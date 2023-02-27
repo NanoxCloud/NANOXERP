@@ -47,6 +47,7 @@ var AxRuesDefScriptFCP = "false";
 var AxpDcstateVal = "";
 var AxAllowEmptyFlds = new Array;
 var isScriptFormLoad = "false";
+var callGetTab = false;
 var dynamicMobileResolution = function () {
     if ($(".grid-stack").hasClass("dynamicRunMode")) {
         if ((window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth) <=
@@ -633,11 +634,12 @@ $j(document).ready(function () {
     //        });
     //    }
     //}
-
-    $('.griddivColumn ').addClass('gridFixedHeader').css({ "overflow": "auto" });
+    if (axInlineGridEdit) {
+        $('.griddivColumn').addClass('gridFixedHeader').css({ "overflow": "auto" });
+    }
     if (typeof gridFixedHeader == "undefined" || gridFixedHeader == "true") {
         //$('.griddivColumn ').addClass('gridFixedHeader').css({ "overflow": "auto", "max-height": "calc(100vh - 130px)" });
-        $('.griddivColumn ').addClass('gridFixedHeader').css({ "max-height": "calc(100vh - 130px)" });
+        $('.griddivColumn').addClass('gridFixedHeader').css({ "max-height": "calc(100vh - 130px)" });
         $(".gridFixedHeader table thead tr th").css({ "background": "#fff", "position": "sticky", "top": "0" });
     }
 
@@ -1454,7 +1456,7 @@ function LoadEvents(dvId) {
 
     //TimePickerEvent(dvId, dtpkrRTL);
     //function call on blur event of textarea, textbox.
-    $j("textarea:not(#comment):not(.labelInp,.select2-search__field),[id]:text:not([id=searstr],[class=AxAddRows],[class=AxSearchField],.gridHdrChk,.tstOnlyTime,.tstOnlyTime24hours,.gridHeaderSwitch,.flatpickr-input),[id][type=number]:not([id=searstr],[class=AxAddRows],[class=AxSearchField]),:password").blur(function (event) {
+    $j("textarea:not(#comment):not(.labelInp,.select2-search__field),[id]:text:not([id=searstr],[class=AxAddRows],[class=AxSearchField],.gridHdrChk,.tstOnlyTime,.tstOnlyTime24hours,.gridHeaderSwitch,.dvgrdchkboxnonedit,.flatpickr-input),[id][type=number]:not([id=searstr],[class=AxAddRows],[class=AxSearchField]),:password").blur(function (event) {
         if (theMode != "design")
             MainBlur($j(this));
     });
@@ -1485,7 +1487,7 @@ function LoadEvents(dvId) {
     });
 
     //function call on blur event of checkbox, checklist & radiogroup.
-    $j(":checkbox:not([class=chkAllList],.gridHdrChk,.gridRowChk,.gridHeaderSwitch):not(.tokenSelectAll):not(#ckbCompressedMode):not(#ckbStaticRunMode):not(#ckbWizardDC):not('[id^=ckbGridStretch]'),:radio").not(".chkShwSel").change(function () {
+    $j(":checkbox:not([class=chkAllList],.gridHdrChk,.gridRowChk,.gridHeaderSwitch,.dvgrdchkboxnonedit):not(.tokenSelectAll):not(#ckbCompressedMode):not(#ckbStaticRunMode):not(#ckbWizardDC):not('[id^=ckbGridStretch]'),:radio").not(".chkShwSel").change(function () {
         MainBlur($j(this));
     });
 
@@ -4209,7 +4211,6 @@ function ShowingDc(a, x, calledFrom) {
     var cursorStyle = 'hand';
     var disable = "true";
     x = x.toString().toLowerCase();
-    var callGetTab = false;
 
     if (x == "hide") {
 
@@ -4276,6 +4277,10 @@ function ShowingDc(a, x, calledFrom) {
         if (x == "show") {
             // dvFrame.show();
             dvFrame.removeClass("d-none");
+            if ($("#gridHd" + a).length > 0 && $("#gridHd" + a + " tbody tr").hasClass('inline-edit')) {
+                updateInlineGridRowValues();
+                $("#gridHd" + a + " tbody tr").removeClass('inline-edit');
+            }
         } else if (x == "hide") {
             dvFrame.addClass("d-none");
         } else if (x == "showpopdc") {
@@ -4300,7 +4305,8 @@ function ShowingDc(a, x, calledFrom) {
             $j("#gridToggleBtn" + a).removeClass('disables').prop('disables', false);
             $j("#DivFrame" + a).find('.rowadd').removeClass("disableadd");
             $j("#DivFrame" + a).find('.fillcls').removeClass("disablefill");
-            $j("#gridAddBtn" + a).prop('disabled', false);
+            $j("#gridAddBtn" + a).prop('disabled', false).removeClass("disableadd");
+            $j("#DivFrame" + a + " .gridIconBtns a").not("[id^=clearThisDC]").prop('disabled', false).removeClass('disabled');
             $j("#wrapperForEditFields" + a).find(".editLayoutFooter button").removeClass('disabled').prop('disabled', false);
             $j("[id ^= 'fillgrid']").prop('disabled', false).removeClass('disabled');
             $j("#gridHd" + a + " tbody tr").removeClass('disableTheRow');
@@ -4322,7 +4328,8 @@ function ShowingDc(a, x, calledFrom) {
             $j("#DivFrame" + a).find(":button").removeClass('handCur');
             $j("#DivFrame" + a).find('.rowdelete').addClass("disabledelete");
             $j("#DivFrame" + a).find('.rowadd').addClass("disableadd");
-            $j("#gridAddBtn" + a).prop('disabled', true);
+            $j("#gridAddBtn" + a).prop('disabled', true).addClass('disabled');
+            $j("#DivFrame" + a + " .gridIconBtns a").not("[id^=clearThisDC]").prop('disabled', true).addClass('disabled');
             $j("#clearThisDC" + a).prop("disabled", true).find(".gridActs").addClass("disabled");
             $j("#wrapperForEditFields" + a).hide();
             $j("#gridToggleBtn" + a).addClass('disabled').prop('disabled', true);
@@ -5243,6 +5250,14 @@ function SuccessFillGridNonMS(result, eventArgs) {
         UpdateFldArrayInFillgrid(fillGridDc);
 
         try {
+            $('.griddivColumn ').addClass('gridFixedHeader').css({ "overflow": "auto" });
+            if (typeof gridFixedHeader == "undefined" || gridFixedHeader == "true") {
+                $('.griddivColumn ').addClass('gridFixedHeader').css({ "max-height": "calc(100vh - 130px)" });
+                $(".gridFixedHeader table thead tr th").css({ "background": "#fff", "position": "sticky", "top": "0" });
+            }
+        } catch (ex) { }
+
+        try {
             AxAfterFillGrid();
         } catch (ex) {
 
@@ -5257,6 +5272,7 @@ function SuccessFillGridNonMS(result, eventArgs) {
         }
         //applyDesignJsonAgain(fillGridDc);
         setDesignedLayout("#divDc" + fillGridDc);
+        checkTableBodyWidths(fillGridDc);
         //AlignDcElements("divDc" + fillGridDc);
         FocusOnFirstGridField(fillGridDc);
         if (isMobile && mobileCardLayout == "none") {
@@ -8606,6 +8622,41 @@ function ProcessScriptFormControl(listControls, actionStr, sfName) {
                         }
                     }
                     break;
+                case ("setfontproperty"):
+                    var _thisdcNo = GetDcNo(fldname);
+                    if (IsDcGrid(_thisdcNo)) {
+                        let _thisRowNo = sfFldVal;
+                        let _thisProperties = sfRno;
+                        if (_thisRowNo != "" && _thisRowNo != 0 && _thisProperties != "") {
+                            let _thisFldId = $j("#" + fldname + GetClientRowNo(sfFldVal, _thisdcNo) + "F" + _thisdcNo);
+                            if (_thisFldId.length > 0) {
+                                const _setPreporties = _thisProperties.split('♠');
+                                let _fldStyles = "";
+                                _setPreporties.forEach(function (ele, ind) {
+                                    if (ele != "" && ind == 0) {
+                                        _fldStyles += "font-family:" + ele + ";";
+                                    } else if (ele != "" && ind == 1) {
+                                        _fldStyles += "font-size:" + ele + ";";
+                                    } else if (ele != "" && ind == 2) {
+                                        _fldStyles += "font-weight:" + ele + ";";
+                                    } else if (ele != "" && ind == 3) {
+                                        _fldStyles += "color:" + ele + ";";
+                                    } else if (ele != "" && ind == 4) {
+                                        _fldStyles += "background-color:" + ele + " !important";
+                                    }
+                                });
+                                document.getElementById(fldname + GetClientRowNo(sfFldVal, _thisdcNo) + "F" + _thisdcNo).setAttribute("style", _fldStyles);
+
+                                var idx = $j.inArray(_thisdcNo + "~" + fldname + "~" + GetClientRowNo(sfFldVal, _thisdcNo) + "~setfont~" + _fldStyles, AxFormContSetGridCell);
+                                if (idx == -1) {
+                                    AxFormContSetGridCell.push(_thisdcNo + "~" + fldname + "~" + GetClientRowNo(sfFldVal, _thisdcNo) + "~setfont~" + _fldStyles);
+                                } else {
+                                    AxFormContSetGridCell[idx] = _thisdcNo + "~" + fldname + "~" + GetClientRowNo(sfFldVal, _thisdcNo) + "~setfont~" + _fldStyles;
+                                }
+                            }
+                        }
+                    }
+                    break;
                 default:
                     return;
             }
@@ -8974,7 +9025,7 @@ function DropzoneInit(dvId) {
         _thisDiv = $("[id^='divDc']:not(:has(.editWrapTr)) .dropzone:not(.dropzoneGrid)");// $("#divDc1 .dropzone");
     }
     _thisDiv.each(function () {
-        if ($(this).parents('.editWrapTr').length > 0)
+        if (($(this).parents('.editWrapTr').length > 0 && axInlineGridEdit) || ((!axInlineGridEdit && AxpGridForm == "form" && !$(this).parents('.editWrapTr').length > 0)))
             return;
         const id = "#" + $(this).attr("id");
         const dropzone = document.querySelector(id);
@@ -9184,7 +9235,7 @@ $(document).on("mouseover", ".fileuploadmore", function () {
 
 
 $j(document).on("mouseover", "body", function (e) {
-    if (!$(e.target).hasClass("fileuploadmore") && !$(e.target).hasClass("grdattch") && !$(e.target).hasClass("gridattach") && !$(e.target).hasClass("fw-boldest") && !$(e.target).hasClass("popover-arrow") && !$(e.target).hasClass("popover-body") && !$(e.target).hasClass("dropzone-delete") && !$(e.target).hasClass("dropzoneItemDelete") && !$(e.target).hasClass("dropzoneGridItemDelete") && !$(e.target).hasClass("dropzone-panel") && !$(e.target).hasClass("dropzone-file") && !$(e.target).hasClass("dropzone") && !$(e.target).hasClass("dropzone-items") && !$(e.target).hasClass("dropzone-item") && !$(e.target).hasClass("dropzone-filename") && !$(e.target).parent().hasClass("dropzone-filename")) {
+    if (!$(e.target).hasClass("fileuploadmore") && !$(e.target).hasClass("grdattch") && !$(e.target).hasClass("gridattach") && !$(e.target).hasClass("fw-boldest") && !$(e.target).hasClass("popover-arrow") && !$(e.target).hasClass("popover") && !$(e.target).hasClass("popover-body") && !$(e.target).hasClass("dropzone-delete") && !$(e.target).hasClass("dropzoneItemDelete") && !$(e.target).hasClass("dropzoneItemDeleteHeader") && !$(e.target).hasClass("dropzoneGridItemDelete") && !$(e.target).hasClass("dropzone-panel") && !$(e.target).hasClass("dropzone-file") && !$(e.target).hasClass("dropzone") && !$(e.target).hasClass("dropzone-items") && !$(e.target).hasClass("dropzone-item") && !$(e.target).hasClass("dropzone-filename") && !$(e.target).parent().hasClass("dropzone-filename")) {
         $("[data-bs-toggle]").popover("hide");
     }
 });

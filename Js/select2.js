@@ -361,14 +361,20 @@ function createFormSelect(fld) {
             else if (isOnCLose && $(this).val() != "" && $(this).val() != null && !$(this).hasClass('multiFldChk'))
                 select2IsFocused = false;
 
-            if (gridRowEditOnLoad && IsGridField(GetFieldsName($(this).attr("id")))) {
+            if ($(this).attr("id") != AxFocusedFld && AxFocusedFld != "" && !$("#" + AxFocusedFld).hasClass("fldFromSelect") && !$("#" + AxFocusedFld).hasClass("multiFldChk") && !$("#" + AxFocusedFld).hasClass("gridHeaderSwitch") && !$("#" + AxFocusedFld).hasClass("dvgrdchkboxnonedit"))// Changed text field and directlly click on select2 field using mouse changed field not getting call mainblur.
+            {
+                MainBlur($("#" + AxFocusedFld));
+                AxOldValue = "";
+                MainFocus($j(this));
+            }
+            else if (gridRowEditOnLoad && IsGridField(GetFieldsName($(this).attr("id")))) {
                 UpdateGridRowFlags($(this).attr("id"), GetFieldsDcNo($(this).attr("id")), "001");
             }
 
             isOnCLose = false;
         }
         else {
-            if ($(this).attr("id") != AxFocusedFld && AxFocusedFld != "" && !$("#" + AxFocusedFld).hasClass("fldFromSelect") && !$("#" + AxFocusedFld).hasClass("multiFldChk") && !$("#" + AxFocusedFld).hasClass("gridHeaderSwitch"))// Changed text field and directlly click on select2 field using mouse changed field not getting call mainblur.
+            if ($(this).attr("id") != AxFocusedFld && AxFocusedFld != "" && !$("#" + AxFocusedFld).hasClass("fldFromSelect") && !$("#" + AxFocusedFld).hasClass("multiFldChk") && !$("#" + AxFocusedFld).hasClass("gridHeaderSwitch") && !$("#" + AxFocusedFld).hasClass("dvgrdchkboxnonedit"))// Changed text field and directlly click on select2 field using mouse changed field not getting call mainblur.
             {
                 MainBlur($("#" + AxFocusedFld));
                 AxOldValue = "";

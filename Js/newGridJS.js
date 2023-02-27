@@ -20,7 +20,7 @@ var divEditClass = "";
 var gridDivHtml = {};
 var formGridRowDele = {};
 var isLoadDataRow = false;
-
+var clearFormRows = false;
 function addTheValuesToGrid(dcNo, elem, trIndexForEdit, onlySave) {
     globalOnlySave = false;
     if (typeof onlySave == "undefined" || onlySave === "") {
@@ -181,9 +181,9 @@ function addTheValuesToGrid(dcNo, elem, trIndexForEdit, onlySave) {
         $("#editCancelButton" + dcNo).click();
         return false;
     } else {
-        createAutoComplete(`#wrapperForEditFields${dcNo} .fldFromSelect`);
+        // createAutoComplete(`#wrapperForEditFields${dcNo} .fldFromSelect`);
 
-        $j(`#wrapperForEditFields${dcNo}`).find('.dropdown-main').remove();
+        $j(`#wrapperForEditFields${dcNo}`).find('.dropdown-main,.fldFromSelect').remove();
         $j(`#wrapperForEditFields${dcNo}`).find('.dropdown-display-label').remove();
         $j(`#wrapperForEditFields${dcNo}`).find('.dropdown-mul optgroup').remove();
         jQuery.each($j(`#wrapperForEditFields${dcNo}`).find('.dropdown-mul'), function (idx, el) {
@@ -343,6 +343,11 @@ function createInpLabel(id, text, valueOfField, typeOfField, isFieldVisible, hid
         var fldIndex = $j.inArray(fName, FNames);
         var mgsSep = FldMgsSeparator[fldIndex];
         labelHtml += "<textarea tabindex='-1' class='form-control w-100 border bg-transparent overflow-hidden resize-none  selectTextArea labelInp " + disableClass + "' maxlength='" + maxlength + "'  data-style='" + inlineStyle + "' data-type='" + typeOfFields + isrefreshsave + "' data-sep='" + mgsSep + "' data-hidden='" + hiddenData + "' id='" + id + "'  readonly>" + valOfTextField + "</textarea>";
+    } else if (typeOfField == "checkbox") {
+        labelHtml += "<textarea tabindex='-1' class='form-control w-100 border bg-transparent overflow-hidden resize-none labelInp d-none" + disableClass + "' maxlength='" + maxlength + "'  data-style='" + inlineStyle + "' data-type='" + typeOfField + "' data-hidden='" + hiddenData + "' id='" + id + "'  readonly>" + valueOfField + "</textarea>";
+        labelHtml += "<div id=\"dvgrdchkbox" + id + "\" class=\"form-check form-switch form-check-custom px-1 align-self-end py-2\"><input title=\"\" value=\"" + valueOfField + "\" class=\"form-check-input opacity-100 Family h-30px w-50px dvgrdchkboxnonedit\" type=\"checkbox\"";
+        if (valueOfField.toLowerCase() == 'yes') labelHtml += ' checked="checked" ';
+        labelHtml += "></input></div>";
     } else {
         labelHtml += "<textarea tabindex='-1' class='form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp " + disableClass + "' maxlength='" + maxlength + "'  data-style='" + inlineStyle + "' data-type='" + typeOfField + "' data-hidden='" + hiddenData + "' id='" + id + "'  readonly>" + valueOfField + "</textarea>";
     }
@@ -1138,7 +1143,8 @@ function editTheRow(elem, dcNo, rowNo, e) { //(editIcon,2,001,event)
     } else if ((!isMobile && AxpGridForm == "form") || (isMobile && mobileCardLayout != "none")) {
         addRowFormGrid(dcNo, rowNo);
         //if (rowNo.toString().length == 3) {// || formGridRowDele[dcNo] == "true") {
-        if (rowNo.toString().length == 3 && !isLoadDataRow) {
+        //if (rowNo.toString().length == 3 && !isLoadDataRow) {
+        if (!isLoadDataRow) {
             if (typeof wsPerfEnabled != "undefined" && wsPerfEnabled)
                 CallEvaluateOnAddPerf(dcNo, rowNo, fields, "ToCheckAddRow");
             else
@@ -2628,18 +2634,28 @@ function addRowFormGrid(dcNo, newRowNo, calledFrom) {
     let mobileDcCapt = "";
     try {
         mobileDcCapt = $(`#head${dcNo}`).length > 0 ? $(`#head${dcNo}`).text() : $("#dcCaption" + dcNo)[0].childNodes[0].nodeValue;
-    } catch (error) { }
+    } catch (error) { }    
 
     if (isMobile) { //&& strRowNo != "001") {
         gridHtml += "<div id=\"dcCaptionBtn" + dcNo + "-" + strRowNo + "\" class=\"d-flex gap-3 frameCap fw-boldest fs-6 text-gray-800 dcCaptionBtn\"><span class=\"d-flex flex-center\">" + mobileDcCapt + "</span>" + mobileDcRowNo + "</div><hr class=\"text-gray-500\" />";
     }
-    gridHtml += "<div id=\"gridrowWrap" + dcNo + "-" + strRowNo + "\" class=\"formGridRow\"><div class=\"row\" id=\"wrapperForEditFields" + dcNo + "\" >" + $j("#wrapperForEditFields" + dcNo).html() + "</div><div class=\"addFormGridbutton d-inline-flex me-2\"><button id=\"gridAddBtnAdd" + dcNo + "\" onclick=\"editTheRow(''," + dcNo + "," + strRowNo + ",event)\" class=\"btn btn-primary\" type=\"button\" title=\"Add\">Add Row</button></div>" + btnRemove + "<div class=\"clearfix\"></div></div>";
-    $("#bootstrapModalData").remove();
+    gridHtml += "<div id=\"gridrowWrap" + dcNo + "-" + strRowNo + "\" class=\"formGridRow\"><div class=\"row\" id=\"wrapperForEditFields" + dcNo + "\" >" + $j("#wrapperForEditFields" + dcNo).html() + "</div>";
+    if ($(`#gridAddBtn${dcNo}`)?.[0] != undefined) {
+        gridHtml += "<div class=\"addFormGridbutton d-inline-flex me-2\"><button id=\"gridAddBtnAdd" + dcNo + "\" onclick=\"editTheRow(''," + dcNo + ",'" + strRowNo + "',event)\" class=\"btn btn-primary\" type=\"button\" title=\"Add\">Add Row</button></div>" + btnRemove + "<div class=\"clearfix\"></div></div>";
+    }
+      
+    closeModalDialog();
+    $("#bootstrapModalGrid").remove();
     $("#colScroll" + dcNo + " [id^=gridrowWrap" + dcNo + "-]").children("#wrapperForEditFields" + dcNo + "Added").attr('id', "wrapperForEditFields" + dcNo);
     $("#colScroll" + dcNo).append(gridHtml);
 
     let gridClsList = isMobile ? "editWrapTr grid-stack grid-stack-one-column-mode dynamicRunMode dirty" : "editWrapTr grid-stack dynamicRunMode dirty"
     $("#gridrowWrap" + dcNo + "-" + strRowNo).find(".editWrapTr").removeAttr("class").attr("class", gridClsList);
+
+    if ($(`#DivFrame${dcNo} .grdAttach`).length > 0) {
+        $(`#DivFrame${dcNo} .grdAttach`).attr("id").toLowerCase().startsWith("axpfile_") != true && $(`#DivFrame${dcNo} .grdAttach`).next().find(" .dropzone.dropzone-queue").addClass("dropzoneGrid");
+        $(`#DivFrame${dcNo} .grdAttach`).next().find(".fileuploadmore").removeClass("initialized");
+    }
     if (isMobile) {
         // $("#colScroll" + dcNo).css({
         //     "overflow": "hidden"
@@ -2655,27 +2671,47 @@ function addRowFormGrid(dcNo, newRowNo, calledFrom) {
     arrEditDiv.push("#gridrowWrap" + dcNo + "-" + strRowNo);
     //if (isLoadDataRow)
     //    changeEditLayoutIds(newRowNo, dcNo, 'listView');
-    AssignJQueryEvents(arrEditDiv);
+    if (!isLoadDataRow)
+        AssignJQueryEvents(arrEditDiv);
     $(".editLayoutFooter").remove();
 }
 
 function DeleteFromGridRow(dcNo, rowFrmNo, elem) {
     // if ($j("#del" + rowFrmNo).attr("class").indexOf("disabledelete") != -1)
     //     return;
+    if (rowFrmNo == "*") {
+        let _editRow = $("#colScroll" + dcNo + " [id^=gridrowWrap" + dcNo + "] .editWrapTr").attr("id");
+        if (typeof _editRow == "undefined") {
+            clearFormRows = false;
+            return;
+        } else {
+            rowFrmNo = _editRow.substring(_editRow.lastIndexOf("F"), _editRow.lastIndexOf("F") - 3);
+            clearFormRows = true;
+        }
+    }
     var gridRowCust = "sp" + dcNo + "R" + rowFrmNo;
     //if ($("#gridHd" + dcNo + " tbody [id^=" + gridRowCust + "]").length == 0) {
     var delRowNo = rowFrmNo.substring(0, 3);
-    $("#colScroll" + dcNo + " #gridrowWrap" + dcNo + "-" + delRowNo).remove();
     var rdId = $("#colScroll" + dcNo + " [id^=gridrowWrap" + dcNo + "]").last().attr("id");
-    $("#colScroll" + dcNo + " .addFormGridbutton").remove();
     $("#colScroll" + dcNo + " #gridrowWrap" + dcNo + "-" + rdId.split("-")[1] + " .clearfix").remove();
-    $("#colScroll" + dcNo + " #gridrowWrap" + dcNo + "-" + rdId.split("-")[1]).append("<div class=\"addFormGridbutton d-inline-flex me-2\"><button id=\"gridAddBtnAdd" + dcNo + "\" onclick=\"editTheRow(''," + dcNo + "," + rdId.split("-")[1] + ",event)\" class=\"btn btn-primary\" type=\"button\" title=\"Add\">Add Row</button></div><div class=\"clearfix\"></div>");
-    $("#gridAddBtnAdd" + dcNo).removeAttr("onclick").attr("onclick", "editTheRow(''," + dcNo + "," + rdId.split("-")[1] + ",event)");
+    $("#colScroll" + dcNo + " #gridrowWrap" + dcNo + "-" + delRowNo).remove();    
+    $("#colScroll" + dcNo + " .addFormGridbutton").remove();    
+    if ($(`#gridAddBtn${dcNo}`)?.[0] != undefined) {
+        $("#colScroll" + dcNo + " #gridrowWrap" + dcNo + "-" + rdId.split("-")[1]).append("<div class=\"addFormGridbutton d-inline-flex me-2\"><button id=\"gridAddBtnAdd" + dcNo + "\" onclick=\"editTheRow(''," + dcNo + ",'" + rdId.split("-")[1] + "',event)\" class=\"btn btn-primary\" type=\"button\" title=\"Add\">Add Row</button></div><div class=\"clearfix\"></div>");
+        $("#gridAddBtnAdd" + dcNo).removeAttr("onclick").attr("onclick", "editTheRow(''," + dcNo + ",'" + rdId.split("-")[1] + "',event)");
+    }
     formGridRowDele[dcNo] = "true";
     //    return;
     //}
     if ($("#gridHd" + dcNo + " tbody [id^=" + gridRowCust + "]").length > 0)
         DeleteRow(dcNo, rowFrmNo, elem);
+    else if (!axInlineGridEdit && AxpGridForm == "form") {
+        try {
+            DeleteGridRow(dcNo, rowFrmNo, undefined);
+        } catch (ex) {
+            //AxWaitCursor(false);
+        }
+    }
 
     if (isMobile)
         $("#dcCaptionBtn" + dcNo + "-" + delRowNo).remove();
@@ -2729,7 +2765,25 @@ function addTheValuesToFormGrid(dcNo, rowNo, elem, trIndexForEdit, onlySave) {
         $j(".wrapperForGridData" + dcNo + " tbody tr[id=sp" + dcNo + "R" + GetFieldsRowNo(rowId) + "F" + dcNo + "] select,tr[id=sp" + dcNo + "R" + GetFieldsRowNo(rowId) + "F" + dcNo + "] textarea").each(function () {
             $(this).attr('id', "gr" + this.id);
         });
-        UpdateFieldArray(axpIsRowValid + dcNo + addedRowNum + "F" + dcNo, GetDbRowNo(addedRowNum, dcNo), "", "parent", "AddRow");
+        //UpdateFieldArray(axpIsRowValid + dcNo + addedRowNum + "F" + dcNo, GetDbRowNo(addedRowNum, dcNo), "", "parent", "AddRow");
+        let _thisAxpValid = axpIsRowValid + dcNo + addedRowNum + "F" + dcNo;
+        if (ChangedFields.length > 0) {
+            var idx = $j.inArray(_thisAxpValid, ChangedFields);
+            if (idx != -1) {
+                ChangedFieldValues[idx] = "";
+                ChangedFieldOldValues[idx] = "";
+            } else {
+                ChangedFields.push(_thisAxpValid);
+                ChangedFieldDbRowNo.push(GetDbRowNo(addedRowNum, dcNo));
+                ChangedFieldValues.push("");
+                ChangedFieldOldValues.push("");
+            }
+        } else {
+            ChangedFields.push(_thisAxpValid);
+            ChangedFieldDbRowNo.push(GetDbRowNo(addedRowNum, dcNo));
+            ChangedFieldValues.push("");
+            ChangedFieldOldValues.push("");
+        }
 
         AxCurrGridRowNo = "";
         TstructTabEventsInPopUP(dcNo);
@@ -2743,7 +2797,25 @@ function addTheValuesToFormGrid(dcNo, rowNo, elem, trIndexForEdit, onlySave) {
         var slNoHtml = '<td ' + (gridColOptVisibility("uniqueThHead", dcNo) == false ? "style=\"display:none;\"" : (gridColOptVisibility("uniqueThHead", dcNo) || IsTabDc(dcNo)) ? "" : "style=\"display:none;\"") + '><label id="lblSlNo' + GetFieldsRowNo(rowId) + 'F' + dcNo + '" class="form-control w-100 border bg-transparent overflow-hidden resize-none  slno">' + (trIndexForEdit + 1) + '</label></td>';
         $j(".wrapperForGridData" + dcNo + " tbody tr").eq(trIndexForEdit).html(editDeleteOpts + deleteHtml + slNoHtml + tableHtml);
 
-        UpdateFieldArray(axpIsRowValid + dcNo + GetFieldsRowNo(rowId) + "F" + dcNo, GetDbRowNo(GetFieldsRowNo(rowId), dcNo), "", "parent", "AddRow");
+        //UpdateFieldArray(axpIsRowValid + dcNo + GetFieldsRowNo(rowId) + "F" + dcNo, GetDbRowNo(GetFieldsRowNo(rowId), dcNo), "", "parent", "AddRow");
+        let _thisAxpValid = axpIsRowValid + dcNo + GetFieldsRowNo(rowId) + "F" + dcNo;
+        if (ChangedFields.length > 0) {
+            var idx = $j.inArray(_thisAxpValid, ChangedFields);
+            if (idx != -1) {
+                ChangedFieldValues[idx] = "";
+                ChangedFieldOldValues[idx] = "";
+            } else {
+                ChangedFields.push(_thisAxpValid);
+                ChangedFieldDbRowNo.push(GetDbRowNo(GetFieldsRowNo(rowId), dcNo));
+                ChangedFieldValues.push("");
+                ChangedFieldOldValues.push("");
+            }
+        } else {
+            ChangedFields.push(_thisAxpValid);
+            ChangedFieldDbRowNo.push(GetDbRowNo(GetFieldsRowNo(rowId), dcNo));
+            ChangedFieldValues.push("");
+            ChangedFieldOldValues.push("");
+        }
 
         //$j(".wrapperForGridData" + dcNo + " tbody tr textarea").each(function () {
         $j(".wrapperForGridData" + dcNo + " tbody tr[id=sp" + dcNo + "R" + GetFieldsRowNo(rowId) + "F" + dcNo + "] select,tr[id=sp" + dcNo + "R" + GetFieldsRowNo(rowId) + "F" + dcNo + "] textarea").each(function () {
@@ -2791,6 +2863,12 @@ function formGridRowBlur(fldObj) {
 function createFormGridRowHTML(editGridDC) {
     var idOfelement = "divDc" + editGridDC + " #gridheaddiv";
     var data = "wrapperForEditFields" + editGridDC;
+
+    $(`#wrapperForEditFields${editGridDC} select.fldFromSelect`).each((ind, elm) => {
+        try {
+            $(elm).removeClass("initialized").select2("destroy");
+        } catch (ex) { }
+    });
     gridDivHtml[editGridDC] = "<div class=\"row hide\" id=\"wrapperForEditFields" + editGridDC + "\">" + $("#" + data).html() + "</div>";
 
     var modalHTML = "";
@@ -3006,6 +3084,12 @@ function AddNewFormRowInDc(dcNo, calledFrom) {
     formGridRowBlur($("#axp_recid" + dcNo + strRowNoAdd + "F" + dcNo));
     AxEditActiveRowNo = parseInt(strRowNoAdd, 10);
     UpdateDcRowArrays(dcNo, GetRowNoHelper(AxEditActiveRowNo), "Add");
+    if (clearFormRows) {
+        var arrEditDiv = new Array();
+        arrEditDiv.push("#gridrowWrap" + dcNo + "-" + strRowNo);
+        AssignJQueryEvents(arrEditDiv);
+        clearFormRows = false;
+    }
     isLoadDataRow = false;
 }
 //#EndRegion FormGridEdit;
@@ -3202,13 +3286,7 @@ function inlineGridEdit(dcNo, td, col, row, ent) {
                             editorHtml += '<input type="hidden" id="' + idOFtheField + '" tabindex="-1" name="' + idOFtheField + '" value="' + valueOfField + '" class="grdAttach handCur">'; //axp_gridattach_2001F2   endIdPart
                             editorHtml += '</div>';
                         } else if (typeOfField == 'checkbox') {
-                            //var isCompMode = false;
-                            //if (($("#ckbCompressedMode").length && $("#ckbCompressedMode").prop('checked') == true) || ($j("#hdnCompMode").length && $j("#hdnCompMode").val().toLowerCase() == "true")) isCompMode = true;
-                            //if (isCompMode)
-                            //    editorHtml += '<div style="min-height: 23px;">';
-                            //// else
-                            //// editorHtml += '<div style="min-height: 30px;">';
-
+                            typeof $("#dvgrdchkbox" + idOFtheField) != "undefined" && $("#dvgrdchkbox" + idOFtheField).addClass("d-none");
                             editorHtml += '<input id="' + idOFtheField + '" name="' + idOFtheField + '" title="" alt="' + presentLabel.data('hidden') + '" value="' + valueOfField + '" class="form-check-input opacity-100 gridchk Family focus-input h-30px" style="' + inlineStyle + '" type="checkbox"';
                             if (isFieldDisable) editorHtml += ' disabled readonly ';
                             if (valueOfField.toLowerCase() == 'yes') editorHtml += ' checked="checked" ';
@@ -3331,13 +3409,23 @@ function inlineGridEdit(dcNo, td, col, row, ent) {
                         else {
                             var focusElem = $(td).find(".focus-input").filter(':visible').not(':disabled')
                             focusElem = focusElem.length == 0 ? $(td).find(".fldmultiSelectInput").filter(':visible').not(':disabled') : focusElem;
+                            focusElem = focusElem.length == 0 ? $(td).find(":not(.edit-mode-content) .grdAttach").not(':disabled') : focusElem;
                             var curElem = $(td);
                             while (focusElem.length == 0 && curElem.length != 0) { //if any field is disabled then find next focus input element
                                 curElem = $(curElem).next();
                                 focusElem = curElem.find(".focus-input").filter(':visible').not(':disabled');
                             }
-                            if (focusElem.length > 0)
-                                focusElem.focusCursorToEnd();
+                            if (focusElem.length > 0) {
+                                if (focusElem.hasClass("gridchk")) {
+                                    if (focusElem.is(":checked"))
+                                        focusElem.prop("checked", false);
+                                    else
+                                        focusElem.prop("checked", true);
+                                    MainBlur(focusElem);
+                                }
+                                else
+                                    focusElem.focusCursorToEnd();
+                            }
                             else if ($(parentTrElement).find('[onclick*="DeleteRow"]').is(":visible"))
                                 $(parentTrElement).find('[onclick*="DeleteRow"]').focus();
                         }
@@ -3367,6 +3455,7 @@ function updateInlineGridRowValues(isValidated = false) {
             return;
         $(".inline-edit td").removeAttr("data-focus-index");
         $(".inline-edit").removeAttr("last-focus-index");
+        let _thisRow = "";
         $(".inline-edit").closest("tr").find('td').each(function (index, td) {
             if (index == 0) {
                 //means last edit delete field which we can skip adding
@@ -3376,7 +3465,7 @@ function updateInlineGridRowValues(isValidated = false) {
             } else {
                 var curFldId, curFldType, selectedVal, selectFldId, selectedTxt;
                 if ($(td).find(".edit-mode-content").length > 0) {
-                    curFldId = $(td).find(".edit-mode-content").data("fld-id");
+                    _thisRow = curFldId = $(td).find(".edit-mode-content").data("fld-id");
                     curFldType = $(td).find(".edit-mode-content").data("type");
                     if (curFldType == "select") {
                         selectFldId = curFldId.substr(5);
@@ -3405,8 +3494,18 @@ function updateInlineGridRowValues(isValidated = false) {
                                     "value": selectedTxt
                                 });
                         });
-                    } else if (curFldType == "checkbox")
+                    } else if (curFldType == "checkbox") {
                         $("#EDIT\\~" + curFldId).val(selectedVal ? "YES" : "NO");
+                        try {
+                            if (typeof $("#dvgrdchkbox" + curFldId) != "undefined") {
+                                $("#dvgrdchkbox" + curFldId).removeClass("d-none");
+                                if (selectedVal)
+                                    $("#dvgrdchkbox" + curFldId + " input").prop("checked", true);
+                                else
+                                    $("#dvgrdchkbox" + curFldId + " input").prop("checked", false);
+                            }
+                        } catch (ex) { }
+                    }
                     else if (curFldType == "multigroupselect" || curFldType == "multigroupselect~isrefreshsave") {
                         var hiddenData = $(td).find('select.fldmultiSelect').attr('data-selected');
                         $("#EDIT\\~" + curFldId).val(hiddenData);
@@ -3470,7 +3569,7 @@ function updateInlineGridRowValues(isValidated = false) {
                 }
             });
         }
-
+        SetFontFldGridCell(_thisRow);
         $(".inline-edit").attr("data-valid-row", grdRowValid);
 
         $(".inline-edit").removeClass("inline-edit").find(".edit-mode-content").remove();
@@ -3479,6 +3578,30 @@ function updateInlineGridRowValues(isValidated = false) {
         } catch (e) { }
     } catch (e) {
         console.log("Exception: " + e);
+    }
+}
+
+function SetFontFldGridCell(_thisRowNo) {
+    let gfDcNo = "";
+    if (_thisRowNo != "") {
+        gfDcNo = _thisRowNo.substring(_thisRowNo.lastIndexOf("F") + 1);
+        _thisRowNo = _thisRowNo.substring(_thisRowNo.lastIndexOf("F"), _thisRowNo.lastIndexOf("F") - 3);
+    }
+    else
+        return;
+    for (var j = 0; j < AxFormContSetGridCell.length; j++) {
+        if (AxFormContSetGridCell[j] != "") {
+            var strFld = AxFormContSetGridCell[j].split("~");
+            var dcNo = strFld[0];
+            let _tRowNo = strFld[2];
+
+            if (gfDcNo != "" && dcNo == gfDcNo && _tRowNo == _thisRowNo) {
+                let fieldId = strFld[1] + _tRowNo + "F" + dcNo;
+                if (strFld[3] == "setfont") {
+                    document.getElementById(fieldId).setAttribute("style", strFld[4]);
+                }
+            }
+        }
     }
 }
 
@@ -3876,7 +3999,7 @@ function assignInlineGridEditEvent(dcNo) {
                             inlineShiftKeyPressed = true;
                             focusOnDeleteButton = false;
                         } else { //no next column and row found then add a new grid row and make it into editable row & focus on first input element
-                            if (currentTd.find(".focus-input").length && !currentTd.find(".focus-input").hasClass("upload-icon"))
+                            if (currentTd.find(".focus-input").length && !currentTd.find(".focus-input").hasClass("upload-icon") && currentTd.find(".focus-input").attr("type") != "checkbox")
                                 MainBlur(currentTd.find(".focus-input"));
                             if (typeof callBackFunDtls != "undefined" && callBackFunDtls.startsWith("GetDependents♠") > 0) { // GIS000196
                                 e.preventDefault();

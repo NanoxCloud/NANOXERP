@@ -29,7 +29,7 @@
             document.write('<script src="../Js/polyfill.min.js"><\/script>');
         }
     </script>
-    <script type="text/javascript" src="../Js/helper.min.js?v=141"></script>
+    <script type="text/javascript" src="../Js/helper.min.js?v=142"></script>
     <script src="../Js/thirdparty/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
     <script src="../Js/noConflict.min.js?v=1" type="text/javascript"></script>
     <link href="../Css/animate.min.css" rel="stylesheet" />
@@ -38,7 +38,7 @@
     <link href="../Css/alerts.min.css" rel="stylesheet" />
     <script src="../Js/alerts.min.js?v=30" type="text/javascript"></script>
     <%--custom alerts end--%>
-    <script type="text/javascript" src="../Js/tstruct.min.js?v=490"></script>
+    <script type="text/javascript" src="../Js/tstruct.min.js?v=494"></script>
     <script type="text/javascript">
 
         var traceSplitChar = "♦";
@@ -48,14 +48,14 @@
         maxLen = 150; // max number of characters allowed in the textbox
     </script>
     <script src="../Js/cancel.min.js?v=1" type="text/javascript"></script>
-    <script src="../Js/common.min.js?v=118" type="text/javascript"></script>
+    <script src="../Js/common.min.js?v=120" type="text/javascript"></script>
 </head>
 <body onload="GetFormDetails();">
     <form id="f1" runat="server" dir="<%=direction%>">
         <div>
             <asp:ScriptManager ID="ScriptManager1" runat="server">
                 <Scripts>
-                    <asp:ScriptReference Path="../Js/tstruct.min.js?v=490" />
+                    <asp:ScriptReference Path="../Js/tstruct.min.js?v=494" />
                 </Scripts>
                 <Services>
                     <asp:ServiceReference Path="../WebService.asmx" />

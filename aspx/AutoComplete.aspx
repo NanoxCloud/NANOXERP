@@ -2,7 +2,7 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" class="overflow-auto">
 <head runat="server">
     <title></title>
     <meta charset="utf-8" />
@@ -27,12 +27,12 @@
     <script src="../UI/axpertUI/datatables.bundle.js"></script>
     <script src="../Js/noConflict.min.js"></script>
 
-    <script type="text/javascript" src="../Js/tstruct.min.js?v=490"></script>
-    <script type="text/javascript" src="../Js/helper.min.js?v=141"></script>
-    <script type="text/javascript" src="../Js/jsclient.min.js?v=77"></script>
+    <script type="text/javascript" src="../Js/tstruct.min.js?v=494"></script>
+    <script type="text/javascript" src="../Js/helper.min.js?v=142"></script>
+    <script type="text/javascript" src="../Js/jsclient.min.js?v=78"></script>
 
     <script src="../Js/advSearch.min.js?v=23" type="text/javascript"></script>
-    <script src="../Js/common.min.js?v=118" type="text/javascript"></script>
+    <script src="../Js/common.min.js?v=120" type="text/javascript"></script>
     <script type="text/javascript">
         var IsFormDirty = false;
         var ChangedFields = new Array();

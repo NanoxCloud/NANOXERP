@@ -371,6 +371,7 @@
                                                             <div class="col-md-8 col-sm-12">
                                                                 <%-- <asp:TextBox ID="txtrpwd" type="password" runat="server" autocomplete="off" class="m-wrap placeholder-no-fix form-control"></asp:TextBox>--%>
                                                                 <asp:TextBox ID="txtrpwd" runat="server" autocomplete="off" class="m-wrap placeholder-no-fix form-control"></asp:TextBox>
+                                                                <asp:HiddenField ID="hdnRPwd" runat="server" Value="true" />
                                                             </div>
                                                             <div class="clearfix"></div>
                                                         </div>
@@ -718,8 +719,8 @@
     <script src="../ThirdParty/jquery-confirm-master/jquery-confirm.min.js?v=2" type="text/javascript"></script>
     <script src="../Js/alerts.min.js?v=30" type="text/javascript"></script>
     <script src="../Js/xmlToJson.min.js?v=2"></script>
-    <script src="../Js/config.min.js?v=7" type="text/javascript"></script>
+    <script src="../Js/config.min.js?v=9" type="text/javascript"></script>
     <script src="../Js/lang/content-<%=langType%>.js?v=59" type="text/javascript"></script>
-    <script src="../Js/common.min.js?v=118" type="text/javascript"></script>
+    <script src="../Js/common.min.js?v=120" type="text/javascript"></script>
 </body>
 </html>

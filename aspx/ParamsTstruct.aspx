@@ -81,7 +81,7 @@
     <%--<script src="../Js/ParamsTstruct.min.js?v=3" type="text/javascript"></script>--%>
 </head>
 <body onload="ChangeDir('<%=direction%>');" class="content d-flex flex-column flex-column-fluid fs-6 p-0" dir="<%=direction%>">
-    <div id="dvlayout" class="d-flex flex-column mvh-100" runat="server">
+    <div id="dvlayout" class="d-flex flex-column mvh-100---" runat="server">
         <div class="toolbar m-0 ms-5 p-0 py-1 flex-shrink-0--- sticky-top bg-light">
             <div class="container-fluid p-0 d-flex flex-stack flex-wrap flex-sm-nowrap">
                 <div class="d-flex flex-column align-items-start justify-content-center flex-wrap me-2" id="breadcrumb-panel">

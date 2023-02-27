@@ -2341,6 +2341,20 @@ function OnTstructLoad() {
     if (AxRuesDefScriptFormcontrol == "true")
         AxRulesScriptsParser("formcontrol", "");
 
+    try {
+        if (callGetTab) {
+            arrVisibleTabDcs.forEach(function (ele, ind) {
+                if (ele != "") {
+                    $("#myTab li a").removeClass('active');
+                    $("#myTab li#li" + ele + " a").addClass('active');
+                    $(".tab-content .tab-pane:not(.grid-icons)").removeClass('active');
+                    $(".tab-content #tab-" + ele).addClass('active');
+                    $("#myTab li#li" + ele + " a").click();
+                }
+            });
+        }
+    } catch (ex) { }
+
     GetDcStateOnLodaData(isCopyTransLoad);
 
     if (window.parent.enableDraft)
@@ -2462,26 +2476,39 @@ function GridDcAddEmptyRows() {
                         dcgridCount++;
                         gridDummyRows = true;
                         lastRow = "001";
-                        if ((!axInlineGridEdit && AxpGridForm == "form") || (isMobile && mobileCardLayout != "none"))
-                            editTheRow("", dcID, "", event);
-                        else
+                        if ((!axInlineGridEdit && AxpGridForm == "form") || (isMobile && mobileCardLayout != "none")) {
+                            if ($("#gridHd" + dcID + " tbody tr").length == 0) {
+                                editTheRow("", dcID, "", event);
+                            }
+                        } else {
                             editTheRow("", dcID, lastRow, "event");
-                        gridDummyRowVal.push(dcID + "~" + lastRow);
-                        gridDummyRows = false;
+                            gridDummyRowVal.push(dcID + "~" + lastRow);
+                            gridDummyRows = false;
+                        }
                         try {
                             AxAfterAddRow(dcID, lastRow);
-                        } catch (ex) {}
-                        let tabDcSt=-1;
-                        let tabInd=$.inArray(dcID,TabDCs);
-                        if(tabInd>-1)
-                            tabDcSt=TabDCStatus[tabInd];
-                        if (dcgridCount == 1 && tabDcSt == -1 && (typeof isWizardTstruct == "undefined" || !isWizardTstruct) && $("[id^=dcBlean]").length == 0) {
-                            setTimeout(function () {
-                                forceRowedit = true;
-                                gridRowEditOnLoad = true;
-                                $("#gridHd" + dcID + " tr#sp" + dcID + "R" + lastRow + "F" + dcID + " td:eq(2)").click();
-                                swicthCompressMode(dcID);
-                            }, 0);
+                        } catch (ex) { }
+                        if (axInlineGridEdit) {
+                            let tabDcSt = -1;
+                            let tabInd = $.inArray(dcID, TabDCs);
+                            if (tabInd > -1)
+                                tabDcSt = TabDCStatus[tabInd];
+                            if (dcgridCount == 1 && tabDcSt == -1 && (typeof isWizardTstruct == "undefined" || !isWizardTstruct) && $("[id^=dcBlean]").length == 0) {
+                                setTimeout(function () {
+                                    forceRowedit = true;
+                                    gridRowEditOnLoad = true;
+                                    $("#gridHd" + dcID + " tr#sp" + dcID + "R" + lastRow + "F" + dcID + " td:eq(2)").click();
+                                    swicthCompressMode(dcID);
+                                }, 0);
+                            }
+                            else if (dcgridCount == 1 && tabDcSt == -1 && (typeof isWizardTstruct == "undefined" || !isWizardTstruct) && $("[id^=dcBlean]").length > 0 && $("#gridHd" + dcID + " tr#sp" + dcID + "R" + lastRow + "F" + dcID).find(".dropzone").length > 0) {
+                                setTimeout(function () {
+                                    forceRowedit = true;
+                                    gridRowEditOnLoad = true;
+                                    $("#gridHd" + dcID + " tr#sp" + dcID + "R" + lastRow + "F" + dcID + " td:eq(2)").click();
+                                    swicthCompressMode(dcID);
+                                }, 0);
+                            }
                         }
                     }
                 }
@@ -5285,11 +5312,22 @@ function SuccessGetTabData(result, eventArgs) {
 
         result = result.replace(strResult[0] + "*♠*", "");
         ParseServiceResult(result, "GetTabData");
+
+        UpdateFldArrayInFillgrid(CurrTabNo);
+
+
         UpdatePopGridInfo();
         CheckFormControlPriv(CurrTabNo);
         CheckDisabledDcs(CurrTabNo);
         CheckShowHideFlds();
         CheckEnableDiableFlds();
+        try {
+            $('.griddivColumn ').addClass('gridFixedHeader').css({ "overflow": "auto" });
+            if (typeof gridFixedHeader == "undefined" || gridFixedHeader == "true") {
+                $('.griddivColumn ').addClass('gridFixedHeader').css({ "max-height": "calc(100vh - 130px)" });
+                $(".gridFixedHeader table thead tr th").css({ "background": "#fff", "position": "sticky", "top": "0" });
+            }
+        } catch (ex) { }
         if (appstatus == "Approved" || appstatus == "Rejected") {
             ShowingDc(CurrTabNo, "Disable");
         }
@@ -5538,8 +5576,11 @@ function SetFormContFldGridCell(gfDcNo, _thisRowNo) {
                 let fieldId = strFld[1] + _tRowNo + "F" + dcNo;
                 if (strFld[3] == "disable")
                     EnableDisableField(fieldId, "2", "1");
-                else
+                else if (strFld[3] == "enable")
                     EnableDisableField(fieldId, "1", "1");
+                else if (strFld[3] == "setfont") {
+                    document.getElementById(fieldId).setAttribute("style", strFld[4]);
+                }
             }
         }
     }
@@ -5752,7 +5793,7 @@ function AssignJQueryEvents(dcArray) {
             $j(dvId).find("textarea:not(#txtCommentWF),:text,:password").unbind("blur");
 
             //function call on blur event of textarea, textbox.
-            $j(dvId).find("textarea:not(#txtCommentWF):not(.labelInp,.select2-search__field),[id]:text:not([class=AxAddRows],[class=AxSearchField],.gridRowChk,.gridHdrChk,.tstOnlyTime,.tstOnlyTime24hours,.flatpickr-input),:password").blur(function () {
+            $j(dvId).find("textarea:not(#txtCommentWF):not(.labelInp,.select2-search__field),[id]:text:not([class=AxAddRows],[class=AxSearchField],.gridRowChk,.gridHdrChk,.dvgrdchkboxnonedit,.tstOnlyTime,.tstOnlyTime24hours,.flatpickr-input),:password").blur(function () {
                 MainBlur($j(this));
                 if (axInlineGridEdit) {
                     var fldObj = $j(this);
@@ -5786,7 +5827,7 @@ function AssignJQueryEvents(dcArray) {
             });
 
             //function call on blur event of checkbox, checklist & radiogroup.
-            $j(dvId).find(":checkbox:not([class=chkAllList],.gridRowChk,.gridHdrChk):not(.tokenSelectAll),:radio").not(".chkShwSel").change(function () {
+            $j(dvId).find(":checkbox:not([class=chkAllList],.gridRowChk,.gridHdrChk,.dvgrdchkboxnonedit):not(.tokenSelectAll),:radio").not(".chkShwSel").change(function () {
                 MainBlur($j(this));
             });
 
@@ -6708,8 +6749,8 @@ function CallEvaluateOnAddPerf(dcNo, rowNo, fields, calldepField) {
             }
         }
     }
-
-    UpdateAxpRowVldInArray(dcNo, rowNo, fldDbRowNo);
+    if ((!isMobile || (isMobile && axInlineGridEdit)))
+        UpdateAxpRowVldInArray(dcNo, rowNo, fldDbRowNo);
 
     if (callService) {
         callService = false;
@@ -7597,13 +7638,13 @@ function ValidateBeforeSubmit(valDcNo) {
                 }
 
                 //if(!axInlineGridEdit && (AxpGridForm != "form" && !axInlineGridEdit) && rCount == 1){
-                if (!axInlineGridEdit && rCount == 1 && $("#gridHd" + dcNo + " tbody tr").length == 0) {
-                    var dcCaption = GetDcCaption(dcNo);
-                    showAlertDialog("warning", 2054, "client", dcCaption);
-                    return false;
-                }
+                // if (!axInlineGridEdit && rCount == 1 && $("#gridHd" + dcNo + " tbody tr").length == 0) {
+                //     var dcCaption = GetDcCaption(dcNo);
+                //     showAlertDialog("warning", 2054, "client", dcCaption);
+                //     return false;
+                // }
 
-                for (var k = 1; k < (axInlineGridEdit ? rCount + 1 : rCount); k++) {
+                for (var k = 1; k < (axInlineGridEdit ? rCount + 1 : rCount + 1); k++) {
 
                     k = GetRowNoHelper(k);
                     //If the field is in popgrid, check if the sub_parent fields are not empty, if the sub_parent fields are empty dont validate that row values.
@@ -7624,7 +7665,7 @@ function ValidateBeforeSubmit(valDcNo) {
                     }
 
                     //Refer bug -AGI003509
-                    if (isRowEmpty || $j("#sp" + dcNo + "R" + k + "F" + dcNo).hasClass("editWrapTr"))
+                    if (isRowEmpty || (axInlineGridEdit && $j("#sp" + dcNo + "R" + k + "F" + dcNo).hasClass("editWrapTr")))
                         continue;
 
 
@@ -9425,10 +9466,10 @@ function SearchOpen(txtobj) {
     // fldXml = fldXml.replace(/&/g, "%26");
 
     if ($j("#" + fname1).hasClass("fldFromSelect")) {
-        var na = "./AutoComplete.aspx?search=" + x + "&fldname=" + fname1 + "&transid=" + tst + "&activeRow=" + AxActiveRowNo + "&frameno=" + fldFrameNo + "&key=" + objKey + "&parStr=" + parStr + "&subStr=" + subStr;
+        var na = "./AutoComplete.aspx?search=" + x + "&fldname=" + fname1 + "&transid=" + tst + "&activeRow=" + AxActiveRowNo + "&frameno=" + fldFrameNo + "&key=" + objKey + "&parStr=" + parStr + "&subStr=" + subStr + "&AxPop=true";
         createPopup(na);
     } else {
-        var na = "./srchComponent.aspx?search=" + x + "&fldname=" + fname1 + "&transid=" + tst + "&activeRow=" + AxActiveRowNo + "&frameno=" + fldFrameNo + "&key=" + objKey + "&parStr=" + parStr + "&subStr=" + subStr;
+        var na = "./srchComponent.aspx?search=" + x + "&fldname=" + fname1 + "&transid=" + tst + "&activeRow=" + AxActiveRowNo + "&frameno=" + fldFrameNo + "&key=" + objKey + "&parStr=" + parStr + "&subStr=" + subStr + "&AxPop=true";
         window.open(na, "SaveWindow", "width=800,height=530,scrollbars=no,resizable=yes").focus();
     }
 }
@@ -9471,9 +9512,18 @@ function SearchOpenNew(fldAdvSrcId) {
         x = "";
     AxActiveRowNo = GetDbRowNo(fldRowNo, fldFrameNo);
     let _isDropfld = fldPk.hasClass("multiFldChk") ? "true" : (typeof fldPk.attr("data-refresh") == "undefined" ? "" : fldPk.attr("data-refresh"));
-
+    let _thisFldVal = "";
+    if (fldPk.hasClass("multiFldChk")) {
+        if (fldPk.attr("data-selected") != "") {
+            let _chkSep = fldPk.attr("data-separator");
+            _thisFldVal = fldPk.attr("data-selected");
+            _thisFldVal = _thisFldVal.replace(new RegExp(_chkSep, "g"), '♠');
+        }
+    } else {
+        _thisFldVal = fldPk.val();
+    }
     var objKey = tstDataId;
-    var na = "./AutoComplete.aspx?search=" + x + "&fldname=" + fname + "&transid=" + tst + "&activeRow=" + AxActiveRowNo + "&frameno=" + fldFrameNo + "&key=" + objKey + "&parStr=" + parStr + "&subStr=" + subStr + "&isFldddl=" + _isDropfld;
+    var na = "./AutoComplete.aspx?search=" + x + "&fldname=" + fname + "&transid=" + tst + "&activeRow=" + AxActiveRowNo + "&frameno=" + fldFrameNo + "&key=" + objKey + "&parStr=" + parStr + "&subStr=" + subStr + "&isFldddl=" + _isDropfld + "&selFldVal=" + _thisFldVal + "&AxPop=true";
     // createPopup(na, "73vw");
     let myModal = new BSModal("modalIdAddSearch", "", "<iframe class='col-12 h-100' src='" + na + "'></iframe>", () => {
         //shown callback
@@ -9518,6 +9568,22 @@ function SetSelectedValue(listcontrol, listctrl) {
         if (result.indexOf("¿") != -1) {
             pickIdVal = result.substring(0, result.indexOf("¿"));
             result = result.substring(result.indexOf("¿") + 1);
+        }
+
+        if ($j("#" + fname, parent.window.document).hasClass('multiFldChk') && $j("#" + fname, parent.window.document).data("selected") != "") {
+            let _selValues = $j("#" + fname, parent.window.document).data("selected");
+            let _chkSep = $j("#" + fname, parent.window.document).data('separator');
+            let _isValueSelected = _selValues.split(_chkSep).includes(result);
+            if (_isValueSelected) {
+                if (window.opener == null)
+                    callParentNew("modalIdAddSearch", "id").dispatchEvent(new CustomEvent("close"));
+                else
+                    window.close();
+                callParentNew(`showAlertDialog(warning,This value already selected.)`, "function");
+                AxWaitCursor(false);
+                ShowDimmer(false);
+                return;
+            }
         }
         // parentFillField.val(result);
         window.parent.$("#" + $(parentFillField).attr("id")).append('<option value="' + result + '" selected="selected">' + result + '</option>');

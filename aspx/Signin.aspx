@@ -41,9 +41,9 @@
     <script src="../ThirdParty/jquery-confirm-master/jquery-confirm.min.js?v=2" type="text/javascript"></script>
     <script src="../Js/noConflict.min.js?v=1" type="text/javascript"></script>
     <script src="../Js/alerts.min.js?v=30" type="text/javascript"></script>
-    <script type="text/javascript" src="../Js/login.min.js?v=71"></script>
+    <script type="text/javascript" src="../Js/login.min.js?v=72"></script>
     <script type="text/javascript" src="../Js/lang/content-<%=langType%>.js?v=59"></script>
-    <script src="../Js/common.min.js?v=118" type="text/javascript"></script>
+    <script src="../Js/common.min.js?v=120" type="text/javascript"></script>
     <script type="text/javascript">
         history.go(1);
         var cdt = new Date();
@@ -251,9 +251,9 @@ c-45 8 -53 30 -33 91 22 70 14 75 -11 7z"
                                         <div class="clearfix"></div>
                                     </div>
 
-                                    <div class="create-account btn btn-icon btn-white  btn-active-primary  m-4  position-absolute top-0 end-0" id="axpertConfig" runat="server" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-dismiss="click" data-bs-trigger="hover" data-bs-original-title="Axpert Configuration" visible="false" onclick="OpenNewConnection()">
+                                 <%--   <div class="create-account btn btn-icon btn-white  btn-active-primary  m-4  position-absolute top-0 end-0" id="axpertConfig" runat="server" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-dismiss="click" data-bs-trigger="hover" data-bs-original-title="Axpert Configuration" visible="false" onclick="OpenNewConnection()">
                                         <span class="material-icons material-icons-style">settings</span>
-                                    </div>
+                                    </div>--%>
                                 </asp:Panel>
 
                                 <asp:Literal ID="panelPwd" runat="server"></asp:Literal>

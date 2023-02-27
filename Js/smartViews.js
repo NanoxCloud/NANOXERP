@@ -448,7 +448,7 @@ $j(document).ready(function ($) {
 
                             htmlToShow += Object.keys(lvFldsObj).map((dcInd) => {
                                 let dc = lvFldsObj[dcInd];
-                                
+
                                 let extraFIelds = [];
                                 if(dcInd == 1){
                                     extraFIelds = ["Created By", "Created On", "Modified By", "Modified On"].map((fld, ind)=>{
@@ -463,7 +463,7 @@ $j(document).ready(function ($) {
                                 return `
                                 <div id="lstColSel_${dc.name}" class="d-block gap-10 lstColSelWrapper">
                                     <div class="d-flex flex-row-auto form-check form-check-sm form-check-custom form-check-solid gap-10">
-                                        <input id="showAllColumns${dcInd}" class="form-check-input showAllColumns" type="checkbox" value="${dc.name}" ${Object.keys(dc).map((propName) => { return (propName != "fields" ? `data-${propName}="${dc[propName]}"` : ``) }).join(" ")} /> 
+                                        <input id="showAllColumns${dcInd}" class="form-check-input showAllColumns" type="checkbox" value="${dc.name}" ${Object.keys(dc).map((propName) => { return (propName != "fields" ? `data-${propName}="${dc[propName]}"` : ``) }).join(" ")} />
                                         <!-- <span> -->
                                             <label class="form-label col-form-label pb-1 fw-boldest fst-bolder"for="showAllColumns${dcInd}">
                                                 ${dc.name}<i> (${dc.caption}) - ${dc.isGrid ? `Grid` : `Non-Grid`}</i>
@@ -492,7 +492,7 @@ $j(document).ready(function ($) {
                             }).join("");
 
                             htmlToShow += `<div class="form-group">
-                                <label for="grpColName" class="form-label col-form-label pb-1 fw-boldest required"> 
+                                <label for="grpColName" class="form-label col-form-label pb-1 fw-boldest required">
                                     Select column for Hyperlink
                                 </label>
                                 <select class="form-select dialogSlctFld stepperSelect" id="selColHypOpts">
@@ -540,7 +540,7 @@ $j(document).ready(function ($) {
                 else {
                     return htmlToShow;
                 }
-                
+
             }
             else if (selectedVal == 'sort' && iName != "inmemdb") {
 
@@ -678,7 +678,7 @@ $j(document).ready(function ($) {
                     else {
                         try {
                             callParentNew("Charts", "id").dispatchEvent(new CustomEvent("close"));
-                        } catch (error) {}                        
+                        } catch (error) {}
                         getViewName();
                     }
                 }
@@ -727,7 +727,7 @@ $j(document).ready(function ($) {
     /**
      * This function will be trigerred from datatable whenever Advanced Filters Search will be requested.
      * @author Prashik
-     * @Date   2019-02-28T10:37:05+0530                                                                                   
+     * @Date   2019-02-28T10:37:05+0530
      * var isObjectAvailable [if filters are parsed from filterObject or opened filter Popup Fields]
      * @return {[boolean]}                            [return true if current row should be shown in search result]
      */
@@ -917,9 +917,9 @@ $j(document).ready(function ($) {
                         try {
                             var tempData = typeof data[currentIndex] == "object" && data[currentIndex] != null ? data[currentIndex].display : (data[currentIndex] != null ? data[currentIndex] : "");
                             tempData = $($.parseHTML(tempData)).text().trim();
-                          
+
                                 tempData = getDateBasedOnCulture(tempData);
-                      
+
                             currentData = getDateStamp(tempData);
                         } catch (ex) { }
                         if (currentData != "")
@@ -1184,7 +1184,7 @@ function generateAdvFilterDates(dateOption) {
 }
 
 /**
- * Generate unique list of values from selected non special row column 
+ * Generate unique list of values from selected non special row column
  * @author Prashik
  * @Date   2019-04-11T11:55:05+0530
  * @param  {character}                 type        : type of column
@@ -1202,9 +1202,9 @@ function generateUniqueColumnVals(type, columnIndex) {
 
                 columnVals.push(value);
             } else if (type == "d") {
-            
+
                     value = getDateBasedOnCulture(value);
-      
+
                 var curTimeStamp = getDateStamp(value);
 
                 columnVals.push(curTimeStamp);
@@ -1288,7 +1288,7 @@ function generateFilterPill(filterJSON, advFilterNameValue, indexOfArray, isPill
     var limitExceeded = false;
     var isFirstTime = false;
 
-    //apply the pill is is directly handled in chekcbox click ivirCheckBox 
+    //apply the pill is is directly handled in chekcbox click ivirCheckBox
 
     var name = advFilterNameValue;
 
@@ -1362,7 +1362,7 @@ function generateFilterPill(filterJSON, advFilterNameValue, indexOfArray, isPill
  * @author ManiKanta
  * @Date   2018-11-19T14:43:21+0530
  * @param  {String}                 actName id of the original action button
- * @return {}                         
+ * @return {}
  */
 function fireTheCustomAction(actName) {
     $("#" + actName).click();
@@ -1377,7 +1377,7 @@ function fireTheCustomAction(actName) {
  * @param  {String}                 divToShow   which one to show
  * @param  {String}                 typeOfChart Type of chart to show
  * @param  {Object}                 elem        clicked buttons
- * @return {}                            
+ * @return {}
  */
 function ivirShowChart(divToShow, typeOfChart, elem) {
     if (divToShow !== 'chart') {
@@ -1398,8 +1398,8 @@ function ivirShowChart(divToShow, typeOfChart, elem) {
  * @param  {Numbee}                 indexOfArray  Index of the array if user selecting existing chart condition
  * @param  {Boolean}                isPillChecked To know weather user checking or unchecking the condition
  * @param  {Boolean}                applyThePill  To apply the existing pill or to add new condition
- * @param  {Boolean}                isFromLoad    
- * @return {}                             
+ * @param  {Boolean}                isFromLoad
+ * @return {}
  */
 function ivirCreateChart(indexOfArray, isPillChecked, applyThePill, isFromLoad) {
     var checkingArray = [];
@@ -1603,7 +1603,7 @@ var checkNextDBRowsExist = true; //fetch size info, true if webservice call is r
 var dtPageNo = 1; //iview page no for datatable
 var dtTotalRecords = 0; //datatable current page record count
 var dtDbTotalRecords = 0; //datatable total records
-var autoAppendRecords = false; //true - lazy binding, which will automatically append all records to datatable after datatable initilization 
+var autoAppendRecords = false; //true - lazy binding, which will automatically append all records to datatable after datatable initilization
 var pageScrollToEnd = false; //flag used to check page is scrolled to end of div
 var scrollTopPosition = 0; //to get the scroll position of the div before datatable draw event & update the scroll position to same after draw event
 /**
@@ -1614,8 +1614,8 @@ var scrollTopPosition = 0; //to get the scroll position of the div before datata
  * @param  {String}                 task            To re-apply or to clear or grouping
  * @param  {Numeric}                index           In case of group or groupApply this param have the value of the grouped column
  * @param  {Array/Object}           totalArray      The info about the subtotal for that group
- * @param  {Array/Object}           grandTotalArray Info about any grandtotal 
- * @return {}                              
+ * @param  {Array/Object}           grandTotalArray Info about any grandtotal
+ * @return {}
  */
 function createIvirDataTable(task, index, totalArray, grandTotalArray) {
     dtInitalising = true;
@@ -1868,7 +1868,7 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
             recordsExist = this.fnSettings().fnRecordsTotal() > 0;
         } catch (ex) { }
 
-        
+
         if(iName == "ad___acs"){
             $("#dvRefreshParam").parent().prepend(`<a id="newFormForRuntime" href="javascript:void(0)" onclick="javascript:getAxpertStudioAddFormData();" class="btn btn-white btn-color-gray-600 btn-active-primary d-inline-flex align-items-center shadow-sm me-2 dwbIvBtnbtm"><span class="material-icons">add_circle_outline</span>New Form</a>`);
         }
@@ -1897,13 +1897,16 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
         setTimeout(function () {
             // $(window).trigger("resize");
 
-            
+
             // if (!responsiveColumnWidth) {
-            //     forceColumnWidth();
+                // forceColumnWidth();
             // }
+
+            $(".gridData").css({ "width": `${visibleTableWidth}px` }).addClass("ms-0");
+
             setTimeout(() => {
                 $("#GridView1 thead").addClass("headSortUiFix");
-                
+
                 setTimeout(() => {
                     hideDataTableLoading();
 
@@ -1939,14 +1942,14 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
 
 
 
-            
-            
+
+
             // if (!responsiveColumnWidth) {
             //     forceColumnWidth();
             // }
-            
+
             drawCallbackPaginationLogic();
-            
+
             // scrollToLastKnownDrilldown();
 
             /**
@@ -1958,7 +1961,7 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
                 axDatatablePostInDrawCallBack(settings);
             } catch (ex) { };
         }
-    
+
     if (isChkBox == "true" || (rowOptionsExist && !false)) {
         dataTblObj.columnDefs = [{
             "targets": 0,
@@ -2129,7 +2132,7 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
         dataTblObj.data = ivDatas.length != undefined ? ivDatas.slice(0, nxtScrollSize) : ivDatas;
 
         dataTblObj.deferRender = true;
- 
+
 
     if (responsiveColumnWidth) {
         var widthOfGrid = tableWidth || $("table#GridView1")[0].offsetWidth;
@@ -2448,14 +2451,14 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
 
 
 
-            
-            
+
+
             // if (!responsiveColumnWidth) {
             //     forceColumnWidth();
             // }
-            
+
             drawCallbackPaginationLogic();
-            
+
             // scrollToLastKnownDrilldown();
 
             /**
@@ -2522,7 +2525,7 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
     });
 
     ivirDatatable = $(ivirTable).dataTable();
-  
+
         var lastScrollTop = 0;
         //if datatable scrolls bottom of the page then check if next db rows exists & call webservice and append the rows to the grid
         $(".dataTables_scrollBody").on("scroll", delay(function (e) {
@@ -2637,7 +2640,7 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
         nxtScrollSize += defaultRecsPerPage;
         var currScrollSize = 0;
         if (autoAppendRecords) { //all records fetch to the client side if lazy load is true
-            currScrollSize = dtDbTotalRecords; //append next records(from nxtScrollSize to dtDbTotalRecords) to the grid 
+            currScrollSize = dtDbTotalRecords; //append next records(from nxtScrollSize to dtDbTotalRecords) to the grid
             autoAppendRecords = false;
         }
         else
@@ -2652,7 +2655,7 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
                 var currRowSize = nxtScrollSize;
                 defaultRecsPerPage = iviewDataWSRows;
                 var currScrollSize = 0;
-                if (dtDbTotalRecords > iviewDataWSRows) { //if lazy load is enabled then append all records to the datatable & all pages are cached 
+                if (dtDbTotalRecords > iviewDataWSRows) { //if lazy load is enabled then append all records to the datatable & all pages are cached
                     nxtScrollSize = currScrollSize = defaultRecsPerPage;
                     autoAppendRecords = true;
                 }
@@ -2841,18 +2844,18 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
  */
 function scrollToLastKnownDrilldown(){
     setTimeout(() => {
-        
+
         try {
             var scrollHeight = $(".dataTables_scrollBody")[0].scrollHeight;
 
             var appUrl = top.window.location.href.toLowerCase().substring("0", top.window.location.href.indexOf("/aspx/"));
-            
+
             var drilldownScrollInfo = localStorage["drilldownScrollInfo-" + appUrl] || "{}";
 
             var loadedScroll = JSON.parse(drilldownScrollInfo)?.[iName]?.scroll || 0;
-            
+
             let scrollParams = {};
-            
+
             var loadedIndex = -1;
             if(!$.isEmptyObject(scrollParams = (JSON.parse(drilldownScrollInfo)[iName]?.params || {}))){
                 loadedIndex = _.findIndex(ivDatas.map(oldData=>{
@@ -2860,13 +2863,13 @@ function scrollToLastKnownDrilldown(){
                 return newData
             }), ((val)=>{delete val.rowno;return val;})(scrollParams));
             }
-            
-            
+
+
             if(loadedScroll > -1 && scrollHeight >= loadedScroll){
                 $(".dataTables_scrollBody").scrollTop(loadedScroll);
             }
             // else if(loadedIndex > 0 && lazyBinding){
-                
+
             // }
 
             if(loadedIndex > -1){
@@ -2880,9 +2883,9 @@ function scrollToLastKnownDrilldown(){
                     tr.addClass("loadedRecord").addClass("tableStripedFix bg-secondary");
 
                     var updatedJSON = JSON.parse(drilldownScrollInfo);
-                    
+
                     delete updatedJSON?.[iName];
-        
+
                     localStorage["drilldownScrollInfo-" + appUrl] = JSON.stringify(updatedJSON);
                 }
             }
@@ -2937,7 +2940,7 @@ function autoSplitChecker() {
  * @return {string}                          : samrtviews data access key
  */
 function getPropertyAccess(property) {
-    
+
     return isPerf && !property.startsWith("@") ? "@" + property.toUpperCase() : property;
 }
 
@@ -3004,7 +3007,7 @@ function generateCellCheckbox({ td, cellData, rowData, row, col, colID, rowDataA
                                         <span>${optIcon}</span>
                                     </span>
                                     ${optCaption}
-                                </a>       
+                                </a>
                             </div>`;
                         }).join("")
                     }
@@ -3018,10 +3021,10 @@ function generateCellCheckbox({ td, cellData, rowData, row, col, colID, rowDataA
     return returnString;
 }
 
-function generateFieldCheckbox({ td, cellData, rowData, row, col, colID, rowDataAccess }) { 
+function generateFieldCheckbox({ td, cellData, rowData, row, col, colID, rowDataAccess }) {
     let isChecked = false;
     isChecked = (cellData == "T");
-    
+
     let returnString = `<div class="form-check form-check-sm form-check-custom form-check-solid ms-3"><input class="form-check-input border-gray-500 listViewDisabledCb" name="${colID}" type="checkbox" ${isChecked ? ` checked="checked" ` : ``} value="${cellData}"></div>`;
 
     return returnString;
@@ -3062,7 +3065,7 @@ function generateCellOnClick(elem, optType, optName, row, rowData) {
  * @author Prashik
  * @date 2019-10-01
  * @param {*} { td, cellData, rowData, row, col, colID, rowDataAccess }
- * @returns 
+ * @returns
  */
 function generateViewNavigation({ td, cellData, rowData, row, col, colID, rowDataAccess }) {
     var returnData = ``;
@@ -3152,7 +3155,7 @@ function processCellData({ td, cellData, rowData, row, col, colID, rowDataAccess
     let dtColumnName = dtColumns[col].name;
 
     if (iName == "inmemdb") {
-        dtColumnName = getColumnName(dtColumnName);        
+        dtColumnName = getColumnName(dtColumnName);
     }
 
     switch (ColumnType[FieldName.indexOf(dtColumnName)]) {
@@ -3263,10 +3266,10 @@ function processCellData({ td, cellData, rowData, row, col, colID, rowDataAccess
                 var fieldNamePrefix = FieldName[FieldName.indexOf(dtColumnName)].substring(0, 7);
 
                 var attachFilePath = getCaseInSensitiveJsonProperty(rowData, getPropertyAccess(fieldNamePrefix + "Path_" + fieldNameShort)).toString() || "";
-                
+
                 if(attachFilePath){
                     var tempAttachFilePath = (attachFilePath.replace(/\*/g, "\\\\").split("\\").filter((val) => { return (val) }).join("\\\\") || "");
-                }                
+                }
 
                 if (tempAttachFilePath) {
                     if(attachFilePath.indexOf("\\\\") == 0){
@@ -3416,7 +3419,7 @@ function generateCellHyperlink({ td, cellData, rowData, row, col, colID, rowData
     let dtColumnName = dtColumns[col].name;
 
     if (iName == "inmemdb") {
-        dtColumnName = getColumnName(dtColumnName);        
+        dtColumnName = getColumnName(dtColumnName);
     }
 
     if (returnString && HideColumn[FieldName.indexOf(dtColumnName)] == "false") {
@@ -3463,9 +3466,9 @@ function generateCellHyperlink({ td, cellData, rowData, row, col, colID, rowData
                         {
                             if(hLinkData.indexOf("HP") == 0){
                                 hLinkData = hLinkData.substr(2);
-                                
+
                                 returnString = `<a href="javascript:void(0)" onclick="${commonOnClick}" ${className}>${(listViewCbCellData ? $(td).html() : cellData)}</a>`;
-                            }                            
+                            }
                         }
                         break;
                 }
@@ -3482,9 +3485,9 @@ function generateCellHyperlink({ td, cellData, rowData, row, col, colID, rowData
         returnString =  $(`<dummy>${returnString}</dummy>`).find("a:not('.customLink')").attr("onclick", commonOnClick).attr("data-data", cellData).attr("data-row", row).attr("data-col", FieldName.indexOf(rowDataAccess)).parents("dummy").html();
     }
 
-    if (returnString == cellData && listViewCbCellData && !$(td).hasClass("isHyperlinkUI")) {   
+    if (returnString == cellData && listViewCbCellData && !$(td).hasClass("isHyperlinkUI")) {
         $(td).find("input:checkbox").prop("disabled", true);
-        
+
         returnString = $(td).html();
     }
 
@@ -3511,7 +3514,7 @@ function clickOnDemand(elem, open = true, cellData, row, col){
     let dtColumnName = dtColumns[col].name;
 
     if (iName == "inmemdb") {
-        dtColumnName = getColumnName(dtColumnName);        
+        dtColumnName = getColumnName(dtColumnName);
     }
 
     if (returnString && HideColumn[FieldName.indexOf(dtColumnName)] == "false") {
@@ -3563,8 +3566,8 @@ function clickOnDemand(elem, open = true, cellData, row, col){
             _paramsObj[_lastMapCol] = _lastMapValue;
         });
 
-        
-        
+
+
 
         _params = _params.split("#").map((val, ind) => {
             return val.endsWith("&") && ind != (_params.split("#").length - 1) ? val + "#" : (ind != _params.split("#").length - 1 ? val + "%23" : val);
@@ -3573,7 +3576,7 @@ function clickOnDemand(elem, open = true, cellData, row, col){
         _params = _params.replace(/%3C/g, 'l%3tC;');
         cellData = cellData.replace(/&nbsp;/g, " ");
         if (!(cellData.indexOf("<") == 0 && cellData.indexOf(">") == cellData.length - 1) && !(cellData.indexOf("<") > -1 && (cellData.indexOf("</") > -1 || cellData.indexOf("/>") > -1))) {
-            
+
             cellData = CheckSpecialChars(cellData);
         }
         var refresh = ``;
@@ -3687,7 +3690,7 @@ function clickOnDemand(elem, open = true, cellData, row, col){
                                                     if(ivHeadRows[colID]["@hltype"] == "load"){
                                                         viewNavigationData[colID][index] = viewNavigationData[colID][index].replace("ivtstload.aspx?", "tstruct.aspx?")(isTstNavReplaced ? `&openerIV=${iName/* || hLinkData*/}&isIV=${!isListView}` : ``);
                                                     }
-                                                // }                                                
+                                                // }
                                             }else{
                                                 viewNavigationData[colID][index] = "";
                                             }
@@ -3741,7 +3744,7 @@ function clickOnDemand(elem, open = true, cellData, row, col){
                                     }
                                     returnString = "<a href='javascript:void(0)' onclick=\"javascript:ReloadIframe('" + _urlStr + _params + _hLinkType + "');\"" + className + ">" + (listViewCbCellData ? $(td).html() : cellData) + "</a>";
                                 }
-                            }                            
+                            }
                         }
                         break;
                 }
@@ -3762,13 +3765,13 @@ function clickOnDemand(elem, open = true, cellData, row, col){
         $(td).addClass("isHyperlinkUI");
     }
 
-    if (returnString == cellData && listViewCbCellData && !$(td).hasClass("isHyperlinkUI")) {   
+    if (returnString == cellData && listViewCbCellData && !$(td).hasClass("isHyperlinkUI")) {
         $(td).find("input:checkbox").prop("disabled", true);
-        
+
         returnString = $(td).html();
     }
 
-    
+
     if(open){
         try {
             var appUrl = top.window.location.href.toLowerCase().substring("0", top.window.location.href.indexOf("/aspx/"));
@@ -3791,7 +3794,7 @@ function clickOnDemand(elem, open = true, cellData, row, col){
                 }//Math.round($(".dataTables_scrollBody").scrollTop())
             });
         } catch (ex) {}
-        
+
         $(returnString).click();
     }else{
         return returnString;
@@ -3927,7 +3930,7 @@ function setSmartViewHeight() {
         $(".dataTables_scrollFoot").length ? dtScrollFootOffsetHeight = $(".dataTables_scrollFoot")[0].offsetHeight : "";
     } catch (ex) { }
 
-    var tableWrapperOuterHeight = $(".iviewTableWrapper ").outerHeight(true) - $(".iviewTableWrapper ").height();  
+    var tableWrapperOuterHeight = $(".iviewTableWrapper ").outerHeight(true) - $(".iviewTableWrapper ").height();
 
     var subCaptionHeight = 0;
     try {
@@ -4486,7 +4489,7 @@ $(document).on('keyup', '#customSearchInput', function (event) {
  * To get the all the numeric columns in the table will be pushed into numericColumns array
  * @author ManiKanta + Prashik
  * @Date   2018-11-19T15:21:46+0530
- * @return {}                 
+ * @return {}
  */
 function getAllNumericColumns() {
     numericColumns = [];
@@ -4504,7 +4507,7 @@ function getAllNumericColumns() {
  * @author ManiKanta
  * @Date   2018-11-19T15:22:33+0530
  * @param  {Number}                 index The index of the column upto which freeze should happen
- * @return {}                       
+ * @return {}
  */
 function freezeColumn(index) {
 
@@ -4576,7 +4579,7 @@ $(document).on('change', ".DTFC_LeftWrapper table tr input[name='chkItem']", fun
  * @Date   2018-11-19T15:27:12+0530
  * @param  {String}                 dir   Direction of the sort asc/desc
  * @param  {Number}                 index The index of the column to sort
- * @return {}                       
+ * @return {}
  */
 function colAscDsc(dir, index) {
     ivirDatatable.fnSort([index, dir]);
@@ -4591,7 +4594,7 @@ function colAscDsc(dir, index) {
  * @author ManiKanta
  * @Date   2018-11-19T15:28:00+0530
  * @param  {Number}                 indexOfCol The index of the column to toggle on
- * @return {}                            
+ * @return {}
  */
 function toggleGrandTotal(indexOfCol) {
     if ($('#rightClickMenu' + indexOfCol + ' li.columnGrndTotal i').hasClass('icon-arrows-check')) {
@@ -4616,7 +4619,7 @@ function toggleGrandTotal(indexOfCol) {
  * @Date   2018-11-19T15:28:39+0530
  * @param  {Object}                 e          Complete right click event
  * @param  {Number}                 indexOfCol The index of the column to position this menu
- * @return {}                            
+ * @return {}
  */
 function createRightClick(e, indexOfCol) {
     if (typeof indexOfCol == "undefined" || indexOfCol == "0") {
@@ -4714,10 +4717,10 @@ function createRightClick(e, indexOfCol) {
  * keyboars events on custom context menu
  * @author ManiKanta
  * @Date   2018-11-19T15:32:30+0530
- * @param  {}                 presElem      
- * @param  {}                 indexOfCol    
- * @param  {}                 bindedElement 
- * @return {}                               
+ * @param  {}                 presElem
+ * @param  {}                 indexOfCol
+ * @param  {}                 bindedElement
+ * @return {}
  */
 function highlightAndBindUpDown(presElem, indexOfCol, bindedElement) {
 
@@ -4873,7 +4876,7 @@ $(document).on('click', '.rightClickMenu ul li', function () {
  * Function to call to add any onload check when an ivir is called
  * @author ManiKanta
  * @Date   2018-11-19T15:41:23+0530
- * @return {}                 
+ * @return {}
  */
 function ivirInitailCheck() {
     //checking for hyperlink
@@ -4892,7 +4895,7 @@ function ivirInitailCheck() {
  * Events to be binded when highlight popup opens from actions
  * @author ManiKanta
  * @Date   2018-11-19T15:46:44+0530
- * @return {}                 
+ * @return {}
  */
 function highlightBindEvents() {
     $(document).on("focusout", "#ivirbgColorValue", function () {
@@ -4916,7 +4919,7 @@ function highlightBindEvents() {
  * To unbind events of highligh when popup is closed
  * @author ManiKanta
  * @Date   2018-11-19T15:47:11+0530
- * @return {}                 
+ * @return {}
  */
 function highlightUnBindEvents() {
     $(document).off("focusout", "#ivirbgColorValue");
@@ -4966,7 +4969,7 @@ saveViewActionRef = (titleName, task, okFunction, showValuesOnOpen, isEditPill) 
                 if (presentAction == "chart") {
                     try {
                         callParentNew("Charts", "id").dispatchEvent(new CustomEvent("close"));
-                    } catch (error) {}                    
+                    } catch (error) {}
                 } else {
                     return false;
                 }
@@ -5101,7 +5104,7 @@ onContentReadyRef = (task, showValuesOnOpen, isEditPill) => {
                     "/Js/thirdparty/jquery/3.1.1/jquery.min.js",
                     "/Js/noConflict.min.js",
                     "/ThirdParty/lodash.min.js",
-                    "/Js/common.min.js?v=118",
+                    "/Js/common.min.js?v=120",
                     "/ThirdParty/DataTables-1.10.13/media/js/jquery.dataTables.min.js",
                     "/ThirdParty/DataTables-1.10.13/media/js/dataTables.bootstrap.min.js",
                     "/ThirdParty/DataTables-1.10.13/extensions/FixedHeader/js/dataTables.fixedHeader.min.js",
@@ -5288,7 +5291,7 @@ function validateViewName() {
  * To highlight the first field when an popup is opened
  * @author ManiKanta
  * @Date   2018-11-19T16:26:22+0530
- * @return {}                 
+ * @return {}
  */
 function highlightTheFirstFld() {
     var allFocusableElems = $(".jconfirm-box-container").find(':focusable');
@@ -5305,7 +5308,7 @@ function highlightTheFirstFld() {
  * @author ManiKanta
  * @Date   2018-11-19T16:26:49+0530
  * @param  {String}                 type Type of the condition to check
- * @return {Boolean}                      
+ * @return {Boolean}
  */
 function checkForPillsLength(type) {
     if (type == "group" || type == "highlight" || type == "chart" || type == "filter") {
@@ -5334,7 +5337,7 @@ function checkForPillsLength(type) {
  * @author ManiKanta
  * @Date   2018-11-19T16:28:14+0530
  * @param  {String}                 act Action name on which popup is opened
- * @return {}                     
+ * @return {}
  */
 function ivirbindEvents(act) {
     var action = act.toLowerCase();
@@ -5547,7 +5550,7 @@ function ivirbindEvents(act) {
  * @author ManiKanta
  * @Date   2018-11-19T16:28:59+0530
  * @param  {String}                 act Action on which popup is closing
- * @return {}                     
+ * @return {}
  */
 function ivirRemovebindEvents(act) {
     jQuery(document).unbind("keydown.cnfrmPopupKD");
@@ -5575,8 +5578,8 @@ function ivirRemovebindEvents(act) {
  * Events to be binded when user opened a sort popup like key down/up space selction and dragging(Future use)
  * @author ManiKanta
  * @Date   2018-11-19T16:29:53+0530
- * @param  {}                 parentId 
- * @return {}                          
+ * @param  {}                 parentId
+ * @return {}
  */
 function assignKeyDownDrag(parentId) {
     $(document).on('keydown.upAndDown', function (e) {
@@ -5607,7 +5610,7 @@ function assignKeyDownDrag(parentId) {
  * @Date   2018-11-19T16:31:30+0530
  * @param  {String}                 direction up/down
  * @param  {String}                 parentId  id of the parent
- * @return {}                           
+ * @return {}
  */
 function ivirMoveUpDown(direction, parentId) {
     var selectedFld = $("#" + parentId).find('div.labelSelected');
@@ -5626,7 +5629,7 @@ function ivirMoveUpDown(direction, parentId) {
  * Will be called when user applied hide show columns
  * @author Prashik + ManiKanta
  * @Date   2018-11-19T17:18:08+0530
- * @return {}                 
+ * @return {}
  */
 function ivirshowHideColumns(hvColumns = []) {
     requestTstructFieldsObj();
@@ -5803,7 +5806,7 @@ function ivirDesignColumn() {
 
     ivirMainObj.design = ivColDesignJSON || [];
 
-    if (document.getElementById("IvirActions").value == "design") {        
+    if (document.getElementById("IvirActions").value == "design") {
         var username = callParentNew("mainUserName");
 
         ivirMainObj["applyTo"] = $('#viewAplyTo option:selected').val() || username;
@@ -5825,7 +5828,7 @@ function ivirDesignColumn() {
  * Will be called when user applied sorting
  * @author Prashik + ManiKanta
  * @Date   2018-11-19T17:18:47+0530
- * @return {}                 
+ * @return {}
  */
 function ivirSortColumns(fldSortingArray = []) {
     var sortingArray = [];
@@ -5895,7 +5898,7 @@ function ivirSortColumns(fldSortingArray = []) {
  * @Date   2018-11-19T17:19:03+0530
  * @param  {Number}                 indexOfArray         index of the column on which grouping should apply
  * @param  {Boolean}                isPillAlreadyChecked To know weather user is applyig or removing the conditon
- * @return {}                                      
+ * @return {}
  */
 function ivirRowGrouping(indexOfArray, isPillAlreadyChecked) {
 
@@ -5985,7 +5988,7 @@ function ivirRowGrouping(indexOfArray, isPillAlreadyChecked) {
     }
 
 
-    //apply the pill is is directly handled in chekcbox click ivirCheckBox 
+    //apply the pill is is directly handled in chekcbox click ivirCheckBox
 
     var name = grpName.val();
     var columnIndex = colIndex;
@@ -6064,7 +6067,7 @@ function ivirRowGrouping(indexOfArray, isPillAlreadyChecked) {
  * @author ManiKanta
  * @Date   2018-11-19T17:21:32+0530
  * @param  {Boolean}                isFromEdit To check from edit of new
- * @return {}                            
+ * @return {}
  */
 function getChartHtml(isFromEdit) {
     isFromEdit = isFromEdit || false;
@@ -6123,7 +6126,7 @@ function getChartHtml(isFromEdit) {
  * @author ManiKanta
  * @Date   2018-11-19T17:22:26+0530
  * @param  {Boolean}                isFromEdit To check is from edit or new
- * @return {}                            
+ * @return {}
  */
 function getGroupHtml(isFromEdit) {
     isFromEdit = isFromEdit || false;
@@ -6212,7 +6215,7 @@ $(document).on('change', '.totalSource', function (event) {
  * @author ManiKanta
  * @Date   2018-11-19T17:26:17+0530
  * @param  {String}                 indexToAdd New index to add
- * @return {}                            
+ * @return {}
  */
 function ivirAddTotalCndtn(indexToAdd) {
     indexToAdd = parseInt(indexToAdd, 10);
@@ -6272,7 +6275,7 @@ function ivirAddTotalCndtn(indexToAdd) {
  * @author ManiKanta
  * @Date   2018-11-19T17:28:05+0530
  * @param  {String}                 indexToDelete The index to delete the condition
- * @return {}                               
+ * @return {}
  */
 function ivirDeleteTotalCndtn(indexToDelete) {
     var functionVal = $('#ivirTotalCndtn' + indexToDelete + ' .totalAggrFunction').val();
@@ -6319,7 +6322,7 @@ function ivirDeleteTotalCndtn(indexToDelete) {
  * @Date   2018-11-19T17:29:59+0530
  * @param  {Object}                 elem feild object
  * @param  {String}                 msg  Message to show
- * @return {}                      
+ * @return {}
  */
 function ivirCustomErrMsg(elem, msg) {
     var labelName = elem.parent().find('label').text();
@@ -6344,10 +6347,10 @@ function ivirCustomErrMsg(elem, msg) {
  * To get the highlight HTML for the popup
  * @author ManiKanta
  * @Date   2018-11-19T17:38:27+0530
- * @param  {}                 type       
+ * @param  {}                 type
  * @param  {Number}                 index      Index of the col
  * @param  {Boolean}                isFromEdit From edit or new
- * @return {}                           
+ * @return {}
  */
 function getHighlightHtml(type, index, isFromEdit) {
     var isFromEdit = isFromEdit || false;
@@ -6455,7 +6458,7 @@ function getAllColumns(exceptionArray, dontCheckForHiddenFields, calledFrom) {
  * @param  {Number}                 indexOfArray  The index of the already applied highlight
  * @param  {Boolean}                isPillChecked Applying or removing
  * @param  {Boolean}                applyThePill  To apply the condtion or to simply add
- * @return {}                               
+ * @return {}
  */
 function ivirHighlightRow(indexOfArray, isPillChecked, applyThePill) {
     //must handle first time click,creating pills,edit pills,showing particular pill
@@ -6573,7 +6576,7 @@ function ivirHighlightRow(indexOfArray, isPillChecked, applyThePill) {
         if ((indexOfArray === undefined) || isPillChecked) {
 
             for (var i = 0; i < totalRows[0].length; i++) {
-                //totalRows[0][i](if sorting happrend i wont be the row num) is the row and j is column                
+                //totalRows[0][i](if sorting happrend i wont be the row num) is the row and j is column
                 var presentRowData = rowsData[i];
                 (!isNaN(parseInt(colvalue))) ? presentRowData = presentRowData[Object.keys(presentRowData)[colvalue]] : graphCol = presentRowData[colvalue]
                 presentRowData = typeof presentRowData[colvalue] == "object" && presentRowData[colvalue] != null ? presentRowData[colvalue].display : (presentRowData[colvalue] != null ? presentRowData[colvalue] : "");
@@ -6709,7 +6712,7 @@ function ivirHighlightRow(indexOfArray, isPillChecked, applyThePill) {
  * @author ManiKanta
  * @Date   2018-11-20T10:26:40+0530
  * @param  {String}                 index If index is 'all' then it will clear all the highlights
- * @return {}                       
+ * @return {}
  */
 function clearIvirHighlight(index) {
     // initial values need to be given
@@ -6789,7 +6792,7 @@ function clearIvirHighlight(index) {
  * @Date   2018-11-20T10:30:05+0530
  * @param  {String}                 type            Particular type to create or all
  * @param  {String}                 pillToHighlight To chechk the first/last/none by default
- * @return {}                                 
+ * @return {}
  */
 function createPills(type, pillToHighlight) {
     if (!ivirMainObj.highlight && !ivirMainObj.group && !ivirMainObj.filter)
@@ -6894,7 +6897,7 @@ function createPills(type, pillToHighlight) {
  * @param  {String}                 type highlihgt or group
  * @param  {Number}                 j    Index need to update
  * @param  {String}                 name New condition name to show
- * @return {}                      
+ * @return {}
  */
 function upateThePills(type, j, name) {
     var pillsHtml = "";
@@ -6938,7 +6941,7 @@ function upateThePills(type, j, name) {
  * Similar to create pills usedj to create chart conditions
  * @author ManiKanta
  * @Date   2018-11-20T10:34:01+0530
- * @return {}                 
+ * @return {}
  */
 function createChartPills() {
     var pillsHtml = "";
@@ -7004,7 +7007,7 @@ function createChartPills() {
  * @Date   2018-11-20T10:34:26+0530
  * @param  {Number}                 j    New index to add
  * @param  {String}                 name New name to show
- * @return {}                      
+ * @return {}
  */
 function upateTheChartPills(j, name) {
     var pillsHtml = "";
@@ -7044,7 +7047,7 @@ function upateTheChartPills(j, name) {
  * Show/Hide of the highlight/group condtions when user click on show hide button
  * @author ManiKanta + Prashik
  * @Date   2018-11-20T10:36:46+0530
- * @return {}                 
+ * @return {}
  */
 function toggleIvirPills() {
     var cndtns = $("#ivirAllCndtns");
@@ -7187,7 +7190,7 @@ function applyThePill(type, index) {
  * @Date   2018-11-20T11:14:52+0530
  * @param  {String}                  type  highlight/group/chart
  * @param  {Number}                 index Index of the condition to edit
- * @return {}                       
+ * @return {}
  */
 function editThePill(type, index) {
     var showValueOption = [type, index];
@@ -7208,7 +7211,7 @@ function editThePill(type, index) {
  * @Date   2018-11-20T11:16:55+0530
  * @param  {String}                 type  highlihgt/group/chart
  * @param  {index}                  index index of the condition to delete
- * @return {}                       
+ * @return {}
  */
 function deleteThePill(type, index, isClearAll = false) {
     if (type == 'highlight')
@@ -7252,7 +7255,7 @@ function deleteThePill(type, index, isClearAll = false) {
             }
 
             var filterPills = $("[data-pill-type='filter']");
-            //when user deletes a plill and if any other filter pill exists & it was selected then display default grid data as selected filter 
+            //when user deletes a plill and if any other filter pill exists & it was selected then display default grid data as selected filter
             if (filterPills.length && filterPills.find(".ivirFilterCheckBox").is(":checked")) {
                 try {
                     advFiltersObjectToApply = ivirMainObj.filter[filterPills.find(".ivirFilterCheckBox:checked").data("index")].data;
@@ -7349,7 +7352,7 @@ $(function () {
  * @Date   2018-11-20T11:18:02+0530
  * @param  {String}                 type  type of the condtion to rearrange
  * @param  {Number}                 index The index which is deleted
- * @return {}                       
+ * @return {}
  */
 function reArrangeIndexes(type, index) {
     var pillsArray = ivirMainObj[type];
@@ -7382,7 +7385,7 @@ function reArrangeIndexes(type, index) {
  * All validations of the popup will be handled here
  * @author ManiKanta
  * @Date   2018-11-20T11:19:20+0530
- * @param  {String}                 title 
+ * @param  {String}                 title
  * @return {Boolean}                       returns true if everything is valid
  */
 function validateFields(title) {
@@ -7425,7 +7428,7 @@ function validateFields(title) {
  * Will be called when user click on download
  * @author ManiKanta
  * @Date   2018-11-20T11:20:47+0530
- * @param  {}                 
+ * @param  {}
  */
 function DownloadAndSave(el) {
     $("#ivirDownloadWrapper div button .ivirDownload").removeClass('active');
@@ -7443,7 +7446,7 @@ function DownloadAndSave(el) {
  * Will be called when user click on download of any file in download popup
  * @author ManiKanta
  * @Date   2018-11-20T11:21:44+0530
- * @param  {}                 val 
+ * @param  {}                 val
  */
 function DownloadFile(val) {
     if (!$("#ivirDownloadWrapper div button").hasClass('active')) {
@@ -7478,7 +7481,7 @@ function DownloadFile(val) {
  * @author ManiKanta
  * @Date   2018-11-20T11:23:04+0530
  * @param  {Object}                 elemm Element which is clicked
- * @return {}                       
+ * @return {}
  */
 function ivirChkHdrCheckbox(elemm) {
 
@@ -7524,7 +7527,7 @@ function ivirChkHdrCheckbox(elemm) {
  * @author ManiKanta
  * @Date   2018-11-20T11:23:57+0530
  * @param  {Object}                 elem Element which is clicked
- * @return {}                      
+ * @return {}
  */
 function ivirCheckAll(elem) {
 
@@ -7559,7 +7562,7 @@ function ivirCheckAll(elem) {
  * @Date   2018-11-20T11:25:48+0530
  * @param  {String}                 type view to show chart/grid
  * @param  {Object}                 elem Clicked button
- * @return {}                      
+ * @return {}
  */
 function toggleGridView(type, elem) {
     $(".task-button").removeClass('active')
@@ -7642,7 +7645,7 @@ function toggleGridView(type, elem) {
  * @param  {Number}                 index        chart condition index
  * @param  {String}                 type         column/bar
  * @param  {Number}                 valColIndex  The value column index number
- * @return {}                              
+ * @return {}
  */
 function columnChart(isDataExists, datats, title, index, type, valColIndex) {
     var headerName = $(ivirDataTableApi.columns(valColIndex).header()).text().trim();
@@ -7733,7 +7736,7 @@ function columnChart(isDataExists, datats, title, index, type, valColIndex) {
  * @param  {String}                 type         column/bar
  * @param  {Number}                 valColIndex  The value column index number
  * @param  {Boolean}                isDonut      Is donut or pie chart
- * @return {}                              
+ * @return {}
  */
 function pieChart(isDataExists, datats, title, index, valColIndex, isDonut) {
     var headerName = $(ivirDataTableApi.columns(valColIndex).header()).text().trim();
@@ -7946,7 +7949,7 @@ function ivirDuplicateCheck(title, isEditPill, index) {
  * @param {*} title
  * @param {boolean} isEditPill
  * @param {*} index
- * @returns 
+ * @returns
  */
 function ivirChartNewDuplicateCheck(title, isEditPill, index) {
     if (ivirMainViewObj) {
@@ -8004,9 +8007,9 @@ function deleteCommonChart(chartObj) {
  * To test the regular expressions
  * @author ManiKanta
  * @Date   2018-11-20T11:58:52+0530
- * @param  {}                 type  
- * @param  {}                 value 
- * @return {Boolean}                       
+ * @param  {}                 type
+ * @param  {}                 value
+ * @return {Boolean}
  */
 function testRegex(type, value) {
     var regexTotst = regexes[type];
@@ -8019,7 +8022,7 @@ function testRegex(type, value) {
  * On click on action save saving the condition to database for next load
  * @author ManiKanta
  * @Date   2018-11-20T11:59:18+0530
- * @return {}                 
+ * @return {}
  */
 function saveInSessionBeforeSave() {
     $("#IvirActions").val("");
@@ -8235,7 +8238,7 @@ function SavePillsCheckedProperty() {
  * On load to get the already saved conditions from db
  * @author ManiKanta
  * @Date   2018-11-20T12:00:04+0530
- * @return {}                 
+ * @return {}
  */
 function getSavedConditions() {
 
@@ -8275,7 +8278,7 @@ function getSavedConditionsNew(view, json = "") {
 
         createPillsOnLoad();
         applyCheckedPillsOnLoad();
-        
+
         scrollToActiveView(view);
 
         try {
@@ -8313,7 +8316,7 @@ function createViewTabs(jsonObj) {
                     <a data-bs-toggle="tab" id="${key}" class="nav-link fw-boldest shadow-sm fs-6 text-gray-800 p-4 lnkViewTab" data-caption="${tabindex}" href="#${key}">
                         <span>${dataCaption}</span>
                         <span  data-name="${key}" data-caption="${dataCaption}" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-dismiss="click" data-bs-original-title="Edit" class="material-icons material-icons-style material-icons-5 viewtabEdit viewtabDltBtn">edit</span>
-                        
+
                     </a>
                 </li>
             `;
@@ -8404,7 +8407,7 @@ function clearExistingPills() {
  * @Date   2018-11-20T12:00:27+0530
  * @param  {String}                 option task to get/set
  * @param  {Object}                 json   if set the json data to set
- * @return {}                        
+ * @return {}
  */
 function saveJsonToDB(option, json, view) {
 
@@ -8630,7 +8633,7 @@ function SaveSmartviewJsonToDb(option, json, uname, view) {
  * Create all the condtions once we got the data from database
  * @author ManiKanta + Prashik
  * @Date   2018-11-20T12:01:28+0530
- * @return {}                 
+ * @return {}
  */
 function createPillsOnLoad() {
     if (jQuery.isEmptyObject(ivirMainObj))
@@ -8668,10 +8671,10 @@ function createPillsOnLoad() {
  * To ccheck any dependent fields are there when user is applying any conditions
  * @author ManiKanta
  * @Date   2018-11-20T12:01:51+0530
- * @param  {}                 arrayType  
- * @param  {}                 arrayIndex 
- * @param  {}                 getColumns 
- * @return {}                            
+ * @param  {}                 arrayType
+ * @param  {}                 arrayIndex
+ * @param  {}                 getColumns
+ * @return {}
  */
 function checkForPillDependentFlds(arrayType, arrayIndex, getColumns) {
     if (!getColumns && ivirVisibleColumns.length === 0) {
@@ -8767,9 +8770,9 @@ function hideDataTableLoading() {
  * @param {*} elem = jQuery empty html element or document element that should be passed to function and will be further filled with processedData [eg: $("<div />") / document.createElement("div")]
  * @param {*} cellData : Current Data that should be processed
  * @param {*} rowData : complete rowData
- * @param {int} row : row index starting from 0 in ivDatas json onject 
+ * @param {int} row : row index starting from 0 in ivDatas json onject
  * @param {int} col : data index starting from 0 for given rowData as per FieldName
- * 
+ *
  * @return {htmlObj} jQuery html element will be returned with processed data that can be attached anywhere in dom [eg: html : <div>Processed Data</div>]
  */
 var createdCell = createCustomElement = (elem, cellData, rowData, row, col, parseTemplete = true) => {
@@ -8781,7 +8784,7 @@ var createdCell = createCustomElement = (elem, cellData, rowData, row, col, pars
     let dtColumnName = dtColumns[col].name;
 
     if (iName == "inmemdb") {
-        dtColumnName = getColumnName(dtColumnName);        
+        dtColumnName = getColumnName(dtColumnName);
     }
 
     var colID = FieldName[FieldName.indexOf(dtColumnName)];
@@ -8905,11 +8908,11 @@ function injectProductColumnTemplate(iName, colID){
     } else if (iName == "ad___acr" && colID == "dmy") {
         return `
         <div class="col-12">
-            <div class="col-12 d-flex flex-row">                    
+            <div class="col-12 d-flex flex-row">
                     <div class="">
                             <a href="javascript:void(0);" class="btn btn-light-primary fw-boldest btn-sm px-5" onclick="loadAxRuleEngineForm('false','{{axpdef_rulesdefid}}');">
                                 Edit
-                            </a>                        
+                            </a>
                     </div>
             </div>
         </div>
@@ -9086,7 +9089,7 @@ function constuctDataButton(task) {
         filterSelectHtml += '<input type="hidden" name="IvirActions" id="IvirActions" class="js-dropdown__input" value="">';
 
         filterSelectHtml += ` <div id="ivirActionButton" class="c-button c-button--dropdown js-dropdown__current ${iviewButtonStyle == "old" ? "menu-link text-gray-600 text-hover-white p-0 menu-dropdown" : "pt-2"}" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-flip="top-end">${iviewButtonStyle == "old" ? `<span class="menu-title">${callParentNew('lcm')[406]}</span><span class="menu-arrow"></span>` : `<span class="material-icons material-icons-style">list_alt</span>`}</div>`;
-        
+
         var MenuClass = iviewButtonStyle == "modern" ? "w-100 w-sm-350px" : "w-200px";
         var MenuItemClass = iviewButtonStyle == "modern" ? "col-4" : "menu-item px-3";
         var MenuItemLinkClass = iviewButtonStyle == "modern" ? "d-flex flex-column flex-center text-center text-gray-800 text-hover-primary bg-hover-light rounded p-3 mb-3" : "menu-link px-3";
@@ -9170,7 +9173,7 @@ function constuctDataButton(task) {
         filterSelectHtml += '</ul>';
         filterSelectHtml += '</div>';
 
-        $("#filterWrapper").html(filterSelectHtml);        
+        $("#filterWrapper").html(filterSelectHtml);
     }
 
     if (requestJSON && appGlobalVarsObject._CONSTANTS.compressedMode) {
@@ -9547,7 +9550,7 @@ function getLayoutHTML(cardTemplatingHTML) {
                                     <span class="apt-status-color" style="padding: 12px; border-radius: 50%; background: orange; display: inline-block;"></span>
                                     {{/is}}
                                     <span class="apt-status-text" style="display: inline-block; padding: 6px 12px; vertical-align: super; font-size: 16px; font-style: italic;">{{axp_status}}</span>
-                                {{/is}}                        
+                                {{/is}}
 
                                 {{#is axrowoptions}}
                                 <ul class="header-dropdown" style="list-style: none; display: inline-block;">
@@ -9699,7 +9702,7 @@ function getLayoutHTML(cardTemplatingHTML) {
                                     {{{axp_title}}}
                                 </h2>
                             </div>
-                            </div>     	                	
+                            </div>
                         </div>
                         <div class="panel-body">
                             <hr style="margin: 0px 0px 10px;"/>
@@ -9718,7 +9721,7 @@ function getLayoutHTML(cardTemplatingHTML) {
                                 {{#is axp_status 'toLower' 'progress'}}
                                 <span class="apt-status-color" style="padding: 12px; border-radius: 50%; background: orange; display: inline-block;"></span>
                                 {{/is}}
-                                <span class="apt-status-text" style="display: inline-block; padding: 6px 12px; vertical-align: super; font-size: 16px; font-style: italic;">{{axp_status}}</span>     
+                                <span class="apt-status-text" style="display: inline-block; padding: 6px 12px; vertical-align: super; font-size: 16px; font-style: italic;">{{axp_status}}</span>
                                 </div>
                             {{/is}}
                         </div>
@@ -9755,11 +9758,11 @@ function smartStepper(newViewTab, viewTabName, viewTabCaption) {
     if (viewTabName == "main" && viewTabCaption == "main" && isListView) {
         svOptionsObj = svOptionsObj.filter(opt => opt.name == "design");
     }
-    
+
     var saveView = `saveViewActionRef("${(newViewTab ? "Add View" : "Edit View")}", "view", "saveInSessionBeforeSaveNew", ${showValueOption}, ${!newViewTab ? true : false})`;
 
     /* Section :: HTML */
-    var smartViewStepperHTML = `<div class="stepper stepper-pills card bg-transparent border-0 h-100">        
+    var smartViewStepperHTML = `<div class="stepper stepper-pills card bg-transparent border-0 h-100">
         <div class="card-header d-block p-0 bg-transparent border-0">
             <div class="stepper-nav bg-white rounded-2 flex-center flex-wrap">
                 ${
@@ -9773,11 +9776,11 @@ function smartStepper(newViewTab, viewTabName, viewTabCaption) {
                         <div class="stepper-label">
                             <h3 class="stepper-title">
                                 ${element.caption}
-                            </h3>                       
+                            </h3>
                         </div>
                     </div>`;
                     }).join("")
-                }                
+                }
             </div>
         </div>
         <div class="card-body p-0">
@@ -9789,24 +9792,24 @@ function smartStepper(newViewTab, viewTabName, viewTabCaption) {
                                 ${element.html(!newViewTab)}
                             </div>`;
                         }).join("")
-                    }                    
-                </div>                
+                    }
+                </div>
             </div>
-        </div>        
+        </div>
     </div>
     `;
 
-    var viewHeaderHTML = `<label class="input-group border-bottom required"> 
+    var viewHeaderHTML = `<label class="input-group border-bottom required">
         <input required id="viewName" type="text" class="d-none form-control" maxlength="20" tabindex="-1" value="${viewTabName}" ${viewTabName && !newViewTab ? `disabled="disabled"` : ``} />
 
-        <input required id="viewCaption" type="text" class="form-control form-control-transparent ps-12" maxlength="20" tabindex="-1" placeholder="Enter View Name..." title="Enter View Name..." value="${viewTabCaption}" ${viewTabCaption && !newViewTab ? `disabled="disabled"` : ``} /> 
+        <input required id="viewCaption" type="text" class="form-control form-control-transparent ps-12" maxlength="20" tabindex="-1" placeholder="Enter View Name..." title="Enter View Name..." value="${viewTabCaption}" ${viewTabCaption && !newViewTab ? `disabled="disabled"` : ``} />
 
         <span class="material-icons material-icons-style material-icons-2 material-icons-lg-3 cursor-default position-absolute top-50 translate-middle-y ms-4 z-index-3">
             edit
         </span>
     </label>
-    
-    <label class="input-group gap-5 ${!hasBuildAccess ? `d-none` : ``}">                    
+
+    <label class="input-group gap-5 ${!hasBuildAccess ? `d-none` : ``}">
         <label class="form-label col-form-label pb-1 fw-boldest text-gray-500 fst-italic">for</label>
         <select class="form-select form-select-white border-bottom dialogSlctFld" id="viewAplyTo" placeholder="Apply To">
             <option value=${callParentNew("mainUserName")}>${callParentNew("mainUserName")}</option>
@@ -9815,7 +9818,7 @@ function smartStepper(newViewTab, viewTabName, viewTabCaption) {
     </label>
 
     <label class="input-group gap-5 w-600px ${!isListView ? `d-none` : ``}">
-        <!--<div class="vr h-25px bg-dark my-3"></div>-->   
+        <!--<div class="vr h-25px bg-dark my-3"></div>-->
         <label class="form-label col-form-label pb-1 fw-boldest text-gray-500 fst-italic">set as</label>
         <div class="form-check form-switch form-check-custom form-check-solid--- px-1">
             <label for="asDefaultView" class="form-check-label form-label col-form-label pb-1 fw-boldest opacity-100 noempty nopurpose col-form-label-sm fs-6">
@@ -9832,7 +9835,7 @@ function smartStepper(newViewTab, viewTabName, viewTabCaption) {
         </span>
     </span>` : ``
     }
-    
+
     <span class="btn btn-icon btn-light btn-active-light-primary shadow-sm sv-btn-reset" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-dismiss="click" data-bs-original-title="${appGlobalVarsObject.lcm[393]}">
         <span class="material-icons material-icons-style">
             auto_mode
@@ -10070,18 +10073,18 @@ function getRowGroupingCondtionHtml() {
 function smartDesign(lvDesignHTML) {
     var newViewTab = typeof ivirMainViewObj?.views?.["main"]?.design?.length == "undefined" ? true : false;
     var viewTabName = "main";
-    
-    let applyToHTML = `<label class="input-group border-bottom required d-none"> 
+
+    let applyToHTML = `<label class="input-group border-bottom required d-none">
     <input required id="viewName" type="text" class="d-none form-control" maxlength="20" tabindex="-1" value=""} />
 
-    <input required id="viewCaption" type="text" class="form-control form-control-transparent ps-12" maxlength="20" tabindex="-1" placeholder="Enter View Name..." title="Enter View Name..." value="main"} /> 
+    <input required id="viewCaption" type="text" class="form-control form-control-transparent ps-12" maxlength="20" tabindex="-1" placeholder="Enter View Name..." title="Enter View Name..." value="main"} />
 
     <span class="material-icons material-icons-style material-icons-2 material-icons-lg-3 cursor-default position-absolute top-50 translate-middle-y ms-4 z-index-3">
         edit
     </span>
 </label>
 
-<label class="input-group gap-5 ${!hasBuildAccess ? `d-none` : ``}">                    
+<label class="input-group gap-5 ${!hasBuildAccess ? `d-none` : ``}">
     <label class="form-label col-form-label pb-1 fw-boldest text-gray-500 fst-italic">Design for</label>
     <select class="form-select form-select-white border-bottom dialogSlctFld" id="viewAplyTo" placeholder="Apply To">
         <option value=${callParentNew("mainUserName")}>${callParentNew("mainUserName")}</option>
@@ -10112,7 +10115,7 @@ var buttonDeleteResetHTML = `
             width: 'resolve'
         });
 
-        
+
         if(!newViewTab){
             let {applyTo} = ivirMainViewObj.views["main"];
 
@@ -10126,6 +10129,7 @@ var buttonDeleteResetHTML = `
             newBtnGroup["design"]?.clear();
             showAlertDialog(`success`, `${newBtnGroup["design"]?.caption} ${appGlobalVarsObject.lcm[393]}.`);
             saveViewActionRef("Design", "design", newBtnGroup.design.apply, undefined, false);
+            ShowDimmer(true);
             setTimeout(() => {
                 window.location.href = window.location.href;
             }, 3000);
@@ -10142,6 +10146,7 @@ var buttonDeleteResetHTML = `
     myModal.okBtn.removeAttribute("data-bs-dismiss");
     myModal.okBtn.addEventListener("click", () => {
         saveViewActionRef("Design", "design", newBtnGroup.design.apply, undefined, false);
+        ShowDimmer(true);
         setTimeout(() => {
             window.location.href = window.location.href;
         }, 3000);
@@ -10181,14 +10186,15 @@ function createAxRulesPopup(modalBodyLink, delayLoad = false) {
         var iFrameModalBody = `<iframe id="${modalId}" name="${modalId}" class="col-12 flex-column-fluid w-100 h-100 p-0 my-n1" src="${delayLoad ? "" : modalBodyLink}" frameborder="0" allowtransparency="True"></iframe>`;
 
         let myModal = new BSModal(modalId, "", iFrameModalBody,
-            (opening) => {
+            (opening, modal) => {
                 if (delayLoad) {
                     try {
+                        modal.url = modalBodyLink;
                         myModal.modalBody.querySelector(`#${modalId}`).contentWindow.location.href = modalBodyLink;
                     } catch (ex) { }
                 }
             },
-            (closing) => {
+            (closing, modal) => {
                 var isAxPop = modalBodyLink.indexOf("AxPop=true") > -1;
                 if (isAxPop && (window.document.title == "Iview" || window.document.title == "Listview")) {
                     window.location.href = window.location.href;
@@ -10211,7 +10217,7 @@ function createAxRulesPopup(modalBodyLink, delayLoad = false) {
  * @author Prashik
  * @date 06/01/2023
  * @param {*} { td, cellData, rowData, row, col, colID, rowDataAccess }
- * @return {*}  
+ * @return {*}
  */
 function processMask({ td, cellData, rowData, row, col, colID, rowDataAccess }){
     let returnData = cellData;
@@ -10224,7 +10230,7 @@ function processMask({ td, cellData, rowData, row, col, colID, rowDataAccess }){
         else if(maskObj.masking == "Show few characters"){
             let prefixVisibleMaskCount = +maskObj.firstcharmask;
             let postfixVisibleMaskCount = +maskObj.lastcharmask;
-            
+
             if(prefixVisibleMaskCount){
                 if(returnData.toString().length < prefixVisibleMaskCount){
                     prefixVisibleMaskCount = returnData.toString().length;

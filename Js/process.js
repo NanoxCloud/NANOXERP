@@ -4233,8 +4233,11 @@ function SetRows(dcNo, rowCount, delRows, calledFrom, oldHasData, dcHasRows) {
 
                 if (rowNo == "*") {
                     var dcRowCnt = GetDcRowCount(dcNo);
-                    if (dcHasRows != "no")
+                    if (dcHasRows != "no") {
                         SetRowsInDc(dcNo, currentRowCnt, calledFrom);
+                        if ((!axInlineGridEdit && AxpGridForm == "form") || (isMobile && mobileCardLayout != "none"))
+                            DeleteFromGridRow(dcNo, rowNo, this);
+                    }
                 }
                 else {
                     DeleteDbRow(dcNo, rowNo, calledFrom);
@@ -6272,9 +6275,9 @@ function constructWrkHtml(maxLevels, usernames, statusWrk, elno, levelJson) {
             var lblst = wfContent.split('.');// $j("#lblStatus").text().split('.');
             let wfUser = user.replace(/[.]/ig, '♣');
             lblst.forEach(function (val) {
-                if ((val.startsWith("Pending ") || val.startsWith(" Pending ")) && (val.indexOf("'" + wfUser + "'") > 0 || val.indexOf(" " + wfUser + "") > 0))
+                if ((val.startsWith("Pending ") || val.startsWith(" Pending ")) && (val.indexOf("'" + wfUser + "'") > 0 || val.indexOf(" " + wfUser + "") > 0 || val.indexOf("," + wfUser) > 0 || val.indexOf(" " + wfUser + ",") > 0 || val.indexOf(wfUser + ",") > 0))
                     htmlwfNew = "Approval pending with you. ";
-                else if (val.startsWith("Returned ") && (val.indexOf("'" + wfUser + "'") > 0 || val.indexOf(" " + wfUser + "") > 0))
+                else if (val.startsWith("Returned ") && (val.indexOf("'" + wfUser + "'") > 0 || val.indexOf(" " + wfUser + "") > 0 || val.indexOf("," + wfUser) > 0 || val.indexOf(" " + wfUser + ",") > 0 || val.indexOf(wfUser + ",") > 0))
                     htmlwfNew = val.replace(/'/g, "").replace(/♣/g, ".");
             });
         }
@@ -6303,7 +6306,7 @@ function constructWrkHtml(maxLevels, usernames, statusWrk, elno, levelJson) {
                 var lblst = wfContent.split('.');
                 let wfUser = user.replace(/[.]/ig, '♣');
                 lblst.forEach(function (val) {
-                    if (val.indexOf("'" + wfUser + "'") > 0)
+                    if (val != "" && (val.indexOf("'" + wfUser + "'") > 0 || val.indexOf(" " + wfUser + " ")))
                         htmlwfNew = val.replace(/'/g, "").replace(/♣/g, ".");;
                 });
             }

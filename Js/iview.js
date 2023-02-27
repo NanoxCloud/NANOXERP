@@ -4344,7 +4344,7 @@ function SetSelectedValue(listcontrol, listctrl, b) {
             }
         }
 
-        callParentNew("ivPlAdvSearch", "id").dispatchEvent(new CustomEvent("close"));
+        callParentNew("loadPopUpPage", "id").dispatchEvent(new CustomEvent("close"));
     }
 }
 
@@ -8007,14 +8007,17 @@ function CallSearchOpen(plEle = "") {
     if ($j("#hdnparamValues").val() != "")
         isPlDepParBound = true;
 
-    if ($(`#${plEle.id}`).data("select2").dropdown.$search.val() != "") {
         try {
-            var plAdvanceSearchUrl = `./ivpicklist.aspx?sqlsearch=${plEle.id}&searchval=${$(`#${plEle.id}`).data("select2").dropdown.$search.val()}&ivname=${iName}&isPlDepParBound=${isPlDepParBound}`;
 
-            var plAdvSearchHtml = `<iframe id="ivPlAdvSearch" name="ivPlAdvSearch" class="col-12 flex-column-fluid w-100 h-100 p-0 my-n1" src="${plAdvanceSearchUrl}" frameborder="0" allowtransparency="True"></iframe>`;
+            let thisDfVal = window[`dfval${plEle.id}`] || "";
+            //$(`#${plEle.id}`).data("select2").dropdown.$search.val()
+            var plAdvanceSearchUrl = `./iviewAutoComplete.aspx?isIV=${!isListView}&srchTxt=${""}&fldname=${plEle.id}&transid=${iName}&key=${$("#hdnKey").val()}&params=${$("#hdnparamValues").val()}&dF=${thisDfVal}`;
 
-            let myModal = new BSModal("ivPlAdvSearch", "Pick List", plAdvSearchHtml, () => {
+            var plAdvSearchHtml = `<iframe id="loadPopUpPage" name="loadPopUpPage" class="col-12 flex-column-fluid w-100 h-100 p-0 my-n1" src="${plAdvanceSearchUrl}" frameborder="0" allowtransparency="True"></iframe>`;
+
+            let myModal = new BSModal("loadPopUpPage", "Pick List", plAdvSearchHtml, () => {
                 $(`#${plEle.id}`).select2("close");
+                // $(`#${plEle.id}`).data("select2").dropdown.$search.val("");
             }, () => { });
 
             myModal.changeSize("fullscreen");
@@ -8023,10 +8026,6 @@ function CallSearchOpen(plEle = "") {
         } catch (error) {
 
         }
-
-    } else {
-        showAlertDialog("error", appGlobalVarsObject.lcm[8]);
-    }
     isPlDepParBound = false;
 }
 
@@ -10120,7 +10119,7 @@ function difference(object, base) {
 
 function createPlSmartSelect(paramName) {
     const PlSmartSelect = $(paramName);
-
+    
     PlSmartSelect.select2({
         ajax: {
             contentType: "application/json;charset=utf-8",
@@ -10144,7 +10143,7 @@ function createPlSmartSelect(paramName) {
             processResults: function (data, params) {
                 params.page = params.page || 1;
                 var pageSize = 10;
-
+                
                 if (CheckSessionTimeout(data.d)) {
                     ShowDimmer(false);
                     return;
@@ -10163,7 +10162,7 @@ function createPlSmartSelect(paramName) {
                         if (processPlData.sqlresultset.response.row.length == undefined) {
                             processPlData.sqlresultset.response.row = [processPlData.sqlresultset.response.row];
                         }
-
+                        
                         data.items = processPlData.sqlresultset.response.row.map((row, index) => {
                             var pkData = $(`<span>${row[Object.keys(row)[0]]["#text"]}</span>`).html();
                             return {
@@ -10193,13 +10192,13 @@ function createPlSmartSelect(paramName) {
             let returnHTML = "";
             if (!data.loading) {
                 let { row } = data;
-
+                
                 if (row) {
                     returnHTML = "Hi";
                 } else {
                     returnHTML = data.text;
                 }
-
+                
             } else {
                 returnHTML = data.text;
             }
@@ -10211,9 +10210,11 @@ function createPlSmartSelect(paramName) {
     }).on('select2:open', (selectEv) => {
         var curDropdown = $(selectEv.currentTarget).data("select2")?.$dropdown;
 
-        // if (curDropdown.find(".select2-search").find(".plAdvanceSearch").length == 0) {
-        //     curDropdown.find(".select2-search").addClass("d-flex input-group").append(`<span class="input-group-text rounded-circle btn btn-icon btn-white btn-color-gray-600 btn-active-primary shadow-sm ms-2 plAdvanceSearch" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-dismiss="click" data-bs-original-title="Advance Search" onclick="javascript:CallSearchOpen(${$(paramName)[0].id});"><span class="material-icons material-icons-style cursor-pointer">manage_search</span></span>`).find(".select2-search__field").addClass("form-control w-auto");
-        // }
+        let thisDfVal = window[`dfval${selectEv.currentTarget.id}`];
+
+        if (thisDfVal && curDropdown.find(".select2-search").find(".plAdvanceSearch").length == 0) {
+            curDropdown.find(".select2-search").addClass("d-flex input-group").append(`<span class="input-group-text rounded-circle btn btn-icon btn-white btn-color-gray-600 btn-active-primary shadow-sm ms-2 plAdvanceSearch" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-dismiss="click" data-bs-original-title="Advance Search" onclick="javascript:CallSearchOpen(${$(paramName)[0].id});"><span class="material-icons material-icons-style cursor-pointer">manage_search</span></span>`).find(".select2-search__field").addClass("form-control w-auto");
+        }
     });
 }
 
