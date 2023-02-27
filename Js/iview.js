@@ -8244,15 +8244,6 @@ function createIvir(jsonString) {
                 pivotCreated = false;
             }
             function generateColumns(colSpan, title, style) {
-                if(title.indexOf("{") == 0 && title.indexOf("}") == title.length - 1){
-                    var parName = title.substring(1, title.length - 1);
-                    if(parentArr.indexOf(parName) > -1){
-                        try {
-                            title = $j("#hdnparamValues").val().split("¿").filter(hdnPar=>hdnPar.indexOf(`${parName}~`) == 0)?.[0]?.split?.("~")?.pop?.()?.toString?.() || "";
-                        } catch (ex) {}
-                    }
-                }
-
                 return `<th ${(typeof style != "undefined" ? (`style="${style}"`) : "")} align="center" colspan="${colSpan}" rowspan="1" class="pivotHeaderStyle dt-center">${title.replace(/~/g, "<br />")}</th>`;
             }
             pivotHeaderHtml += `</tr>`;
@@ -8287,21 +8278,12 @@ function createIvir(jsonString) {
             return final ? (final && existEntryCallback(current)) : (final || existEntryCallback(current))
         }, false);
 
-        HeaderText.forEach(function (title, b, c) {
+        HeaderText.forEach(function (a, b, c) {
             if ((FieldName[b] != "rowno")) {
                 var width = ivHeadRows[FieldName[b]]["@width"] || minCellWidth;
 
-                if(title.indexOf("{") == 0 && title.indexOf("}") == title.length - 1){
-                    var parName = title.substring(1, title.length - 1);
-                    if(parentArr.indexOf(parName) > -1){
-                        try {
-                            title = $j("#hdnparamValues").val().split("¿").filter(hdnPar=>hdnPar.indexOf(`${parName}~`) == 0)?.[0]?.split?.("~")?.pop?.()?.toString?.() || "";
-                        } catch (ex) {}
-                    }
-                }
-
                 (ivHeadRows[FieldName[b]]["@hide"].toString() || "true") == "false" ? tableWidth += parseInt(width, 10) : "";
-                GridView2THtml += `<th id="GridView1_ctl01_${FieldName[b]}" class="fw-boldest" data-header-name="${FieldName[b]}" scope="col" style="width:${width}px;">${title.replace(/~/g, "<br />")}${thMenuTemplete}</th>`;
+                GridView2THtml += `<th id="GridView1_ctl01_${FieldName[b]}" class="fw-boldest" data-header-name="${FieldName[b]}" scope="col" style="width:${width}px;">${a.replace(/~/g, "<br />")}${thMenuTemplete}</th>`;
                 footerHtml += footerTdTemplate;
             }
 
@@ -10283,8 +10265,7 @@ function refreshIview(e) {
     if (iName == "inmemdb" || isListView || $("#hdnIsParaVisible").val() == "hidden") {
         callParentNew("loadFrame()", "function");
         e.preventDefault();
-        // window.location.href = window.location.href;
-        window.location.reload();
+        window.location.href = window.location.href;
     }
     else {
         if ($j("#hdnparamValues").val() != "") {

@@ -2196,7 +2196,7 @@ function OnTstructLoad() {
         jsonText = "";
     }
 
-    let isCopyTransLoad = false;
+
 
     var result = "";
     if ((typeof LoadResult) == "string") {
@@ -2226,7 +2226,8 @@ function OnTstructLoad() {
                     }
                     SetFormDirty(false);
                 });
-            }           
+            }
+            let isCopyTransLoad = false;
             try {
                 if (typeof isCopyTrans != "undefined" && isCopyTrans)
                     isCopyTrans = false;
@@ -2341,7 +2342,7 @@ function OnTstructLoad() {
     if (AxRuesDefScriptFormcontrol == "true")
         AxRulesScriptsParser("formcontrol", "");
 
-    GetDcStateOnLodaData(isCopyTransLoad);
+    GetDcStateOnLodaData();
 
     if (window.parent.enableDraft)
         EnableDraftFeature();
@@ -5708,9 +5709,6 @@ function AssignJQueryEvents(dcArray) {
                     //if ($(".flatpickr-calendar:visible").length == 0 && $(instance.element).val() != AxOldValue) {
                     //    MainBlur($(instance.element));
                     //}
-                },
-                onClose: function (selectedDates, dateStr, instance) {
-                    MainBlur($(instance.element));
                 }
             });
             $j(dvId + " .tstOnlyTime").flatpickr({
@@ -5721,12 +5719,9 @@ function AssignJQueryEvents(dcArray) {
                     MainFocus($(instance.element));
                 },
                 onChange: function (selectedDates, dateStr, instance) {
-                    //if ($(instance.element).val() != AxOldValue) {
-                    //    MainBlur($(instance.element));
-                    //}
-                },
-                onClose: function (selectedDates, dateStr, instance) {
-                    MainBlur($(instance.element));
+                    if ($(instance.element).val() != AxOldValue) {
+                        MainBlur($(instance.element));
+                    }
                 }
             });
             $j(dvId + " .tstOnlyTime24hours").flatpickr({
@@ -5738,12 +5733,9 @@ function AssignJQueryEvents(dcArray) {
                     MainFocus($(instance.element));
                 },
                 onChange: function (selectedDates, dateStr, instance) {
-                    //if ($(instance.element).val() != AxOldValue) {
-                    //    MainBlur($(instance.element));
-                    //}
-                },
-                onClose: function (selectedDates, dateStr, instance) {
-                    MainBlur($(instance.element));
+                    if ($(instance.element).val() != AxOldValue) {
+                        MainBlur($(instance.element));
+                    }
                 }
             });            
 
@@ -5752,7 +5744,7 @@ function AssignJQueryEvents(dcArray) {
             $j(dvId).find("textarea:not(#txtCommentWF),:text,:password").unbind("blur");
 
             //function call on blur event of textarea, textbox.
-            $j(dvId).find("textarea:not(#txtCommentWF):not(.labelInp,.select2-search__field),[id]:text:not([class=AxAddRows],[class=AxSearchField],.gridRowChk,.gridHdrChk,.tstOnlyTime,.tstOnlyTime24hours,.flatpickr-input),:password").blur(function () {
+            $j(dvId).find("textarea:not(#txtCommentWF):not(.labelInp,.select2-search__field),[id]:text:not([class=AxAddRows],[class=AxSearchField],.gridRowChk,.gridHdrChk,.tstOnlyTime,.tstOnlyTime24hours),:password").blur(function () {
                 MainBlur($j(this));
                 if (axInlineGridEdit) {
                     var fldObj = $j(this);
@@ -8376,8 +8368,6 @@ function GetFormLoadData(tstQureystr, isDraft, forceRefresh = "false") {
                     multiSelFldParents = new Array();
                     multiSelFldResult = new Array();
                     multiSelectLoadVals = new Array();
-                    FldListParents = new Array();
-                    FldListData = new Array();
                     AxRulesFlds = new Array();
                     imgNames = new Array();
                     imgSrc = new Array();
@@ -8597,8 +8587,6 @@ function GetLoadData(recid, tstQureystr) {
                         multiSelFldResult = new Array();
                         multiSelectLoadVals = new Array();
                         AxRulesFlds = new Array();
-                        FldListParents = new Array();
-                        FldListData = new Array();
                         changeFillGridDc = 0;
                         imgNames = new Array();
                         imgSrc = new Array();
@@ -15226,8 +15214,6 @@ function GetCloneFormLoadData(tstQureystr) {
                         multiSelFldResult = new Array();
                         multiSelectLoadVals = new Array();
                         AxRulesFlds = new Array();
-                        FldListParents = new Array();
-                        FldListData = new Array();
                         changeFillGridDc = 0;
                         imgNames = new Array();
                         imgSrc = new Array();

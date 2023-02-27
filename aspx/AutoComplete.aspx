@@ -27,7 +27,7 @@
     <script src="../UI/axpertUI/datatables.bundle.js"></script>
     <script src="../Js/noConflict.min.js"></script>
 
-    <script type="text/javascript" src="../Js/tstruct.min.js?v=490"></script>
+    <script type="text/javascript" src="../Js/tstruct.min.js?v=489"></script>
     <script type="text/javascript" src="../Js/helper.min.js?v=141"></script>
     <script type="text/javascript" src="../Js/jsclient.min.js?v=77"></script>
 

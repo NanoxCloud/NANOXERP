@@ -2050,14 +2050,14 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
                 widthIncrement = 0;
             }
         }
-        // ivirMainObj = {};
+
         /**
          * smartviews column properties initialization
          * @author Prashik
          * @Date   2019-04-11T12:18:30+0530
          */
         dataTblObj.columns = FieldName.map((fld, ind) => {
-            if(isListView && (!ivirMainObj?.design || ivirMainObj?.design?.length == 0)  && fld != "rowno"){
+            if(isListView && !ivirMainObj?.design && fld != "rowno"){
                 let fldLength = ivHeadRows[fld]["@width"];//tstFields.filter(fld => fld.name == fld)?.[0]?.length || 15;
 
                 ivHeadRows[fld]["@width"] = (fldLength > 51 ? 400 : (fldLength <= 15) ? 150 : (fldLength * 8)).toString();
@@ -9348,17 +9348,6 @@ function mergerSmartviewSettings(json) {
             }
         }
         var userName = callParentNew("mainUserName");
-
-        try {
-            if(jsonObj["all"]?.views?.main?.applyTo && jsonObj?.[userName]?.views?.main?.applyTo){
-                if(typeof jsonObj?.[userName]?.views?.main?.design?.length != "undefined" && jsonObj?.[userName]?.views?.main?.design?.length == 0){
-                    if(typeof jsonObj["all"]?.views?.main?.design?.length != "undefned" && jsonObj["all"]?.views?.main?.design?.length > 0){
-                        delete jsonObj?.[userName]?.views?.main?.applyTo;
-                    }
-                }
-            }
-        } catch (ex) {}
-
         var finalJson = $.extend(true, {}, jsonObj["all"], jsonObj[userName]);
         return JSON.stringify(finalJson);
     }
@@ -10068,9 +10057,7 @@ function getRowGroupingCondtionHtml() {
 
 /* Listview Design Modal */
 function smartDesign(lvDesignHTML) {
-    var newViewTab = typeof ivirMainViewObj?.views?.["main"]?.design?.length == "undefined" ? true : false;
-    var viewTabName = "main";
-    
+
     let applyToHTML = `<label class="input-group border-bottom required d-none"> 
     <input required id="viewName" type="text" class="d-none form-control" maxlength="20" tabindex="-1" value=""} />
 
@@ -10089,20 +10076,8 @@ function smartDesign(lvDesignHTML) {
     </select>
 </label>`;
 
-var buttonDeleteResetHTML = `
-<span class="btn btn-icon btn-light btn-active-light-primary shadow-sm sv-btn-reset" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-dismiss="click" data-bs-original-title="${appGlobalVarsObject.lcm[393]}">
-<span class="material-icons material-icons-style">
-    auto_mode
-</span>
-</span>
-`;
-
     let myModal = new BSModal("design", "", lvDesignHTML, () => {
         onContentReadyRef("design", undefined, false);
-
-        if (!hasBuildAccess) {
-            $('#viewAplyTo').prop("disabled", true);
-        }
 
         $("select#viewAplyTo").select2({
             allowClear: true,
@@ -10110,25 +10085,6 @@ var buttonDeleteResetHTML = `
             minimumResultsForSearch: Infinity,
             placeholder: appGlobalVarsObject.lcm[441],
             width: 'resolve'
-        });
-
-        
-        if(!newViewTab){
-            let {applyTo} = ivirMainViewObj.views["main"];
-
-            if(applyTo && hasBuildAccess){
-                $("select#viewAplyTo").val(applyTo).trigger("change");
-            }
-            // $("select#viewAplyTo").prop('disabled', true).next(".select2").find(".select2-selection").addClass("bg-white");
-        }
-
-        $(document).off("click", ".sv-btn-reset").on("click", ".sv-btn-reset", () => {
-            newBtnGroup["design"]?.clear();
-            showAlertDialog(`success`, `${newBtnGroup["design"]?.caption} ${appGlobalVarsObject.lcm[393]}.`);
-            saveViewActionRef("Design", "design", newBtnGroup.design.apply, undefined, false);
-            setTimeout(() => {
-                window.location.href = window.location.href;
-            }, 3000);
         });
     }, () => {
         onCloseRef("design");
@@ -10142,9 +10098,6 @@ var buttonDeleteResetHTML = `
     myModal.okBtn.removeAttribute("data-bs-dismiss");
     myModal.okBtn.addEventListener("click", () => {
         saveViewActionRef("Design", "design", newBtnGroup.design.apply, undefined, false);
-        setTimeout(() => {
-            window.location.href = window.location.href;
-        }, 3000);
     });
 
     var headerExtras = document.createElement("div");
@@ -10153,16 +10106,6 @@ var buttonDeleteResetHTML = `
     myModal.headerExtras = headerExtras;
     myModal.headerExtras.innerHTML = applyToHTML;
 
-    /* Section :: footerExtras object */
-    var footerExtras = document.createDocumentFragment();
-    myModal.footerExtras = footerExtras;
-
-    /* Section :: footerExtras => delete view & Reset filters, sort... option */
-    var buttonDeleteReset = document.createElement("div");
-    buttonDeleteReset.classList.add(..."d-flex gap-2 me-auto".split(" "));
-    myModal.modalFooter.prepend(buttonDeleteReset);
-    myModal.footerExtras.buttonDeleteReset = buttonDeleteReset;
-    myModal.footerExtras.buttonDeleteReset.innerHTML = buttonDeleteResetHTML;
 }
 
 function loadAxRuleEngineForm(isOpen,paramVal='') {

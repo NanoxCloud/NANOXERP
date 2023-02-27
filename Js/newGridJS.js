@@ -212,7 +212,7 @@ function addTheValuesToGrid(dcNo, elem, trIndexForEdit, onlySave) {
     customAlignTstructFlds([], dcNo, parseInt(rowNoToCheck)); //field alignment based on configuation
     try {
         AxAfterPopupAddRow(dcNo, GetFieldsRowNo($j("#" + wrapperForEditFields + " .editWrapTr").attr('id')));
-    } catch (e) { }
+    } catch (e) {}
     return true;
 }
 
@@ -322,7 +322,7 @@ function createInpLabel(id, text, valueOfField, typeOfField, isFieldVisible, hid
             isrefreshsave = "~" + typeOfField.split("~")[1];
         valueOfField == "" ? valOfTextField = "" : valOfTextField = text;
         var addOption = typeof $("#" + id).data("addoption") != "undefined" ? " data-addoption='" + $("#" + id).data("addoption") + "'" : "";
-        labelHtml += "<textarea tabindex='-1' class='form-control w-100 border bg-transparent overflow-hidden resize-none  selectTextArea labelInp " + disableClass + "' maxlength='" + maxlength + "'  data-style='" + inlineStyle + "' data-type='" + typeOfFields + isrefreshsave + "' data-hidden='" + hiddenData + "' id='" + id + "'  readonly " + addOption + ">" + valOfTextField + "</textarea>";
+        labelHtml += "<textarea tabindex='-1' class='form-control w-100 border bg-transparent overflow-hidden resize-none  selectTextArea labelInp " + disableClass + "' maxlength='" + maxlength + "'  data-style='" + inlineStyle + "' data-type='" + typeOfFields + isrefreshsave + "' data-hidden='" + hiddenData + "' id='" + id + "'  readonly " + addOption +">" + valOfTextField + "</textarea>";
     } else if (typeOfField == "fromselect-pick" || typeOfField == "fromselect-pick~isrefreshsave") {
         var valOfTextField = "";
         var typeOfFields = typeOfField.split("~")[0];
@@ -331,7 +331,7 @@ function createInpLabel(id, text, valueOfField, typeOfField, isFieldVisible, hid
             isrefreshsave = "~" + typeOfField.split("~")[1];
         valueOfField == "" ? valOfTextField = "" : valOfTextField = text;
         var addOption = typeof $("#" + id).data("addoption") != "undefined" ? " data-addoption='" + $("#" + id).data("addoption") + "'" : "";
-        labelHtml += "<textarea tabindex='-1' class='form-control w-100 border bg-transparent overflow-hidden resize-none  selectTextArea labelInp " + disableClass + "' maxlength='" + maxlength + "'  data-style='" + inlineStyle + "' data-type='" + typeOfFields + isrefreshsave + "' data-hidden='" + hiddenData + "' id='" + id + "'  readonly " + addOption + ">" + valOfTextField + "</textarea>";
+        labelHtml += "<textarea tabindex='-1' class='form-control w-100 border bg-transparent overflow-hidden resize-none  selectTextArea labelInp " + disableClass + "' maxlength='" + maxlength + "'  data-style='" + inlineStyle + "' data-type='" + typeOfFields + isrefreshsave + "' data-hidden='" + hiddenData + "' id='" + id + "'  readonly " + addOption +">" + valOfTextField + "</textarea>";
     } else if (typeOfField == "multigroupselect" || typeOfField == "multigroupselect~isrefreshsave") {
         var valOfTextField = "";
         var typeOfFields = typeOfField.split("~")[0];
@@ -715,7 +715,7 @@ function editTheRow(elem, dcNo, rowNo, e) { //(editIcon,2,001,event)
                                 addedRowsArray = unionSets(addedRowsArray, new Set(_.map(tempRowObj, 'y')));
                                 groupFieldDesignArr = tempRowObj[0];
                             }
-                        } catch (ex) { }
+                        } catch (ex) {}
                         if (theMode == "render" && !staticRunMode) {
                             if (compressedMode) {
                                 gsiHeight = (((elmHeight * gsConf.compressedMode.cellHeight) + ((elmHeight - 1) * gsConf.compressedMode.verticalMargin)) - gsConf.compressedMode.labelHeight).toString() + isMobile ? 10 : "" + "px";
@@ -740,7 +740,7 @@ function editTheRow(elem, dcNo, rowNo, e) { //(editIcon,2,001,event)
                                         groupFieldDesignArr = {};
                                     }
                                 }
-                            } catch (ex) { }
+                            } catch (ex) {}
                         }
                     }
 
@@ -1052,7 +1052,7 @@ function editTheRow(elem, dcNo, rowNo, e) { //(editIcon,2,001,event)
         editHtml += '</div>';
         if (!isMobile) {
             makeIdsEdit(parentTrElement, 'add');
-            $j("#wrapperForEditFields" + dcNo).html(editHtml) /*.removeClass('hide')*/;
+            $j("#wrapperForEditFields" + dcNo).html(editHtml) /*.removeClass('hide')*/ ;
         } else if (isMobile) {
             $j("#wrapperForEditFields" + dcNo).html(editHtml); //.removeClass('hide');
             $("#wrapperForEditFields" + (dcNo)).removeClass("hide");
@@ -1133,7 +1133,7 @@ function editTheRow(elem, dcNo, rowNo, e) { //(editIcon,2,001,event)
             customAlignTstructFlds([], dcNo, parseInt(rowNo)); //field alignment based on configuation
             try {
                 AxAfterPopupAddRow(dcNo, rowNo);
-            } catch (e) { }
+            } catch (e) {}
         });
     } else if ((!isMobile && AxpGridForm == "form") || (isMobile && mobileCardLayout != "none")) {
         addRowFormGrid(dcNo, rowNo);
@@ -1929,7 +1929,7 @@ function adjustEditLayoutId(dcNo) {
             changeEditLayoutIds(idOfLastCol, dcNo);
             UpdateLastRowNoOnDel(dcNo, presentRowNo, newRowNo)
         }
-    } catch (Ex) { }
+    } catch (Ex) {}
 }
 
 function UpdateLastRowNoOnDel(dcNo, rowNo, newRowNo) {
@@ -2024,8 +2024,8 @@ function createGridHtmlFromEditPop(dcNo, calledFrom) {
                 eleType = inpValue.hasClass('isrefreshsave') ? eleType + "~isrefreshsave" : eleType;
             } else {
                 eleType = inpValue[0].nodeName.toLowerCase();
-                (eleType == "input" && inpValue[0].type == "checkbox") ? eleType = "checkbox" : "";
-                (eleType == "input" && inpValue.hasClass('number')) ? eleType = "numeric" : "";
+                (eleType == "input" && inpValue[0].type == "checkbox") ? eleType = "checkbox": "";
+                (eleType == "input" && inpValue.hasClass('number')) ? eleType = "numeric": "";
                 hiddenData = '';
             }
 
@@ -2198,8 +2198,8 @@ function createGridHtmlFromEdit(dcNo, calledFrom) {
                 eleType = inpValue.hasClass('isrefreshsave') ? eleType + "~isrefreshsave" : eleType;
             } else {
                 eleType = inpValue[0].nodeName.toLowerCase();
-                (eleType == "input" && inpValue[0].type == "checkbox") ? eleType = "checkbox" : "";
-                (eleType == "input" && inpValue.hasClass('number')) ? eleType = "numeric" : "";
+                (eleType == "input" && inpValue[0].type == "checkbox") ? eleType = "checkbox": "";
+                (eleType == "input" && inpValue.hasClass('number')) ? eleType = "numeric": "";
                 hiddenData = '';
             }
 
@@ -2623,40 +2623,40 @@ function addRowFormGrid(dcNo, newRowNo, calledFrom) {
     if (strRowNo != "001" && $(`#clearThisDC${dcNo}`)?.[0]) {
         btnRemove = "<div class=\"removeformGridbutton d-inline-flex\"><button id=\"gridRemoveBtnAdd" + dcNo + strRowNo + "\" onclick=\"DeleteFromGridRow('" + dcNo + "','" + strRowNo + "F" + dcNo + "','this');\" class=\"btn btn-white btn-color-gray-700 btn-active-primary shadow-sm\" >Delete Row</button></div>";
     }
-    var gridHtml = "<div class=\"clearfix\"></div>";
-    let mobileDcRowNo = "<span class=\"d-flex flex-center mobileDcRowNO\"> (" + strRowNo + ") </span>";
-    let mobileDcCapt = "";
-    try {
-        mobileDcCapt = $(`#head${dcNo}`).length > 0 ? $(`#head${dcNo}`).text() : $("#dcCaption" + dcNo)[0].childNodes[0].nodeValue;
-    } catch (error) { }
+var gridHtml = "<div class=\"clearfix\"></div>";
+let mobileDcRowNo = "<span class=\"d-flex flex-center mobileDcRowNO\"> (" + strRowNo + ") </span>";
+let mobileDcCapt = "";
+try {
+    mobileDcCapt = $(`#head${dcNo}`).length > 0 ? $(`#head${dcNo}`).text() : $("#dcCaption" + dcNo)[0].childNodes[0].nodeValue;
+} catch (error) {}
 
-    if (isMobile) { //&& strRowNo != "001") {
-        gridHtml += "<div id=\"dcCaptionBtn" + dcNo + "-" + strRowNo + "\" class=\"d-flex gap-3 frameCap fw-boldest fs-6 text-gray-800 dcCaptionBtn\"><span class=\"d-flex flex-center\">" + mobileDcCapt + "</span>" + mobileDcRowNo + "</div><hr class=\"text-gray-500\" />";
-    }
-    gridHtml += "<div id=\"gridrowWrap" + dcNo + "-" + strRowNo + "\" class=\"formGridRow\"><div class=\"row\" id=\"wrapperForEditFields" + dcNo + "\" >" + $j("#wrapperForEditFields" + dcNo).html() + "</div><div class=\"addFormGridbutton d-inline-flex me-2\"><button id=\"gridAddBtnAdd" + dcNo + "\" onclick=\"editTheRow(''," + dcNo + "," + strRowNo + ",event)\" class=\"btn btn-primary\" type=\"button\" title=\"Add\">Add Row</button></div>" + btnRemove + "<div class=\"clearfix\"></div></div>";
-    $("#bootstrapModalData").remove();
-    $("#colScroll" + dcNo + " [id^=gridrowWrap" + dcNo + "-]").children("#wrapperForEditFields" + dcNo + "Added").attr('id', "wrapperForEditFields" + dcNo);
-    $("#colScroll" + dcNo).append(gridHtml);
+if (isMobile ) { //&& strRowNo != "001") {
+    gridHtml += "<div id=\"dcCaptionBtn" + dcNo + "-" + strRowNo + "\" class=\"d-flex gap-3 frameCap fw-boldest fs-6 text-gray-800 dcCaptionBtn\"><span class=\"d-flex flex-center\">" + mobileDcCapt + "</span>" + mobileDcRowNo + "</div><hr class=\"text-gray-500\" />";
+}
+gridHtml += "<div id=\"gridrowWrap" + dcNo + "-" + strRowNo + "\" class=\"formGridRow\"><div class=\"row\" id=\"wrapperForEditFields" + dcNo + "\" >" + $j("#wrapperForEditFields" + dcNo).html() + "</div><div class=\"addFormGridbutton d-inline-flex me-2\"><button id=\"gridAddBtnAdd" + dcNo + "\" onclick=\"editTheRow(''," + dcNo + "," + strRowNo + ",event)\" class=\"btn btn-primary\" type=\"button\" title=\"Add\">Add Row</button></div>" + btnRemove + "<div class=\"clearfix\"></div></div>";
+$("#bootstrapModalData").remove();
+$("#colScroll" + dcNo + " [id^=gridrowWrap" + dcNo + "-]").children("#wrapperForEditFields" + dcNo + "Added").attr('id', "wrapperForEditFields" + dcNo);
+$("#colScroll" + dcNo).append(gridHtml);
 
-    let gridClsList = isMobile ? "editWrapTr grid-stack grid-stack-one-column-mode dynamicRunMode dirty" : "editWrapTr grid-stack dynamicRunMode dirty"
-    $("#gridrowWrap" + dcNo + "-" + strRowNo).find(".editWrapTr").removeAttr("class").attr("class", gridClsList);
-    if (isMobile) {
-        // $("#colScroll" + dcNo).css({
-        //     "overflow": "hidden"
-        // });
-        $(`#head${dcNo}`).addClass("d-none");
-        $(`#DivFrame${dcNo} .gridIconBtns:not(.dcCaptionBtn .gridIconBtns)`).first().clone().appendTo($(`#dcCaptionBtn${dcNo}-${strRowNo}`));
-        $(`#DivFrame2 .gridIconBtns:not(.dcCaptionBtn .gridIconBtns)`).addClass("d-none");
-        $(`#dcCaptionBtn${dcNo}-${strRowNo} .gridIconBtns`).addClass("ms-auto").removeClass("d-none");
-        // strRowNo == "001" ? $("#dcCaption" + dcNo).html(mobileDcCapt + mobileDcRowNo) : "";
-    }
-    SetGridBtnAccess();
-    var arrEditDiv = new Array();
-    arrEditDiv.push("#gridrowWrap" + dcNo + "-" + strRowNo);
-    //if (isLoadDataRow)
-    //    changeEditLayoutIds(newRowNo, dcNo, 'listView');
-    AssignJQueryEvents(arrEditDiv);
-    $(".editLayoutFooter").remove();
+let gridClsList = isMobile ? "editWrapTr grid-stack grid-stack-one-column-mode dynamicRunMode dirty" : "editWrapTr grid-stack dynamicRunMode dirty"
+$("#gridrowWrap" + dcNo + "-" + strRowNo).find(".editWrapTr").removeAttr("class").attr("class", gridClsList);
+if (isMobile) {
+    // $("#colScroll" + dcNo).css({
+    //     "overflow": "hidden"
+    // });
+    $(`#head${dcNo}`).addClass("d-none");
+    $(`#DivFrame${dcNo} .gridIconBtns:not(.dcCaptionBtn .gridIconBtns)`).first().clone().appendTo($(`#dcCaptionBtn${dcNo}-${strRowNo}`));
+    $(`#DivFrame2 .gridIconBtns:not(.dcCaptionBtn .gridIconBtns)`).addClass("d-none");
+    $(`#dcCaptionBtn${dcNo}-${strRowNo} .gridIconBtns`).addClass("ms-auto").removeClass("d-none");
+    // strRowNo == "001" ? $("#dcCaption" + dcNo).html(mobileDcCapt + mobileDcRowNo) : "";
+}
+SetGridBtnAccess();
+var arrEditDiv = new Array();
+arrEditDiv.push("#gridrowWrap" + dcNo + "-" + strRowNo);
+//if (isLoadDataRow)
+//    changeEditLayoutIds(newRowNo, dcNo, 'listView');
+AssignJQueryEvents(arrEditDiv);
+$(".editLayoutFooter").remove();
 }
 
 function DeleteFromGridRow(dcNo, rowFrmNo, elem) {
@@ -2881,8 +2881,8 @@ function createGridHtmlForm(dcNo, rowNo, calledFrom) {
                 eleType = inpValue.hasClass('isrefreshsave') ? eleType + "~isrefreshsave" : eleType;
             } else {
                 eleType = inpValue[0].nodeName.toLowerCase();
-                (eleType == "input" && inpValue[0].type == "checkbox") ? eleType = "checkbox" : "";
-                (eleType == "input" && inpValue.hasClass('number')) ? eleType = "numeric" : "";
+                (eleType == "input" && inpValue[0].type == "checkbox") ? eleType = "checkbox": "";
+                (eleType == "input" && inpValue.hasClass('number')) ? eleType = "numeric": "";
                 hiddenData = '';
             }
 
@@ -3027,7 +3027,7 @@ function AddNewFormRowInDc(dcNo, calledFrom) {
 * @return               converts the selected grid row into editable mode       
 ------------------------------------
 */
-function inlineGridEdit(dcNo, td, col, row, ent) {
+function inlineGridEdit(dcNo, td, col, row,ent) {
     try {
         if ($(".grd-attach-popover").length > 0) //prevent inline edit mode if any grid attachment(files count) popover is opened
             return;
@@ -3102,7 +3102,7 @@ function inlineGridEdit(dcNo, td, col, row, ent) {
                         var classes = "";
                         if (typeOfField == 'checkbox')
                             classes = " form-check form-switch form-check-custom px-1 align-self-end ";
-                        else if (idOFtheField.toLowerCase().startsWith("barqr_"))
+                        else if(idOFtheField.toLowerCase().startsWith("barqr_"))
                             classes = " input-group";
                         editorHtml += '<div class="edit-mode-content' + classes + '" data-type="' + typeOfField + '" style="' + (visibility ? '' : 'display:none;') + '" data-fld-id="' + idOFtheField + '">';
 
@@ -3170,7 +3170,7 @@ function inlineGridEdit(dcNo, td, col, row, ent) {
                             }
                             if (timepicker != "") {
                                 editorHtml += '<span class="input-group-text" data-toggle=""><span class="material-icons material-icons-style cursor-pointer fs-4">schedule</span></span>';
-                                editorHtml += '</span>';
+                                editorHtml += '</span>';                                
                             }
                             if (fldDType == "Table")
                                 editorHtml += '<span class="input-group-text"><span class="material-icons material-icons-style cursor-pointer fs-4 fldCustTableIcon" data-clk="' + idOFtheField + '-tbl">apps</span></span></div>';
@@ -3237,8 +3237,8 @@ function inlineGridEdit(dcNo, td, col, row, ent) {
                                 else
                                     editorHtml += '<select class="tem fldFromSelect form-control focus-input form-select fastdll ' + auRefreshOnSave + '" data-control="select2" id="' + idOFtheField + '" data-placeholder="Select an option" data-allow-clear="true" data-refresh="true" "' + addOption + '">';
                             }
-                            if (valueOfField != "") {
-                                valueOfField = valueOfField.replace(/#amp:/g, "&").replace(/#lt:/g, "<").replace(/#gt:/g, ">").replace(/#apos:/g, "'").replace(/#quot:/g, '"');
+                            if (valueOfField != ""){
+                                valueOfField=valueOfField.replace(/#amp:/g, "&").replace(/#lt:/g, "<").replace(/#gt:/g, ">").replace(/#apos:/g, "'").replace(/#quot:/g, '"');
                                 editorHtml += '<option value="' + valueOfField + '" selected="selected">' + valueOfField + '</option>';
                             }
                             editorHtml += '</select>';
@@ -3300,7 +3300,7 @@ function inlineGridEdit(dcNo, td, col, row, ent) {
             });
 
             $(parentTrElement).attr("last-focus-index", focusIndex); //set total visible & not disabled fields(td's) to tr 
-
+          
             makeIdsEdit(parentTrElement, "add");
             $(".inline-edit").find("textarea:not([data-txt-area])").hide();
             var arrEditDiv = new Array();
@@ -3324,7 +3324,7 @@ function inlineGridEdit(dcNo, td, col, row, ent) {
 
                     if (focusOnDeleteButton)
                         $(parentTrElement).find('input.gridRowChk').focus();
-                    //$(parentTrElement).find('[onclick*="DeleteRow"]').focus();
+                        //$(parentTrElement).find('[onclick*="DeleteRow"]').focus();
                     else if ($(td).is("td")) {
                         if ($(td).find(".upload-icon").length) //if column type is attachment then focus on the upload icon
                             $(td).find(".upload-icon").focus();
@@ -3476,7 +3476,7 @@ function updateInlineGridRowValues(isValidated = false) {
         $(".inline-edit").removeClass("inline-edit").find(".edit-mode-content").remove();
         try {
             AxAfterInlineAddRowUpdate();
-        } catch (e) { }
+        } catch (e) {}
     } catch (e) {
         console.log("Exception: " + e);
     }
@@ -3486,7 +3486,7 @@ function updateInlineGridRowValues(isValidated = false) {
 function addNewInlineGridRow(dcNo, calledFrom) {
     try {
         AxActiveDc = dcNo;
-        inlineShiftKeyPressed = false;
+        inlineShiftKeyPressed = false;       
         if (calledFrom === undefined && !validateInlineGridRow(dcNo, "addrow")) { //if any mandatory field is empty then ignore adding a new record & focus on the row first mandatory field
             return;
         }
@@ -3769,12 +3769,8 @@ function assignInlineGridEditEvent(dcNo) {
                         isAttaFld = true;
                     else if (e.shiftKey && currentTd.prev().find(".edit-mode-content").attr('data-type') == "gridattach")
                         isAttaFld = true;
-                    try {
-                        if ($("textarea.select2-search__field").parents('.edit-mode-content').find('.fldmultiSelect').length > -1)
-                            $($("textarea.select2-search__field").parents('.edit-mode-content').find('.fldmultiSelect')[0]).select2('close');
-                    } catch (ex) { }
 
-                    var prevOrNextTd = e.shiftKey ? (isAttaFld ? currentTd.prev().prev() : currentTd.prev()) : (isAttaFld ? currentTd.next().next() : currentTd.next());
+                    var prevOrNextTd = e.shiftKey ? (isAttaFld ? currentTd.prev().prev() : currentTd.prev()) : (isAttaFld ? currentTd.next().next(): currentTd.next());
 
                     // while (prevOrNextTd.hasClass("none") || GetFieldProp($j.inArray(GetFieldsName($($(prevOrNextTd).find(".edit-mode-content")).children().attr("id")), FNames), "tabstop") == "F" ){
                     while (prevOrNextTd.hasClass("none")) { //if any table cell is hidden then find next/prev cell
@@ -3963,7 +3959,7 @@ function validateInlineGridRow(dcNo, calledfrom) {
             //var fName = GetFieldsName(fldId);
             //var fldIndex = $j.inArray(fName, FNames);
 
-            updateInlineGridRowValues();
+             updateInlineGridRowValues();
             // mandatoryFields.attr("inline-grid-warning", ''); //add an attribute 'inline-grid-warning' to invalid grid row td
 
             //var rowIndex = mandatoryFields.first().parent().index();
@@ -4034,14 +4030,14 @@ function validateInlineGridRow(dcNo, calledfrom) {
                         gridRowEditOnLoad = true;
 
                     //showAlertDialog("warning", 2055, "client", FCaption[fldIndex]);
-                    let _thisRowNo = GetDbRowNo(fieldRowNo, dcNo);
+                   let _thisRowNo = GetDbRowNo(fieldRowNo, dcNo);
                     _thisRowNo = GetRowNoHelper(_thisRowNo);
                     showAlertDialog("warning", 2056, "client", FCaption[fldIndex] + "^♠^" + parseInt(_thisRowNo, 10));
                     result = false;
                     return false;
                 } else {
                     fldObj.css("border", "1px solid rgb(204, 204, 204)"); //remove warning border css
-                    fldObj.closest("td").removeAttr("data-fld-mandatory").removeAttr("inline-grid-warning");
+                     fldObj.closest("td").removeAttr("data-fld-mandatory").removeAttr("inline-grid-warning");
                     //result = true;
                 }
             });
@@ -4147,13 +4143,13 @@ function CheckAllGridRow(obj, ckDcNo) {
 }
 
 function CheckboxGridRow(obj, ckDcNo, ckRowNo, event) {
-    if ($j("input[name=grdchkItemTd" + ckDcNo + "]:visible").length == $j("input[name=grdchkItemTd" + ckDcNo + "]:checked").length) {
+    if ($j("input[name=grdchkItemTd" + ckDcNo + "]:visible").length == $j("input[name=grdchkItemTd" + ckDcNo + "]:checked").length){
         $j("#chkallgridrow" + ckDcNo).prop("checked", true);
-        $j("#chkallgridrow" + ckDcNo).prop("disabled", false);
+        $j("#chkallgridrow"+ckDcNo).prop("disabled", false);
     }
-    else {
+    else{
         $j("#chkallgridrow" + ckDcNo).prop("checked", false);
-        $j("#chkallgridrow" + ckDcNo).prop("disabled", false);
+        $j("#chkallgridrow"+ckDcNo).prop("disabled", false);
     }
 
     if ($j("input[name=grdchkItemTd" + ckDcNo + "]:checked").length > 0)

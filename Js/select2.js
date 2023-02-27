@@ -4,7 +4,12 @@ var AutPageNo = 1, AutPageSize = 50, rcount = 0, fetchRCount = FetchPickListRows
 var CangefldName = '', isNavigation = false, refreshAC = false, pickarrow = false;
 var isAutocomBlur = true;
 var isSelectedValFocus = false;
-var isRefreshClick = false;
+//$(function () {
+//    createFormSelect(".fldFromSelect,.multiFldChk");
+
+//    createFormMultiSelect(".fldmultiSelect");
+
+//});
 
 function createFormSelect(fld) {
     const formSelect = $(fld);
@@ -15,9 +20,6 @@ function createFormSelect(fld) {
         depFldName = "";
     var isPickMinChar = false;
     var isOnCLose = false;
-    var parentFldVal = "";
-    var IsBindData = false;
-
     formSelect.select2({
         ajax: {
             url: 'tstruct.aspx/GetAutoCompleteData',
@@ -33,8 +35,8 @@ function createFormSelect(fld) {
                 else if (select2IsFocused) {
                     select2EventType = "open";
                     termVal = params.term == "" ? undefined : (isSelectedValFocus ? undefined : params.term);
-                    if (typeof termVal == "undefined" && $(this).val() != null)
-                        termVal = "";
+                    //console.log("Select2:select2IsFocused:" + termVal + " ," + isSelectedValFocus);
+
                 }
                 else if (typeof params.term != "undefined" && params.term != "") {
                     termVal = params.term;
@@ -47,7 +49,7 @@ function createFormSelect(fld) {
                     var isrefreshsave = $(this).hasClass('isrefreshsave');
                     var pageData = GetAutoCompData(fldNameAc, termVal, AutPageNo, AutPageSize);
                     var fieldName = fldNameAc.substring(0, fldNameAc.lastIndexOf("F") - 3);
-                    parentFldVal = "";
+                    var parentFldVal = "";
                     if (typeof wsPerfEnabled != "undefined" && wsPerfEnabled)
                         parentFldVal = ISBoundAutoCom(fieldName, fldNameAc);
                     else
@@ -55,39 +57,31 @@ function createFormSelect(fld) {
                     let fldApiInd = GetFieldIndex(fieldName);
                     let isApifld = FldIsAPI[fldApiInd];
 
-                    if (FldListParents.length > 0 && FldListParents.indexOf(fieldName + "♦" + fldNameAc + "♦" + parentFldVal) > -1 && termVal == "" && !isRefreshClick && !$(this).hasClass('multiFldChk')) {//&& $(this).val() != null
-                        //let _thisIdx = FldListParents.indexOf(fieldName + "~" + parentFldVal);
-                        IsBindData = true;
-                    } else {
-                        IsBindData = false;
-                        isRefreshClick = false;
-                        return JSON.stringify({
-                            tstDataId: tstDataId,
-                            FldName: fieldName,
-                            FltValue: termVal,
-                            ChangedFields: ChangedFields,
-                            ChangedFieldDbRowNo: ChangedFieldDbRowNo,
-                            ChangedFieldValues: ChangedFieldValues,
-                            DeletedDCRows: DeletedDCRows,
-                            pageData: pageData,
-                            fastdll: fastdll,
-                            fldNameAc: fldNameAc,
-                            refreshAC: refreshAC,
-                            pickArrow: pickarrow,
-                            parentsFlds: parentFldVal,
-                            rfSave: isrefreshsave,
-                            IsApiFld: isApifld,
-                            tblSourceParams: ""
-                        });
-                    }
+                    return JSON.stringify({
+                        tstDataId: tstDataId,
+                        FldName: fieldName,
+                        FltValue: termVal,
+                        ChangedFields: ChangedFields,
+                        ChangedFieldDbRowNo: ChangedFieldDbRowNo,
+                        ChangedFieldValues: ChangedFieldValues,
+                        DeletedDCRows: DeletedDCRows,
+                        pageData: pageData,
+                        fastdll: fastdll,
+                        fldNameAc: fldNameAc,
+                        refreshAC: refreshAC,
+                        pickArrow: pickarrow,
+                        parentsFlds: parentFldVal,
+                        rfSave: isrefreshsave,
+                        IsApiFld: isApifld,
+                        tblSourceParams: ""
+                    });
                 } else {
-                    IsBindData = false;
                     rcount = 0;
                     isPickMinChar = true;
                 }
             },
             processResults: function (data) {
-                IsBindData = false;
+                // datasss = data.d;
                 select2EventType = "open";
                 refreshAC = false;
                 try {
@@ -139,18 +133,6 @@ function createFormSelect(fld) {
 
                         dtAssoc = serResult.pickdata[3].data;
                         if (dtAssoc != undefined && dtAssoc.length != 0) {
-                            if (!$("#" + fldNameAc).hasClass('multiFldChk')) {
-                                let _fieldName = fldNameAc.substring(0, fldNameAc.lastIndexOf("F") - 3);
-                                if (FldListParents.indexOf(_fieldName + "♦" + fldNameAc + "♦" + parentFldVal) > -1 || FldListParents.some(item => item.startsWith(_fieldName + "♦"))) {
-                                    let _tIdn = FldListParents.indexOf(_fieldName + "♦" + fldNameAc + "♦" + parentFldVal) > -1 ? FldListParents.indexOf(_fieldName + "♦" + fldNameAc + "♦" + parentFldVal) : FldListParents.findIndex((account) => { return account.startsWith(_fieldName + "♦"); }, _fieldName + "♦");
-                                    FldListParents[_tIdn] = _fieldName + "♦" + fldNameAc + "♦" + parentFldVal;
-                                    FldListData[_tIdn] = dtAssoc;
-                                } else {
-                                    FldListParents.push(_fieldName + "♦" + fldNameAc + "♦" + parentFldVal);
-                                    FldListData.push(dtAssoc);
-                                }
-                            }
-
                             if ($(this.$element).hasClass('multiFldChk'))
                                 $(".msSelectAllOption").removeClass("d-none");
                             if (fastdll) {
@@ -219,30 +201,6 @@ function createFormSelect(fld) {
                         ShowDimmer(false);
                         $("#reloaddiv").show();
                         $("#dvlayout").hide();
-                    }
-                }
-            },
-            error: function (data) {
-                if (IsBindData) {
-                    let _fieldName = fldNameAc.substring(0, fldNameAc.lastIndexOf("F") - 3);
-                    if (FldListParents.length > 0 && FldListParents.indexOf(_fieldName + "♦" + fldNameAc + "♦" + parentFldVal) > -1) {
-                        var _thisIdx = FldListParents.indexOf(_fieldName + "♦" + fldNameAc + "♦" + parentFldVal);
-                        var result = ($.map(FldListData[_thisIdx], function (item) {
-                            item.i = item.i.replace(/\^\^dq/g, '"');
-                            return {
-                                id: item.i,
-                                text: item.i,
-                                dep: item.d
-                            }
-                        }))
-                        $(".select2-results__options li:eq(0)").remove();
-                        //$("#" + fldNameAc).trigger("change")
-                        //$("#" + fldNameAc).select2('data', result).trigger("change");
-
-                        //$("#" + fldNameAc).select2("updateResults");
-                        console.clear();
-                        $("#" + fldNameAc).select2("data", result, true);//.trigger("change");
-                        $("#" + fldNameAc).select2("updateResults");
                     }
                 }
             }
@@ -360,11 +318,6 @@ function createFormSelect(fld) {
                 select2IsFocused = true;
             else if (isOnCLose && $(this).val() != "" && $(this).val() != null && !$(this).hasClass('multiFldChk'))
                 select2IsFocused = false;
-
-            if (gridRowEditOnLoad && IsGridField(GetFieldsName($(this).attr("id")))) {
-                UpdateGridRowFlags($(this).attr("id"), GetFieldsDcNo($(this).attr("id")), "001");
-            }
-
             isOnCLose = false;
         }
         else {
@@ -478,7 +431,6 @@ function clickEvents(fsFldName) {
         isSelectedValFocus = false;
         select2IsFocused = false;
         select2IsOpened = true;
-        isRefreshClick = true;
         select2EventType = "click";
         if (typeof $(".select2-dropdown--below") != "undefined" && $(".select2-dropdown--below").length > 0)
             $(".select2-dropdown--below").find('.select2-search__field').trigger($.Event('input', { which: 13 }));
@@ -722,17 +674,13 @@ function createFormMultiSelect(msfldId) {
                 return data.text;
             }
             if (data.children) {
-                //if (igr > 1)
-                //    $('#' + fldNameMs).data("select2")?.$dropdown.find('ul.select2-results__options:eq(0)').addClass('d-flex justify-content-between multiSelectGroup');
-                //igr++;
-                $('#' + fldNameMs).data("select2")?.$dropdown.find('ul.select2-results__options:eq(0)').addClass('d-flex justify-content-between multiSelectGroup');
+                if (igr > 1)
+                    $('#' + fldNameMs).data("select2")?.$dropdown.find('ul.select2-results__options:eq(0)').addClass('d-flex justify-content-between');
+                igr++;
             }
             return data.text;
         },
-        closeOnSelect: false,
-        createTag: function (params) {
-            return null;
-        }
+        closeOnSelect: false
     }).on('select2:select', function (event) {
         let fldMulValue = $(this).val();
         if (typeof $(this).data("sep") != "undefined") {
