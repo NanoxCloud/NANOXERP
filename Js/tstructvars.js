@@ -370,5 +370,3 @@ var tstReadOnlyPeg = false;
 var AxFormControlList = new Array();
 var isCopyTrans = false;
 var TstCopyTransRes = "";
-var FldListParents = new Array();
-var FldListData = new Array();

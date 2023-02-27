@@ -26,8 +26,8 @@
     <script src="../Js/noConflict.min.js"></script>
     <script type="text/javascript" src="../Js/iFrameHandler.min.js"></script>
     <script src="../Js/common.min.js?v=118"></script>
-    <script src="../Js/tstructvars.min.js?v=78"></script>
-    <script src="../Js/tstruct.min.js?v=490"></script>
+    <script src="../Js/tstructvars.min.js?v=77"></script>
+    <script src="../Js/tstruct.min.js?v=489"></script>
     <script src="../Js/tstTable.min.js?v=17"></script>
 </head>
 <body dir="<%=direction%>">

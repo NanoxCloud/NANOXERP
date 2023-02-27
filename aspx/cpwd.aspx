@@ -150,7 +150,7 @@
                                     <asp:ScriptManager ID="ScriptManager1" runat="server">
                                         <Scripts>
                                             <asp:ScriptReference Path="../Js/gen.min.js?v=14" />
-                                            <asp:ScriptReference Path="../Js/tstruct.min.js?v=490" />
+                                            <asp:ScriptReference Path="../Js/tstruct.min.js?v=489" />
                                         </Scripts>
                                         <Services>
                                             <asp:ServiceReference Path="../WebService.asmx" />

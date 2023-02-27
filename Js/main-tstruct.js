@@ -93,7 +93,7 @@ $j(document).ready(function () {
                 if (btnfooteropenlist.indexOf('<li>') > -1)
                     btnfooteropenlist = '';
             }
-        }
+        }       
     }
     if (typeof AxpTstButtonStyle != "undefined" && AxpTstButtonStyle == "old") {
         $("#breadcrumb-panel").removeClass("justify-content-center");
@@ -372,8 +372,8 @@ $j(document).ready(function () {
                 select2EventType = "";
                 if (select2IsFocused == true && select2IsOpened)
                     $(this).siblings('select.fldFromSelect').select2('close');
-                select2IsOpened = false;
-                select2IsFocused = false;
+                select2IsOpened = false;               
+                select2IsFocused = false;                       
             } else {
                 if (select2IsOpened)
                     select2EventType = "click";
@@ -611,10 +611,10 @@ $j(document).ready(function () {
     //        "width": "100%",
     //        "overflow": "inherit"
     //    });
-
+        
     //    $('.griddivColumn .customSetupTableMN').each((ind, elm) =>{
     //        var gridMainWidth = $(elm).width() + ($($(elm)).parents(".card-body").outerWidth() - $($(elm)).parents(".card-body").width());
-
+            
     //        $($(elm)).parents(".dvdcframe").css({
     //            "width": gridMainWidth
     //        });
@@ -638,7 +638,7 @@ $j(document).ready(function () {
     if (typeof gridFixedHeader == "undefined" || gridFixedHeader == "true") {
         //$('.griddivColumn ').addClass('gridFixedHeader').css({ "overflow": "auto", "max-height": "calc(100vh - 130px)" });
         $('.griddivColumn ').addClass('gridFixedHeader').css({ "max-height": "calc(100vh - 130px)" });
-        $(".gridFixedHeader table thead tr th").css({ "background": "#fff", "position": "sticky", "top": "0" });
+        $(".gridFixedHeader table thead tr th").css({ "background": "#fff", "position": "sticky", "top": "0" });        
     }
 
     hideacoptions();
@@ -657,9 +657,9 @@ $j(document).ready(function () {
 
     $(".toolbarRightMenu .menu").find('.menu-sub').addClass("mh-300px scroll-y");
 
-    $(".nav.nav-tabs").each((ind, tab) => {
+    $(".nav.nav-tabs").each((ind, tab)=>{
         $(tab).find(".nav-item a.nav-link").length == 1 && $(tab).find(".nav-item a.nav-link").removeClass("active").addClass("bg-white");
-    });
+    }); 
 
     setTimeout(function () {
         swicthCompressMode();
@@ -804,7 +804,7 @@ function swicthCompressMode(dvId) {
                 let fcwidth = parseInt(designObj[0].fieldCaptionWidth);
                 fcwidth = fcwidth / 10;
                 fcwidth = 12 - fcwidth;
-                if (!$(".compressedModeUI .input-group").parent().hasClass("layoutAdded")) {
+                if(!$(".compressedModeUI .input-group").parent().hasClass("layoutAdded")){
                     $(".compressedModeUI .input-group").wrap(`<div class='col-sm-${fcwidth} layoutAdded'></div>`);
                 }
                 $(".upload-button").addClass('mt-4');
@@ -831,7 +831,8 @@ function swicthCompressMode(dvId) {
             $("select.multiFldChk,select.multiFldChklist,select.fldmultiSelect").parent().addClass('flex-root overflow-auto');
             $(".compressedModeUI textarea.CodeMirrorApplied").parent().addClass("overflow-auto");
         }
-    } else {
+    } else
+    {
         $(".content table.customSetupTableMN tr:not(.inline-edit) textarea:not([data-txt-area]),.content  table.customSetupTableMN tr:not(.inline-edit) label").addClass("py-2 min-h-30px h-30px");
         $(".content table.customSetupTableMN tr textarea[data-txt-area]").addClass("min-h-25px h-30px");
         $(".content table.customSetupTableMN").removeClass("table-sm");
@@ -840,13 +841,13 @@ function swicthCompressMode(dvId) {
         $(".content .dvdcframe .gridIconBtns a").addClass("btn-sm");
 
         $(".btn.btn-icon").addClass("btn-sm").find(".material-icons").addClass("material-icons-style material-icons-2");
-
+        
         $(".content table.customSetupTableMN .form-check").addClass("py-2");
 
         $(".content .dropzone").parent(".form-control").removeClass("p-0").addClass("p-1 rounded-1");
         $(".content [id^=DivFrame] .form-switch .form-check-input").removeClass("w-40px").addClass("w-50px");
         $(".content .form-check-input").parents(".agform").addClass("d-flex");
-
+        
         $("textarea.memofam.gridstackCalc").parent().addClass('flex-root overflow-auto').parents('.agform').addClass('d-flex flex-column');
 
         $("select.multiFldChk,select.multiFldChklist,select.fldmultiSelect").parents('.agform').addClass('d-flex flex-column');
@@ -861,7 +862,7 @@ function swicthCompressMode(dvId) {
             let fcwidth = parseInt(designObj[0].fieldCaptionWidth);
             fcwidth = fcwidth / 10;
             fcwidth = 12 - fcwidth;
-            if (!$(".content .input-group").parent().hasClass("layoutAdded")) {
+            if(!$(".content .input-group").parent().hasClass("layoutAdded")){
                 $(".content .input-group").wrap(`<div class='col-sm-${fcwidth} layoutAdded'></div>`);
             }
             $(".upload-button").addClass('mt-4');
@@ -872,7 +873,7 @@ function swicthCompressMode(dvId) {
         $("textarea.select2-search__field").addClass("cursor-pointer");
     }
 
-    if (staticRunMode) {
+    if(staticRunMode){
         $(".fld-wrap3").addClass("text-truncate");
     }
 
@@ -1367,9 +1368,6 @@ function LoadEvents(dvId) {
             //if ($(".flatpickr-calendar:visible").length == 0 && $(instance.element).find("input").val() != AxOldValue) {
             //    MainBlur($(instance.element).find("input"));
             //}
-        },
-        onClose: function (selectedDates, dateStr, instance) {
-            MainBlur($(instance.element).find("input"));
         }
     });
 
@@ -1383,12 +1381,9 @@ function LoadEvents(dvId) {
             MainFocus($(instance.element).find("input"));
         },
         onChange: function (selectedDates, dateStr, instance) {
-            //if ($(instance.element).find("input").val() != AxOldValue) {
-            //    MainBlur($(instance.element).find("input"));
-            //}
-        },
-        onClose: function (selectedDates, dateStr, instance) {
-            MainBlur($(instance.element).find("input"));
+            if ($(instance.element).find("input").val() != AxOldValue) {
+                MainBlur($(instance.element).find("input"));
+            }
         }
     });
 
@@ -1403,12 +1398,9 @@ function LoadEvents(dvId) {
             MainFocus($(instance.element).find("input"));
         },
         onChange: function (selectedDates, dateStr, instance) {
-            //if ($(instance.element).find("input").val() != AxOldValue) {
-            //    MainBlur($(instance.element).find("input"));
-            //}
-        },
-        onClose: function (selectedDates, dateStr, instance) {
-            MainBlur($(instance.element).find("input"));
+            if ($(instance.element).find("input").val() != AxOldValue) {
+                MainBlur($(instance.element).find("input"));
+            }
         }
     });
 
@@ -1454,7 +1446,7 @@ function LoadEvents(dvId) {
 
     //TimePickerEvent(dvId, dtpkrRTL);
     //function call on blur event of textarea, textbox.
-    $j("textarea:not(#comment):not(.labelInp,.select2-search__field),[id]:text:not([id=searstr],[class=AxAddRows],[class=AxSearchField],.gridHdrChk,.tstOnlyTime,.tstOnlyTime24hours,.gridHeaderSwitch,.flatpickr-input),[id][type=number]:not([id=searstr],[class=AxAddRows],[class=AxSearchField]),:password").blur(function (event) {
+    $j("textarea:not(#comment):not(.labelInp,.select2-search__field),[id]:text:not([id=searstr],[class=AxAddRows],[class=AxSearchField],.gridHdrChk,.tstOnlyTime,.tstOnlyTime24hours,.gridHeaderSwitch),[id][type=number]:not([id=searstr],[class=AxAddRows],[class=AxSearchField]),:password").blur(function (event) {
         if (theMode != "design")
             MainBlur($j(this));
     });
@@ -1528,7 +1520,7 @@ function LoadEvents(dvId) {
         if ($(e.target).attr("onclick") == "ClearImageSrc(this);") {
             return;
         }
-        if (tstructCancelled != "Cancelled") {
+        if (tstructCancelled != "Cancelled") {            
             var imgFld = $j(this).find(".signatureInput");
             var fldName = imgFld[0].id;
             var onclickevent = document.getElementById(fldName).onclick;
@@ -1793,7 +1785,7 @@ function LoadEvents(dvId) {
         $(".fldImageCamera").removeClass("d-none");
     }
 
-    $("#wBdr").on("mouseenter mouseleave", ".customSetupTableMN textarea", function (e) {
+    $("#wBdr").on("mouseenter mouseleave", ".customSetupTableMN textarea", function(e){
         $(this).attr('title', $(this).val());
     });
 }
@@ -4015,7 +4007,7 @@ function HideShowField(fldName, action) {
         fld = $j("#dv" + fldName);
         try {
             let _fldIndex = GetFieldIndex(fldName);
-            if (action == "hide") {
+            if (action == "hide") {               
                 FFieldHidden[_fldIndex] = "True";
             } else
                 FFieldHidden[_fldIndex] = "False";
@@ -5117,7 +5109,7 @@ function SuccessGetFillGridMS(result, eventArgs) {
             myModal.okBtn.innerText = eval(callParent('lcm[281]'));
             myModal.okBtn.setAttribute("onClick", "ProcessFillGrid('" + fillGridDc + "','" + AxActivefillGridName + "')");
             myModal.cancelBtn.innerText = eval(callParent('lcm[192]'));
-
+            
 
             if (jQuery('table[id^=tblFillGrid]').length) bindUpdownEvents(jQuery('table[id^=tblFillGrid]').attr('id'), 'multiple');
             $("#wrapperForMainNewData", window.parent.document).hide();
@@ -7775,7 +7767,7 @@ function discardLodaData() {
 function hideDiscardButton() {
     try {
         var dcldId = $j("#recordid000F0").val();
-        if (dcldId != "" && dcldId != "0" && AxpTstButtonStyle != "old")
+        if (dcldId != "" && dcldId != "0" && AxpTstButtonStyle!="old")
             $("#ftbtn_iDiscard").removeClass("d-none");
         else {
             if (!$("#ftbtn_iDiscard").hasClass("d-none"))
@@ -8430,7 +8422,7 @@ function ProcessScriptFormControl(listControls, actionStr, sfName) {
                             FldMaskDetails[_fldInd] = "0♦0♦" + _maskChar + "♦";
                         }
                         let _dcNo = GetDcNo(fldname);
-                        if (IsDcGrid(_dcNo)) {
+                        if (IsDcGrid(_dcNo)) {                            
                             let rowCnt = GetDcRowCount(_dcNo);
                             for (var i = 1; i <= rowCnt; i++) {
                                 let _thisFld = fldname + GetClientRowNo(i, _dcNo) + "F" + _dcNo;
@@ -8477,7 +8469,7 @@ function ProcessScriptFormControl(listControls, actionStr, sfName) {
                                 if (idx > -1)
                                     ScriptMaskFields.splice(idx, 1);
                             }
-                        }
+                        } 
                         FldMaskType[_fldIndnm] = "";
                         FldMaskDetails[_fldIndnm] = "";
                         let _dcNo = GetDcNo(fldname);
@@ -8604,7 +8596,7 @@ function ProcessScriptFormControl(listControls, actionStr, sfName) {
                                 }
                             }
                         }
-                    }
+                    } 
                     break;
                 default:
                     return;
@@ -9035,7 +9027,7 @@ function DropzoneInit(dvId) {
                     let mesg = progress.xhr.response;
                     let _thisupfile = "";
                     if (mesg != "")
-                        _thisupfile = mesg.split('♠')[1];
+                        _thisupfile = mesg.split('♠')[1];                    
                     $(progress.previewElement).parents(".dropzone").find(".fileuploadmore").removeClass("d-none");
                     let fuInpId = $(progress.previewElement).parents(".dropzone").attr("id").substr(9);
                     let fuInpVal = $("#" + fuInpId).val();
@@ -9124,7 +9116,7 @@ function DropzoneInit(dvId) {
 
 
         let fuInpId = $(id).attr("id").substr(9)
-        let fuInpVal = typeof $("textarea#" + fuInpId).val() == "undefined" ? $("#" + fuInpId).val() : $("textarea#" + fuInpId).val();
+        let fuInpVal = $("#" + fuInpId).val();
         if (fuInpVal != "") {
             let axpFName = fuInpId.substr(7);
             var axpPath = "";
@@ -9295,7 +9287,7 @@ function HeaderAttachFiles() {
             if (progress.xhr.response == "success" || progress.xhr.response.startsWith("success:")) {
                 let mesg = progress.xhr.response;
                 $(progress.previewElement).parents(".dropzone").find(".fileuploadmore").removeClass("d-none");
-                $(progress.previewElement).parents(".dropzone").find("#hattachCounter").removeClass("d-none");
+                $(progress.previewElement).parents(".dropzone").find("#hattachCounter").removeClass("d-none");  
                 $(progress.previewElement).parents(".dropzone").find("span.spanAttCount").text(this.files.length);
                 filenamearray.push(progress.name);
 
@@ -9334,7 +9326,7 @@ function HeaderAttachFiles() {
         else {
             $(this.element).find(".fileuploadmore").addClass("d-none");
             $(this.element).find("span.spanAttCount").text(this.files.length);
-            $(this.element).find("#hattachCounter").addClass("d-none");
+            $(this.element).find("#hattachCounter").addClass("d-none");  
         }
     });
 
@@ -9358,7 +9350,7 @@ function HeaderAttachFiles() {
         });
         $(id).find("span.spanAttCount").text(myhdrDropzone.files.length);
         $(id).find(".fileuploadmore").removeClass("d-none");
-        $(id).find("#hattachCounter").removeClass("d-none");
+        $(id).find("#hattachCounter").removeClass("d-none");        
     }
 }
 
@@ -9580,128 +9572,128 @@ $j(document).off("click", ".gridHeaderSwitch").on("click", ".gridHeaderSwitch", 
         //        $("#divDc" + _thisDicId).addClass("d-none");
         //    GetDcStateValue(_thisDicId, 'F');
         //} else {
-        var isExitDummy = false;
-        if (gridDummyRowVal.length > 0) {
-            gridDummyRowVal.map(function (v) {
-                if (v.split("~")[0] == _thisDicId) isExitDummy = true;
-            });
-        }
-        if (!isExitDummy && $(".wrapperForGridData" + _thisDicId + " table tbody tr").length > 0) {
-            var cutMsg = eval(callParent('lcm[520]'));
-            cutMsg = cutMsg.replace('{0}', GetDcCaption(_thisDicId));
-            var glType = eval(callParent('gllangType'));
-            var isRTL = false;
-            if (glType == "ar")
-                isRTL = true;
-            else
-                isRTL = false;
-            var clearThisDCGrid = $.confirm({
-                theme: 'modern',
-                closeIcon: false,
-                rtl: isRTL,
-                title: eval(callParent('lcm[155]')),
-                onContentReady: function () {
-                    disableBackDrop('bind');
-                },
-                backgroundDismiss: 'false',
-                escapeKey: 'buttonB',
-                content: cutMsg,
-                buttons: {
-                    buttonA: {
-                        text: eval(callParent('lcm[164]')),
-                        btnClass: 'btn btn-primary',
-                        action: function () {
-                            clearThisDCGrid.close();
-                            var fDcRowCount = GetDcRowCount(_thisDicId);
-                            DeleteAllRows(_thisDicId, fDcRowCount);
-                            ShowDimmer(false);
-                            $("#chkallgridrow" + _thisDicId).prop("checked", false);
-                            $("#divDc" + _thisDicId + " .griddivColumn").addClass("d-none");
-                            $("#divDc" + _thisDicId + " .gridIconBtns").addClass("d-none");
-
-                            GetDcStateValue(_thisDicId, 'F');
-                        }
-                    },
-                    buttonB: {
-                        text: eval(callParent('lcm[192]')),
-                        btnClass: 'btn btn-bg-light btn-color-danger btn-active-light-danger',
-                        action: function () {
-                            //$("#divDc" + _thisDicId + " .griddivColumn").addClass("d-none");
-                            //$("#divDc" + _thisDicId + " .gridIconBtns").addClass("d-none");
-
-                            $("#divDc" + _thisDicId + " .griddivColumn").removeClass("d-none");
-                            $("#divDc" + _thisDicId + " .gridIconBtns").removeClass("d-none");
-                            $("#dcBlean" + _thisDicId).prop("checked", true);
-                            disableBackDrop('destroy');
-                            return;
-                        }
-                    },
-                }
-            });
-        } else {
-            if ($("#divDc" + _thisDicId + " .gridIconBtns").length > 0) {
-                $("#divDc" + _thisDicId + " .griddivColumn").addClass("d-none");
-                $("#divDc" + _thisDicId + " .gridIconBtns").addClass("d-none");
-            } else {
-                if (IsFormDirty || isRecLoad) {
-                    var cutMsg = eval(callParent('lcm[520]'));
-                    cutMsg = cutMsg.replace('{0}', GetDcCaption(_thisDicId));
-                    var glType = eval(callParent('gllangType'));
-                    var isRTL = false;
-                    if (glType == "ar")
-                        isRTL = true;
-                    else
-                        isRTL = false;
-                    var clearThisDCGrid = $.confirm({
-                        theme: 'modern',
-                        closeIcon: false,
-                        rtl: isRTL,
-                        title: eval(callParent('lcm[155]')),
-                        onContentReady: function () {
-                            disableBackDrop('bind');
-                        },
-                        backgroundDismiss: 'false',
-                        escapeKey: 'buttonB',
-                        content: cutMsg,
-                        buttons: {
-                            buttonA: {
-                                text: eval(callParent('lcm[164]')),
-                                btnClass: 'btn btn-primary',
-                                action: function () {
-                                    clearThisDCGrid.close();
-                                    var _thisFlds = GetGridFields(_thisDicId);
-                                    _thisFlds.forEach(function (_thifld) {
-                                        if (_thifld != "axp_recid" + _thisDicId) {
-                                            let _thisfldId = _thifld + "000F" + _thisDicId;
-                                            SetFieldValue(_thisfldId, "");
-                                            UpdateFieldArray(_thisfldId, 0, "", "parent", "");
-                                        }
-                                    });
-                                    ShowDimmer(false);
-                                    $("#divDc" + _thisDicId).addClass("d-none");
-
-                                    GetDcStateValue(_thisDicId, 'F');
-                                }
-                            },
-                            buttonB: {
-                                text: eval(callParent('lcm[192]')),
-                                btnClass: 'btn btn-bg-light btn-color-danger btn-active-light-danger',
-                                action: function () {
-                                    //$("#divDc" + _thisDicId).addClass("d-none");
-                                    $("#divDc" + _thisDicId).removeClass("d-none");
-                                    $("#dcBlean" + _thisDicId).prop("checked", true);
-                                    disableBackDrop('destroy');
-                                    return;
-                                }
-                            },
-                        }
-                    });
-                } else
-                    $("#divDc" + _thisDicId).addClass("d-none");
+            var isExitDummy = false;
+            if (gridDummyRowVal.length > 0) {
+                gridDummyRowVal.map(function (v) {
+                    if (v.split("~")[0] == _thisDicId) isExitDummy = true;
+                });
             }
-        }
-        /*GetDcStateValue(_thisDicId, 'F');*/
-        // }
+            if (!isExitDummy && $(".wrapperForGridData" + _thisDicId + " table tbody tr").length > 0) {
+                var cutMsg = eval(callParent('lcm[520]'));
+                cutMsg = cutMsg.replace('{0}', GetDcCaption(_thisDicId));
+                var glType = eval(callParent('gllangType'));
+                var isRTL = false;
+                if (glType == "ar")
+                    isRTL = true;
+                else
+                    isRTL = false;
+                var clearThisDCGrid = $.confirm({
+                    theme: 'modern',
+                    closeIcon: false,
+                    rtl: isRTL,
+                    title: eval(callParent('lcm[155]')),
+                    onContentReady: function () {
+                        disableBackDrop('bind');
+                    },
+                    backgroundDismiss: 'false',
+                    escapeKey: 'buttonB',
+                    content: cutMsg,
+                    buttons: {
+                        buttonA: {
+                            text: eval(callParent('lcm[164]')),
+                            btnClass: 'btn btn-primary',
+                            action: function () {
+                                clearThisDCGrid.close();
+                                var fDcRowCount = GetDcRowCount(_thisDicId);
+                                DeleteAllRows(_thisDicId, fDcRowCount);
+                                ShowDimmer(false);
+                                $("#chkallgridrow" + _thisDicId).prop("checked", false);
+                                $("#divDc" + _thisDicId + " .griddivColumn").addClass("d-none");
+                                $("#divDc" + _thisDicId + " .gridIconBtns").addClass("d-none");
+
+                                GetDcStateValue(_thisDicId, 'F');
+                            }
+                        },
+                        buttonB: {
+                            text: eval(callParent('lcm[192]')),
+                            btnClass: 'btn btn-bg-light btn-color-danger btn-active-light-danger',
+                            action: function () {
+                                //$("#divDc" + _thisDicId + " .griddivColumn").addClass("d-none");
+                                //$("#divDc" + _thisDicId + " .gridIconBtns").addClass("d-none");
+
+                                $("#divDc" + _thisDicId + " .griddivColumn").removeClass("d-none");
+                                $("#divDc" + _thisDicId + " .gridIconBtns").removeClass("d-none");
+                                $("#dcBlean" + _thisDicId).prop("checked", true);
+                                disableBackDrop('destroy');
+                                return;
+                            }
+                        },
+                    }
+                });
+            } else {
+                if ($("#divDc" + _thisDicId + " .gridIconBtns").length > 0) {
+                    $("#divDc" + _thisDicId + " .griddivColumn").addClass("d-none");
+                    $("#divDc" + _thisDicId + " .gridIconBtns").addClass("d-none");
+                } else {
+                    if (IsFormDirty || isRecLoad) {
+                        var cutMsg = eval(callParent('lcm[520]'));
+                        cutMsg = cutMsg.replace('{0}', GetDcCaption(_thisDicId));
+                        var glType = eval(callParent('gllangType'));
+                        var isRTL = false;
+                        if (glType == "ar")
+                            isRTL = true;
+                        else
+                            isRTL = false;
+                        var clearThisDCGrid = $.confirm({
+                            theme: 'modern',
+                            closeIcon: false,
+                            rtl: isRTL,
+                            title: eval(callParent('lcm[155]')),
+                            onContentReady: function () {
+                                disableBackDrop('bind');
+                            },
+                            backgroundDismiss: 'false',
+                            escapeKey: 'buttonB',
+                            content: cutMsg,
+                            buttons: {
+                                buttonA: {
+                                    text: eval(callParent('lcm[164]')),
+                                    btnClass: 'btn btn-primary',
+                                    action: function () {
+                                        clearThisDCGrid.close();
+                                        var _thisFlds = GetGridFields(_thisDicId);
+                                        _thisFlds.forEach(function (_thifld) {
+                                            if (_thifld != "axp_recid" + _thisDicId) {
+                                                let _thisfldId = _thifld + "000F" + _thisDicId;
+                                                SetFieldValue(_thisfldId, "");
+                                                UpdateFieldArray(_thisfldId, 0, "", "parent", "");
+                                            }
+                                        });
+                                        ShowDimmer(false);
+                                        $("#divDc" + _thisDicId).addClass("d-none");
+
+                                        GetDcStateValue(_thisDicId, 'F');
+                                    }
+                                },
+                                buttonB: {
+                                    text: eval(callParent('lcm[192]')),
+                                    btnClass: 'btn btn-bg-light btn-color-danger btn-active-light-danger',
+                                    action: function () {
+                                        //$("#divDc" + _thisDicId).addClass("d-none");
+                                        $("#divDc" + _thisDicId).removeClass("d-none");
+                                        $("#dcBlean" + _thisDicId).prop("checked", true);
+                                        disableBackDrop('destroy');
+                                        return;
+                                    }
+                                },
+                            }
+                        });
+                    } else
+                        $("#divDc" + _thisDicId).addClass("d-none");
+                }
+            }
+            /*GetDcStateValue(_thisDicId, 'F');*/
+       // }
     }
 });
 
@@ -9709,11 +9701,6 @@ function GetDcStateValue(dcsId, expandDc) {
     try {
         if ($("#axp_dcstate000F1").length > 0) {
             let _thisIsFormDirty = IsFormDirty;
-            try {
-                let _fldIndex = $j.inArray("axp_dcstate", FNames);
-                FFieldReadOnly[_fldIndex] = "False";
-                FFieldHidden[_fldIndex] = "False";
-            } catch (ex) { }
             if (dcsId == "") {
                 AxpDcstateVal = $("#axp_dcstate000F1").val();
                 if ($("[id^=dcBlean]").length > 0) {
@@ -9735,7 +9722,7 @@ function GetDcStateValue(dcsId, expandDc) {
                         }
                     });
                     let _thidSwithVal = _arrAxpDc.join('');
-                    let _thidFldId = $("#axp_dcstate000F1").attr("id");
+                    let _thidFldId = $("#axp_dcstate000F1").attr("id");                    
                     SetFieldValue(_thidFldId, _thidSwithVal);
                     UpdateFieldArray(_thidFldId, "000", _thidSwithVal, "parent");
                     MainBlur($("#axp_dcstate000F1"));
@@ -9757,7 +9744,7 @@ function GetDcStateValue(dcsId, expandDc) {
     } catch (ex) { }
 }
 
-function GetDcStateOnLodaData(isCoptyTrans = false) {
+function GetDcStateOnLodaData() {
     let _thisRid = $j("#recordid000F0").val();
     if (_thisRid != "0") {
         if ($("#axp_dcstate000F1").length > 0 && $("#axp_dcstate000F1").val() != "" && AxpDcstateVal != "") {
@@ -9773,17 +9760,5 @@ function GetDcStateOnLodaData(isCoptyTrans = false) {
             if (AxFormControlList.length > 0)
                 ProcessScriptFormControlOnList('axp_dcstate');
         }
-    } else if (_thisRid == "0" && isCoptyTrans) {
-        var _arrAxpDc = Array.from(AxpDcstateVal);
-        _arrAxpDc.forEach(function (val, ind) {
-            if (ind == 0)
-                return true;
-            if (val == "T")
-                AxFormControlList.push("expand~" + DCName[ind]);
-            else
-                AxFormControlList.push("collapse~" + DCName[ind]);
-        });
-        if (AxFormControlList.length > 0)
-            ProcessScriptFormControlOnList('axp_dcstate');
     }
 }

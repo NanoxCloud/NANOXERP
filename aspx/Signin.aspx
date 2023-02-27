@@ -36,9 +36,7 @@
     <asp:PlaceHolder runat="server">
         <%:Scripts.Render("~/UI/axpertUI/bundleJs") %>
     </asp:PlaceHolder>
-    
     <script src="../Js/jquery.browser.min.js" type="text/javascript"></script>
-    <script src="../ThirdParty/jquery-confirm-master/jquery-confirm.min.js?v=2" type="text/javascript"></script>
     <script src="../Js/noConflict.min.js?v=1" type="text/javascript"></script>
     <script src="../Js/alerts.min.js?v=30" type="text/javascript"></script>
     <script type="text/javascript" src="../Js/login.min.js?v=71"></script>
@@ -292,7 +290,7 @@ c-45 8 -53 30 -33 91 22 70 14 75 -11 7z"
         <input type="hidden" runat="server" name="hbtforDupLogin" id="hbtforDupLogin" />
         <button type="submit" runat="server" title="Login" id="btnSubmitUser" class="hotbtn btn hide" />
     </form>
-    
+    <script src="../ThirdParty/jquery-confirm-master/jquery-confirm.min.js?v=2" type="text/javascript"></script>
 
     <!-- END CORE PLUGINS -->
     <!-- BEGIN PAGE LEVEL PLUGINS -->
