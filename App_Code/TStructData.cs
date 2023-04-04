@@ -957,7 +957,7 @@ public class TStructData
     }
 
 
-    public string CallSaveDataWS(TStructData tstData, ArrayList fldArray, ArrayList fldDbRowNo, ArrayList fldValueArray, ArrayList fldDeletedArray, ArrayList deletedFldArrayValues, string files, string rid, string delRows, string changedRows, string axRulesFlds)
+    public string CallSaveDataWS(TStructData tstData, ArrayList fldArray, ArrayList fldDbRowNo, ArrayList fldValueArray, ArrayList fldDeletedArray, ArrayList deletedFldArrayValues, string files, string rid, string delRows, string changedRows)
     {
 
         DateTime stTime = DateTime.Now;
@@ -996,17 +996,7 @@ public class TStructData
 
         serviceInputXml += tstData.fldValueXml + memVarsData + "</data>";
         serviceInputXml += delRows + cngRows;
-        if (axRulesFlds != "")
-        {
-            serviceInputXml += GetAxRuleFlsXML(axRulesFlds, transid);
-        }
-        string AxErroCodeNode = string.Empty;
-        AxErroCodeNode = util.GetAxvalErrorcode(transid);
-
-        string dbmemvarsXML = GetDBMemVarsXML(transid);
-        string cdVarsXML = GetConfigDataVarsXML(transid);
-
-        serviceInputXml += HttpContext.Current.Session["axApps"].ToString() + HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + dbmemvarsXML + cdVarsXML + AxErroCodeNode + HttpContext.Current.Session["axUserVars"].ToString();
+        serviceInputXml += HttpContext.Current.Session["axApps"].ToString() + HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + HttpContext.Current.Session["axUserVars"].ToString();
         serviceInputXml += "</Transaction>";
         logobj.CreateLog("Call to SaveData Web Service", sessionid, filename, "");
         ires = tstStrObj.structRes;
@@ -1106,7 +1096,6 @@ public class TStructData
 
                         if (recId != string.Empty)
                         {
-                            ClearIviewDataKey();
                             if (tstStrObj.AxpFileUploadFields.Count > 0)
                                 RemoveUnwantedAxpFiles(transid, recId, delRows, tstData, deletedFldArrayValues);
 
@@ -1150,63 +1139,6 @@ public class TStructData
                         }
                     }
                 }
-            }
-            if (transid == "axrlr")//Delete tstruct cached keys for particular form On Save of AxRules
-            {
-                try
-                {
-                    XmlDocument xmlDoc = new XmlDocument();
-                    xmlDoc.LoadXml(serviceInputXml);
-                    XmlNode stIdNode = xmlDoc.SelectSingleNode("//Transaction/data/stransid");
-                    if (stIdNode != null && stIdNode.InnerText != "")
-                    {
-                        FDW fdwObj = FDW.Instance;
-                        FDR fObj = (FDR)HttpContext.Current.Session["FDR"];
-                        if (fObj == null)
-                            fObj = new FDR();
-                        string fdData = Constants.REDISTSTRUCTALL;
-                        var dbVarKeys = fObj.GetWildCardKeyNames(util.GetRedisServerkey(fdData, stIdNode.InnerText));
-                        fdwObj.DeleteKeys(dbVarKeys);
-
-                        string fdMemVar = Constants.DBMEMVARSFORMLOAD;
-                        var dbMemVarKeys = fObj.GetWildCardKeyNames(util.GetRedisServerkey(fdMemVar, stIdNode.InnerText, "*"));
-                        fdwObj.DeleteKeys(dbMemVarKeys);
-                    }
-                }
-                catch (Exception ex) { }
-            }
-            else if (transid == "ad_ve")//Delete tstruct cached keys for particular form On Save of Error Codes
-            {
-                try
-                {
-                    XmlDocument xmlDoc = new XmlDocument();
-                    xmlDoc.LoadXml(serviceInputXml);
-                    XmlNode stIdNode = xmlDoc.SelectSingleNode("//Transaction/data/applicabletransid");
-                    if (stIdNode != null && stIdNode.InnerText != "")
-                    {
-                        FDW fdwObj = FDW.Instance;
-                        FDR fObj = (FDR)HttpContext.Current.Session["FDR"];
-                        if (fObj == null)
-                            fObj = new FDR();
-
-                        string _trTransId = stIdNode.InnerText;
-                        string[] _trTransIds = _trTransId.Split(',');
-                        foreach (var _trId in _trTransIds)
-                        {
-                            if (_trId != "")
-                            {
-                                string fdData = Constants.REDISTSTRUCTALL;
-                                var dbVarKeys = fObj.GetWildCardKeyNames(util.GetRedisServerkey(fdData, _trId));
-                                fdwObj.DeleteKeys(dbVarKeys);
-
-                                string fdMemVar = Constants.DBMEMVARSFORMLOAD;
-                                var dbMemVarKeys = fObj.GetWildCardKeyNames(util.GetRedisServerkey(fdMemVar, _trId, "*"));
-                                fdwObj.DeleteKeys(dbMemVarKeys);
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex) { }
             }
         }
 
@@ -1252,8 +1184,6 @@ public class TStructData
                     }
                 }
             }
-            AxDelDcNo = new ArrayList();
-            AxDelRecIds = new ArrayList();
         }
     }
 
@@ -1274,11 +1204,7 @@ public class TStructData
 
         tstData.GetFieldValueXml(fldArray, fldDbRowNo, fldValueArray, fldDeletedArray, "-1", "true", "ALL", "");
         inputXml += "<data>" + tstData.fldValueXml + "</data>";
-
-        string dbmemvarsXML = GetDBMemVarsXML(transid);
-        string cdVarsXML = GetConfigDataVarsXML(transid);
-
-        inputXml += HttpContext.Current.Session["axApps"].ToString() + HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + dbmemvarsXML + cdVarsXML + HttpContext.Current.Session["axUserVars"].ToString() + "</root>";
+        inputXml += HttpContext.Current.Session["axApps"].ToString() + HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + HttpContext.Current.Session["axUserVars"].ToString() + "</root>";
         logobj.CreateLog("Call to WorkFlowAction Web Service", sessionid, filename, "");
         //Call service
         objWebServiceExt = new ASBExt.WebServiceExt();
@@ -1867,8 +1793,6 @@ public class TStructData
             grdAttPath = grdAttPath + "\\" + dcImagePath;
 
         }
-        else if (grdAttPath == string.Empty && dcImagePath != "")
-            grdAttPath = dcImagePath;
         else if (dcImagePath == string.Empty)
         {
             string errorLog = string.Empty;
@@ -2979,15 +2903,8 @@ public class TStructData
 
 
         s += tstData.fieldValueXml + memVarsData + "</row></varlist>" + delRows + cngRows;
-
-        string AxErroCodeNode = string.Empty;
-        AxErroCodeNode = util.GetAxvalErrorcode(transid);
-
-        string dbmemvarsXML = GetDBMemVarsXML(transid);
-        string cdVarsXML = GetConfigDataVarsXML(transid);
-
         s += HttpContext.Current.Session["axApps"].ToString();
-        s += HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + dbmemvarsXML + cdVarsXML + AxErroCodeNode + HttpContext.Current.Session["axUserVars"].ToString() + "</root>";
+        s += HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + HttpContext.Current.Session["axUserVars"].ToString() + "</root>";
 
 
         if (ires == null)
@@ -3021,7 +2938,7 @@ public class TStructData
         return result;
     }
 
-    public string CallActionWS(TStructData tstData, ArrayList fldArray, ArrayList fldDbRowNo, ArrayList fldValueArray, ArrayList fldDeletedArray, ArrayList deletedFldArrayValues, string s, string f, string source, string delRows, string changedRows, string calledFrom = "false", StringBuilder files = null, bool isScript = false, string axRulesFlds = "", bool axRulesScript = false)
+    public string CallActionWS(TStructData tstData, ArrayList fldArray, ArrayList fldDbRowNo, ArrayList fldValueArray, ArrayList fldDeletedArray, ArrayList deletedFldArrayValues, string s, string f, string source, string delRows, string changedRows, string calledFrom = "false", StringBuilder files = null, bool isScript = false)
     {
         string news = GetTraceString(s);
         if (news != "") s = news;
@@ -3039,21 +2956,8 @@ public class TStructData
             ires = tstStrObj.structRes;
             tstData.GetFieldValueXml(fldArray, fldDbRowNo, fldValueArray, fldDeletedArray, "-1", calledFrom, "ALL", "");
             s += tstData.fldValueXml + memVarsData + "</row></varlist>" + delRows + cngRows;
-
-            string AxErroCodeNode = string.Empty;
-            AxErroCodeNode = util.GetAxvalErrorcode(transid);
-
-            string dbmemvarsXML = GetDBMemVarsXML(transid);
-            string cdVarsXML = GetConfigDataVarsXML(transid);
-            bool isAxRulesScript = false;
-            if (isScript && axRulesScript)
-                isAxRulesScript = true;
-            if (axRulesFlds != "" || (isAxRulesScript && axRulesFlds == ""))
-            {
-                s += GetAxRuleFlsXML(axRulesFlds, transid, isAxRulesScript);
-            }
             s += HttpContext.Current.Session["axApps"].ToString();
-            s += HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + dbmemvarsXML + cdVarsXML + AxErroCodeNode + HttpContext.Current.Session["axUserVars"].ToString() + "</root>";
+            s += HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + HttpContext.Current.Session["axUserVars"].ToString() + "</root>";
         }
         else
             ires = "";
@@ -3103,28 +3007,6 @@ public class TStructData
         //avoid special chars in result DURING notify
         if (result != "This proces taking time is more than expected. You will get a notification once completed")
             CheckSave(result, delRows, tstData, changedRows, deletedFldArrayValues, (files != null ? files.ToString() : ""));
-        if (transid == "axrlr" && AxActiveAction == "iSave")//Delete tstruct cached keys for particular form On Save of AxRules
-        {
-            try
-            {
-                XmlNode stIdNode = xmlDoc.SelectSingleNode("//root/varlist/row/stransid");
-                if (stIdNode != null && stIdNode.InnerText != "")
-                {
-                    FDW fdwObj = FDW.Instance;
-                    FDR fObj = (FDR)HttpContext.Current.Session["FDR"];
-                    if (fObj == null)
-                        fObj = new FDR();
-                    string fdData = Constants.REDISTSTRUCTALL;
-                    var dbVarKeys = fObj.GetWildCardKeyNames(util.GetRedisServerkey(fdData, stIdNode.InnerText));
-                    fdwObj.DeleteKeys(dbVarKeys);
-
-                    string fdMemVar = Constants.DBMEMVARSFORMLOAD;
-                    var dbMemVarKeys = fObj.GetWildCardKeyNames(util.GetRedisServerkey(fdMemVar, stIdNode.InnerText, "*"));
-                    fdwObj.DeleteKeys(dbMemVarKeys);
-                }
-            }
-            catch (Exception ex) { }
-        }
         AxActiveAction = string.Empty;
         logobj.CreateLog("End Time : " + DateTime.Now.ToString(), sessionid, filename, "");
         result = requestProcess_logtime + strExecTrace + "♠" + result;
@@ -3238,8 +3120,6 @@ public class TStructData
 
                         if (attachDir && (!string.IsNullOrEmpty(files) || removeFiles.Count > 0))
                             SaveAttached(files, recId);
-
-                        ClearIviewDataKey();
                     }
                     RefFastDataOnSave(AxActiveAction);
                     RefInMemOnSave();
@@ -3521,9 +3401,7 @@ public class TStructData
         }
 
         s += memVarsData;
-        string dbmemvarsXML = GetDBMemVarsXML(transid);
-        string cdVarsXML = GetConfigDataVarsXML(transid);
-        s += HttpContext.Current.Session["axApps"].ToString() + HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + dbmemvarsXML + cdVarsXML + HttpContext.Current.Session["axUserVars"].ToString();
+        s += HttpContext.Current.Session["axApps"].ToString() + HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + HttpContext.Current.Session["axUserVars"].ToString();
         s += "</sqlresultset>";
         //Call service
         objWebServiceExt = new ASBExt.WebServiceExt();
@@ -3571,9 +3449,7 @@ public class TStructData
             catch (Exception ex) { }
             s += regVarXml;
         }
-        string dbmemvarsXML = GetDBMemVarsXML(transid);
-        string cdVarsXML = GetConfigDataVarsXML(transid);
-        s += HttpContext.Current.Session["axApps"].ToString() + HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + dbmemvarsXML + cdVarsXML + HttpContext.Current.Session["axUserVars"].ToString();
+        s += HttpContext.Current.Session["axApps"].ToString() + HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + HttpContext.Current.Session["axUserVars"].ToString();
         s += "</sqlresultset>";
         //Call service
         objWebServiceExt = new ASBExt.WebServiceExt();
@@ -3695,9 +3571,7 @@ public class TStructData
         ires = tstStrObj.structRes;
         GetFieldValueXml(fldArray, fldDbRowNo, fldValueArray, fldDeletedArray, "-1", "RefreshDc", "NG", includeDcs);
         iXml += fieldValueXml + memVarsData;
-        string dbmemvarsXML = GetDBMemVarsXML(transid);
-        string cdVarsXML = GetConfigDataVarsXML(transid);
-        iXml += HttpContext.Current.Session["axApps"].ToString() + HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + dbmemvarsXML + cdVarsXML + HttpContext.Current.Session["axUserVars"].ToString();
+        iXml += HttpContext.Current.Session["axApps"].ToString() + HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + HttpContext.Current.Session["axUserVars"].ToString();
         iXml += "</sqlresultset>";
         //Call service     
         objWebServiceExt = new ASBExt.WebServiceExt();
@@ -3751,9 +3625,7 @@ public class TStructData
         tstData.GetFieldValueXml(fldArray, fldDbRowNo, fldValueArray, fldDeletedArray, "-1", "FillGrid", "NG", "");
 
         s += tstData.fieldValueXml + memVarsData;
-        string dbmemvarsXML = GetDBMemVarsXML(transid);
-        string cdVarsXML = GetConfigDataVarsXML(transid);
-        s += HttpContext.Current.Session["axApps"].ToString() + HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + dbmemvarsXML + cdVarsXML + HttpContext.Current.Session["axUserVars"].ToString();
+        s += HttpContext.Current.Session["axApps"].ToString() + HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + HttpContext.Current.Session["axUserVars"].ToString();
         s += "</sqlresultset>";
 
         #region Data cache in session
@@ -4166,9 +4038,7 @@ public class TStructData
         //tstData.GetFieldValueXml(fldArray, fldDbRowNo, fldValueArray, fldDeletedArray, frameNo, "FillGrid", "NG", dcNo);
         tstData.GetPerfFieldValueXml(fldArray, fldDbRowNo, fldValueArray, fldDeletedArray, frameNo, "FillGrid", "NG", dcNo);
         s += "<FieldList>" + WsPerfAddRowLoadDc(dcNo, "FillGrid") + memVarsData + "</FieldList>" + HttpContext.Current.Session["axApps"].ToString();
-        string dbmemvarsXML = GetDBMemVarsXML(transid);
-        string cdVarsXML = GetConfigDataVarsXML(transid);
-        s += HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + dbmemvarsXML + cdVarsXML + HttpContext.Current.Session["axUserVars"].ToString() + "</sqlresultset>";
+        s += HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + HttpContext.Current.Session["axUserVars"].ToString() + "</sqlresultset>";
         //Call service
         objWebServiceExt = new ASBExt.WebServiceExt();
         DateTime asStart = DateTime.Now;
@@ -4560,9 +4430,7 @@ public class TStructData
         string visibleDCs = string.Empty;
         visibleDCs = tstStrObj.GetVisibleDCs();
         string loadXml = "<root axpapp='" + HttpContext.Current.Session["project"].ToString() + "' sessionid='" + HttpContext.Current.Session["nsessionid"].ToString() + "' transid='" + tstData.transid + "' recordid='" + rid + "' dcname='" + visibleDCs + "' trace='" + errorLog + "' appsessionkey='" + HttpContext.Current.Session["AppSessionKey"].ToString() + "' username='" + HttpContext.Current.Session["username"].ToString() + "'>";
-        string dbmemvarsXML = GetDBMemVarsXML(tstData.transid);
-        string cdVarsXML = GetConfigDataVarsXML(transid);
-        loadXml += HttpContext.Current.Session["axApps"].ToString() + HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + dbmemvarsXML + cdVarsXML + HttpContext.Current.Session["axUserVars"].ToString();
+        loadXml += HttpContext.Current.Session["axApps"].ToString() + HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + HttpContext.Current.Session["axUserVars"].ToString();
         loadXml += "</root>";
         objWebServiceExt = new ASBExt.WebServiceExt();
         result = objWebServiceExt.CallDoFormLoadWS(tstData.transid, loadXml, tstStrObj.structRes);
@@ -4581,9 +4449,7 @@ public class TStructData
         if (HttpContext.Current.Session["AxpSaveImageDb"] != null)
             imagefromdb = HttpContext.Current.Session["AxpSaveImageDb"].ToString();
         string loadXml = "<root imagefromdb='" + imagefromdb + "' axpapp = '" + proj + "' sessionid = '" + HttpContext.Current.Session["nsessionid"].ToString() + "' appsessionkey = '" + HttpContext.Current.Session["AppSessionKey"].ToString() + "' username = '" + HttpContext.Current.Session["username"].ToString() + "' transid = '" + tstData.transid + "' recordid = '" + recordid + "' dcname = '" + visibleDCs + "' trace = '" + errorLog + "' > ";
-        string dbmemvarsXML = GetDBMemVarsXML(tstData.transid);
-        string cdVarsXML = GetConfigDataVarsXML(transid);
-        loadXml += HttpContext.Current.Session["axApps"].ToString() + HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + dbmemvarsXML + cdVarsXML + HttpContext.Current.Session["axUserVars"].ToString();
+        loadXml += HttpContext.Current.Session["axApps"].ToString() + HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + HttpContext.Current.Session["axUserVars"].ToString();
         loadXml += "</root>";
         loadXml = util.ReplaceImagePath(loadXml);
         string tsId = tstData.transid;
@@ -6544,10 +6410,7 @@ public class TStructData
         result = objWebServiceExt.CallDeleteDataWS(transid, s);
         DateTime asEnd = DateTime.Now;
         if (result.ToLower().IndexOf("data deleted successfully") > -1)
-        {
-            ClearIviewDataKey();
             RemoveAttachFromServer(s, transid);
-        }
         //RemoveAttachFromDir("");
         if (logTimeTaken)
         {
@@ -6566,9 +6429,7 @@ public class TStructData
         ires = tstStrObj.structRes;
         tstData.GetFieldValueXml(fldArray, fldDbRowNo, fldValueArray, fldDeletedArray, "-1", "", "NG", dcNo);
         s += tstData.fieldValueXml + memVarsData;
-        string dbmemvarsXML = GetDBMemVarsXML(transid);
-        string cdVarsXML = GetConfigDataVarsXML(transid);
-        s += HttpContext.Current.Session["axApps"].ToString() + HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + dbmemvarsXML + cdVarsXML + HttpContext.Current.Session["axUserVars"].ToString();
+        s += HttpContext.Current.Session["axApps"].ToString() + HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + HttpContext.Current.Session["axUserVars"].ToString();
         s += "</sqlresultset>";
         string result = string.Empty;
 
@@ -6587,9 +6448,7 @@ public class TStructData
         tstData.GetPerfFieldValueXml(fldArray, fldDbRowNo, fldValueArray, fldDeletedArray, "-1", "", "NG", dcNo);
         s += WsPerfAddRowLoadDc(dcNo, "AddRow");
         s += memVarsData;
-        string dbmemvarsXML = GetDBMemVarsXML(transid);
-        string cdVarsXML = GetConfigDataVarsXML(transid);
-        s += HttpContext.Current.Session["axApps"].ToString() + HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + dbmemvarsXML + cdVarsXML + HttpContext.Current.Session["axUserVars"].ToString();
+        s += HttpContext.Current.Session["axApps"].ToString() + HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + HttpContext.Current.Session["axUserVars"].ToString();
         s += "</sqlresultset>";
         string result = string.Empty;
 
@@ -6670,9 +6529,7 @@ public class TStructData
         ires = tstStrObj.structRes;
         tstData.GetFieldValueXml(fldArray, fldDbRowNo, fldValueArray, fldDeletedArray, "-1", "", "NG", dcNo);
         s += tstData.fieldValueXml + memVarsData;
-        string dbmemvarsXML = GetDBMemVarsXML(transid);
-        string cdVarsXML = GetConfigDataVarsXML(transid);
-        s += HttpContext.Current.Session["axApps"].ToString() + HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + dbmemvarsXML + cdVarsXML + HttpContext.Current.Session["axUserVars"].ToString();
+        s += HttpContext.Current.Session["axApps"].ToString() + HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + HttpContext.Current.Session["axUserVars"].ToString();
         s += "</sqlresultset>";
         string result = string.Empty;
         //Call service
@@ -6690,9 +6547,7 @@ public class TStructData
         tstData.GetPerfFieldValueXml(fldArray, fldDbRowNo, fldValueArray, fldDeletedArray, "-1", "", "NG", dcNo);
         s += WsPerfAddRowLoadDc(dcNo, "DeleteRow");
         s += memVarsData;
-        string dbmemvarsXML = GetDBMemVarsXML(transid);
-        string cdVarsXML = GetConfigDataVarsXML(transid);
-        s += HttpContext.Current.Session["axApps"].ToString() + HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + dbmemvarsXML + cdVarsXML + HttpContext.Current.Session["axUserVars"].ToString();
+        s += HttpContext.Current.Session["axApps"].ToString() + HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + HttpContext.Current.Session["axUserVars"].ToString();
         s += "</sqlresultset>";
         string result = string.Empty;
         bool callService = false;
@@ -6725,9 +6580,7 @@ public class TStructData
         tstData.GetPerfFieldValueXml(fldArray, fldDbRowNo, fldValueArray, fldDeletedArray, "-1", "LoadTab", "NG", dcNo);
         iXml += WsPerfAddRowLoadDc(dcNo, "LoadDc");
         iXml += memVarsData;
-        string dbmemvarsXML = GetDBMemVarsXML(transid);
-        string cdVarsXML = GetConfigDataVarsXML(transid);
-        iXml += HttpContext.Current.Session["axApps"].ToString() + HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + dbmemvarsXML + cdVarsXML + HttpContext.Current.Session["axUserVars"].ToString();
+        iXml += HttpContext.Current.Session["axApps"].ToString() + HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + HttpContext.Current.Session["axUserVars"].ToString();
         iXml += "</sqlresultset>";
         //Call service     
         objWebServiceExt = new ASBExt.WebServiceExt();
@@ -6830,9 +6683,7 @@ public class TStructData
         string res = "";
         GetPicklistInputXml(fldArray, fldDbRowNo, fldValueArray, fldDeletedArray, fldName, frameNo, parentInfo, subGridInfo, activeRow);
         iXml += this.fieldValueXml + memVarsData;
-        string dbmemvarsXML = GetDBMemVarsXML(transid);
-        string cdVarsXML = GetConfigDataVarsXML(transid);
-        iXml += HttpContext.Current.Session["axApps"].ToString() + HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + dbmemvarsXML + cdVarsXML + HttpContext.Current.Session["axUserVars"].ToString();
+        iXml += HttpContext.Current.Session["axApps"].ToString() + HttpContext.Current.Application["axProps"].ToString() + HttpContext.Current.Session["axGlobalVars"].ToString() + HttpContext.Current.Session["axUserVars"].ToString();
         iXml += "</sqlresultset>";
         //Call service
         objWebServiceExt = new ASBExt.WebServiceExt();
@@ -8262,7 +8113,7 @@ public class TStructData
 
     #endregion
 
-    public string GetFieldSqlQuery(string fldName, string fldValues, string globalVar, string userVars, int activeRow, string parentFlds, string tblSourceParams = "")
+    public string GetFieldSqlQuery(string fldName, string fldValues, string globalVar, string userVars, int activeRow, string parentFlds)
     {
         int fldidx = tstStrObj.GetFieldIndex(fldName);
         TStructDef.FieldStruct fld = (TStructDef.FieldStruct)tstStrObj.flds[fldidx];
@@ -8275,8 +8126,6 @@ public class TStructData
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(fldValues);
             sqlParamsXML += "<globalvars>";
-            string[] tblSourceList = tblSourceParams.Split('♠');
-            ArrayList tblParamExist = new ArrayList();
             // in cluase paramets for grid field {invioceno*} for non grid field {invioceno}
             if (Regex.Match(sqlQuery.ToLower(), @"{\b\w+\b}", RegexOptions.IgnoreCase).Success || Regex.Match(sqlQuery.ToLower(), @"{\b\w+\b\*}", RegexOptions.IgnoreCase).Success)
             {
@@ -8359,40 +8208,10 @@ public class TStructData
                     else if (flds.datatype == "Date/Time")
                         appVarTypes += "d";
                 }
-                if (tblSourceParams != "" && tblSourceList.Length > 0)
-                {
-                    try
-                    {
-                        foreach (var parms in tblSourceList)
-                        {
-                            string[] parmsVal = parms.Split(':');
-                            if (Regex.Match(sqlQuery, String.Format(@":\b{0}\b", parmsVal[0]), RegexOptions.IgnoreCase).Success)
-                            {
-                                int fldidxs = tstStrObj.GetFieldIndex(parmsVal[0]);
-                                TStructDef.FieldStruct flds = (TStructDef.FieldStruct)tstStrObj.flds[fldidxs];
-                                sqlParamsXML += "<" + parmsVal[0] + " rowno=\"001\">" + parmsVal[1] + "</" + parmsVal[0] + ">";
-                                parentFldVals += parms + "~";
-                                if (flds.datatype == "Character" || flds.datatype == "Text")
-                                    appVarTypes += "c";
-                                else if (flds.datatype == "Numeric")
-                                    appVarTypes += "n";
-                                else if (flds.datatype == "Date/Time")
-                                    appVarTypes += "d";
-                                tblParamExist.Add(parmsVal[0]);
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        logobj.CreateLog("GetFieldSqlQuery table source params - " + ex.Message, sessionid, "GetFieldSqlQuery-tblsourceparams" + transid, "new");
-                    }
-                }
                 foreach (XmlNode parms in xmlDoc.ChildNodes[0].ChildNodes)
                 {
                     if (Regex.Match(sqlQuery, String.Format(@":\b{0}\b", parms.Name.ToString()), RegexOptions.IgnoreCase).Success)
                     {
-                        if (tblParamExist.IndexOf(parms.Name) > 0)
-                            continue;
                         int fldidxs = tstStrObj.GetFieldIndex(parms.Name);
                         TStructDef.FieldStruct flds = (TStructDef.FieldStruct)tstStrObj.flds[fldidxs];
                         bool isDcGrid = false;
@@ -8456,7 +8275,7 @@ public class TStructData
             if (sqlParamsXML != "<globalvars>")
                 sqlParamsXML += "<appvartypes>" + appVarTypes + "</appvartypes>";
             sqlParamsXML += "</globalvars>";
-            if (activeRow == 0 && tblSourceParams == "")
+            if (activeRow == 0)
             {
                 string SessAutKey = "autocomplete♦" + transid + "-" + fldName + "-" + parentFlds;
                 HttpContext.Current.Session[SessAutKey] = sqlQuery + sqlParamsXML + "♠" + parentFldVals;
@@ -8466,128 +8285,6 @@ public class TStructData
         {
         }
         return sqlQuery + sqlParamsXML + "♠" + parentFldVals;
-    }
-
-
-    public string GetDBMemVarsXML(string _thisTid)
-    {
-        string dbmemvarsXML = string.Empty;
-        try
-        {
-            //if (HttpContext.Current.Session["dbmemvars_" + _thisTid] != null && HttpContext.Current.Session["dbmemvars_" + _thisTid].ToString() != "")
-            //    dbmemvarsXML = HttpContext.Current.Session["dbmemvars_" + _thisTid].ToString();
-            dbmemvarsXML = util.GetDBMemVarsXML(_thisTid);
-        }
-        catch (Exception ex)
-        {
-            dbmemvarsXML = string.Empty;
-            logobj.CreateLog("GetDBMemVariables XML  - " + ex.Message, sessionid, "GetDBMemVarsXML-" + _thisTid, "new");
-        }
-        return dbmemvarsXML;
-    }
-
-    public string GetAxRuleFlsXML(string axRulesFlds, string _thisTid, bool isOnSubmit = false)
-    {
-        string axrulefldXMl = string.Empty;
-        try
-        {
-            if (axRulesFlds != "")
-            {
-                StringBuilder allowEmpty = new StringBuilder();
-                StringBuilder axValidate = new StringBuilder();
-                StringBuilder axDuplicate = new StringBuilder();
-                StringBuilder axValidateOnsave = new StringBuilder();
-                string[] listarflds = axRulesFlds.Split('♥');
-                foreach (var _thisaxr in listarflds)
-                {
-                    string[] typelist = _thisaxr.Split('♦');
-                    if (typelist[0] == "validate")
-                        axValidate.Append("<" + typelist[1] + ">" + util.CheckSpecialChars(typelist[2]) + "</" + typelist[1] + ">");
-                    else if (typelist[0] == "validate_onsave")
-                        axValidateOnsave.Append("<" + typelist[1] + ">" + util.CheckSpecialChars(typelist[2]) + "</" + typelist[1] + ">");
-                    else if (typelist[0] == "allowempty")
-                        allowEmpty.Append("<" + typelist[1] + ">" + util.CheckSpecialChars(typelist[2]) + "</" + typelist[1] + ">");
-                    else if (typelist[0] == "allowduplicate")
-                        axDuplicate.Append("<" + typelist[1] + ">" + util.CheckSpecialChars(typelist[2]) + "</" + typelist[1] + ">");
-                }
-                axrulefldXMl = "<axrules>";
-                if (axValidate.ToString() != "")
-                    axrulefldXMl += "<validate>" + axValidate.ToString() + "</validate>";
-                if (axValidateOnsave.ToString() != "")
-                    axrulefldXMl += "<validate_onsave>" + axValidateOnsave.ToString() + "</validate_onsave>";
-                if (allowEmpty.ToString() != "")
-                    axrulefldXMl += "<allowempty>" + allowEmpty.ToString() + "</allowempty>";
-                if (axDuplicate.ToString() != "")
-                    axrulefldXMl += "<allowduplicate>" + axDuplicate.ToString() + "</allowduplicate>";
-                if (isOnSubmit && HttpContext.Current.Session["AxRuleOnSubmit"] != null)
-                    axrulefldXMl += HttpContext.Current.Session["AxRuleOnSubmit"].ToString();
-
-                axrulefldXMl += "</axrules>";
-            }
-            else if (axRulesFlds == "" && isOnSubmit)
-            {
-                if (HttpContext.Current.Session["AxRuleOnSubmit"] != null)
-                {
-                    axrulefldXMl = "<axrules>";
-                    axrulefldXMl += HttpContext.Current.Session["AxRuleOnSubmit"].ToString();
-                    axrulefldXMl += "</axrules>";
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            axrulefldXMl = string.Empty;
-            logobj.CreateLog("GetAxRuleFlsXML XML  - " + ex.Message, sessionid, "GetAxRuleFlsXML-" + _thisTid, "new");
-        }
-        return axrulefldXMl;
-    }
-
-    public string GetConfigDataVarsXML(string _thisTid)
-    {
-        string cdVarsXML = string.Empty;
-        try
-        {
-            cdVarsXML = util.GetConfigDataVarsXML(_thisTid);
-        }
-        catch (Exception ex)
-        {
-            cdVarsXML = string.Empty;
-            logobj.CreateLog("GetConfigDataVarsXML XML  - " + ex.Message, sessionid, "GetConfigDataVarsXML-" + _thisTid, "new");
-        }
-        return cdVarsXML;
-    }
-
-    private void ClearIviewDataKey()
-    {
-        try
-        {
-            if (HttpContext.Current.Session["openerIV"] != null && HttpContext.Current.Session["openerIV"].ToString() != "")
-            {
-                string openIvName = HttpContext.Current.Session["openerIV"].ToString();
-
-                FDW fdwObj = FDW.Instance;
-                FDR fObj = (FDR)HttpContext.Current.Session["FDR"];
-                if (fObj == null)
-                    fObj = new FDR();
-
-
-
-                string[] ivlvKeys = openIvName.Split('~');
-                if (ivlvKeys[1] == "IV")
-                {
-                    string keyPattern = fObj.MakeKeyName(Constants.RedisIvData, ivlvKeys[0], user, "*", -1);
-                    ArrayList keyList = fObj.GetPrefixedKeys(keyPattern, true, string.Empty, false);
-                    fdwObj.DeleteKeys(keyList);
-                }
-                else if (ivlvKeys[1] == "LV")
-                {
-                    string keyPattern = fObj.MakeKeyName(Constants.RedisLvData, ivlvKeys[0], user, "*", -1);
-                    ArrayList keyList = fObj.GetPrefixedKeys(keyPattern, true, string.Empty, false);
-                    fdwObj.DeleteKeys(keyList);
-                }
-            }
-        }
-        catch (Exception ex) { }
     }
 }
 #endregion

@@ -85,10 +85,6 @@ var DeletedFieldValue = new Array();
 var RegVarFldList = new Array();
 var AcceptExpressionFlds = new Array();
 
-var AllFieldNames = new Array();
-var AllFieldValues = new Array();
-var ScriptMaskFields = new Array();
-
 //add row no arrays
 var RowDcNo = new Array();
 var DbRowNo = new Array();
@@ -144,7 +140,6 @@ var AxFormContSetCapFlds = new Array();
 var AxFormContSetCapFldsGrid = new Array();
 var AxFormContSetFldActGrid = new Array();
 var AxFormContFldSetFocus = new Array();
-var AxFormContSetGridCell = new Array();
 var changeFillGridDc = 0;
 var ArrActionLog = "";
 var FromSave = false;
@@ -269,20 +264,14 @@ var compressedMode = false;
 
 var gsConf = {
     normalMode: {
-        get cellHeight() {
-            return this.labelHeight + this.controlHeight;
-        },
-        verticalMargin: 5,
-        controlHeight: 38,
-        labelHeight: 32.5
+        cellHeight: 89,
+        verticalMargin: 1,
+        labelHeight: 31
     },
     compressedMode: {
-        get cellHeight() {
-            return this.labelHeight + this.controlHeight;
-        },
+        cellHeight: 60,
         verticalMargin: 1,
-        controlHeight: 34.4,
-        labelHeight: 21
+        labelHeight: 10
     }
 };
 
@@ -342,10 +331,7 @@ var ChangedTblFieldVals = new Array();
 var fldSourceAcMetaJson = "";
 var sourceAcMetaJsonFlds = new Array();
 
-try {
-    (typeof CKEDITOR != "undefined") && (CKEDITOR.basePath = `${encodeURI(mainPageUrl = window.location.href.toLowerCase()) && (webUrl = mainPageUrl.substr(0, mainPageUrl.indexOf("/aspx")))}/Js/ckeditor/`);
-} catch (error) { }
-
+CKEDITOR.basePath = `${encodeURI(mainPageUrl = window.location.href.toLowerCase()) && (webUrl = mainPageUrl.substr(0, mainPageUrl.indexOf("/aspx")))}/Js/ckeditor/`;
 var draftSetTimeoutObj;
 var checkIsdraft = "false";
 var wizardSaveActionBtn = "FormSubmit()";
@@ -365,10 +351,3 @@ Dropzone.autoDiscover = false;
 var clickedButtonCaption = "";
 var FormControlSameFormLoad = false;
 var AxFocusedFld = "";
-var AxRulesFlds = new Array();
-var tstReadOnlyPeg = false;
-var AxFormControlList = new Array();
-var isCopyTrans = false;
-var TstCopyTransRes = "";
-var FldListParents = new Array();
-var FldListData = new Array();

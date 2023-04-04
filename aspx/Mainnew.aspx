@@ -86,7 +86,7 @@
     <!-- <link href="../Css/master_style.min.css?v=23" rel="stylesheet" /> -->
     <%} %>
 
-    <script src="../Js/alerts.min.js?v=30" type="text/javascript"></script>
+    <script src="../Js/alerts.min.js?v=29" type="text/javascript"></script>
     <%if (templateText == String.Empty)
         {%>
     <!-- <script src="../Js/template.min.js?v=3" type="text/javascript"></script> -->
@@ -97,7 +97,7 @@
     <title><%=appTitle%></title>
     <link rel="shortcut icon" href="../images/favicon.ico" />
     <script src="../Js/xmlToJson.js?v=2"></script>
-    <script src="../Js/helper.min.js?v=141"></script>
+    <script src="../Js/helper.min.js?v=124"></script>
     <!-- <script src="../assets/scripts/app.min.js?v=1" type="text/javascript"></script> -->
     <script src="../assets/js/loadingoverlay.min.js?v=3" type="text/javascript"></script>
     <!-- <script src="../assets/scripts/tasks.min.js" type="text/javascript"></script> -->
@@ -126,9 +126,9 @@
     <!-- <link href="../App_Themes/Gray/Stylesheet.min.css?v=23" rel="stylesheet" /> -->
     <%} %>
     <!-- <link id="themecss" type="text/css" href="" rel="stylesheet" /> -->
-    <script type="text/javascript" src="../Js/common.min.js?v=118"></script>
-    <script src="../Js/process.min.js?v=238"></script>
-    <script type="text/javascript" src="../Js/lang/content-<%=langType%>.js?v=59"></script>
+    <script type="text/javascript" src="../Js/common.min.js?v=99"></script>
+    <script src="../Js/process.min.js?v=207"></script>
+    <script type="text/javascript" src="../Js/lang/content-<%=langType%>.js?v=52"></script>
     <script src="../ThirdParty/QRcode/qrcode.js?v=1"></script>
     <!-- END PAGE LEVEL SCRIPTS -->
 
@@ -190,7 +190,7 @@
         var axMenuReSize = '<%=axMenuReSize%>';
         var enableTemplatization = <%=templateText == String.Empty ? "false" : "true" %>;
         var axUserOptions=<%=axUserOptions%>;
-        var compressedMode = false;//<%=compressedMode.ToString().ToLower()%>;
+        var compressedMode = <%=compressedMode.ToString().ToLower()%>;
         var showMenu = <%=showMenu.ToString().ToLower()%>;
         var googleMapsApiKey = "<%=googleMapsApiKey%>";
         var privateSSO = "<%=privateSSO%>";
@@ -207,11 +207,10 @@
         var serverprocesstime='<%=serverprocesstime%>';
         var axpProjectCaption='<%=axpProjectCaption%>';
         var homePageType='<%=homePageType%>';
-        var bundleCss = '<%=Styles.RenderFormat("{0},", direction == "ltr" ? "~/UI/axpertUI/ltrBundleCss" : "~/UI/axpertUI/rtlBundleCss").ToString().Replace("\r\n", "")%>'.split(",").filter(file=>file).map(file => window.location.origin + file);
-        var bundleJs = '<%=Scripts.RenderFormat("{0},", "~/UI/axpertUI/bundleJs").ToString().Replace("\r\n", "")%>'.split(",").filter(file => file).map(file => window.location.origin + file);
-        var reportCss = '<%=Styles.RenderFormat("{0},", "~/Css/report").ToString().Replace("\r\n", "")%>'.split(",").filter(file => file).map(file => window.location.origin + file);
-        var reportJs = '<%=Scripts.RenderFormat("{0},", "~/Js/report").ToString().Replace("\r\n", "")%>'.split(",").filter(file => file).map(file => window.location.origin + file);
-        var aspBundleJs = '<%=Scripts.RenderFormat("{0},", "~/Js/aspJs").ToString().Replace("\r\n", "")%>'.split(",").filter(file => file).map(file => window.location.origin + file);
+        var bundleCss = window.location.origin + '<%=Styles.Url(direction == "ltr" ? "~/UI/axpertUI/ltrBundleCss" : "~/UI/axpertUI/rtlBundleCss")%>';
+        var bundleJs = window.location.origin + '<%=Styles.Url("~/UI/axpertUI/bundleJs")%>';
+        var reportCss = window.location.origin + '<%=Styles.Url("~/Css/report")%>';
+        var reportJs = window.location.origin + '<%=Styles.Url("~/Js/report")%>';
     </script>
     <!-- <script src="../Js/jquery.browser.min.js" type="text/javascript"></script> -->
     <script type="text/javascript" src="../Js/util.min.js?v=2"></script>
@@ -220,7 +219,7 @@
     <script src="../Js/msal.min.js" type="text/javascript"></script>
     <script src="../Js/okta-auth-js.min.js" type="text/javascript"></script>
     <!-- <script src="../ThirdParty/bootstrap-growl-1.1.0/jquery.bootstrap-growl.min.js"></script> -->
-    <script type="text/javascript" src="../js/main.min.js?v=268"></script>
+    <script type="text/javascript" src="../js/main.min.js?v=251"></script>
 </head>
 
 <body id="mainNewPageBody" onload="ChangeDir('<');"
@@ -854,9 +853,7 @@
         <asp:HiddenField ID="cardsDesign" runat="server" />
         
         <asp:HiddenField ID="listviewAsDefault" value="[]" runat="server" />
-        <asp:HiddenField ID="listviewLoadFromSearch" value="[]" runat="server" />
 
-        <asp:HiddenField ID="_antiforgery" runat="server"/>
     </form>
     <!-- END FOOTER -->
     <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
