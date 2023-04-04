@@ -137,7 +137,6 @@ public class TStructDef
     private int fgCount = 0;
     public string srchCols = string.Empty;
     public string grpActBtns = string.Empty;
-    public ArrayList grpActBtnsList = new ArrayList();
     public string refreshSelect = string.Empty;
     public string htmlToPDF = string.Empty;
     //Fastdata variables
@@ -173,11 +172,6 @@ public class TStructDef
     Util.Util utilObj = new Util.Util();
     public Dictionary<string, int> AxRowLimit = new Dictionary<string, int>();
     public string FormLoadGlobalVarNode = string.Empty;
-    public string AxMemVarFunction = string.Empty;
-    public bool AxMemVarAvailable = false;
-
-    public StringBuilder ArrFFieldHidden = new StringBuilder();
-    public StringBuilder ArrFFieldReadOnly = new StringBuilder();
 
     // Global variables
     [NonSerialized]
@@ -217,7 +211,7 @@ public class TStructDef
     public int docHeight = 0;
     public int left = 0;
     public int top = 0;
-    Custom cust = Custom.Instance;
+    Custom cust = Custom.Instance;          //murali
     bool flgEnblPurpose = true;
 
     public string isPerfCode = "false";
@@ -230,8 +224,6 @@ public class TStructDef
     public string Publish_id = string.Empty;
     public string Is_Publish = "N";
     public string dcPlistaddrow = string.Empty;
-    public string dcExpandCollapse = string.Empty;
-    public string dcDefaultstate = string.Empty;
     Boolean IsPublish = false;
     bool isMobile = false;
     public ArrayList fldSetCarry = new ArrayList();
@@ -459,22 +451,6 @@ public class TStructDef
                         else if (dr["configname"].ToString() == "groupbtns")
                         {
                             grpActBtns = dr["cvalue"].ToString();
-                            if (grpActBtns != "")
-                            {
-                                try
-                                {
-                                    String[] btnGroups = grpActBtns.Split('~');
-                                    for (int i = 0; i < btnGroups.Length; i++)
-                                    {
-                                        string[] seperateButton = (btnGroups[i].Split('-')[1]).ToString().Split(',');
-                                        for (int j = 0; j < seperateButton.Length; j++)
-                                        {
-                                            grpActBtnsList.Add(seperateButton[j]);
-                                        }
-                                    }
-                                }
-                                catch (Exception ex) { }
-                            }
                         }
                         else if (dr["configname"].ToString().ToLower() == "refreshselect")
                         {
@@ -496,7 +472,7 @@ public class TStructDef
         }
     }
 
-    private bool CheckpurposeFld()
+    private bool CheckpurposeFld()//murali
     {
         bool resPurpose = false;
         ASBCustom.CustomWebservice objCWbSer = new ASBCustom.CustomWebservice();
@@ -653,26 +629,14 @@ public class TStructDef
         string headerStyle;
         string subTotalStyle;
         string action;
-        string dcPurpose;
+        string dcPurpose;//murali
         ArrayList dispKeyColValues;
         ArrayList keyColumnValues;
         ArrayList tabParentFlds;
         StringBuilder dcExpDependents;
         string dcAcceptMRFields;
         string dcPlist;
-        string DCblean;
-        string DCDefaultstate;
 
-        public string DcBlean
-        {
-            get { return DCblean; }
-            set { DCblean = value; }
-        }
-        public string DcDefaultstate
-        {
-            get { return DCDefaultstate; }
-            set { DCDefaultstate = value; }
-        }
         public string dcPList
         {
             get { return dcPlist; }
@@ -835,7 +799,7 @@ public class TStructDef
             set { dcAcceptMRFields = value; }
         }
 
-        public string purpose
+        public string purpose //murali
         {
             get { return dcPurpose; }
             set { dcPurpose = value; }
@@ -984,7 +948,6 @@ public class TStructDef
         string actParentRefresh;
         string actsavetask;
         string actscripttask;
-        string actscriptcancel;
 
         public string actname
         {
@@ -1054,11 +1017,6 @@ public class TStructDef
             get { return actscripttask; }
             set { actscripttask = value; }
         }
-        public string actScriptCancel
-        {
-            get { return actscriptcancel; }
-            set { actscriptcancel = value; }
-        }
     }
 
     /// <summary>
@@ -1071,7 +1029,6 @@ public class TStructDef
         string fldCaption;
         string fldDatatype;
         string fldTableVal;
-        string tableTypSql;
         string fldModeofEntry;
         string fldExpression;
         string fldValidateExpression;
@@ -1163,15 +1120,10 @@ public class TStructDef
         string fldmultiselectsep;
         string fldtype;
         string fldacceptapi;
-        string fldtimeformat;
 
         int pwdMinChar;
         bool pwdAlphaNumeric;
         int pwdNodExpiry;
-
-        string fldmasktype;
-        string fldmaskdetails;
-        bool fldCustomDecimal;
 
         public string OnFocus
         {
@@ -1235,22 +1187,10 @@ public class TStructDef
             set { fldDatatype = value; }
         }
 
-        public bool CustomDecimal
-        {
-            get { return fldCustomDecimal; }
-            set { fldCustomDecimal = value; }
-        }
-
         public string tabletypeval
         {
             get { return fldTableVal; }
             set { fldTableVal = value; }
-        }
-
-        public string tabletypsql
-        {
-            get { return tableTypSql; }
-            set { tableTypSql = value; }
         }
 
         public string moe
@@ -1335,7 +1275,7 @@ public class TStructDef
             get { return fldHint; }
             set { fldHint = value; }
         }
-        public string fieldPurpose
+        public string fieldPurpose //m
         {
             get { return fldPurpose; }
             set { fldPurpose = value; }
@@ -1737,24 +1677,6 @@ public class TStructDef
         {
             get { return fldacceptapi; }
             set { fldacceptapi = value; }
-        }
-
-        public string fldTimeFormat
-        {
-            get { return fldtimeformat; }
-            set { fldtimeformat = value; }
-        }
-
-        public string fldMaskType
-        {
-            get { return fldmasktype; }
-            set { fldmasktype = value; }
-        }
-
-        public string fldMaskDetails
-        {
-            get { return fldmaskdetails; }
-            set { fldmaskdetails = value; }
         }
     }
 
@@ -2656,8 +2578,6 @@ public class TStructDef
         dc.DisplayKeyCol = string.Empty;
         dc.DisplayTotalCol = string.Empty;
         dc.dcPList = dcPlistaddrow;
-        dc.DcBlean = dcExpandCollapse;
-        dc.DcDefaultstate = dcDefaultstate;
         LoadDCArray(dc, pdc);
         dcs.Add(dc);
         //For every dc add a field 'axp_recid + dcno' as a hidden field.
@@ -2892,31 +2812,11 @@ public class TStructDef
                     fld.fieldIsImage = true;
                     AxImageFields.Add(fld.name);
                 }
-
-                if (fld.datatype == "Numeric")
-                {
-                    if (fieldNodes.Attributes["customdecimal"] != null)
-                        fld.CustomDecimal = fieldNodes.Attributes["customdecimal"].Value.ToString() == "T" ? true : false;
-                    else
-                        fld.CustomDecimal = false;
-                }
-                else
-                    fld.CustomDecimal = false;
             }
             else if (fldNode.Name == "a4")
                 fld.fldlength = int.Parse(fldNode.InnerText);
             else if (fldNode.Name == "a5")
-            {
                 fld.flddecimal = int.Parse(fldNode.InnerText);
-                //if (fld.CustomDecimal && HttpContext.Current.Session["axdecimal"] != null)
-                //{
-                //    string axDecimal = HttpContext.Current.Session["axdecimal"].ToString();
-                //    if (axDecimal != "")
-                //    {
-                //        fld.flddecimal = int.Parse(axDecimal);
-                //    }
-                //}
-            }
             else if (fldNode.Name == "a6")
             {
                 fld.moe = fldNode.InnerText;
@@ -2988,8 +2888,8 @@ public class TStructDef
                 fld.applycomma = fldNode.InnerText;
             else if (fldNode.Name == "a58")
                 fld = SetValueFMT(fldNode, fld);
-            else if (fldNode.Name == "a59")
-                fld.fieldPurpose = fldNode.InnerText;
+            else if (fldNode.Name == "a59") //murali
+                fld.fieldPurpose = "";// fldNode.InnerText;
             else if (fldNode.Name == "a64")
                 fldSearchSQL = fldNode.InnerText;
             else if (fldNode.Name == "a65")
@@ -2997,74 +2897,7 @@ public class TStructDef
             else if (fldNode.Name == "a66")
                 fld = SetParents(fldNode, fld);
             else if (fldNode.Name == "a70")
-            {
                 fld.tabletypeval = fldNode.InnerText.Replace("\"", "&quot;");
-                if (fld.tabletypeval != "" && fld.tabletypeval.StartsWith("{"))
-                {
-                    string tbltypeval = utilObj.ReverseCheckSpecialChars(fld.tabletypeval);
-                    dynamic tblJson = JObject.Parse(tbltypeval);
-                    if (tblJson.props.sql != null)
-                    {
-                        fld.tabletypsql = tblJson.props.sql.Value;
-                        tblJson.props.sql = "true";
-                        fld.tabletypeval = utilObj.CheckSpecialChars(JsonConvert.SerializeObject(tblJson));
-                    }
-                }
-            }
-            else if (fldNode.Name == "a48")
-            {
-                string maskDtls = string.Empty;
-                string maskType = string.Empty;
-                try
-                {
-                    if (fldNode.Attributes["masking"] != null && fldNode.Attributes["masking"].Value != "No Mask" && fldNode.Attributes["masking"].Value == "Mask all characters")
-                    {
-                        string strmaRoles = String.Empty;
-                        if (fldNode.Attributes["maskroles"] != null)
-                            strmaRoles = fldNode.Attributes["maskroles"].Value;
-                        string[] maRoles = strmaRoles.Split(',');
-                        string userRoles = HttpContext.Current.Session["AxRole"].ToString();
-                        string[] userRolesList = userRoles.Split(',');
-                        bool isMaskMatch = false;
-                        foreach (var marName in maRoles)
-                        {
-                            int index = Array.IndexOf(userRolesList, marName);
-                            if (index != -1 || (marName != "" && marName.ToLower() == "default"))
-                            {
-                                isMaskMatch = true;
-                                break;
-                            }
-                        }
-                        if (isMaskMatch)
-                        {
-                            maskType = fldNode.Attributes["masking"].Value;
-                            if (fldNode.Attributes["lastcharmask"] != null)
-                                maskDtls += fldNode.Attributes["lastcharmask"].Value;
-                            if (fldNode.Attributes["firstcharmask"] != null)
-                                maskDtls += "♦" + fldNode.Attributes["firstcharmask"].Value;
-                            if (fldNode.Attributes["maskchar"] != null)
-                                maskDtls += "♦" + fldNode.Attributes["maskchar"].Value;
-                            if (fldNode.Attributes["maskroles"] != null)
-                                maskDtls += "♦" + fldNode.Attributes["maskroles"].Value;
-                        }
-                    }
-                    else if (fldNode.Attributes["masking"] != null && fldNode.Attributes["masking"].Value != "No Mask" && fldNode.Attributes["masking"].Value == "Show few characters")
-                    {
-                        maskType = fldNode.Attributes["masking"].Value;
-                        if (fldNode.Attributes["lastcharmask"] != null)
-                            maskDtls += fldNode.Attributes["lastcharmask"].Value;
-                        if (fldNode.Attributes["firstcharmask"] != null)
-                            maskDtls += "♦" + fldNode.Attributes["firstcharmask"].Value;
-                        if (fldNode.Attributes["maskchar"] != null)
-                            maskDtls += "♦" + fldNode.Attributes["maskchar"].Value;
-                        if (fldNode.Attributes["maskroles"] != null)
-                            maskDtls += "♦" + fldNode.Attributes["maskroles"].Value;
-                    }
-                }
-                catch (Exception ex) { }
-                fld.fldMaskType = maskType;
-                fld.fldMaskDetails = maskDtls;
-            }
             if (ContainsGridAttach)
             {
                 if (fldNode.Name == "a13" && fldNode.InnerText != "")
@@ -3221,7 +3054,7 @@ public class TStructDef
         if (fld.tabStop == true) tabStop = "T";
         else tabStop = "F";
 
-        fieldArray.Append(" FNames[" + fldNo + "]=\"" + fld.name + "\";ExprPosArray[" + fldNo + "]=\"\";FLowerNames[" + fldNo + "]=\"" + fld.name.ToLower() + "\"; FDataType[" + fldNo + "]=\"" + fld.datatype + "\"; FTableTypeVal[" + fldNo + "]=\"" + fld.tabletypeval + "\"; FDecimal[" + fldNo + "]=\"" + fld.flddecimal + "\";FldValidateExpr[" + fldNo + "]=\"" + fld.vexpr.Replace("\"", "'") + "\";FDupDecimals[" + fldNo + "]=\"" + fld.flddecimal + "\";FCustDecimal[" + fldNo + "]=\"" + fld.CustomDecimal + "\";");
+        fieldArray.Append(" FNames[" + fldNo + "]=\"" + fld.name + "\";ExprPosArray[" + fldNo + "]=\"\";FLowerNames[" + fldNo + "]=\"" + fld.name.ToLower() + "\"; FDataType[" + fldNo + "]=\"" + fld.datatype + "\"; FTableTypeVal[" + fldNo + "]=\"" + fld.tabletypeval + "\"; FDecimal[" + fldNo + "]=\"" + fld.flddecimal + "\";FldValidateExpr[" + fldNo + "]=\"" + fld.vexpr.Replace("\"", "'") + "\";FDupDecimals[" + fldNo + "]=\"" + fld.flddecimal + "\";");
         fieldArray.Append("FCaption[" + fldNo + "]=\"" + fld.caption + "\";FldsFrmLst[" + fldNo + "]=\"" + fld.fieldIsFrmList + "\";");
         fieldArray.Append("FMoe[" + fldNo + "]=\"" + fld.moe + "\";");
         fieldArray.Append("FMaxLength[" + fldNo + "]=\"" + fld.fldlength + "\";");
@@ -3240,17 +3073,7 @@ public class TStructDef
         fieldArray.Append("FldChkSeparator[" + fldNo + "]=\"" + fld.fieldValSeparator + "\";");
         fieldArray.Append("FldMgsSeparator[" + fldNo + "]=\"" + fld.fldMultiSelectSep + "\";");
         fieldArray.Append("FFieldType[" + fldNo + "]=\"" + fld.fldType + "\";");
-        fieldArray.Append("FFieldHidden[" + fldNo + "]=\"" + fld.visibility + "\";");
-
-        ArrFFieldHidden.Append(fld.visibility + ",");
-
-        fieldArray.Append("FFieldReadOnly[" + fldNo + "]=\"" + fld.freadonly + "\";");
-
-        ArrFFieldReadOnly.Append(fld.freadonly + ",");
-
         fieldArray.Append("FFieldAcceptApi[" + fldNo + "]=\"" + fld.fldAcceptApi + "\";");
-        fieldArray.Append("FldMaskType[" + fldNo + "]=\"" + fld.fldMaskType + "\";");
-        fieldArray.Append("FldMaskDetails[" + fldNo + "]=\"" + fld.fldMaskDetails + "\";");
 
         //Rapid field arrays
         fieldArray.Append("FldRapidDeps[" + fldNo + "]=\"" + fld.FldRapidDeps + "\";");
@@ -3362,10 +3185,6 @@ public class TStructDef
             patName = "gr_" + fld.name;
         if (!string.IsNullOrEmpty(fld.pattern))
         {
-            if (fld.pattern == "24H Format")
-            {
-                fld.fldTimeFormat = fld.pattern;
-            }
             jsPatternArray.Append("PatternNames[" + patternNo + "]='" + patName + "';Patterns[" + patternNo + "]='" + fld.pattern + "';");
             patternNo++;
         }
@@ -3630,12 +3449,8 @@ public class TStructDef
 
                         if (moeDetailNode.Attributes["mulselect"] != null && moeDetailNode.Attributes["mulselect"].Value == "true")
                             fld.fldMultiSelect = fld.name;
-                        else
-                            fld.fldMultiSelect = string.Empty;
                         if (moeDetailNode.Attributes["mulsep"] != null)
                             fld.fldMultiSelectSep = moeDetailNode.Attributes["mulsep"].Value;
-                        else
-                            fld.fldMultiSelectSep = string.Empty;
 
                         if (moeDetailNode.ChildNodes.Count > 0 && moeDetailNode.ChildNodes[0].InnerText != "")
                             fld.isFieldSql = "True";
@@ -3897,7 +3712,7 @@ public class TStructDef
                 {
                     btnHtml.Append("<div  class=\" grid-stack-item\"" + xywhGridStack(dummy) + ">");
                     btnHtml.Append("<div class=\"grid-stack-item-content\"></div>");
-                    btnHtml.Append("<div id=\"dv" + btnId + "\" class=\"labelcol inputs grid-stack-item-content form-group row w-100 agform d-block align-self-end\">");
+                    btnHtml.Append("<div id=\"dv" + btnId + "\" class=\"labelcol inputs grid-stack-item-content form-group row w-100 agform align-self-end\">");
                     btnHtml.Append("<div class=\"fld-wrap1\"><label class=\"labelcolid\" for=\"" + btnId + "\" ></label></div>");
                     //                btnHtml.Append("<span class=\"AxpTstBtn\" >");
                     string btnFunction = string.Empty;
@@ -3965,7 +3780,7 @@ public class TStructDef
                 {
                     btnHtml.Append("<div  class=\" grid-stack-item\"" + xywhGridStack(dummy) + ">");
                     btnHtml.Append("<div class=\"grid-stack-item-content\"></div>");
-                    btnHtml.Append("<div id=\"dv" + btnId + "\" class=\"labelcol inputs grid-stack-item-content form-group row w-100 agform d-block align-self-end\">");
+                    btnHtml.Append("<div id=\"dv" + btnId + "\" class=\"labelcol inputs grid-stack-item-content form-group row w-100 agform align-self-end\">");
                     btnHtml.Append("<div class=\"fld-wrap1\"><label class=\"labelcolid\" for=\"" + btnId + "\" ></label></div>");
 
                     string btnFunction = string.Empty;
@@ -4107,7 +3922,7 @@ public class TStructDef
                                 {
                                     btnHtml.Append("<div  class=\" grid-stack-item " + colFldGridStackItem + "\"" + xywhGridStack(dummy) + ">");
                                     btnHtml.Append("<div class=\"grid-stack-item-content\"></div>");
-                                    btnHtml.Append("<div id=\"dv" + btnId + "\" class=\"labelcol inputs grid-stack-item-content form-group row w-100 agform d-block align-self-end " + colDivInputPadding + "\">");
+                                    btnHtml.Append("<div id=\"dv" + btnId + "\" class=\"labelcol inputs grid-stack-item-content form-group row w-100 agform align-self-end " + colDivInputPadding + "\">");
                                     btnHtml.Append(colFldWidth);
                                     btnHtml.Append("<div class=\"fld-wrap1\"><label class=\"labelcolid\" for=\"" + btnId + "\" ></label></div>");
                                     string btnFunction = string.Empty;
@@ -4175,7 +3990,7 @@ public class TStructDef
                                 {
                                     btnHtml.Append("<div  class=\" grid-stack-item " + colFldGridStackItem + "\"" + xywhGridStack(dummy) + ">");
                                     btnHtml.Append("<div class=\"grid-stack-item-content\"></div>");
-                                    btnHtml.Append("<div id=\"dv" + btnId + "\" class=\"labelcol inputs grid-stack-item-content form-group row w-100 agform d-block align-self-end " + colDivInputPadding + "\">");
+                                    btnHtml.Append("<div id=\"dv" + btnId + "\" class=\"labelcol inputs grid-stack-item-content form-group row w-100 agform align-self-end " + colDivInputPadding + "\">");
                                     btnHtml.Append(colFldWidth);
                                     btnHtml.Append("<div class=\"fld-wrap3\"><label class=\"labelcolid\" for=\"" + btnId + "\" ></label></div>");
 
@@ -4194,7 +4009,7 @@ public class TStructDef
                                 {
                                     btnHtml.Append("<div  class=\" grid-stack-item " + colFldGridStackItem + "\"" + xywhGridStack(dummy) + ">");
                                     btnHtml.Append("<div class=\"grid-stack-item-content\"></div>");
-                                    btnHtml.Append("<div id=\"dv" + btnId + "\" class=\"labelcol inputs grid-stack-item-content form-group row w-100 agform d-block align-self-end " + colDivInputPadding + "\">");
+                                    btnHtml.Append("<div id=\"dv" + btnId + "\" class=\"labelcol inputs grid-stack-item-content form-group row w-100 agform align-self-end " + colDivInputPadding + "\">");
                                     btnHtml.Append(colFldWidth);
                                     btnHtml.Append("<div class=\"fld-wrap1\"><label class=\"labelcolid\" for=\"" + btnId + "\" ></label></div>");
 
@@ -4222,7 +4037,7 @@ public class TStructDef
                                     else
                                         btnFunction = " onclick=javascript:CallAction('" + action + "','','','','','','" + script.ToString().ToLower() + "'); ";
                                     string gsbtn = "<a href=\"javascript:void(0)\" class=\"Grdlnk axpBtnCustom\" id=\"" + btnId + "\" onclick=" + btnFunction + ">" + caption + "</a>";
-                                    gridScriptButtons.Add("<th id=\"th-" + btnId + "\" style=\"width:100px;\" class=\"fw-boldest\"><div id=\"th-" + btnId + "-sizer\"></div><div class='thhead'></div></th>♠<div class=\"gridElement form-group grid-stack-item\" style=\"\"><div class=\"fld-wrap3\"><div>" + gsbtn + "</div></div>♠<div class=\"gridElement form-group grid-stack-item\" " + xywhGridStack(dummy) + " id=\"dvGrid" + btnId + "\" style=\"\"><span class=\"badge-grid-stack position-absolute top-0 end-0\">1</span><div class=\"grid-stack-item-content ui-draggable-handle\"></div><div class=\"grid-stack-item-content\"><div>" + gsbtn + "</div></div></div>");
+                                    gridScriptButtons.Add("<th id=\"th-" + btnId + "\" style=\"width:100px;\" ><div id=\"th-" + btnId + "-sizer\"></div><div class='thhead'></div></th>♠<div class=\"gridElement form-group grid-stack-item\" style=\"\"><div class=\"fld-wrap3\"><div>" + gsbtn + "</div></div>♠<div class=\"gridElement form-group grid-stack-item\" " + xywhGridStack(dummy) + " id=\"dvGrid" + btnId + "\" style=\"\"><span class=\"badge-grid-stack position-absolute top-0 end-0\">1</span><div class=\"grid-stack-item-content ui-draggable-handle\"></div><div class=\"grid-stack-item-content\"><div>" + gsbtn + "</div></div></div>");
                                     gridScriptDcNo.Add(dcs.Count.ToString());
                                 }
                                 else if (gridBtnPosition == "headerlevel")
@@ -4232,7 +4047,7 @@ public class TStructDef
                                         btnFunction = " onclick='javascript:" + btnId + "onclick();' ";
                                     else
                                         btnFunction = " onclick=javascript:CallAction('" + action + "','','','','','','" + script.ToString().ToLower() + "'); ";
-                                    gridHeaderScriptButtons.Add("<a class=\"btn btn-sm btn-icon btn-white btn-color-gray-600 btn-active-primary me-2 shadow-sm gridheaderbutton\" id=\"" + btnId + "\" " + btnFunction + " title=\"" + caption + "\"><span class=\"material-icons material-icons-style material-icons-3\">check_box_outline_blank</span></a>");
+                                    gridHeaderScriptButtons.Add("<a class=\"btn btn-sm btn-icon btn-white btn-color-gray-500 btn-active-primary me-2 shadow-sm gridheaderbutton\" id=\"" + btnId + "\" " + btnFunction + " title=\"" + caption + "\"><span class=\"material-icons material-icons-style material-icons-3\">check_box_outline_blank</span></a>");
                                     gridHeaderScriptDcNo.Add(dcs.Count.ToString());
                                 }
                             }
@@ -4586,10 +4401,10 @@ public class TStructDef
                             XmlNode resultNode = xmlDoc.SelectSingleNode("//r1/param1/exprset");
                             foreach (XmlNode childNode in resultNode.ChildNodes)
                             {
-                                actconname += childNode.InnerText.Replace("\"", "\'") + "♥";
+                                actconname += childNode.InnerText.Replace("\"", "\'") + "~";
                             }
                             if (actconname != string.Empty)
-                                actconname = actconname.TrimEnd('♥');
+                                actconname = actconname.TrimEnd('~');
                         }
                         catch (Exception ex) { }
                     }
@@ -4649,7 +4464,6 @@ public class TStructDef
                         {
                             act.actSaveTask = "";
                             act.actScriptTask = "";
-                            act.actScriptCancel = "";
                             XmlNodeList chkSaveTask = actionNode.ChildNodes;
                             foreach (XmlNode ndSave in chkSaveTask)
                             {
@@ -4666,11 +4480,6 @@ public class TStructDef
                                         if (ndScrp.InnerText.ToLower() == "save()")
                                         {
                                             act.actSaveTask = "save";
-                                            break;
-                                        }
-                                        else if (ndScrp.InnerText.ToLower().StartsWith("canceltransaction("))
-                                        {
-                                            act.actScriptCancel = "canceltransaction♠" + ndScrp.InnerText;
                                             break;
                                         }
                                         else if (ndScrp.InnerText.ToLower().StartsWith("loadform("))
@@ -4696,11 +4505,6 @@ public class TStructDef
                                         else if (ndScrp.InnerText.ToLower().StartsWith("openpage("))
                                         {
                                             act.actScriptTask = "openpage♠" + ndScrp.InnerText;
-                                            break;
-                                        }
-                                        else if (ndScrp.InnerText.ToLower().StartsWith("doformdesign("))
-                                        {
-                                            act.actScriptTask = "doformdesign♠" + ndScrp.InnerText;
                                             break;
                                         }
                                     }
@@ -4754,7 +4558,7 @@ public class TStructDef
                         actions.Add(act);
                         break;
                     }
-                    formcontrol.Append("tstActionName[" + actNo + "]= " + "\"" + act.actname + "\";actParRefresh[" + actNo + "]= " + "\"" + act.actParRefresh + "\";actSaveTask[" + actNo + "]= " + "\"" + act.actSaveTask + "\";actScriptTask[" + actNo + "]=" + "\"" + act.actScriptTask + "\";actScriptCancel[" + actNo + "]=\"" + act.actScriptCancel + "\";");
+                    formcontrol.Append("tstActionName[" + actNo + "]= " + "\"" + act.actname + "\";actParRefresh[" + actNo + "]= " + "\"" + act.actParRefresh + "\";actSaveTask[" + actNo + "]= " + "\"" + act.actSaveTask + "\";actScriptTask[" + actNo + "]=" + "\"" + act.actScriptTask + "\";");
                     actNo++;
                 }
             }
@@ -5008,7 +4812,7 @@ public class TStructDef
                 customLabelHtml.Append("<label class=\"gridstackCalc\" for=\"" + LabelName.Replace(" ", "") + "\" ></label>");
 
                 if (isHyper)
-                    customLabelHtml.Append("<a href=\"javascript:void(0)\" class=\"cursor-pointer\" id=\"" + ((HLinkStruct)(hlnks[n])).hlsource.ToString() + "\" onclick='javascript:Tstructhyperlink(this);'>" + LabelName + "</a></div>");
+                    customLabelHtml.Append("<a href=\"javascript:void(0)\" class=\"handCur\" id=\"" + ((HLinkStruct)(hlnks[n])).hlsource.ToString() + "\" onclick='javascript:Tstructhyperlink(this);'>" + LabelName + "</a></div>");
                 else
                     customLabelHtml.Append("<font Style=\"" + style + "\" class=\"\">" + LabelName + "</font></div>");
 
@@ -5086,11 +4890,6 @@ public class TStructDef
             gridwidth = gridwidth + 80;
         else
             gridwidth = gridwidth + 40;//40 width for sl no column and 40 for delete button
-
-        string dcBoolean = string.Empty;
-        if (!designMode && ((DcStruct)(dcs[dcNo - 1])).DcDefaultstate != "" && ((DcStruct)(dcs[dcNo - 1])).DcDefaultstate.ToLower() == "collapse")
-            dcBoolean = " d-none ";
-
         if (((DcStruct)(dcs[dcNo - 1])).isgrid)
         {
             string rowSrNoClass = string.Empty;
@@ -5116,12 +4915,12 @@ public class TStructDef
             {
                 if (((DcStruct)(dcs[dcNo - 1])).isallowdeletrows.ToString().ToLower() == "false")
                 {
-                    dcRowone = "<div  id=sp" + dcNo + "R001" + "F" + dcNo + " class=\"editWrapTr grid-stack\"><div class='gridElement " + rowSrNoClass + "'><div><label id=\"lblSlNo001F" + dcNo + "\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  slno\">1</label></div></div>" + fieldhtml + "</div>";
+                    dcRowone = "<div  id=sp" + dcNo + "R001" + "F" + dcNo + " class=\"editWrapTr grid-stack\"><div class='gridElement " + rowSrNoClass + "'><div><label id=\"lblSlNo001F" + dcNo + "\" class=\"form-control w-100 border-0 overflow-hidden resize-none slno\">1</label></div></div>" + fieldhtml + "</div>";
                 }
                 else
                 {
                     //delete grid row
-                    dcRowone = "<div  id=sp" + dcNo + "R001" + "F" + dcNo + " class=\"editWrapTr grid-stack\"><div class='gridElement " + rowSrNoClass + "'><label id=\"lblSlNo001F" + dcNo + "\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  slno\">1</label></div>" + fieldhtml + "</div>";
+                    dcRowone = "<div  id=sp" + dcNo + "R001" + "F" + dcNo + " class=\"editWrapTr grid-stack\"><div class='gridElement " + rowSrNoClass + "'><label id=\"lblSlNo001F" + dcNo + "\" class=\"form-control w-100 border-0 overflow-hidden resize-none slno\">1</label></div>" + fieldhtml + "</div>";
                 }
             }
 
@@ -5134,12 +4933,12 @@ public class TStructDef
                 xywhGridStack(new FieldStruct { visibility = false, fldFrameNo = dcNo, name = ("uniqueThHead" + dcNo) }, true);
                 if (((DcStruct)(dcs[dcNo - 1])).ispopgrid)
                 {
-                    defaultColsHtml.Append("<th id=\"uniqueThHead" + dcNo + "\" class='thhead fw-boldest'><div id=\"uniqueThHead" + dcNo + "-sizer\"></div><div class='thhead'>S.no</div></th>");
+                    defaultColsHtml.Append("<th id=\"uniqueThHead" + dcNo + "\" class='thhead'><div id=\"uniqueThHead" + dcNo + "-sizer\"></div><div class='thhead'>S.no</div></th>");
                     colCount++;
                 }
                 else
                 {
-                    defaultColsHtml.Append("<th id=\"uniqueThHead" + dcNo + "\" class='thhead fw-boldest'><div id=\"uniqueThHead" + dcNo + "-sizer\"></div><div class='thhead'>S.no</div></th>");
+                    defaultColsHtml.Append("<th id=\"uniqueThHead" + dcNo + "\" class='thhead'><div id=\"uniqueThHead" + dcNo + "-sizer\"></div><div class='thhead'>S.no</div></th>");
                     colCount++;
                 }
             }
@@ -5150,7 +4949,7 @@ public class TStructDef
                 else
                 {
                     xywhGridStack(new FieldStruct { visibility = false, fldFrameNo = dcNo, name = ("uniqueThHead" + dcNo) }, true);
-                    defaultColsHtml.Append("<th id=\"uniqueThHead" + dcNo + "\" class='thhead fw-boldest'><div id=\"uniqueThHead" + dcNo + "-sizer\"></div><div class='thhead'>S.no</div></th>");
+                    defaultColsHtml.Append("<th id=\"uniqueThHead" + dcNo + "\" class='thhead'><div id=\"uniqueThHead" + dcNo + "-sizer\"></div><div class='thhead'>S.no</div></th>");
                     colCount++;
                 }
             }
@@ -5158,7 +4957,7 @@ public class TStructDef
             string dcBtns = GetGridButtonHtml(dcNo.ToString());
             //TODO: need to fix the calculation of colcount, the same code is there in GetTabFullDcHtml
             colCount = 100;
-            gridHdHtml.Append("<div id=\"containerDc\" class=\"tab-pane fade show active grid-icons\"><div class=\"card card-xl-stretch mb-1 mb-xl-2 shadow-sm\"><div class=\"card-body px-3 pt-1 pb-3\">" + dcBtns);
+            gridHdHtml.Append("<div id=\"containerDc\" class=\"tab-pane fade show active grid-icons\"><div class=\"card card-xl-stretch mb-1 mb-xl-2 shadow-sm overflow-auto\"><div class=\"card-body pt-5\">" + dcBtns);
             gridHdHtml.Append("<div id=\"gridheaddiv\"><span id=\"disgridhead" + dcNo + "\"></span></div><div class=\"clear\"></div>");
             string hideClass = "d-none";
 
@@ -5166,16 +4965,16 @@ public class TStructDef
 
             if (HttpContext.Current.Session["language"].ToString().ToLower() == "arabic")
             {
-                gridHdHtml.Append("<div id=\"colScroll" + dcNo + "\" class=\"griddivColumn wrapperForGridData" + dcNo + " " + dcBoolean + "\">");
-                gridHdHtml.Append("<table class='customSetupTableMN gridHeader g-1 table table-striped table-bordered mt-1 mb-0 border-gray-300 ' id=\"gridHd" + dcNo + "\"><thead><tr>");
+                gridHdHtml.Append("<div id=\"colScroll" + dcNo + "\" class=\"griddivColumn wrapperForGridData" + dcNo + "\">");
+                gridHdHtml.Append("<table class='customSetupTableMN gridHeader table' id=\"gridHd" + dcNo + "\"><thead><tr>");
             }
             else
             {
-                gridHdHtml.Append("<div id=\"colScroll" + dcNo + "\" class=\"griddivColumn wrapperForGridData" + dcNo + " " + dcBoolean + "\">");
-                gridHdHtml.Append("<table class='customSetupTableMN gridHeader g-1 table table-striped table-bordered mt-1 mb-0 border-gray-300 ' id=\"gridHd" + dcNo + "\" style=\"\"><thead><tr class=\"fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-300\">");
+                gridHdHtml.Append("<div id=\"colScroll" + dcNo + "\" class=\"griddivColumn wrapperForGridData" + dcNo + "\">");
+                gridHdHtml.Append("<table class='customSetupTableMN gridHeader table table-bordered mt-6 ' id=\"gridHd" + dcNo + "\" style=\"\"><thead><tr class=\"fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200\">");
             }
             xywhGridStack(new FieldStruct { visibility = false, fldFrameNo = dcNo, name = ("uniqueEditDeleteAct" + dcNo) }, true);
-            gridHdHtml.Append("<th id=\"uniqueEditDeleteAct" + dcNo + "\" class=\"text-center fw-boldest\"><div class=\"form-check form-check-sm form-check-custom ms-2\"><input type=\"checkbox\" name=\"chkallgridrow" + dcNo + "\" class=\"form-check-input fgHdrChk gridHdrChk opacity-100\" id=\"chkallgridrow" + dcNo + "\" onclick=\"javascript:CheckAllGridRow(this, " + dcNo + ");\" disabled></div></th><div class='thhead'></div></th>" + defaultColsHtml.ToString());
+            gridHdHtml.Append("<th id=\"uniqueEditDeleteAct" + dcNo + "\" class=\"text-center\"><div class=\"form-check form-check-sm form-check-custom form-check-solid ms-2\"><input type=\"checkbox\" name=\"chkallgridrow" + dcNo + "\" class=\"form-check-input fgHdrChk gridHdrChk\" id=\"chkallgridrow" + dcNo + "\" onclick=\"javascript:CheckAllGridRow(this, " + dcNo + ");\"></div></th><div class='thhead'></div></th>" + defaultColsHtml.ToString());
             gridHdHtml.Append(gridHeadHtml.ToString() + "</tr></thead><tbody></tbody></table></div>");
 
             StringBuilder gridHtml = new StringBuilder();
@@ -5206,7 +5005,7 @@ public class TStructDef
                 {
                     fullGridHtml1 = "<div class='col-12 pb-2 dvdcframe' id=\"DivFrame" + dcNo + "\">";
                     if (!string.IsNullOrEmpty(((DcStruct)(dcs[dcNo - 1])).purpose))
-                        fullGridHtml1 += gridHdHtml.ToString() + rowCountHtml + "</div><div class=\"clsPrps d-none\" id=axPurpose'" + ((DcStruct)(dcs[dcNo - 1])).name + ">" + ((DcStruct)(dcs[dcNo - 1])).purpose + "</div>";//murali
+                        fullGridHtml1 += gridHdHtml.ToString() + rowCountHtml + "</div><div class=\"clsPrps\" id=axPurpose'" + ((DcStruct)(dcs[dcNo - 1])).name + ">" + ((DcStruct)(dcs[dcNo - 1])).purpose + "</div>";//murali
                     else
                         fullGridHtml1 += gridHdHtml.ToString() + rowCountHtml + "</div>";//murali
                 }
@@ -5214,7 +5013,7 @@ public class TStructDef
                 {
                     fullGridHtml1 = "<div class='col-12 pb-2 dvdcframe' id=\"DivFrame" + dcNo + "\">";
                     if (!string.IsNullOrEmpty(((DcStruct)(dcs[dcNo - 1])).purpose))
-                        fullGridHtml1 += gridHdHtml.ToString() + rowCountHtml + "</div><div id=axPurpose' class=\"clsPrps d-none\"" + ((DcStruct)(dcs[dcNo - 1])).name + ">" + ((DcStruct)(dcs[dcNo - 1])).purpose + "</div>";//murali
+                        fullGridHtml1 += gridHdHtml.ToString() + rowCountHtml + "</div><div id=axPurpose' class=\"clsPrps\"" + ((DcStruct)(dcs[dcNo - 1])).name + ">" + ((DcStruct)(dcs[dcNo - 1])).purpose + "</div>";//murali
                     else
                         fullGridHtml1 += gridHdHtml.ToString() + rowCountHtml + "</div>";//murali
                 }
@@ -5223,7 +5022,7 @@ public class TStructDef
             {
                 fullGridHtml1 = "<div class='row d-none '  id=\"DivFrame" + dcNo + "\">";
                 if (!string.IsNullOrEmpty(((DcStruct)(dcs[dcNo - 1])).purpose))
-                    fullGridHtml1 += "<input type='hidden ' id='popDcTitle" + dcNo + "' class='popDcTitle' value='" + ((DcStruct)(dcs[dcNo - 1])).caption + "' /><div class=\"clsPrps d-none\" id=axPurpose'" + ((DcStruct)(dcs[dcNo - 1])).name + "'>" + ((DcStruct)(dcs[dcNo - 1])).purpose + "</div>";
+                    fullGridHtml1 += "<input type='hidden ' id='popDcTitle" + dcNo + "' class='popDcTitle' value='" + ((DcStruct)(dcs[dcNo - 1])).caption + "' /><div class=\"clsPrps\" id=axPurpose'" + ((DcStruct)(dcs[dcNo - 1])).name + "'>" + ((DcStruct)(dcs[dcNo - 1])).purpose + "</div>";
                 else
                     fullGridHtml1 += "<input type='hidden ' id='popDcTitle" + dcNo + "' class='popDcTitle' value='" + ((DcStruct)(dcs[dcNo - 1])).caption + "' />";
                 fullGridHtml1 += gridHdHtml.ToString() + rowCountHtml + "</div>"; //murali
@@ -5232,15 +5031,7 @@ public class TStructDef
             else
             {
                 fullGridHtml1 = "<div class='col-12 pb-2 dvdcframe' id=\"DivFrame" + dcNo + "\">";
-                fullGridHtml1 += "<ul class=\"cursor-pointer nav nav-tabs mb-n2\">";
-                string dcBooleanHtml = string.Empty;
-                if (((DcStruct)(dcs[dcNo - 1])).DcBlean != "" && ((DcStruct)(dcs[dcNo - 1])).DcBlean.ToUpper() == "TRUE")
-                {
-                    dcBooleanHtml = "<div class=\"form-check form-switch form-check-custom px-1 align-self-end my-auto \"><input type=\"checkbox\" id=\"dcBlean" + dcNo + "\" data-dcname=\"" + ((DcStruct)(dcs[dcNo - 1])).name + "\" title=\"\" style=\"\" name=\"dcBlean" + dcNo + "\" class=\"form-check-input opacity-100 gridHeaderSwitch \" " + (dcBoolean == string.Empty ? "checked" : "") + "></div>";
-                    fullGridHtml1 += "<li id=head" + dcNo + " class=\"nav-item d-flex p-3 shadow-sm bg-white rounded-top\"><a class=\"fs-4 nav-link fw-boldest text-gray-900 rounded-0 border-0 active\" data-bs-toggle=\"tab\" aria-current=\"page\" href=\"javascript:void(0);\" onclick='javascript:ShowDc(\"" + dcNo + "\");'>" + ((DcStruct)(dcs[dcNo - 1])).caption + "</a>" + dcBooleanHtml + "</li></ul>";
-                }
-                else
-                    fullGridHtml1 += "<li id=head" + dcNo + " class=\"nav-item\"><a class=\"nav-link fw-boldest shadow-sm fs-4 text-gray-900 p-4 active\" data-bs-toggle=\"tab\" aria-current=\"page\" href=\"javascript:void(0);\" onclick='javascript:ShowDc(\"" + dcNo + "\");'>" + ((DcStruct)(dcs[dcNo - 1])).caption + "</a></li></ul>";
+                fullGridHtml1 += "<ul class=\"cursor-pointer nav nav-tabs mb-n2\"><li id=head" + dcNo + " class=\"nav-item\"><a class=\"nav-link shadow-sm fw-bold fs-6 text-gray-800 p-4 active\" data-bs-toggle=\"tab\" aria-current=\"page\" href=\"javascript:void(0);\" onclick='javascript:ShowDc(\"" + dcNo + "\");'>" + ((DcStruct)(dcs[dcNo - 1])).caption + "</a></li></ul>";
 
                 fullGridHtml1 += gridHdHtml.ToString() + rowCountHtml + "</div>";
             }
@@ -5258,7 +5049,7 @@ public class TStructDef
                     lastDcHeight = ((DcStruct)(dcs[dcNo - 1])).dcHeight;
                 }
                 //commented because form-horizontal was affecting ui.. previously added by anand.. checking need to be done after removing.
-                ngBorder = "<div id=\"divDc" + dcNo + "\"  class='row mainIframe " + (((DcStruct)(dcs[dcNo - 1])).isgrid ? "" : "grid-stack") + " " + (((DcStruct)(dcs[dcNo - 1])).isgrid ? "" : dcBoolean) + "' > ";
+                ngBorder = "<div id=\"divDc" + dcNo + "\"  class='row mainIframe " + (((DcStruct)(dcs[dcNo - 1])).isgrid ? "" : "grid-stack") + "' > ";
             }
             else
             {
@@ -5275,17 +5066,17 @@ public class TStructDef
                         if (pos > -1)
                         {
                             if (EnableOldTheme == "true")
-                                ngBorder = "<div id=\"divDc" + dcNo + "\"  class='row mainIframe " + (((DcStruct)(dcs[dcNo - 1])).isgrid ? "" : "grid-stack") + " " + dcBoolean + "' > ";
+                                ngBorder = "<div id=\"divDc" + dcNo + "\"  class='row mainIframe " + (((DcStruct)(dcs[dcNo - 1])).isgrid ? "" : "grid-stack") + "' > ";
                             else
-                                ngBorder = "<div id=\"divDc" + dcNo + "\" class='row mainIframe " + (((DcStruct)(dcs[dcNo - 1])).isgrid ? "" : "grid-stack") + " " + dcBoolean + "' > ";
+                                ngBorder = "<div id=\"divDc" + dcNo + "\" class='row mainIframe " + (((DcStruct)(dcs[dcNo - 1])).isgrid ? "" : "grid-stack") + "' > ";
 
                         }
                         else
-                            ngBorder = "<div id=\"divDc" + dcNo + "\"  class='row mainIframe " + (((DcStruct)(dcs[dcNo - 1])).isgrid ? "" : "grid-stack") + " " + dcBoolean + "' > ";
+                            ngBorder = "<div id=\"divDc" + dcNo + "\"  class='row mainIframe " + (((DcStruct)(dcs[dcNo - 1])).isgrid ? "" : "grid-stack") + "' > ";
                     }
                 }
                 else
-                    ngBorder = "<div id=\"divDc" + dcNo + "\"  class='row mainIframe " + ("grid-stack") + " " + dcBoolean + "' > ";
+                    ngBorder = "<div id=\"divDc" + dcNo + "\"  class='row mainIframe " + ("grid-stack") + "' > ";
             }
             string ngFldHtml = ngBorder + fieldhtml + customLabel.ToString() + actionButton.ToString() + "</div>";
 
@@ -5293,7 +5084,7 @@ public class TStructDef
             {
                 if (dcNo > 1)
                 {
-                    dcHtml.Append("<div id=\"DivFrame" + dcNo + "\" class=\"col-12 pb-2 dvdcframe\"><div class=\"card card-xl-stretch mb-1 mb-xl-2 shadow-sm overflow-auto\"><div class=\"card-body px-3 pt-1 pb-3\">");
+                    dcHtml.Append("<div id=\"DivFrame" + dcNo + "\" class=\"col-12 pb-2 dvdcframe\"><div class=\"card card-xl-stretch mb-1 mb-xl-2 shadow-sm overflow-auto\"><div class=\"card-body pt-5\">");
                     dcHtml.Append(ngFldHtml + "</div></div></div><div class='clear'></div>");
 
 
@@ -5301,28 +5092,24 @@ public class TStructDef
                 else
                 {
                     //TODO: the primary dc can also be a tabbed dc
-                    dcHtml.Append("<div id=\"DivFrame" + dcNo + "\" class=\"col-12 pb-2 dvdcframe\"><div class=\"card card-xl-stretch mb-1 mb-xl-2 shadow-sm\"><div class=\"card-body px-3 pt-1 pb-3\">");
+                    dcHtml.Append("<div id=\"DivFrame" + dcNo + "\" class=\"col-12 pb-2 dvdcframe\"><div class=\"card card-xl-stretch mb-1 mb-xl-2 shadow-sm overflow-auto\"><div class=\"card-body pt-5\">");
                     dcHtml.Append(ngFldHtml + "</div></div></div><div class='clear'></div>");
 
                 }
             }
             else
             {
-                dcHtml.Append("<div id=\"DivFrame" + dcNo + "\" class=\"col-12 pb-2 \"><div class=\"card card-xl-stretch mb-1 mb-xl-2 shadow-sm\"><div class=\"card-body px-3 pt-1 pb-3\">");
+                dcHtml.Append("<div id=\"DivFrame" + dcNo + "\" class=\"col-12 pb-2 \"><div class=\"card card-xl-stretch mb-1 mb-xl-2 shadow-sm overflow-auto\"><div class=\"card-body pt-5\">");
                 if (dcNo > 1 || tstLayout == Constants.TILE)
                 {
-                    string dcBooleanHtml = string.Empty;
-                    if (((DcStruct)(dcs[dcNo - 1])).DcBlean != "" && ((DcStruct)(dcs[dcNo - 1])).DcBlean.ToUpper() == "TRUE")
-                        dcBooleanHtml = "<div class=\"form-check form-switch form-check-custom px-1 align-self-end my-auto \"><input type=\"checkbox\" id=\"dcBlean" + dcNo + "\"  data-dcname=\"" + ((DcStruct)(dcs[dcNo - 1])).name + "\" title=\"\" style=\"\" name=\"dcBlean" + dcNo + "\" class=\"form-check-input opacity-100 gridHeaderSwitch \" " + (dcBoolean == string.Empty ? "checked" : "") + "></div>";
-
-                    //if (!string.IsNullOrEmpty(((DcStruct)(dcs[dcNo - 1])).purpose))
-                    //    dcHtml.Append("<div id=head" + dcNo + " class='dcTitle " + divDirection + " d-flex'><a href=\"javascript:void(0)\" onclick='javascript:ShowDc(\"" + dcNo + "\");'><span data-type=\"hide\" title=\"Hide Dc\" class=\"material-icons\" id=dcButspan" + dcNo + " >keyboard_arrow_up</span></a>  <span class=\"frameCap fw-boldest fs-4 text-gray-900 " + divDirection + " me-3\" id=\"dcCaption" + dcNo + "\" >" + ((DcStruct)(dcs[dcNo - 1])).caption + "</span>" + dcBooleanHtml + "</div><div class=\"clsPrps\">" + ((DcStruct)(dcs[dcNo - 1])).purpose + "</div><hr class='hrline my-2' />");//muralli
-                    //else
-                    dcHtml.Append("<div id=head" + dcNo + " class='dcTitle " + divDirection + " d-flex'><a href=\"javascript:void(0)\" onclick='javascript:ShowDc(\"" + dcNo + "\");'><span data-type=\"hide\" title=\"Hide Dc\" class=\"material-icons\" id=dcButspan" + dcNo + " ></span></a>  <span class=\"frameCap fw-boldest fs-4 text-gray-900 " + divDirection + " me-3\" id=\"dcCaption" + dcNo + "\" >" + ((DcStruct)(dcs[dcNo - 1])).caption + "</span>" + dcBooleanHtml + "</div><hr class='hrline my-2' />");//muralli
+                    if (!string.IsNullOrEmpty(((DcStruct)(dcs[dcNo - 1])).purpose))
+                        dcHtml.Append("<div id=head" + dcNo + " class='dcTitle " + divDirection + "'><a href=\"javascript:void(0)\" onclick='javascript:ShowDc(\"" + dcNo + "\");'><span data-type=\"hide\" title=\"Hide Dc\" class=\"material-icons\" id=dcButspan" + dcNo + " >keyboard_arrow_up</span></a>  <span class=\"frameCap " + divDirection + "\" id=\"dcCaption" + dcNo + "\" >" + ((DcStruct)(dcs[dcNo - 1])).caption + "</span></div><div class=\"clsPrps\">" + ((DcStruct)(dcs[dcNo - 1])).purpose + "</div><hr class='hrline' />");//muralli
+                    else
+                        dcHtml.Append("<div id=head" + dcNo + " class='dcTitle " + divDirection + "'><a href=\"javascript:void(0)\" onclick='javascript:ShowDc(\"" + dcNo + "\");'><span data-type=\"hide\" title=\"Hide Dc\" class=\"material-icons\" id=dcButspan" + dcNo + " ></span></a>  <span class=\"frameCap " + divDirection + "\" id=\"dcCaption" + dcNo + "\" >" + ((DcStruct)(dcs[dcNo - 1])).caption + "</span></div><hr class='hrline' />");//muralli
                 }
                 else if (dcNo == 1 && designMode)
                 {
-                    dcHtml.Append("<div id=head" + dcNo + " class='dcTitle " + divDirection + "'><span class=\"frameCap fw-boldest fs-4 text-gray-900 " + divDirection + "\" id=\"dcCaption" + dcNo + "\" >" + ((DcStruct)(dcs[dcNo - 1])).caption + "</span></div><div class=\"clsPrps d-none\">" + ((DcStruct)(dcs[dcNo - 1])).purpose + "</div><hr class='hrline my-2' />");
+                    dcHtml.Append("<div id=head" + dcNo + " class='dcTitle " + divDirection + "'><span class=\"frameCap " + divDirection + "\" id=\"dcCaption" + dcNo + "\" >" + ((DcStruct)(dcs[dcNo - 1])).caption + "</span></div><div class=\"clsPrps\">" + ((DcStruct)(dcs[dcNo - 1])).purpose + "</div><hr class='hrline' />");
                 }
 
                 dcHtml.Append(ngFldHtml + "</div></div></div><div class='clear'></div>");
@@ -5336,7 +5123,7 @@ public class TStructDef
     {
         StringBuilder ruledeflist = new StringBuilder();
         int ruledefNo = 0;
-        string validation = "false", filter = "false", formcontrol = "false", computescript = "false", allowduplicate = "false", allowempty = "false", isapplicable = "false";
+        string validation = "false", filter = "false", formcontrol = "false", computescript = "false", allowduplicate = "false", allowempty = "false";
         XmlNodeList axruleDefChildNodes = default(XmlNodeList);
         axruleDefChildNodes = ruleDefNodes.ChildNodes;
         foreach (XmlNode rulesNode in axruleDefChildNodes)
@@ -5387,16 +5174,10 @@ public class TStructDef
                         allowempty = "true";
                     ruledeflist.Append("AxRDAllowEmpty[" + ruledefNo + "] = " + "\"" + rulesChildNode.InnerText + "\";");
                 }
-                else if (rulesChildNode.Name == "isapplicable")
-                {
-                    if (rulesChildNode.InnerText != "")
-                        isapplicable = "true";
-                    ruledeflist.Append("AxRDIsApplicable[" + ruledefNo + "] = " + "\"" + rulesChildNode.InnerText + "\";");
-                }
             }
             ruledefNo++;
         }
-        strRulesDefEngin = validation + "~" + filter + "~" + formcontrol + "~" + computescript + "~" + allowduplicate + "~" + allowempty + "~" + isapplicable;
+        strRulesDefEngin = validation + "~" + filter + "~" + formcontrol + "~" + computescript + "~" + allowduplicate + "~" + allowempty;
         jsRuleDefArray = ruledeflist.ToString();
     }
     #endregion
@@ -5511,16 +5292,6 @@ public class TStructDef
 
                 if (category == "dc")
                 {
-                    if (tstChildDataNode.Attributes["booleandc"] != null)
-                        dcExpandCollapse = tstChildDataNode.Attributes["booleandc"].Value.ToString();
-                    else
-                        dcExpandCollapse = string.Empty;
-
-                    if (tstChildDataNode.Attributes["defaultstate"] != null)
-                        dcDefaultstate = tstChildDataNode.Attributes["defaultstate"].Value.ToString();
-                    else
-                        dcDefaultstate = string.Empty;
-
                     dcFldCount = 0;
                     dcFldVisibleCount = 0;
                     XmlLoadDc(tstChildDataNode);
@@ -6030,7 +5801,7 @@ public class TStructDef
         //strHeader.Append("<div id='nextprevicons' class='nextprevicon '><a href=\"javascript:void(0)\" class='previous'><span onclick='javascript:GetRecord(\"prev\");' class=\"glyphicon glyphicon-chevron-left icon-arrows-left\"> </span></a> <a href=\"javascript:void(0)\" class='previous'><span onclick='javascript:GetRecord(\"prev\");' class=\"glyphicon glyphicon-chevron-left\"> </span></a></div>");
         //strHeader.Append("<div class='clear'></div></div>");
 
-        strHeader.Append("<h1 class=\"text-dark fw-boldest my-1 fs-2\">" + Caption + "<small class=\"text-muted fs-6 fw-normal ms-1\"></small></h1>");
+        strHeader.Append("<h1 class=\"text-dark fw-bolder my-1 fs-2\">" + Caption + "<small class=\"text-muted fs-6 fw-normal ms-1\"></small></h1>");
 
         return strHeader.ToString();
     }
@@ -6172,10 +5943,6 @@ public class TStructDef
             tabFunction = string.Empty;
             DcStruct dc = (DcStruct)(dcs[tabNo - 1]);
 
-            string dcBoolean = string.Empty;
-            if (dc.DcDefaultstate != "" && dc.DcDefaultstate.ToLower() == "collapse")
-                dcBoolean = " d-none ";
-
             if (j == 0)
             {
                 tabHdrHtml.Append("<ul id='myTab' class=\"cursor-pointer nav nav-tabs mb-n2\">");
@@ -6199,27 +5966,8 @@ public class TStructDef
 
             string activeClass = String.Empty;
             activeClass = j == 0 ? "active" : "";
-            string dcBooleanHtml = string.Empty;
-            if (dc.DcBlean != "" && dc.DcBlean.ToUpper() == "TRUE")
-            {
-                //tabHdrHtml.Append("<div class=\"nav-link fw-boldest d-flex p-4 shadow-sm " + activeClass + "\">");
-                if (activeClass != "")
-                {
-                    dcBooleanHtml = "<div class=\"form-check form-switch form-check-custom px-1 align-self-end my-auto \"><input type=\"checkbox\" id=\"dcBlean" + tabNo + "\" data-dcname=\"" + dc.name + "\" title=\"\" style=\"\" name=\"dcBlean" + tabNo + "\" class=\"form-check-input opacity-100 gridHeaderSwitch \" " + (dcBoolean == string.Empty ? "checked" : "") + "></div>";
-                    tabHdrHtml.Append("<li class=\"nav-item d-flex p-3 shadow-sm bg-white rounded-top\" id=\"li" + tabNo + "\">");
-                }
-                else
-                {
-                    dcBooleanHtml = "<div class=\"form-check form-switch form-check-custom px-1 align-self-end my-auto d-none\"><input type=\"checkbox\" id=\"dcBlean" + tabNo + "\" data-dcname=\"" + dc.name + "\" title=\"\" style=\"\" name=\"dcBlean" + tabNo + "\" class=\"form-check-input opacity-100 gridHeaderSwitch \" " + (dcBoolean == string.Empty ? "checked" : "") + "></div>";
-                    tabHdrHtml.Append("<li class=\"nav-item d-flex p-3 shadow-sm rounded-top\" id=\"li" + tabNo + "\">");
-                }
-                tabHdrHtml.Append("<a class=\"fw-bold fs-6 nav-link fw-boldest text-gray-800 rounded-0 border-0 " + activeClass + "\" data-bs-toggle=\"tab\" data-toggle=\"tab\" href=\"#tab-" + tabNo + "\" id=\"ank" + tabNo + "\" onclick=\"javascript:GetTabData(" + dc.frameno + ");\">" + dc.caption + "</a>" + dcBooleanHtml + "</li>");
-            }
-            else
-            {
-                tabHdrHtml.Append("<li class=\"nav-item\" id=\"li" + tabNo + "\">");
-                tabHdrHtml.Append("<a class=\"nav-link fw-boldest shadow-sm fs-6 text-gray-800 p-4 " + activeClass + "\" data-bs-toggle=\"tab\" data-toggle=\"tab\" href=\"#tab-" + tabNo + "\" id=\"ank" + tabNo + "\" onclick=\"javascript:GetTabData(" + dc.frameno + ");\">" + dc.caption + "</a></li>");
-            }
+            tabHdrHtml.Append("<li class=\"nav-item\" id=\"li" + tabNo + "\"><a class=\"nav-link shadow-sm fw-bold fs-6 text-gray-800 p-4 " + activeClass + "\" data-bs-toggle=\"tab\" data-toggle=\"tab\" href=\"#tab-" + tabNo + "\" id=\"ank" + tabNo + "\" onclick=\"javascript:GetTabData(" + dc.frameno + ");\">" + dc.caption + "</a></li>");
+
             tabInnerHtml.Append("<div class='tab-pane fade show " + activeClass + "  ' id=\"tab-" + dc.frameno + "\" >");
             if (j == 0)
                 tabInnerHtml.Append(strGridHtml);
@@ -6285,7 +6033,7 @@ public class TStructDef
                 else
                 {
                     fieldhtml = GetFieldHtml(tabNo);
-                    strGridHtml = "<div class='card card-xl-stretch mb-1 mb-xl-2 shadow-sm mainContent'>" + GetFullDCHtml(tabNo, fieldhtml, "true") + "</div>";
+                    strGridHtml = "<div class='card card-xl-stretch mb-1 mb-xl-2 shadow-sm overflow-auto mainContent'>" + GetFullDCHtml(tabNo, fieldhtml, "true") + "</div>";
                 }
                 tabDCStatus.Add("1");
             }
@@ -6293,7 +6041,7 @@ public class TStructDef
             {
                 tabDCStatus.Add("1");
                 fieldhtml = GetFieldHtml(tabNo);
-                strGridHtml = "<div class='card card-xl-stretch mb-1 mb-xl-2 shadow-sm mainContent'>" + GetFullDCHtml(tabNo, fieldhtml, "true") + "</div>";
+                strGridHtml = "<div class='card card-xl-stretch mb-1 mb-xl-2 shadow-sm overflow-auto mainContent'>" + GetFullDCHtml(tabNo, fieldhtml, "true") + "</div>";
 
 
             }
@@ -6633,7 +6381,7 @@ public class TStructDef
             fcwidth = fcwidth / 10;
             colFldCaption = "col-sm-" + fcwidth + "";
             fcwidth = 12 - fcwidth;
-            colFldWidth = "<div class=\"input-group col-sm-" + fcwidth + "\">";
+            colFldWidth = "<div class=\"col-sm-" + fcwidth + "\">";
             colFldGridStackItem = " colFldGridStackWidth ";
             colDivInputPadding = " colDivInputPadding ";
         }
@@ -6875,20 +6623,20 @@ public class TStructDef
                         colCount++;
                         if (fld.caption.Contains("~"))
                         {
-                            gridHeadHtml.Append("<th id=\"th-" + fld.name + "\" style=\"width:" + fdwidth + "px;\" class=\"wordBreak fw-boldest\"><div id=\"th-" + fld.name + "-sizer\"></div><div class='thhead " + allowemptycss + "'>");
+                            gridHeadHtml.Append("<th id=\"th-" + fld.name + "\" style=\"width:" + fdwidth + "px;\" class=\"wordBreak\"><div id=\"th-" + fld.name + "-sizer\"></div><div class='thhead " + allowemptycss + "'>");
                         }
                         else if (fld.datatype.ToUpper() == "DATE/TIME")
                         {
-                            gridHeadHtml.Append("<th id=\"th-" + fld.name + "\" style=\"width:" + fdwidth + "px;\" class=\"fw-boldest\"><div id=\"th-" + fld.name + "-sizer\"></div><div class='thhead " + allowemptycss + "'>");
+                            gridHeadHtml.Append("<th id=\"th-" + fld.name + "\" style=\"width:" + fdwidth + "px;\" ><div id=\"th-" + fld.name + "-sizer\"></div><div class='thhead " + allowemptycss + "'>");
                         }
                         else
                         {
-                            gridHeadHtml.Append("<th id=\"th-" + fld.name + "\" style=\"width:" + fdwidth + "px;\" class=\"fw-boldest\"><div id=\"th-" + fld.name + "-sizer\"></div><div class='thhead " + allowemptycss + "'>");
+                            gridHeadHtml.Append("<th id=\"th-" + fld.name + "\" style=\"width:" + fdwidth + "px;\" ><div id=\"th-" + fld.name + "-sizer\"></div><div class='thhead " + allowemptycss + "'>");
                         }
 
                         if (isHyper)
                         {
-                            gridHeadHtml.Append("<a href=\"javascript:void(0)\" class=\"cursor-pointer\"  id=\"" + ((HLinkStruct)(hlnks[n])).hlsource.ToString() + "\" onclick='javascript:Tstructhyperlink(this);'>");
+                            gridHeadHtml.Append("<a href=\"javascript:void(0)\" class=\"handCur\"  id=\"" + ((HLinkStruct)(hlnks[n])).hlsource.ToString() + "\" onclick='javascript:Tstructhyperlink(this);'>");
                         }
                         if (fld.name.ToUpper().IndexOf("AXPBUTTON") == -1)
                         {
@@ -6909,7 +6657,7 @@ public class TStructDef
                         //}
 
                         if (!string.IsNullOrEmpty(fld.fieldPurpose))
-                            gridHeadHtml.Append("<span><i tabindex=\"-1\" data-bs-trigger=\"hover\" class=\"icon-arrows-question material-icons material-icons-style material-icons-4 align-middle ms-2 cursor-pointer\" id=\"ico_cl\" data-bs-toggle=\"tooltip\" data-bs-placement=\"right\" data-bs-dismiss=\"click\" data-bs-original-title=\"" + fld.fieldPurpose + "\">help_outline</i></span>");
+                            gridHeadHtml.Append("<i tabindex=\"-1\" data-trigger=\"hover\" class=\"icon-arrows-question gridHlpTxt\" id=\"ico_cl\"  data-toggle=\"popover\"  data-content=\"" + fld.fieldPurpose + " \" data-placement=\"right\"></i>");
                         gridHeadHtml.Append("</div></th>");
                     }
                     else
@@ -6917,7 +6665,7 @@ public class TStructDef
                         if (fld.ctype.ToUpper() != "CHECK BOX")
                         {
                             fieldHtml.Append("<div class=' grid-stack-item" + colFldGridStackItem + "' " + gridStackData + " id=\"randomID_" + dc.frameno + randomID + "\"><span class=\"badge-grid-stack position-absolute top-0 end-0\">" + (randomID - 10) + "</span><div class=\"grid-stack-item-content ui-draggable-handle\"></div><div id=\"dv" + fld.name.Replace(" ", "") + "\" class=\"labelcol inputs form-group row " + lblBsClass + " " + colDivInputPadding + " \" data-dataindex=" + lblBsIndex + ">");
-                            string color = "cursor: pointer;";
+                            string color = "cursor: default;";
                             if (fld.fieldLabelCss != "")
                             {
                                 //label font will be in the format "font-family,font-size,tttt,color". here the tttt-bold/italic/underline/strikeout
@@ -6986,36 +6734,33 @@ public class TStructDef
                                 //TODO: the font family is not considered as the ui alignment is not proper in web. we can enable it  in future.
                                 //fieldHtml.Append("<font class=\"labelcap\" style=\"" + fontSize + textCss + "\">");
                             }
+
+                            if (isHyper)
+                                fieldHtml.Append("<a href=\"javascript:void(0)\"  class=\"handCur\" id=\"" + ((HLinkStruct)(hlnks[n])).hlsource.ToString() + "\" onclick='javascript:Tstructhyperlink(this);'>");
+                            else if (designHyperLink != "")
+                                fieldHtml.Append("<a href=\"javascript:void(0)\" class=\"handCur\" id=\"hylnk" + fld.name + "\" onclick='javascript:TstructLabelhyperlink(this);' data-param='" + designHyperLink + "'>");
                             if (fld.allowempty && fld.caption != "")
                                 fieldHtml.Append("<div class=\"fld-wrap3 " + colFldCaption + "\" >");
                             else
                                 fieldHtml.Append("<div class=\"fld-wrap3 required " + colFldCaption + "\" >");
 
-                            if (isHyper)
-                                fieldHtml.Append("<a href=\"javascript:void(0)\"  class=\"cursor-pointer\" id=\"" + ((HLinkStruct)(hlnks[n])).hlsource.ToString() + "\" onclick='javascript:Tstructhyperlink(this);'>");
-                            else if (designHyperLink != "")
-                                fieldHtml.Append("<a href=\"javascript:void(0)\" class=\"cursor-pointer\" id=\"hylnk" + fld.name + "\" onclick='javascript:TstructLabelhyperlink(this);' data-param='" + designHyperLink + "'>");
-
-
                             if (designHyperLink != "")
-                                fieldHtml.Append("<label class=\"form-label col-form-label pb-1 fw-boldest \" style=\"text-decoration:underline;cursor: pointer;" + (designFontStyle == "" ? color : designFontStyle) + "\"  for=\"" + name + "\" " + (name.ToLower().Contains("axp_url_") ? "data-axp-url='true'" : "") + " >" + fld.caption + "</label >");
+                                fieldHtml.Append("<label class=\"form-label col-form-label \" style=\"text-decoration:underline;cursor: pointer;" + (designFontStyle == "" ? color : designFontStyle) + "\"  for=\"" + name + "\" " + (name.ToLower().Contains("axp_url_") ? "data-axp-url='true'" : "") + " >" + fld.caption + "</label >");
                             else
-                                fieldHtml.Append("<label class=\"form-label col-form-label pb-1 fw-boldest \" style=\"" + (designFontStyle == "" ? color : designFontStyle) + "\"  for=\"" + name + "\" " + (name.ToLower().Contains("axp_url_") ? "data-axp-url='true'" : "") + " >" + fld.caption + "</label >");//if the tstruct field contains axp_url_ then add an attribute 'data-axp-url' to display hyperlink instead of label
+                                fieldHtml.Append("<label class=\"form-label col-form-label \" style=\"" + (designFontStyle == "" ? color : designFontStyle) + "\"  for=\"" + name + "\" " + (name.ToLower().Contains("axp_url_") ? "data-axp-url='true'" : "") + " >" + fld.caption + "</label >");//if the tstruct field contains axp_url_ then add an attribute 'data-axp-url' to display hyperlink instead of label
                             if (isHyper || designHyperLink != "")
                                 fieldHtml.Append("</a>");
 
                             if (!string.IsNullOrEmpty(fld.fieldPurpose))
-                                fieldHtml.Append("<span><i tabindex=\"-1\" data-bs-trigger=\"hover\" class=\"icon-arrows-question material-icons material-icons-style material-icons-4 align-middle ms-2 cursor-pointer\" id=\"ico_cl\" data-bs-toggle=\"tooltip\" data-bs-placement=\"right\" data-bs-dismiss=\"click\" data-bs-original-title=\"" + fld.fieldPurpose + "\">help_outline</i></span>");
+                                fieldHtml.Append("<span><i tabindex=\"-1\" data-trigger=\"hover\" class=\"icon-arrows-question\" id=\"ico_cl\"  data-toggle=\"popover\"  data-content=\"" + fld.fieldPurpose + " \" data-placement=\"right\"></i></span>");
+
                             fieldHtml.Append("</div>");
                         }
                         else
                         {
-                            // bool columnModeEnabled = axdesignJObject.dcLayout != null && axdesignJObject.dcLayout != "" && axdesignJObject.dcLayout != "default";
-
-                            fieldHtml.Append("<div class=' grid-stack-item" + colFldGridStackItem + "'  " + gridStackData + " id=\"randomID_" + dc.frameno + randomID + "\"><span class=\"badge-grid-stack position-absolute top-0 end-0\">" + (randomID - 10) + "</span><div class=\"grid-stack-item-content ui-draggable-handle\"></div><div id=\"dv" + fld.name.Replace(" ", "") + "\" class=\"labelcol inputs checkbox form-group row " + lblBsClass + " " + colDivInputPadding + " \" data-dataindex=" + lblBsIndex + " >");
+                            fieldHtml.Append("<div class=' grid-stack-item" + colFldGridStackItem + "'  " + gridStackData + " id=\"randomID_" + dc.frameno + randomID + "\"><span class=\"badge-grid-stack position-absolute top-0 end-0\">" + (randomID - 10) + "</span><div class=\"grid-stack-item-content ui-draggable-handle\"></div><div id=\"dv" + fld.name.Replace(" ", "") + "\" class=\"labelcol inputs checkbox form-group now " + lblBsClass + " " + colDivInputPadding + " \" data-dataindex=" + lblBsIndex + " >");
                             //label normal
-                            fieldHtml.Append("<div class=\"fld-wrap3 " + colFldCaption + /*(!columnModeEnabled ? "" : " d-none ")*/ "  " + "\"><label class=\"form-label col-form-label pb-1 fw-boldest\" style=\"cursor: default;\" for=\"" + name + "\">" + fld.caption + "</label></div>");
-                            // fieldHtml.Append("<div class=\"fld-wrap3 "+ colFldCaption + "\"><label class=\"form-label col-form-label pb-1 fw-boldest\" style=\"cursor: default;\" for=\"" + name + "\">" + (!columnModeEnabled ? fld.caption : "") + "</label></div>");
+                            fieldHtml.Append("<div class=\"fld-wrap3\"><label class=\"form-label col-form-label\" style=\"cursor: default;\" for==\"" + name + "\"></label></div>");
                             //fieldHtml.Append("<label for=\"" + name + "\">");
 
                         }
@@ -7041,7 +6786,7 @@ public class TStructDef
                             }
 
                             if (!string.IsNullOrEmpty(fld.fieldPurpose))
-                                fieldHtml.Append("<span><i tabindex=\"-1\" data-bs-trigger=\"hover\" class=\"icon-arrows-question material-icons material-icons-style material-icons-4 align-middle ms-2 cursor-pointer\" id=\"ico_cl\" data-bs-toggle=\"tooltip\" data-bs-placement=\"right\" data-bs-dismiss=\"click\" data-bs-original-title=\"" + fld.fieldPurpose + "\">help_outline</i></span>");
+                                fieldHtml.Append("<span tabindex=\"0\" data-trigger=\"hover\" tabindex=\"0\" class=\"glyphicon glyphicon-question-sign icon-arrows-question\" id=\"ico_cl\"  data-toggle=\"popover\"  data-content=\"" + fld.fieldPurpose + " \" data-placement=\"right\"></span");
 
                             if (popImg != "")
                             {
@@ -7078,8 +6823,7 @@ public class TStructDef
                                 gridInSlackGridY += 1;
                             }
                             if (!string.IsNullOrEmpty(fld.fieldPurpose))
-                                fieldHtml.Append("<span><i tabindex=\"-1\" data-bs-trigger=\"hover\" class=\"icon-arrows-question material-icons material-icons-style material-icons-4 align-middle ms-2 cursor-pointer\" id=\"ico_cl\" data-bs-toggle=\"tooltip\" data-bs-placement=\"right\" data-bs-dismiss=\"click\" data-bs-original-title=\"" + fld.fieldPurpose + "\">help_outline</i></span>");
-
+                                fieldHtml.Append("<span><i tabindex=\"-1\" data-trigger=\"hover\" class=\"icon-arrows-question\" id=\"ico_cl\"  data-toggle=\"popover\"  data-content=\"" + fld.fieldPurpose + " \" data-placement=\"right\"></i></span>");
                             fieldHtml.Append("</div>");
                             if (popImg != "")
                             {
@@ -7099,7 +6843,7 @@ public class TStructDef
                         gridHiddenHtml.Append("<label>" + fld.caption + "</label>");
 
                         if (!string.IsNullOrEmpty(fld.fieldPurpose))
-                            fieldHtml.Append("<span><i tabindex=\"-1\" data-bs-trigger=\"hover\" class=\"icon-arrows-question material-icons material-icons-style material-icons-4 align-middle ms-2 cursor-pointer\" id=\"ico_cl\" data-bs-toggle=\"tooltip\" data-bs-placement=\"right\" data-bs-dismiss=\"click\" data-bs-original-title=\"" + fld.fieldPurpose + "\">help_outline</i></span>");
+                            fieldHtml.Append("<span><i tabindex=\"-1\" data-trigger=\"hover\" class=\"icon-arrows-question\" id=\"ico_cl\"  data-toggle=\"popover\"  data-content=\"" + fld.fieldPurpose + " \" data-placement=\"right\"></i></span>");
 
                         gridHiddenHtml.Append("</div>");
                         gridHiddenHtml.Append("<div>");
@@ -7132,12 +6876,12 @@ public class TStructDef
                         case "ACCEPT":
                             if (!isGrid && fld.datatype.ToUpper() != "IMAGE")
                                 fieldHtml.Append(colFldWidth);
-                            SetCssClass(fld.freadonly, "tem", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                            SetCssClass(fld.freadonly, "tem", fld.datatype, fld.name, fldBsClass, fld.fldType);
 
                             if ((fld.ctype.ToUpper() == "MEMO" || fld.datatype.ToLower() == "text") && fld.ctype.ToUpper() != "CHECK BOX")
                             {
 
-                                SetCssClass(fld.freadonly, "memotem", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "memotem", fld.datatype, fld.name, fldBsClass, fld.fldType);
                                 if (!isGrid)
                                     width = Convert.ToString(Convert.ToInt32(width) - 10);
 
@@ -7148,7 +6892,7 @@ public class TStructDef
                             }
                             else if (fld.ctype.ToUpper() == "CHECK BOX")
                             {
-                                SetCssClass(fld.freadonly, "checkbox", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "checkbox", fld.datatype, fld.name, fldBsClass, fld.fldType);
                                 if (isGrid)
                                     gridHiddenHtml.Append(GetCheckBoxHTML(fld, isGrid, name, i, fldTlhw, width, fld.visibility, fld.moeval));
                                 fieldHtml.Append(GetCheckBoxHTML(fld, isGrid, name, i, fldTlhw, width, fld.visibility, fld.moeval));
@@ -7226,7 +6970,7 @@ public class TStructDef
 
                             if (fld.ctype.ToUpper() == "CHECK LIST")
                             {
-                                SetCssClass(fld.freadonly, "multiFldChk", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "multiFldChk", fld.datatype, fld.name, fldBsClass, fld.fldType);
 
                                 if (isGrid)
                                     gridHiddenHtml.Append(GetCheckListHTML(fld, isGrid, name, fldNo, fldTlhw, width, moeValue));
@@ -7234,7 +6978,7 @@ public class TStructDef
                             }
                             else if (fld.ctype.ToUpper() == "RADIO GROUP")
                             {
-                                SetCssClass(fld.freadonly, "multiFldRdg", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "multiFldRdg", fld.datatype, fld.name, fldBsClass, fld.fldType);
 
                                 if (isGrid)
                                     gridHiddenHtml.Append(GetRadioGroupHTML(fld, isGrid, name, fldNo, fldTlhw, width, moeValue));
@@ -7244,12 +6988,12 @@ public class TStructDef
                             {
                                 bool chkBox = false;
                                 chkBox = IsGridCheckBox(moeValue);
-                                SetCssClass(fld.freadonly, "combo", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "combo", fld.datatype, fld.name, fldBsClass, fld.fldType);
                                 if (isGrid)
                                 {
                                     if (chkBox)
                                     {
-                                        SetCssClass(fld.freadonly, "gridChk", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                        SetCssClass(fld.freadonly, "gridChk", fld.datatype, fld.name, fldBsClass, fld.fldType);
 
                                         width = Convert.ToString(Convert.ToInt32(width) - 10);
                                         gridHiddenHtml.Append(GetCheckBoxHTML(fld, isGrid, name, fldNo, fldTlhw, width, fld.visibility, fld.moeval));
@@ -7269,7 +7013,7 @@ public class TStructDef
                             }
                             else if (fld.selectmode.ToUpper() == "FROM MASTER")
                             {
-                                SetCssClass(fld.freadonly, "combo", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "combo", fld.datatype, fld.name, fldBsClass, fld.fldType);
 
                                 if (!fld.editcombo)
                                 {
@@ -7281,7 +7025,7 @@ public class TStructDef
                                     {
                                         if (chkBox)
                                         {
-                                            SetCssClass(fld.freadonly, "gridChk", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                            SetCssClass(fld.freadonly, "gridChk", fld.datatype, fld.name, fldBsClass, fld.fldType);
                                             gridHiddenHtml.Append(GetCheckBoxHTML(fld, isGrid, name, fldNo, fldTlhw, width, fld.visibility, fld.moeval));
                                             fieldHtml.Append(GetCheckBoxHTML(fld, isGrid, name, fldNo, fldTlhw, width, fld.visibility, fld.moeval));
                                         }
@@ -7322,7 +7066,7 @@ public class TStructDef
                             }
                             else
                             {
-                                SetCssClass(fld.freadonly, "combo", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "combo", fld.datatype, fld.name, fldBsClass, fld.fldType);
 
                                 bool chkBox = false;
                                 chkBox = IsGridCheckBox(moeValue);
@@ -7331,7 +7075,7 @@ public class TStructDef
                                 {
                                     if (chkBox)
                                     {
-                                        SetCssClass(fld.freadonly, "gridChk", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                        SetCssClass(fld.freadonly, "gridChk", fld.datatype, fld.name, fldBsClass, fld.fldType);
 
                                         width = Convert.ToString(Convert.ToInt32(width) - 10);
 
@@ -7367,7 +7111,7 @@ public class TStructDef
                         case "AUTOGENERATE":
                             if (!isGrid)
                                 fieldHtml.Append(colFldWidth);
-                            SetCssClass(fld.freadonly, "auto", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                            SetCssClass(fld.freadonly, "auto", fld.datatype, fld.name, fldBsClass, fld.fldType);
 
 
                             if (isGrid)
@@ -7381,7 +7125,7 @@ public class TStructDef
 
                             if ((fld.ctype.ToUpper() == "MEMO" || fld.datatype.ToLower() == "text") && fld.ctype.ToUpper() != "CHECK BOX")
                             {
-                                SetCssClass(fld.freadonly, "memotem", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "memotem", fld.datatype, fld.name, fldBsClass, fld.fldType);
                                 if (!isGrid)
                                     width = Convert.ToString(Convert.ToInt32(width) - 8);
 
@@ -7391,14 +7135,14 @@ public class TStructDef
                             }
                             else if (fld.ctype.ToUpper() == "CHECK BOX")
                             {
-                                SetCssClass(fld.freadonly, "checkbox", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "checkbox", fld.datatype, fld.name, fldBsClass, fld.fldType);
                                 if (isGrid)
                                     gridHiddenHtml.Append(GetCheckBoxHTML(fld, isGrid, name, i, fldTlhw, width, fld.visibility, fld.moeval));
                                 fieldHtml.Append(GetCheckBoxHTML(fld, isGrid, name, i, fldTlhw, width, fld.visibility, fld.moeval));
                             }
                             else
                             {
-                                SetCssClass(fld.freadonly, "tem", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "tem", fld.datatype, fld.name, fldBsClass, fld.fldType);
                                 if (isGrid)
                                     gridHiddenHtml.Append(GetInputHTML(fld, isGrid, name, fldNo, fldTlhw, width, addZeroForNumeric, popImg, popImgHidden));
                                 fieldHtml.Append(GetInputHTML(fld, isGrid, name, fldNo, fldTlhw, width, addZeroForNumeric, popImg, popImgHidden));
@@ -7408,9 +7152,9 @@ public class TStructDef
                             if (!isGrid)
                                 fieldHtml.Append(colFldWidth);
                             if (fld.ctype.ToUpper() == "CHECK BOX")
-                                SetCssClass(fld.freadonly, "checkbox", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "checkbox", fld.datatype, fld.name, fldBsClass, fld.fldType);
                             else
-                                SetCssClass(fld.freadonly, "tem", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "tem", fld.datatype, fld.name, fldBsClass, fld.fldType);
 
                             if (fld.ctype.ToUpper() == "CHECK BOX")
                             {
@@ -7511,7 +7255,7 @@ public class TStructDef
         }
     }
 
-    private void SetCssClass(bool fReadOnly, string type, string fldDataType, string fldName, string bsClass, string fldFieldType, FieldStruct fldStr)
+    private void SetCssClass(bool fReadOnly, string type, string fldDataType, string fldName, string bsClass, string fldFieldType)
     {
         string dateFunClass = string.Empty;
         string timeFunClass = string.Empty;
@@ -7530,18 +7274,15 @@ public class TStructDef
 
         if (fldName.ToLower().StartsWith("axptm_") || fldName.ToLower().StartsWith("axpdbtm_") || (fldFieldType != string.Empty && fldFieldType.ToLower() == "time"))
         {
-            if (fldStr.fldTimeFormat != null && fldStr.fldTimeFormat == "24H Format")
-                timeFunClass = "flatpickr-input tstOnlyTime24hours ";
-            else
-                timeFunClass = "flatpickr-input tstOnlyTime ";
+            timeFunClass = "flatpickr-input tstOnlyTime ";
         }
 
         if (fldName.Contains("axpvalid"))
         {
             if (IsFillGridCall)
             {
-                fldCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp tem Family  axpvalid\" ";
-                fldHdnCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp tem Family axpvalid\" ";
+                fldCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp tem Family  axpvalid\" ";
+                fldHdnCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp tem Family axpvalid\" ";
             }
             else
             {
@@ -7557,8 +7298,8 @@ public class TStructDef
                 {
                     if (IsFillGridCall)
                     {
-                        fldCss = " readonly disabled tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp tem flddis  Family  date " + dateFunClass + bsClass + "\" ";
-                        fldHdnCss = " readonly disabled tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp tem flddis  Family  date " + dateFunClass + bsClass + "\" ";
+                        fldCss = " readonly disabled tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp tem flddis  Family  date " + dateFunClass + bsClass + "\" ";
+                        fldHdnCss = " readonly disabled tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp tem flddis  Family  date " + dateFunClass + bsClass + "\" ";
                     }
                     else
                     {
@@ -7570,8 +7311,8 @@ public class TStructDef
                 {
                     if (IsFillGridCall)
                     {
-                        fldCss = " readonly disabled tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp tem flddis  Family number " + bsClass + "\" ";
-                        fldHdnCss = " readonly disabled tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp tem flddis  Family number " + bsClass + "\" ";
+                        fldCss = " readonly disabled tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp tem flddis  Family number " + bsClass + "\" ";
+                        fldHdnCss = " readonly disabled tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp tem flddis  Family number " + bsClass + "\" ";
                     }
                     else
                     {
@@ -7583,8 +7324,8 @@ public class TStructDef
                 {
                     if (IsFillGridCall)
                     {
-                        fldCss = " readonly tabindex=\"-1\" disabled class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp tem flddis  Family " + timeFunClass + bsClass + "\" ";
-                        fldHdnCss = " readonly tabindex=\"-1\" disabled class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp tem flddis  Family " + timeFunClass + bsClass + "\" ";
+                        fldCss = " readonly tabindex=\"-1\" disabled class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp tem flddis  Family " + timeFunClass + bsClass + "\" ";
+                        fldHdnCss = " readonly tabindex=\"-1\" disabled class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp tem flddis  Family " + timeFunClass + bsClass + "\" ";
                     }
                     else
                     {
@@ -7599,8 +7340,8 @@ public class TStructDef
                 {
                     if (IsFillGridCall)
                     {
-                        fldCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp tem Family  date " + dateFunClass + bsClass + "\" ";
-                        fldHdnCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp tem Family  date " + dateFunClass + bsClass + " \" ";
+                        fldCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp tem Family  date " + dateFunClass + bsClass + "\" ";
+                        fldHdnCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp tem Family  date " + dateFunClass + bsClass + " \" ";
                     }
                     else
                     {
@@ -7616,8 +7357,8 @@ public class TStructDef
                     if (IsFillGridCall)
                     {
 
-                        fldCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp number " + randomFunClass + bsClass + "\" ";
-                        fldHdnCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp number " + randomFunClass + bsClass + "\" ";
+                        fldCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp number " + randomFunClass + bsClass + "\" ";
+                        fldHdnCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp number " + randomFunClass + bsClass + "\" ";
                     }
                     else
                     {
@@ -7629,8 +7370,8 @@ public class TStructDef
                 {
                     if (IsFillGridCall)
                     {
-                        fldCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp " + timeFunClass + bsClass + "\" ";
-                        fldHdnCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp " + timeFunClass + bsClass + "\" ";
+                        fldCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp " + timeFunClass + bsClass + "\" ";
+                        fldHdnCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp " + timeFunClass + bsClass + "\" ";
                     }
                     else
                     {
@@ -7646,8 +7387,8 @@ public class TStructDef
             {
                 if (IsFillGridCall)
                 {
-                    fldCss = " tabindex=\"-1\" disabled readonly class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp flddis memofam " + bsClass + "\" ";
-                    fldHdnCss = " tabindex=\"-1\" disabled readonly class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp flddis memofam " + bsClass + "\" ";
+                    fldCss = " tabindex=\"-1\" disabled readonly class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp flddis memofam " + bsClass + "\" ";
+                    fldHdnCss = " tabindex=\"-1\" disabled readonly class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp flddis memofam " + bsClass + "\" ";
                 }
                 else
                 {
@@ -7661,8 +7402,8 @@ public class TStructDef
                 {
                     if (IsFillGridCall)
                     {
-                        fldCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp date memofam " + dateFunClass + bsClass + "\" ";
-                        fldHdnCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp date memofam  " + dateFunClass + bsClass + "\" ";
+                        fldCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp date memofam " + dateFunClass + bsClass + "\" ";
+                        fldHdnCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp date memofam  " + dateFunClass + bsClass + "\" ";
                     }
                     else
                     {
@@ -7677,8 +7418,8 @@ public class TStructDef
 
                     if (IsFillGridCall)
                     {
-                        fldCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp number memofam  " + randomFunClass + bsClass + "\" ";
-                        fldHdnCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp number memofam  " + randomFunClass + bsClass + "\" ";
+                        fldCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp number memofam  " + randomFunClass + bsClass + "\" ";
+                        fldHdnCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp number memofam  " + randomFunClass + bsClass + "\" ";
                     }
                     else
                     {
@@ -7690,8 +7431,8 @@ public class TStructDef
                 {
                     if (IsFillGridCall)
                     {
-                        fldCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp memofam " + timeFunClass + bsClass + "\" ";
-                        fldHdnCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp memofam " + timeFunClass + bsClass + "\" ";
+                        fldCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp memofam " + timeFunClass + bsClass + "\" ";
+                        fldHdnCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp memofam " + timeFunClass + bsClass + "\" ";
                     }
                     else
                     {
@@ -7707,8 +7448,8 @@ public class TStructDef
             {
                 if (IsFillGridCall)
                 {
-                    fldCss = " readonly tabindex=\"-1\" disabled class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp multiFld flddis " + bsClass + "\" ";
-                    fldHdnCss = " readonly tabindex=\"-1\" disabled class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp multiFld flddis " + bsClass + "\" ";
+                    fldCss = " readonly tabindex=\"-1\" disabled class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp multiFld flddis " + bsClass + "\" ";
+                    fldHdnCss = " readonly tabindex=\"-1\" disabled class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp multiFld flddis " + bsClass + "\" ";
                 }
                 else
                 {
@@ -7720,8 +7461,8 @@ public class TStructDef
             {
                 if (IsFillGridCall)
                 {
-                    fldCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp multiFld " + bsClass + "\" ";
-                    fldHdnCss = " tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp multiFld " + bsClass + "\" ";
+                    fldCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp multiFld " + bsClass + "\" ";
+                    fldHdnCss = " tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp multiFld " + bsClass + "\" ";
                 }
                 else
                 {
@@ -7737,8 +7478,8 @@ public class TStructDef
             {
                 if (IsFillGridCall)
                 {
-                    fldCss = " readonly disabled tabindex=\"-1\" class=\"w-100 border bg-transparent overflow-hidden resize-none labelInp combotem flddis Family " + bsClass + "\" ";
-                    fldHdnCss = " readonly disabled tabindex=\"-1\" class=\"w-100 border bg-transparent overflow-hidden resize-none labelInp combotem flddis Family " + bsClass + "\" ";
+                    fldCss = " readonly disabled tabindex=\"-1\" class=\"w-100 border-0 overflow-hidden resize-none labelInp combotem flddis Family " + bsClass + "\" ";
+                    fldHdnCss = " readonly disabled tabindex=\"-1\" class=\"w-100 border-0 overflow-hidden resize-none labelInp combotem flddis Family " + bsClass + "\" ";
                 }
                 else
                 {
@@ -7750,8 +7491,8 @@ public class TStructDef
             {
                 if (IsFillGridCall)
                 {
-                    fldCss = " readonly tabindex=\"-1\" class=\"w-100 border bg-transparent overflow-hidden resize-none labelInp combotem Family " + bsClass + "\" ";
-                    fldHdnCss = " readonly tabindex=\"-1\" class=\"w-100 border bg-transparent overflow-hidden resize-none labelInp combotem Family " + bsClass + "\" ";
+                    fldCss = " readonly tabindex=\"-1\" class=\"w-100 border-0 overflow-hidden resize-none labelInp combotem Family " + bsClass + "\" ";
+                    fldHdnCss = " readonly tabindex=\"-1\" class=\"w-100 border-0 overflow-hidden resize-none labelInp combotem Family " + bsClass + "\" ";
                 }
                 else
                 {
@@ -7766,8 +7507,8 @@ public class TStructDef
             {
                 if (IsFillGridCall)
                 {
-                    fldCss = " readonly disabled tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp gridchk flddis  " + bsClass + "\" ";
-                    fldHdnCss = " readonly disabled tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp gridchk flddis   " + bsClass + "\" ";
+                    fldCss = " readonly disabled tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp gridchk flddis  " + bsClass + "\" ";
+                    fldHdnCss = " readonly disabled tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp gridchk flddis   " + bsClass + "\" ";
                 }
                 else
                 {
@@ -7779,8 +7520,8 @@ public class TStructDef
             {
                 if (IsFillGridCall)
                 {
-                    fldCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp gridchk " + bsClass + "\" ";
-                    fldHdnCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp gridchk " + bsClass + "\" ";
+                    fldCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp gridchk " + bsClass + "\" ";
+                    fldHdnCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp gridchk " + bsClass + "\" ";
                 }
                 else
                 {
@@ -7795,8 +7536,8 @@ public class TStructDef
             {
                 if (IsFillGridCall)
                 {
-                    fldCss = " readonly disabled tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp autogen flddis " + bsClass + "\" ";
-                    fldHdnCss = " readonly disabled tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp autogen flddis " + bsClass + "\" ";
+                    fldCss = " readonly disabled tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp autogen flddis " + bsClass + "\" ";
+                    fldHdnCss = " readonly disabled tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp autogen flddis " + bsClass + "\" ";
                 }
                 else
                 {
@@ -7808,8 +7549,8 @@ public class TStructDef
             {
                 if (IsFillGridCall)
                 {
-                    fldCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp autogen \" ";
-                    fldHdnCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp autogen " + bsClass + "\" ";
+                    fldCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp autogen \" ";
+                    fldHdnCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp autogen " + bsClass + "\" ";
                 }
                 else
                 {
@@ -7824,8 +7565,8 @@ public class TStructDef
             {
                 if (IsFillGridCall)
                 {
-                    fldCss = " readonly disabled tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp multiFldChk flddis " + bsClass + "\" ";
-                    fldHdnCss = " readonly disabled tabindex=\"-1\"  class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp multiFldChk flddis " + bsClass + "\" ";
+                    fldCss = " readonly disabled tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp multiFldChk flddis " + bsClass + "\" ";
+                    fldHdnCss = " readonly disabled tabindex=\"-1\"  class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp multiFldChk flddis " + bsClass + "\" ";
                 }
                 else
                 {
@@ -7837,8 +7578,8 @@ public class TStructDef
             {
                 if (IsFillGridCall)
                 {
-                    fldCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp multiFldChk Family " + bsClass + "\" ";
-                    fldHdnCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp multiFldChk Family " + bsClass + "\" ";
+                    fldCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp multiFldChk Family " + bsClass + "\" ";
+                    fldHdnCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp multiFldChk Family " + bsClass + "\" ";
                 }
                 else
                 {
@@ -7853,26 +7594,26 @@ public class TStructDef
             {
                 if (IsFillGridCall)
                 {
-                    fldCss = " readonly disabled tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp multiFldRdg flddis   " + bsClass + "\" ";
-                    fldHdnCss = " readonly disabled tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp multiFldRdg flddis   " + bsClass + "\" ";
+                    fldCss = " readonly disabled tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp multiFldRdg flddis   " + bsClass + "\" ";
+                    fldHdnCss = " readonly disabled tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp multiFldRdg flddis   " + bsClass + "\" ";
                 }
                 else
                 {
-                    fldCss = " disabled class=\"form-control p-0 form-check-input h-30px w-30px opacity-100 multiFldRdg flddis   " + bsClass + "\" ";
-                    fldHdnCss = " disabled class=\"form-control p-0 form-check-input h-30px w-30px opacity-100 multiFldRdg flddis   " + bsClass + "\" ";
+                    fldCss = " disabled class=\"form-check-input h-40px w-40px multiFldRdg flddis   " + bsClass + "\" ";
+                    fldHdnCss = " disabled class=\"form-check-input h-40px w-40px multiFldRdg flddis   " + bsClass + "\" ";
                 }
             }
             else
             {
                 if (IsFillGridCall)
                 {
-                    fldCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp multiFldRdg   " + bsClass + "\" ";
-                    fldHdnCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp multiFldRdg   " + bsClass + "\" ";
+                    fldCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp multiFldRdg   " + bsClass + "\" ";
+                    fldHdnCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp multiFldRdg   " + bsClass + "\" ";
                 }
                 else
                 {
-                    fldCss = " class=\"form-control p-0 form-check-input h-30px w-30px opacity-100 multiFldRdg   " + bsClass + "\" ";
-                    fldHdnCss = " class=\"form-control p-0 form-check-input h-30px w-30px opacity-100 multiFldRdg   " + bsClass + "\" ";
+                    fldCss = " class=\"form-check-input h-40px w-40px multiFldRdg   " + bsClass + "\" ";
+                    fldHdnCss = " class=\"form-check-input h-40px w-40px multiFldRdg   " + bsClass + "\" ";
                 }
             }
         }
@@ -7882,26 +7623,26 @@ public class TStructDef
             {
                 if (IsFillGridCall)
                 {
-                    fldCss = " readonly disabled tabindex=\"-1\"  class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp tem flddis  " + bsClass + "\" ";
-                    fldHdnCss = " readonly disabled tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp tem flddis  " + bsClass + "\" ";
+                    fldCss = " readonly disabled tabindex=\"-1\"  class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp tem flddis  " + bsClass + "\" ";
+                    fldHdnCss = " readonly disabled tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp tem flddis  " + bsClass + "\" ";
                 }
                 else
                 {
-                    fldCss = " disabled class=\"form-check-input h-30px w-40px opacity-100 tem flddis custInpChk " + bsClass + "\" ";
-                    fldHdnCss = " disabled class=\"form-check-input h-30px w-40px opacity-100 tem flddis custInpChk " + bsClass + "\" ";
+                    fldCss = " disabled class=\"form-check-input h-40px w-40px tem flddis custInpChk " + bsClass + "\" ";
+                    fldHdnCss = " disabled class=\"form-check-input h-40px w-40px tem flddis custInpChk " + bsClass + "\" ";
                 }
             }
             else
             {
                 if (IsFillGridCall)
                 {
-                    fldCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp tem    " + bsClass + "\" ";
-                    fldHdnCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  labelInp tem  " + bsClass + "\" ";
+                    fldCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp tem    " + bsClass + "\" ";
+                    fldHdnCss = " readonly tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none labelInp tem  " + bsClass + "\" ";
                 }
                 else
                 {
-                    fldCss = " class=\"form-check-input h-30px w-40px opacity-100 tem custInpChk   " + bsClass + "\" ";
-                    fldHdnCss = " class=\"form-check-input h-30px w-40px opacity-100 tem  l custInpChk " + bsClass + "\" ";
+                    fldCss = " class=\"form-check-input h-40px w-40px tem custInpChk   " + bsClass + "\" ";
+                    fldHdnCss = " class=\"form-check-input h-40px w-40px tem  l custInpChk " + bsClass + "\" ";
                 }
 
             }
@@ -7954,13 +7695,12 @@ public class TStructDef
 
         if (IsGrid)
         {
-            fldCss += " min-h-25px h-30px";
             if (IsFillGridCall)
             {
                 if (fldCss.Contains("flddis"))
-                    memoHTML.Append("<textarea id=\"" + Name + "\" title=\"" + Fld.fieldHint + "\" name=\"" + Name + "\" " + fldCss + " data-style=\"" + bgColor + " \" data-type=\"textarea\" data-hidden=\"\" readonly");
+                    memoHTML.Append("<textarea  class=\"form-control w-100 border-0 overflow-hidden resize-none flddis\" maxlength=\"\" id=\"" + Name + "\" title=\"" + Fld.fieldHint + "\" name=\"" + Name + "\" " + fldCss + " data-style=\"height:28px;" + bgColor + " \" data-type=\"textarea\" data-hidden=\"\" readonly");
                 else
-                    memoHTML.Append("<textarea id=\"" + Name + "\" title=\"" + Fld.fieldHint + "\" name=\"" + Name + "\" " + fldCss + " data-style=\"" + bgColor + " \" data-type=\"textarea\" data-hidden=\"\" readonly");
+                    memoHTML.Append("<textarea  class=\"form-control w-100 border-0 overflow-hidden resize-none\" maxlength=\"\" id=\"" + Name + "\" title=\"" + Fld.fieldHint + "\" name=\"" + Name + "\" " + fldCss + " data-style=\"height:28px;" + bgColor + " \" data-type=\"textarea\" data-hidden=\"\" readonly");
 
                 memoHTML.Append(" >" + Fld.Value + "</textarea>");
             }
@@ -7973,7 +7713,7 @@ public class TStructDef
         }
         else
         {
-            memoHTML.Append("<textarea rows='1' id=\"" + Name + "\" title=\"" + Fld.fieldHint + "\" name=\"" + Name + "\" " + fldCss + " style=\"" + bgColor + ";\" ");
+            memoHTML.Append("<textarea rows='5' id=\"" + Name + "\" title=\"" + Fld.fieldHint + "\" name=\"" + Name + "\" " + fldCss + " style=\"" + bgColor + ";height:calc(100% - 35px) !important \" ");
             memoHTML.Append(" >" + Fld.Value + "</textarea>");
         }
 
@@ -8059,7 +7799,7 @@ public class TStructDef
             {
                 if (IsFillGridCall)
                 {
-                    inputHTML.Append("<textarea id=\"" + name + "\" name=\"" + name + "\" title=\"" + fld.fieldHint + "\" maxlength=\"" + fld.fldlength + "\" " + fldHdnCss + " data-style=\"" + bgColor + popRightPadding + " " + txtAlign + NumericCss + "\" style=\"" + txtAlign + "\" ");
+                    inputHTML.Append("<textarea id=\"" + name + "\" name=\"" + name + "\" title=\"" + fld.fieldHint + "\" maxlength=\"" + fld.fldlength + "\" " + fldHdnCss + " data-style=\"" + bgColor + popRightPadding + " " + txtAlign + NumericCss + "\" ");
                 }
                 else
                 {
@@ -8074,8 +7814,8 @@ public class TStructDef
                     }
                     else if (fld.name.ToLower().StartsWith("barqr_"))
                     {
+                        inputHTML.Append("<div class=\"divBarQrScan\"><span class=\"material-icons barQrIcon\">center_focus_weak</span></div>");
                         inputHTML.Append("<input id=\"" + name + "\" name=\"" + name + "\" title=\"" + fld.fieldHint + "\" value=\"" + fld.Value + "\" maxlength=\"" + fld.fldlength + "\" style=\"" + bgColor + popRightPadding + " " + txtAlign + NumericCss + "\" ");
-                        inputHTML.Append("<div class=\"divBarQrScan input-group-text p-2 cursor-pointer\"><span class=\"material-icons material-icons-style material-icons-1 barQrIcon\">center_focus_weak</span></div>");
                     }
                     else if (fld.name.ToLower().StartsWith("axp_weight_"))
                     {
@@ -8120,8 +7860,8 @@ public class TStructDef
                         }
                         else if (fld.name.ToLower().StartsWith("barqr_"))
                         {
+                            inputHTML.Append("<div class=\"divBarQrScan\"><span class=\"material-icons barQrIcon\">center_focus_weak</span></div>");
                             inputHTML.Append("<input id=\"" + name + "\" name=\"" + name + "\" title=\"" + fld.fieldHint + "\" value=\"" + fld.Value + "\" maxlength=\"" + fld.fldlength + "\" style=\"" + bgColor + popRightPadding + " " + txtAlign + NumericCss + "\" ");
-                            inputHTML.Append("<div class=\"divBarQrScan input-group-text p-2 cursor-pointer\"><span class=\"material-icons material-icons-style material-icons-1 barQrIcon\">center_focus_weak</span></div>");
                         }
                         else if (fld.name.ToLower().StartsWith("axp_weight_"))
                         {
@@ -8235,7 +7975,7 @@ public class TStructDef
             if (fld.name.ToLower().StartsWith("axpfile_") || fld.name.ToLower().StartsWith("axp_nga_"))
             {
                 inputHTML.Append("<input type=\"hidden\" id=\"" + name + "\" name=\"" + name + "\"  value=\"" + fld.Value + "\" maxlength=\"" + fld.fldlength + "\"  class=\"grdAttach handCur grdhandCur\" >");
-                inputHTML.Append("<div class=\"form-group form-control p-0\"><div id=\"dropzone_" + name + "\" name=\"" + name + "\" class=\"dropzone dropzone-queue min-h-1px border-0 px-3 py-2\"><div class=\"d-flex flex-row-auto dropzone-panel mb-lg-0 m-0\"><a class=\"dropzone-select fs-7 text-truncate me-1\"><span class=\"material-icons material-icons-style material-icons-2 float-start mx-2\">upload_file</span> Drop files here or click to upload</a><span class=\"material-icons material-icons-style material-icons-2 ms-auto pe-9 fileuploadmore d-none\" data-bs-toggle=\"popover\" data-bs-sanitize=\"false\" data-bs-placement=\"bottom\" data-bs-html=\"true\">more</span><a class=\"dropzone-remove-all btn btn-sm btn-light-primary d-none\">Remove All</a></div><div class=\"dropzone-items wm-200px d-none\"><div class=\"dropzone-item\" style=\"display: none\"><div class=\"dropzone-file overflow-hidden\"><div class=\"dropzone-filename\" title=\"some_image_file_name.jpg\"><span data-dz-name>some_image_file_name.jpg</span></div><div class=\"dropzone-error\" data-dz-errormessage></div></div><div class=\"dropzone-progress d-none\"><div class=\"progress\"><div class=\"progress-bar bg-primary\" role=\"progressbar\" aria-valuemin=\"0\" aria-valuemax=\"100\" aria-valuenow=\"0\" data-dz-uploadprogress></div></div></div><div class=\"dropzone-toolbar\"><span class=\"dropzone-delete\" data-dz-remove><span class=\"material-icons material-icons-style material-icons-2 float-end dropzoneItemDelete\">delete_outline</span></span></div></div></div></div></div>");
+                inputHTML.Append("<div class=\"form-group form-control p-0\"><div id=\"dropzone_" + name + "\" name=\"" + name + "\" class=\"dropzone dropzone-queue min-h-1px border-0 px-3 py-2\"><div class=\"d-flex flex-row-auto flex-center dropzone-panel mb-lg-0 m-0\"><a class=\"dropzone-select fs-7\"><span class=\"material-icons material-icons-style material-icons-2 float-start mx-2\">upload_file</span> Drop files here or click to upload</a><span class=\"material-icons material-icons-style material-icons-2 float-end ms-4 fileuploadmore d-none\" data-bs-toggle=\"popover\" data-bs-sanitize=\"false\" data-bs-placement=\"bottom\" data-bs-html=\"true\">more</span><a class=\"dropzone-remove-all btn btn-sm btn-light-primary d-none\">Remove All</a></div><div class=\"dropzone-items wm-200px d-none\"><div class=\"dropzone-item\" style=\"display: none\"><div class=\"dropzone-file\"><div class=\"dropzone-filename\" title=\"some_image_file_name.jpg\"><span data-dz-name>some_image_file_name.jpg</span></div><div class=\"dropzone-error\" data-dz-errormessage></div></div><div class=\"dropzone-progress d-none\"><div class=\"progress\"><div class=\"progress-bar bg-primary\" role=\"progressbar\" aria-valuemin=\"0\" aria-valuemax=\"100\" aria-valuenow=\"0\" data-dz-uploadprogress></div></div></div><div class=\"dropzone-toolbar\"><span class=\"dropzone-delete\" data-dz-remove><span class=\"material-icons material-icons-style material-icons-2 float-end dropzoneItemDelete\">clear</span></span></div></div></div></div></div>");
             }
             else
             {
@@ -8252,7 +7992,7 @@ public class TStructDef
                 // bar qr scan field
                 if (fld.name.ToLower().StartsWith("barqr_"))
                 {
-                    inputHTML.Append("<div class=\"divBarQrScan input-group-text p-2 cursor-pointer\"><span class=\"material-icons material-icons-style material-icons-1 barQrIcon\">center_focus_weak</span></div>");
+                    inputHTML.Append("<div class=\"divBarQrScan\"><span class=\"material-icons barQrIcon\">center_focus_weak</span></div>");
                 }
 
                 //if (fld.datatype.ToUpper() == "DATE/TIME" || fld.name.ToLower().StartsWith("axptm_") || fld.name.ToLower().StartsWith("axpdbtm_") || (fld.fldType != string.Empty && fld.fldType.ToLower() == "time"))
@@ -8334,8 +8074,8 @@ public class TStructDef
 
         }
 
-        //if (!string.IsNullOrEmpty(fld.fieldPurpose)) //murali
-        //    inputHTML.Append("<div  id=\"axPurpose" + fld.name + "\"  class=\"clsPrps\"><span class='help-block has-success'>" + fld.fieldPurpose + "</span></div>");
+        if (!string.IsNullOrEmpty(fld.fieldPurpose)) //murali
+            inputHTML.Append("<div  id=\"axPurpose" + fld.name + "\"  class=\"clsPrps\"><span class='help-block has-success'>" + fld.fieldPurpose + "</span></div>");
         if (fld.pwdchar != "")
             inputHTML.Append("<div class=\"pwdtoggle\"><i toggle=#" + name + " class=\"fa fa-fw fa-eye field-icon toggle-password\"></i></div>");
         return inputHTML.ToString();
@@ -8436,8 +8176,8 @@ public class TStructDef
             selectHTML.Append("</select>" + popImg);
         }
 
-        //if (!string.IsNullOrEmpty(fld.fieldPurpose)) //murali
-        //    selectHTML.Append("<div class=\"clsPrps\" id=\"axPurpose" + fld.name + "\" ><span class='help-block has-success'>" + fld.fieldPurpose + "</span></div>");
+        if (!string.IsNullOrEmpty(fld.fieldPurpose)) //murali
+            selectHTML.Append("<div class=\"clsPrps\" id=\"axPurpose" + fld.name + "\" ><span class='help-block has-success'>" + fld.fieldPurpose + "</span></div>");
         return selectHTML.ToString();
     }
 
@@ -8617,8 +8357,8 @@ public class TStructDef
             if (IsFillGridCall)
             {
                 fldReadOnly = "readonly";
-                fldHdnCss = " disabled readonly tabindex=\"-1\" class=\"w-100 border bg-transparent overflow-hidden resize-none labelInp combotem flddis Family \"";
-                fldCss = " disabled readonly tabindex=\"-1\" class=\"w-100 border bg-transparent overflow-hidden resize-none labelInp combotem flddis Family \"";
+                fldHdnCss = " disabled readonly tabindex=\"-1\" class=\"labelInp  tem pickdis inputClass2 pixelwidth form-select\"";
+                fldCss = " disabled readonly tabindex=\"-1\" class=\"labelInp  tem pickdis inputClass2 pixelwidth form-select\"";
             }
             else
             {
@@ -8631,8 +8371,8 @@ public class TStructDef
         {
             if (IsFillGridCall)
             {
-                fldHdnCss = "readonly tabindex=\"-1\" class=\"w-100 border bg-transparent overflow-hidden resize-none labelInp combotem Family \"";
-                fldCss = " readonly tabindex=\"-1\" class=\"w-100 border bg-transparent overflow-hidden resize-none labelInp combotem Family \"";
+                fldHdnCss = "readonly tabindex=\"-1\" class=\"labelInp  tem inputClass2 pixelwidth form-select\"";
+                fldCss = " readonly tabindex=\"-1\" class=\"labelInp  tem inputClass2 pixelwidth form-select\"";
             }
             else
             {
@@ -8823,19 +8563,11 @@ public class TStructDef
             chkLstHTML.Append("</div>");
         else
         {
-            string cklreadyOnly = "";
-            if (fld.freadonly)
-                cklreadyOnly = " disabled ";
             string[] selectedValuesArray = arrValues.ToArray(typeof(string)) as string[];
             if (fld.isFieldSql.ToLower() == "true")
-            {
-                string refreshChlist = "";
-                if (fld.refreshOnSave != "" && fld.refreshOnSave == "True")
-                    refreshChlist = " isrefreshsave ";
-                chkLstHTML.Append("<select class=\"form-select multiFldChk " + refreshChlist + "\" " + cklreadyOnly + " multiple data-control=\"select2\" id=\"" + name + "\" name=\"" + name + "\" data-placeholder=\"Select an option\" data-allow-clear=\"true\" data-valuelist=\"" + string.Join(separator.ToString(), listValues.Where(x => !string.IsNullOrEmpty(x)).ToArray()) + "\"  data-selectedlist=\"" + string.Join(separator.ToString(), selectedValuesArray.Where(x => !string.IsNullOrEmpty(x)).ToArray()) + "\"  data-separator=\"" + separator.ToString() + "\"></select>");
-            }
+                chkLstHTML.Append("<select class=\"form-select multiFldChk\" multiple data-control=\"select2\" id=\"" + name + "\" name=\"" + name + "\" data-placeholder=\"Select an option\" data-allow-clear=\"true\" data-valuelist=\"" + string.Join(separator.ToString(), listValues.Where(x => !string.IsNullOrEmpty(x)).ToArray()) + "\"  data-selectedlist=\"" + string.Join(separator.ToString(), selectedValuesArray.Where(x => !string.IsNullOrEmpty(x)).ToArray()) + "\"  data-separator=\"" + separator.ToString() + "\"></select>");
             else
-                chkLstHTML.Append("<select class=\"form-select multiFldChklist\" " + cklreadyOnly + " multiple data-control=\"select2\" id=\"" + name + "\" name=\"" + name + "\" data-placeholder=\"Select an option\" data-allow-clear=\"true\" data-valuelist=\"" + string.Join(separator.ToString(), listValues.Where(x => !string.IsNullOrEmpty(x)).ToArray()) + "\"  data-selectedlist=\"" + string.Join(separator.ToString(), selectedValuesArray.Where(x => !string.IsNullOrEmpty(x)).ToArray()) + "\"  data-separator=\"" + separator.ToString() + "\"></select>");
+                chkLstHTML.Append("<select class=\"form-select multiFldChklist\" multiple data-control=\"select2\" id=\"" + name + "\" name=\"" + name + "\" data-placeholder=\"Select an option\" data-allow-clear=\"true\" data-valuelist=\"" + string.Join(separator.ToString(), listValues.Where(x => !string.IsNullOrEmpty(x)).ToArray()) + "\"  data-selectedlist=\"" + string.Join(separator.ToString(), selectedValuesArray.Where(x => !string.IsNullOrEmpty(x)).ToArray()) + "\"  data-separator=\"" + separator.ToString() + "\"></select>");
             chkLstHTML.Append("");
         }
         return chkLstHTML.ToString();
@@ -8992,12 +8724,7 @@ public class TStructDef
                 if (IsFillGridCall)
                 {
                     //chkHTML.Append("<textarea data-type=\"checkbox\" id=\"" + Name + "\" title=\"" + Fld.fieldHint + "\" name=\"" + Name + "\" " + chk + " " + fldCss + " data-style=\"vertical-align:middle;\" data-hidden=\"" + fldMoeVal + "\">" + chk + "</textarea>");
-                    fldCss = fldCss.Replace(" gridchk ", " gridchk d-none ");
                     chkHTML.Append("<textarea data-type=\"checkbox\" id=\"" + Name + "\" title=\"" + Fld.fieldHint + "\" name=\"" + Name + "\" " + chk + " " + fldCss + " data-style=\"\" data-hidden=\"" + fldMoeVal + "\">" + chk + "</textarea>");
-                    chkHTML.Append("<div id=\"dvgrdchkbox" + Name + "\" class=\"form-check form-switch form-check-custom px-1 align-self-end py-2\"><input title=\"\" value=\"" + chk + "\" class=\"form-check-input opacity-100 Family h-30px w-50px dvgrdchkboxnonedit\" type=\"checkbox\"");
-                    if (chk != "" && (chk.ToLower() == "yes" || chk.ToLower() == "t"))
-                        chkHTML.Append(" checked=\"checked\" ");
-                    chkHTML.Append(" ></input></div>");
                 }
                 else
                 {
@@ -9012,29 +8739,23 @@ public class TStructDef
                     chkHTML.Append("<span class='" + checkBoxClass + "'>" + Fld.caption);
 
                     if (!string.IsNullOrEmpty(Fld.fieldPurpose))
-                        chkHTML.Append("<span><i tabindex=\"-1\" data-bs-trigger=\"hover\" class=\"icon-arrows-question material-icons material-icons-style material-icons-4 align-middle ms-2 cursor-pointer\" id=\"ico_cl\" data-bs-toggle=\"tooltip\" data-bs-placement=\"right\" data-bs-dismiss=\"click\" data-bs-original-title=\"" + Fld.fieldPurpose + "\">help_outline</i></span>");
+                        chkHTML.Append("<span><i tabindex=\"-1\" data-trigger=\"hover\" class=\"icon-arrows-question\" id=\"ico_cl\"  data-toggle=\"popover\"  data-content=\"" + Fld.fieldPurpose + " \" data-placement=\"right\"></i></span>");
                     chkHTML.Append("</span></label>");
                 }
             }
             else
             {
-                string ckreadyOnly = "";
-                if (Fld.freadonly)
-                    ckreadyOnly = "form-check-solid";
-                chkHTML.Append("<div class=\"form-check form-switch form-check-custom px-1 align-self-end--- " + ckreadyOnly + "\">");
+                chkHTML.Append("<div class=\"form-check form-check-custom form-check-solid px-1 align-self-end\">");
                 chkHTML.Append("<INPUT type=\"checkbox\" id=\"" + Name + "\" title=\"" + Fld.fieldHint + "\" style=\"" + bgColor + "\" name=\"" + Name + "\" " + chk + " " + fldCss + "/>");
-                string checkBoxClass = "form-check-label form-label col-form-label pb-1 fw-boldest opacity-100";// "checkBoxSpn customchkbox";
+                string checkBoxClass = "form-check-label form-label col-form-label";// "checkBoxSpn customchkbox";
                 if (Fld.allowempty)
                     checkBoxClass += " noempty";
                 if (string.IsNullOrEmpty(Fld.fieldPurpose))
                     checkBoxClass += " nopurpose";
                 //chkHTML.Append("<span class='" + checkBoxClass + "' style='" + bgColor + "' >" + Fld.caption);
-
-                // bool columnModeEnabled = axdesignJObject.dcLayout != null && axdesignJObject.dcLayout != "" && axdesignJObject.dcLayout != "default";
-
-                chkHTML.Append("<span class='" + checkBoxClass + " " + /*(!columnModeEnabled ? " d-none " : "")*/ " d-none " + " '>" + Fld.caption);
+                chkHTML.Append("<span class='" + checkBoxClass + "'>" + Fld.caption);
                 if (!string.IsNullOrEmpty(Fld.fieldPurpose))
-                    chkHTML.Append("<span><i tabindex=\"-1\" data-bs-trigger=\"hover\" class=\"icon-arrows-question material-icons material-icons-style material-icons-4 align-middle ms-2 cursor-pointer\" id=\"ico_cl\" data-bs-toggle=\"tooltip\" data-bs-placement=\"right\" data-bs-dismiss=\"click\" data-bs-original-title=\"" + Fld.fieldPurpose + "\">help_outline</i></span>");
+                    chkHTML.Append("<span><i tabindex=\"-1\" data-trigger=\"hover\" class=\"icon-arrows-question\" id=\"ico_cl\"  data-toggle=\"popover\"  data-content=\"" + Fld.fieldPurpose + " \" data-placement=\"right\"></i></span>");
                 chkHTML.Append("</span></div>");
             }
         }
@@ -9121,11 +8842,11 @@ public class TStructDef
             if (IsFillGridCall)
             {
                 if (!Name.ToLower().StartsWith("axpfile_"))
-                    grdAttHTML.Append("<textarea class=\"form-control w-100 border bg-transparent overflow-hidden resize-none labelInp \" style=\"display: none;\" maxlength=\"\" data-style=\"\" data-type=\"gridattach\" data-hidden=\"\"  id=\"" + Name + "\"  readonly=\"\">" + Fld.Value + "</textarea>");
+                    grdAttHTML.Append("<textarea class=\"form-control w-100 border-0 overflow-hidden resize-none \" maxlength=\"\" data-style=\"\" data-type=\"gridattach\" data-hidden=\"\"  id=\"" + Name + "\"  readonly=\"\">" + Fld.Value + "</textarea>");
                 else
-                    grdAttHTML.Append("<textarea class=\"axpAttach form-control w-100 border bg-transparent overflow-hidden resize-none labelInp \" style=\"display: none;\" maxlength=\"\" data-style=\"\" data-type=\"gridattach\" data-hidden=\"\"  id=\"" + Name + "\"  readonly=\"\">" + Fld.Value + "</textarea>");
+                    grdAttHTML.Append("<textarea class=\"axpAttach form-control w-100 border-0 overflow-hidden resize-none \" maxlength=\"\" data-style=\"\" data-type=\"gridattach\" data-hidden=\"\"  id=\"" + Name + "\"  readonly=\"\">" + Fld.Value + "</textarea>");
                 if (HttpContext.Current.Session["AxInlineGridEdit"] != null)
-                    grdAttHTML.Append("<div><input type=\"hidden\" id=\"" + Name + "\" tabindex=\"-1\" " + strClass + " value=\"" + Fld.Value + "\"></input>");
+                    grdAttHTML.Append("<input type=\"hidden\" id=\"" + Name + "\" tabindex=\"-1\" " + strClass + " value=\"" + Fld.Value + "\"></input>");
             }
             else
             {
@@ -9134,18 +8855,18 @@ public class TStructDef
             if (!IsFillGridCall)
             {
                 if (!Name.ToLower().StartsWith("axpfile_"))
-                    grdAttHTML.Append("<div class=\"form-group form-control p-0 grdattch\" id=\"" + divId + "\"><div id=\"dropzone_" + Name + "\" name=\"" + Name + "\" class=\"dropzone dropzone-queue min-h-1px border-0 px-3 py-2 dropzoneGrid\"><div class=\"d-flex flex-row-auto dropzone-panel mb-lg-0 m-0\"><a id=\"" + Name + "\" class=\"dropzone-select fs-7 text-truncate me-1 gridattach\"><span class=\"material-icons material-icons-style material-icons-2 float-start mx-2\">upload_file</span> Drop files here or click to upload</a><span class=\"material-icons material-icons-style material-icons-2 ms-auto pe-9 fileuploadmore d-none\" data-bs-toggle=\"popover\" data-bs-sanitize=\"false\" data-bs-placement=\"bottom\" data-bs-html=\"true\">more</span><a class=\"dropzone-remove-all btn btn-sm btn-light-primary d-none\">Remove All</a></div><div class=\"dropzone-items wm-200px d-none\"><div class=\"dropzone-item\" style=\"display: none\"><div class=\"dropzone-file overflow-hidden\"><div class=\"dropzone-filename\" title=\"some_image_file_name.jpg\"><span data-dz-name>some_image_file_name.jpg</span></div><div class=\"dropzone-error\" data-dz-errormessage></div></div><div class=\"dropzone-progress d-none\"><div class=\"progress\"><div class=\"progress-bar bg-primary\" role=\"progressbar\" aria-valuemin=\"0\" aria-valuemax=\"100\" aria-valuenow=\"0\" data-dz-uploadprogress></div></div></div><div class=\"dropzone-toolbar\"><span class=\"dropzone-delete\" data-dz-remove><span class=\"material-icons material-icons-style material-icons-2 float-end\">clear</span></span></div></div></div></div></div>");
+                    grdAttHTML.Append("<div id=\"" + divId + "\" class=\"grdattch\"><span id=\"" + imgId + "\" tabindex=\"0\" title=\"" + Fld.fieldHint + "\" class=\"fa fa-paperclip\" onclick=\"ShowGridAttachPopUp(this);\" " + strClass + " />");
                 else
                 {
-                    grdAttHTML.Append("<div class=\"form-group form-control p-0 grdattch\" id=\"" + divAxpFileId + "\"><div id=\"dropzone_" + Name + "\" name=\"" + Name + "\" class=\"dropzone dropzone-queue min-h-1px border-0 px-3 py-2\"><div class=\"d-flex flex-row-auto dropzone-panel mb-lg-0 m-0\"><a id=\"" + Name + "\" class=\"dropzone-select fs-7 text-truncate me-1 gridattach\"><span class=\"material-icons material-icons-style material-icons-2 float-start mx-2\">upload_file</span> Drop files here or click to upload</a><span class=\"material-icons material-icons-style material-icons-2 ms-auto pe-9 fileuploadmore d-none\" data-bs-toggle=\"popover\" data-bs-sanitize=\"false\" data-bs-placement=\"bottom\" data-bs-html=\"true\">more</span><a class=\"dropzone-remove-all btn btn-sm btn-light-primary d-none\">Remove All</a></div><div class=\"dropzone-items wm-200px d-none\"><div class=\"dropzone-item\" style=\"display: none\"><div class=\"dropzone-file overflow-hidden\"><div class=\"dropzone-filename\" title=\"some_image_file_name.jpg\"><span data-dz-name>some_image_file_name.jpg</span></div><div class=\"dropzone-error\" data-dz-errormessage></div></div><div class=\"dropzone-progress d-none\"><div class=\"progress\"><div class=\"progress-bar bg-primary\" role=\"progressbar\" aria-valuemin=\"0\" aria-valuemax=\"100\" aria-valuenow=\"0\" data-dz-uploadprogress></div></div></div><div class=\"dropzone-toolbar\"><span class=\"dropzone-delete\" data-dz-remove><span class=\"material-icons material-icons-style material-icons-2 float-end\">clear</span></span></div></div></div></div></div>");
+                    grdAttHTML.Append("<div class=\"form-group form-control p-0 grdattch\" id=\"" + divAxpFileId + "\"><div id=\"dropzone_" + Name + "\" name=\"" + Name + "\" class=\"dropzone dropzone-queue min-h-1px border-0 px-3 py-2\"><div class=\"d-flex flex-row-auto flex-center dropzone-panel mb-lg-0 m-0\"><a id=\"" + Name + "\" class=\"dropzone-select fs-7 gridattach\"><span class=\"material-icons material-icons-style material-icons-2 float-start mx-2\">upload_file</span> Drop files here or click to upload</a><span class=\"material-icons material-icons-style material-icons-2 float-end ms-4 fileuploadmore d-none\">more</span><a class=\"dropzone-remove-all btn btn-sm btn-light-primary d-none\">Remove All</a></div><div class=\"dropzone-items wm-200px d-none\"><div class=\"dropzone-item\" style=\"display: none\"><div class=\"dropzone-file\"><div class=\"dropzone-filename\" title=\"some_image_file_name.jpg\"><span data-dz-name>some_image_file_name.jpg</span></div><div class=\"dropzone-error\" data-dz-errormessage></div></div><div class=\"dropzone-progress d-none\"><div class=\"progress\"><div class=\"progress-bar bg-primary\" role=\"progressbar\" aria-valuemin=\"0\" aria-valuemax=\"100\" aria-valuenow=\"0\" data-dz-uploadprogress></div></div></div><div class=\"dropzone-toolbar\"><span class=\"dropzone-delete\" data-dz-remove><span class=\"material-icons material-icons-style material-icons-2 float-end\">clear</span></span></div></div></div></div></div>");
                 }
             }
             else if (IsFillGridCall && HttpContext.Current.Session["AxInlineGridEdit"] != null)
             {
                 if (!Name.ToLower().StartsWith("axpfile_"))
-                    grdAttHTML.Append("<div class=\"form-group form-control p-0 grdattch\" id=\"" + divId + "\"><div id=\"dropzone_" + Name + "\" name=\"" + Name + "\" class=\"dropzone dropzone-queue min-h-1px border-0 px-3 py-2 dropzoneGrid\"><div class=\"d-flex flex-row-auto dropzone-panel mb-lg-0 m-0\"><a id=\"" + Name + "\" class=\"dropzone-select fs-7 text-truncate me-1 gridattach\"><span class=\"material-icons material-icons-style material-icons-2 float-start mx-2\">upload_file</span> Drop files here or click to upload</a><span class=\"material-icons material-icons-style material-icons-2 ms-auto pe-9 fileuploadmore d-none\" data-bs-toggle=\"popover\" data-bs-sanitize=\"false\" data-bs-placement=\"bottom\" data-bs-html=\"true\">more</span><a class=\"dropzone-remove-all btn btn-sm btn-light-primary d-none\">Remove All</a></div><div class=\"dropzone-items wm-200px d-none\"><div class=\"dropzone-item\" style=\"display: none\"><div class=\"dropzone-file overflow-hidden\"><div class=\"dropzone-filename\" title=\"some_image_file_name.jpg\"><span data-dz-name>some_image_file_name.jpg</span></div><div class=\"dropzone-error\" data-dz-errormessage></div></div><div class=\"dropzone-progress d-none\"><div class=\"progress\"><div class=\"progress-bar bg-primary\" role=\"progressbar\" aria-valuemin=\"0\" aria-valuemax=\"100\" aria-valuenow=\"0\" data-dz-uploadprogress></div></div></div><div class=\"dropzone-toolbar\"><span class=\"dropzone-delete\" data-dz-remove><span class=\"material-icons material-icons-style material-icons-2 float-end\">clear</span></span></div></div></div></div></div>");
+                    grdAttHTML.Append("<div id=\"" + divId + "\" class=\"grdattch\"><span id=\"" + imgId + "\" tabindex=\"0\" title=\"" + Fld.fieldHint + "\" class=\"focus-input fa fa-paperclip upload-icon\" onclick=\"ShowGridAttachPopUp(this);\" " + strClass + " />");
                 else
-                    grdAttHTML.Append("<div class=\"form-group form-control p-0 grdattch\" id=\"" + divAxpFileId + "\"><div id=\"dropzone_" + Name + "\" name=\"" + Name + "\" class=\"dropzone dropzone-queue min-h-1px border-0 px-3 py-2\"><div class=\"d-flex flex-row-auto dropzone-panel mb-lg-0 m-0\"><a id=\"" + Name + "\" class=\"dropzone-select fs-7 text-truncate me-1 gridattach\"><span class=\"material-icons material-icons-style material-icons-2 float-start mx-2\">upload_file</span> Drop files here or click to upload</a><span class=\"material-icons material-icons-style material-icons-2 ms-auto pe-9 fileuploadmore d-none\" data-bs-toggle=\"popover\" data-bs-sanitize=\"false\" data-bs-placement=\"bottom\" data-bs-html=\"true\">more</span><a class=\"dropzone-remove-all btn btn-sm btn-light-primary d-none\">Remove All</a></div><div class=\"dropzone-items wm-200px d-none\"><div class=\"dropzone-item\" style=\"display: none\"><div class=\"dropzone-file overflow-hidden\"><div class=\"dropzone-filename\" title=\"some_image_file_name.jpg\"><span data-dz-name>some_image_file_name.jpg</span></div><div class=\"dropzone-error\" data-dz-errormessage></div></div><div class=\"dropzone-progress d-none\"><div class=\"progress\"><div class=\"progress-bar bg-primary\" role=\"progressbar\" aria-valuemin=\"0\" aria-valuemax=\"100\" aria-valuenow=\"0\" data-dz-uploadprogress></div></div></div><div class=\"dropzone-toolbar\"><span class=\"dropzone-delete\" data-dz-remove><span class=\"material-icons material-icons-style material-icons-2 float-end\">clear</span></span></div></div></div></div></div>");
+                    grdAttHTML.Append("<div id=\"" + divAxpFileId + "\" class=\"grdattch\"><span id=\"GridAxpFileAtt_" + Name + "\" tabindex=\"0\" title=\"" + Fld.fieldHint + "\" class=\"fa fa-paperclip\" onclick=\"ShowAxpFileAttachPopUp(this);\" " + strClass + " />");
             }
             if (hlnkSrc != string.Empty)
             {
@@ -9169,15 +8890,15 @@ public class TStructDef
                     }
                 }
             }
-            //else if (!Name.ToLower().StartsWith("axpfile_"))
-            //    grdAttHTML.Append("<a href=\"javascript:void(0)\" id=\"" + hlnkId + "\" tabindex=\"-1\" " + strClass + " >" + Fld.Value + "</a>");
-            ////else
-            ////    grdAttHTML.Append("<a href=\"javascript:void(0)\" id=\"" + axpFilehlnkId + "\" tabindex=\"-1\" " + strClass + " >" + Fld.Value + "</a>");
-            //if (!IsFillGridCall)
-            //{
-            //    if (!Name.ToLower().StartsWith("axpfile_"))
-            //        grdAttHTML.Append("</div>");
-            //}
+            else if (!Name.ToLower().StartsWith("axpfile_"))
+                grdAttHTML.Append("<a href=\"javascript:void(0)\" id=\"" + hlnkId + "\" tabindex=\"-1\" " + strClass + " >" + Fld.Value + "</a>");
+            //else
+            //    grdAttHTML.Append("<a href=\"javascript:void(0)\" id=\"" + axpFilehlnkId + "\" tabindex=\"-1\" " + strClass + " >" + Fld.Value + "</a>");
+            if (!IsFillGridCall)
+            {
+                if (!Name.ToLower().StartsWith("axpfile_"))
+                    grdAttHTML.Append("</div>");
+            }
             else if (IsFillGridCall && HttpContext.Current.Session["AxInlineGridEdit"] != null)
             {
                 string[] fldValues = new string[] { };
@@ -9193,7 +8914,7 @@ public class TStructDef
                     else
                         grdAttHTML.Append("<div id='axpFileAtt_hlnk_" + rowFrmNo + "attach' class='attach-files'>" + grdLinksInline + "</div>");
                 }
-                grdAttHTML.Append("</div></div>");
+                grdAttHTML.Append("</div>");
             }
 
         }
@@ -9301,35 +9022,20 @@ public class TStructDef
             //imgHTML.Append("<img id=\"" + Name + "\" title=\"" + Fld.fieldHint + "\" src=\"" + Fld.Value + "\" " + strClass + "  />");
             //imgHTML.Append("<INPUT type=\"hidden\" name=\"" + Name + "\" id=\"" + Name + "\" /></div>");
 
-            if (Name.ToLower().StartsWith("sig_"))
-            {
-                imgHTML.Append("<div class=\"input-group input-group-sm flex-root mb-2 pe-4 divImgBorder signaturePad\"><div class=\"image-input image-input-outline w-100 dvImgClear\" data-kt-image-input=\"false\">");
-                imgHTML.Append("<div class=\"shadow-sm w-100 h-100 imageFileUploadz d-flex\"><span class=\"material-icons material-icons-style material-icons-4x d-flex m-auto align-self-center cursor-pointer\">draw</span></div>");
-                imgHTML.Append("<img id=\"" + Name + "\" class=\"profile-pic image-input-wrapper signatureInput w-100 h-100 p-3 position-absolute top-50 start-50 translate-middle bgi-size-contain of-contain d-none\" src=\"\">");
-                imgHTML.Append("<input class=\"file-upload tstfldImagez d-none\" name=\"" + Name + "\" id=\"" + Name + "\" data-type=\"webImg\" type=\"file\" name=\"avatar\" accept=\"" + Constants.fileExtensionImage + "\">");
-                imgHTML.Append("<input type=\"hidden\" name=\"avatar_remove\">");
-                imgHTML.Append("<span class=\"delete-button d-flex btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow-sm mt-n4 ms-auto d-none\" data-kt-image-input-action=\"remove\" data-bs-toggle=\"tooltip\" data-bs-dismiss=\"click\" title=\"Remove avatar\">");
-                imgHTML.Append("<i id=\"del-" + Name + "\" onclick=\"ClearImageSrc(this);\" class=\"shadow-sm  w-25px h-25px bg-white btn btn-icon btn-circle btn-active-color-primary material-icons material-icons-style\">delete</i>");
-                imgHTML.Append("</span>");
-                imgHTML.Append("</div></div>");
-            }
-            else
-            {
-                imgHTML.Append("<div class=\"input-group input-group-sm flex-root mb-2 pe-4 divImgBorder\"><div class=\"image-input image-input-outline w-100 dvImgClear\" data-kt-image-input=\"true\" style=\"background-image: url(/assets/media/avatars/blank.png)\">");
-                imgHTML.Append("<div class=\"shadow-sm w-100 h-100 imageFileUpload d-flex\"><span class=\"material-icons material-icons-style material-icons-4x d-flex m-auto align-self-center cursor-pointer\">file_upload</span></div>");
-                imgHTML.Append("<img id=\"" + Name + "\" class=\"profile-pic image-input-wrapper w-100 h-100 p-3 position-absolute top-50 start-50 translate-middle bgi-size-contain of-contain d-none\" src=\"\">");
-                imgHTML.Append("<span class=\"shadow-sm w-25px h-25px bg-white btn btn-icon btn-circle btn-active-color-primary material-icons material-icons-style position-absolute top-0 end-0 mt-n4 p-4 me-5 fldImageCamera\">photo_camera</span>");
-                imgHTML.Append("<label class=\"upload-button btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow-sm\" data-kt-image-input-action=\"change\" data-bs-toggle=\"tooltip\" data-bs-dismiss=\"click\" title=\"Change avatar\">");
-                imgHTML.Append("<i class=\"shadow-sm w-25px h-25px bg-white btn btn-icon btn-circle btn-active-color-primary material-icons material-icons-style\">edit</i>");
-                imgHTML.Append("<input class=\"file-upload tstfldImage d-none\" name=\"" + Name + "\" id=\"" + Name + "\" data-type=\"webImg\" type=\"file\" name=\"avatar\" accept=\"" + Constants.fileExtensionImage + "\">");
-                imgHTML.Append("<input type=\"hidden\" name=\"avatar_remove\">");
-                imgHTML.Append("</label>");
-                imgHTML.Append("<span class=\"delete-button d-flex btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow-sm mt-n4 d-none\" data-kt-image-input-action=\"remove\" data-bs-toggle=\"tooltip\" data-bs-dismiss=\"click\" title=\"Remove avatar\">");
-                imgHTML.Append("<i id=\"del-" + Name + "\" onclick=\"ClearImageSrc(this);\" class=\"shadow-sm  w-25px h-25px bg-white btn btn-icon btn-circle btn-active-color-primary material-icons material-icons-style\">delete</i>");
-                imgHTML.Append("</span>");
-                imgHTML.Append("</div></div>");
-                //imgHTML.Append("</div>");
-            }
+            imgHTML.Append("<div class=\"input-group input-group-sm flex-root mb-2 pe-4\"><div class=\"image-input image-input-outline w-100\" data-kt-image-input=\"true\" style=\"background-image: url(/assets/media/avatars/blank.png)\">");
+            imgHTML.Append("<div class=\"shadow-sm w-100 h-100 imageFileUpload d-flex\"><span class=\"material-icons material-icons-style material-icons-4x d-flex m-auto align-self-center cursor-pointer\">file_upload</span></div>");
+            imgHTML.Append("<img id=\"" + Name + "\" class=\"profile-pic image-input-wrapper w-100 h-100 p-3 position-absolute top-50 start-50 translate-middle bgi-size-contain of-contain d-none\" src=\"\">");
+            imgHTML.Append("<span class=\"shadow-sm w-25px h-25px bg-white btn btn-icon btn-circle btn-active-color-primary material-icons material-icons-style position-absolute top-0 end-0 mt-n4 p-4 me-5 fldImageCamera\">photo_camera</span>");
+            imgHTML.Append("<label class=\"upload-button btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow-sm\" data-kt-image-input-action=\"change\" data-bs-toggle=\"tooltip\" data-bs-dismiss=\"click\" title=\"Change avatar\">");
+            imgHTML.Append("<i class=\"shadow-sm w-25px h-25px bg-white btn btn-icon btn-circle btn-active-color-primary material-icons material-icons-style\">edit</i>");
+            imgHTML.Append("<input class=\"file-upload tstfldImage d-none\" name=\"" + Name + "\" id=\"" + Name + "\" data-type=\"webImg\" type=\"file\" name=\"avatar\" accept=\"" + Constants.fileExtensionImage + "\">");
+            imgHTML.Append("<input type=\"hidden\" name=\"avatar_remove\">");
+            imgHTML.Append("</label>");
+            imgHTML.Append("<span class=\"delete-button d-flex btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-white shadow-sm mt-n4 d-none\" data-kt-image-input-action=\"remove\" data-bs-toggle=\"tooltip\" data-bs-dismiss=\"click\" title=\"Remove avatar\">");
+            imgHTML.Append("<i id=\"del-" + Name + "\" onclick=\"ClearImageSrc(this);\" class=\"shadow-sm  w-25px h-25px bg-white btn btn-icon btn-circle btn-active-color-primary material-icons material-icons-style\">delete</i>");
+            imgHTML.Append("</span>");
+            imgHTML.Append("</div></div>");
+            //imgHTML.Append("</div>");
         }
 
         return imgHTML.ToString();
@@ -9345,7 +9051,7 @@ public class TStructDef
             btnHTML.Append("<a href=\"javascript:void(0)\" class=\"Grdlnk axpBtn\" id=\"" + name + "\" >" + field.caption + "</a>");
             if (IsFillGridCall)
             {
-                btnHTML.Append("<textarea tabindex=\"-1\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  Grdlnk axpBtn\" maxlength=\"\"  data-style=\"\" data-type=\"axpBtn\" data-hidden=\"\" id=\"txt_axpBtn_" + name + "\" style=\"display: none;\"  readonly>" + field.caption + "</textarea>");
+                btnHTML.Append("<textarea tabindex=\"-1\" class=\"form-control w-100 border-0 overflow-hidden resize-none Grdlnk axpBtn\" maxlength=\"\"  data-style=\"\" data-type=\"axpBtn\" data-hidden=\"\" id=\"txt_axpBtn_" + name + "\" style=\"display: none;\"  readonly>" + field.caption + "</textarea>");
             }
         }
         else
@@ -9369,24 +9075,21 @@ public class TStructDef
 
             if (dcNo == dcStr.frameno.ToString())
             {
-                string dcBoolean = string.Empty;
-                if (dcStr.DcDefaultstate != "" && dcStr.DcDefaultstate.ToLower() == "collapse")
-                    dcBoolean = " d-none ";
                 bool addBtn = dcStr.isallowaddrows;
-                buttonsHtml.Append("<div class=\"d-flex align-items-center flex-nowrap text-nowrap mb-1 gridIconBtns " + dcBoolean + "\">");
+                buttonsHtml.Append("<div class=\"d-flex align-items-center flex-nowrap text-nowrap mb-1 gridIconBtns\">");
 
                 if (dcStr.isallowaddrows)
-                    buttonsHtml.Append("<a class=\"btn btn-sm btn-icon btn-white btn-color-gray-600 btn-active-primary me-2 shadow-sm\" id=\"gridAddBtn" + dcNo + "\" onclick=\"editTheRow(''," + dcNo + ",'',event)\" title=\"Add Row\"><span class=\"material-icons material-icons-style material-icons-3\">add</span></a>");
+                    buttonsHtml.Append("<a class=\"btn btn-sm btn-icon btn-white btn-color-gray-500 btn-active-primary me-2 shadow-sm\" id=\"gridAddBtn" + dcNo + "\" onclick=\"editTheRow(''," + dcNo + ",'',event)\" title=\"Add Row\"><span class=\"material-icons material-icons-style material-icons-3\">add</span></a>");
 
                 if (dcStr.isallowdeletrows)
-                    buttonsHtml.Append("<a href=\"javascript:void(0)\" id='clearThisDC" + dcNo + "' onclick=\"javascript:clearDataGrid('" + dcNo + "');\" class=\"btn btn-sm btn-icon btn-white btn-color-gray-600 btn-active-primary me-2 shadow-sm disabled\" title=\"Clear Data\"><span class=\"material-icons material-icons-style material-icons-3\">delete_outline</span></a>");
+                    buttonsHtml.Append("<a href=\"javascript:void(0)\" id='clearThisDC" + dcNo + "' onclick=\"javascript:clearDataGrid('" + dcNo + "');\" class=\"btn btn-sm btn-icon btn-white btn-color-gray-500 btn-active-primary me-2 shadow-sm disabled\" title=\"Clear Data\"><span class=\"material-icons material-icons-style material-icons-3\">delete_outline</span></a>");
 
                 if (isMobile)
-                    buttonsHtml.Append("<a href=\"javascript:void(0)\" id='viewGrid" + dcNo + "' onclick=\"javascript:viewGridPopUp('" + dcNo + "');\" class=\"btn btn-sm btn-icon btn-white btn-color-gray-600 btn-active-primary me-2 shadow-sm lblViewGrid\" title=\"View Grid\"><span class=\"material-icons material-icons-style material-icons-3\">table_rows</span></a>");
+                    buttonsHtml.Append("<li class=\"cardStyle\" id='viewGrid" + dcNo + "' onclick=\"javascript:viewGridPopUp('" + dcNo + "');\"><a href=\"javascript:void(0)\" class=\"lblViewGrid\" title=\"View Grid\">Grid View</a></li>");
 
-                buttonsHtml.Append("<a href=\"javascript:void(0)\" id='exportGridToExcel" + dcNo + "' onclick=\"javascript:exportGridToExcel('" + dcNo + "');\" class=\"btn btn-sm btn-icon btn-white btn-color-gray-600 btn-active-primary me-2 shadow-sm\" title=\"Send to Excel\"><span class=\"material-icons material-icons-style material-icons-3\">table_chart</span></a>");
+                buttonsHtml.Append("<a href=\"javascript:void(0)\" id='exportGridToExcel" + dcNo + "' onclick=\"javascript:exportGridToExcel('" + dcNo + "');\" class=\"btn btn-sm btn-icon btn-white btn-color-gray-500 btn-active-primary me-2 shadow-sm\" title=\"Send to Excel\"><span class=\"material-icons material-icons-style material-icons-3\">table_chart</span></a>");
 
-                buttonsHtml.Append("<a href=\"javascript:void(0)\" id='ExcelGridimport" + dcNo + "' onclick=\"javascript:importExceltoGrid('" + dcNo + "');\" class=\"btn btn-sm btn-icon btn-white btn-color-gray-600 btn-active-primary me-2 shadow-sm\" title=\"Import Data from Excel to Grid\"><span class=\"material-icons material-icons-style material-icons-3\">table_view</span></a>");
+                buttonsHtml.Append("<a href=\"javascript:void(0)\" id='ExcelGridimport" + dcNo + "' onclick=\"javascript:importExceltoGrid('" + dcNo + "');\" class=\"btn btn-sm btn-icon btn-white btn-color-gray-500 btn-active-primary me-2 shadow-sm\" title=\"Import Data from Excel to Grid\"><span class=\"material-icons material-icons-style material-icons-3\">table_view</span></a>");
 
                 ArrayList dcFsg = new ArrayList(fgs.Cast<FGStruct>().Where(f => f.fgtargetdc == ("dc" + dcNo)).ToList());
 
@@ -9400,13 +9103,13 @@ public class TStructDef
                     else
                         strOnClk = "onclick =\"javascript:FillGrid('" + dcNo + "','','" + fg.fgName + "');\"";
                     string fgCapt = fg.fgcaption == string.Empty ? fg.fgName : fg.fgcaption;
-                    buttonsHtml.Append("<a href=\"javascript:void(0)\" " + strOnClk + " class=\"btn btn-sm btn-icon btn-white btn-color-gray-600 btn-active-primary me-2 shadow-sm\" id=\"fillgrid" + dcNo + "\" name=\"" + fg.fgName + "\" title=\"" + fgCapt + "\"><span class=\"material-icons material-icons-style material-icons-3\">view_module</span></a>");
+                    buttonsHtml.Append("<a href=\"javascript:void(0)\" " + strOnClk + " class=\"btn btn-sm btn-icon btn-white btn-color-gray-500 btn-active-primary me-2 shadow-sm\" id=\"fillgrid" + dcNo + "\" name=\"" + fg.fgName + "\" title=\"" + fgCapt + "\"><span class=\"material-icons material-icons-style material-icons-3\">view_module</span></a>");
                 }
                 else if (dcFsg.Count > 1)
                 {
                     int frameNo = Convert.ToInt32(dcNo);
                     int cnt = 0;
-                    buttonsHtml.Append("<div class=\"dropdown btn btn-sm btn-icon btn-white btn-color-gray-600 btn-active-primary me-2 shadow-sm\"><a id=\"fillgridList\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\" title=\"Fill Grid List\"><span class='material-icons material-icons-style material-icons-3'>import_export</span></a><ul class=\"dropdown-menu\" aria-labelledby=\"fillgridList\">");
+                    buttonsHtml.Append("<div class=\"dropdown btn btn-sm btn-icon btn-white btn-color-gray-500 btn-active-primary me-2 shadow-sm\"><a id=\"fillgridList\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\" title=\"Fill Grid List\">" + (isMobile ? "Fill Grid List (" + dcStr.caption.ToString() + ")" : "<span class='material-icons material-icons-style material-icons-3'>import_export</span>") + "</a><ul class=\"dropdown-menu\" aria-labelledby=\"fillgridList\">");
                     for (cnt = 0; cnt <= dcFsg.Count - 1; cnt++)
                     {
                         FGStruct fg = ((FGStruct)dcFsg[cnt]);
@@ -9443,7 +9146,7 @@ public class TStructDef
     private string GetFastAutoComHTML(FieldStruct fld, bool isGrid, string name, string fldReadOnly, string bgColor, bool isPicklist)
     {
         StringBuilder fastdataHTML = new StringBuilder();
-        if (fld.fldMultiSelect != null && fld.fldMultiSelect != string.Empty)
+        if (fld.fldMultiSelect != null)
         {
             fldCss = fldCss.Replace("form-control", "form-control fldmultiSelect");
             if (fld.refreshOnSave != "" && fld.refreshOnSave == "True")
@@ -9539,7 +9242,7 @@ public class TStructDef
                         labelHtml.Append("<label class=\"gridstackCalc formLabel\" for=\"" + frLblVal.name.Replace(" ", "") + "\" data-id=\"" + frLblVal.id + "\" style=\"" + frLblVal.fontFamilly + "\"></label>");
 
                         if (frLblVal.hyperlinkJson != "")
-                            labelHtml.Append("<a href=\"javascript:void(0)\" class=\"cursor-pointer\" style=\"" + frLblVal.fontFamilly + "\" id=\"" + frLblVal.id + "\" onclick='javascript:TstructLabelhyperlink(this);' data-param='" + frLblVal.hyperlinkJson + "'>" + frLblVal.name + "</a></div>");
+                            labelHtml.Append("<a href=\"javascript:void(0)\" class=\"handCur\" style=\"" + frLblVal.fontFamilly + "\" id=\"" + frLblVal.id + "\" onclick='javascript:TstructLabelhyperlink(this);' data-param='" + frLblVal.hyperlinkJson + "'>" + frLblVal.name + "</a></div>");
                         else
                             labelHtml.Append("<font style=\"" + style + frLblVal.fontFamilly + "\" class=\"\">" + frLblVal.name + "</font></div>");
                         if (colFldWidth != "")
@@ -9638,11 +9341,11 @@ public class TStructDef
                         {
                             if (((DcStruct)(dcs[dcNo - 1])).DCHasDataRows)
                             {
-                                dcRowone = "<tr  id=sp" + dcNo + "R" + rowNo + "F" + dcNo + " ><td class=\"text-center\"><span class=\"tem1\"><div class=\"form-check form-check-sm form-check-custom ms-2\"><input class=\"form-check-input border-gray-500 fgChk gridRowChk opacity-100\" type=\"checkbox\" name=\"grdchkItemTd" + dcNo + "\" id=\"grdchkItemTd" + rowNo + "F" + dcNo + "\" onclick=\"javascript:CheckboxGridRow(this," + dcNo + "," + rowNo + ",event);\"></span></div></td><td class='" + rowSrNoClass + " d-none'></td><td class='gridElement " + rowSrNoClass + "'><label id=\"lblSlNo" + rowNo + "F" + dcNo + "\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  slno\">" + serialNo.ToString() + "</label></td>" + rowHTML + "</tr>";
+                                dcRowone = "<tr  id=sp" + dcNo + "R" + rowNo + "F" + dcNo + " ><td class=\"text-center\"><span class=\"tem1\"><div class=\"form-check form-check-sm form-check-custom form-check-solid ms-2\"><input class=\"form-check-input fgChk gridRowChk\" type=\"checkbox\" name=\"chkItem" + dcNo + "\" id=\"chkItem" + rowNo + "F" + dcNo + "\" onclick=\"javascript:CheckboxGridRow(this," + dcNo + "," + rowNo + ",event);\"></span></div></td><td class='" + rowSrNoClass + " d-none'></td><td class='gridElement " + rowSrNoClass + "'><label id=\"lblSlNo" + rowNo + "F" + dcNo + "\" class=\"form-control w-100 border-0 overflow-hidden resize-none slno\">" + serialNo.ToString() + "</label></td>" + rowHTML + "</tr>";
                             }
                             if (i == rowCnt)
                             {
-                                fillGriddcRowone = "<div  id=sp" + dcNo + "R" + rowNo + "F" + dcNo + " class=\"editWrapTr grid-stack\"><div class='gridElement gridtdclass d-none'><label id=\"lblSlNo" + rowNo + "F" + dcNo + "\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  slno\">" + serialNo.ToString() + "</label></div>" + fillGridRowHTML + "</div>";
+                                fillGriddcRowone = "<div  id=sp" + dcNo + "R" + rowNo + "F" + dcNo + " class=\"editWrapTr grid-stack\"><div class='gridElement gridtdclass d-none'><label id=\"lblSlNo" + rowNo + "F" + dcNo + "\" class=\"form-control w-100 border-0 overflow-hidden resize-none slno\">" + serialNo.ToString() + "</label></div>" + fillGridRowHTML + "</div>";
                             }
                         }
                         else
@@ -9650,12 +9353,12 @@ public class TStructDef
                             //delete grid row
                             if (((DcStruct)(dcs[dcNo - 1])).DCHasDataRows)
                             {
-                                dcRowone = "<tr  id=sp" + dcNo + "R" + rowNo + "F" + dcNo + " ><td class=\"text-center\"><span class=\"tem1\"><div class=\"form-check form-check-sm form-check-custom ms-2\"><input class=\"form-check-input border-gray-500 fgChk gridRowChk opacity-100\" type=\"checkbox\" name=\"grdchkItemTd" + dcNo + "\" id=\"grdchkItemTd" + rowNo + "F" + dcNo + "\" onclick=\"javascript:CheckboxGridRow(this," + dcNo + "," + rowNo + ",event);\"></span></div></td><td class='gridElement " + rowSrNoClass + "'><label id=\"lblSlNo" + rowNo + "F" + dcNo + "\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  slno\">" + serialNo.ToString() + "</label></td>" + rowHTML + "</tr>";
+                                dcRowone = "<tr  id=sp" + dcNo + "R" + rowNo + "F" + dcNo + " ><td class=\"text-center\"><span class=\"tem1\"><div class=\"form-check form-check-sm form-check-custom form-check-solid ms-2\"><input class=\"form-check-input fgChk gridRowChk\" type=\"checkbox\" name=\"chkItem" + dcNo + "\" id=\"chkItem" + rowNo + "F" + dcNo + "\" onclick=\"javascript:CheckboxGridRow(this," + dcNo + "," + rowNo + ",event);\"></span></div></td><td class='gridElement " + rowSrNoClass + "'><label id=\"lblSlNo" + rowNo + "F" + dcNo + "\" class=\"form-control w-100 border-0 overflow-hidden resize-none slno\">" + serialNo.ToString() + "</label></td>" + rowHTML + "</tr>";
                             }
                             if (i == rowCnt)
                             {
                                 //fillGriddcRowone = "<div  id=sp" + dcNo + "R" + rowNo + "F" + dcNo + " class=\"editWrapTr grid-stack\"><div class='gridtdclass d-none'><a href=\"javascript:void(0)\" id=\"del" + rowNo + "F" + dcNo + "\" class=\"rowdelete\" title=\"Delete row\"><img src=\"../axpimages/icons/16x16/delete-fade.png\" title=\"Delete Row\" alt=\"Delete row\" /></a></div><div class='gridElement gridtdclass d-none'><label id=\"lblSlNo" + rowNo + "F" + dcNo + "\" class=\"slno\">" + serialNo.ToString() + "</label></div>" + fillGridRowHTML + "</div>";
-                                fillGriddcRowone = "<div  id=sp" + dcNo + "R" + rowNo + "F" + dcNo + " class=\"editWrapTr grid-stack\"><div class='gridElement gridtdclass d-none'><label id=\"lblSlNo" + rowNo + "F" + dcNo + "\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  slno\">" + serialNo.ToString() + "</label></div>" + fillGridRowHTML + "</div>";
+                                fillGriddcRowone = "<div  id=sp" + dcNo + "R" + rowNo + "F" + dcNo + " class=\"editWrapTr grid-stack\"><div class='gridElement gridtdclass d-none'><label id=\"lblSlNo" + rowNo + "F" + dcNo + "\" class=\"form-control w-100 border-0 overflow-hidden resize-none slno\">" + serialNo.ToString() + "</label></div>" + fillGridRowHTML + "</div>";
                             }
                         }
                     }
@@ -9663,12 +9366,12 @@ public class TStructDef
                     {
                         if (((DcStruct)(dcs[dcNo - 1])).isallowdeletrows.ToString().ToLower() == "false")
                         {
-                            dcRowone = "<div  id=sp" + dcNo + "R" + rowNo + "F" + dcNo + " class=\"editWrapTr grid-stack\"><div class='gridElement " + rowSrNoClass + "'><label id=\"lblSlNo" + rowNo + "F" + dcNo + "\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  slno\">" + serialNo.ToString() + "</label></div>" + rowHTML + "</div>";
+                            dcRowone = "<div  id=sp" + dcNo + "R" + rowNo + "F" + dcNo + " class=\"editWrapTr grid-stack\"><div class='gridElement " + rowSrNoClass + "'><label id=\"lblSlNo" + rowNo + "F" + dcNo + "\" class=\"form-control w-100 border-0 overflow-hidden resize-none slno\">" + serialNo.ToString() + "</label></div>" + rowHTML + "</div>";
                         }
                         else
                         {
                             //delete grid row
-                            dcRowone = "<div  id=sp" + dcNo + "R" + rowNo + "F" + dcNo + " class=\"editWrapTr grid-stack\"><div class='gridElement " + rowSrNoClass + "''><label id=\"lblSlNo" + rowNo + "F" + dcNo + "\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  slno\">" + serialNo.ToString() + "</label></div>" + rowHTML + "</div>";
+                            dcRowone = "<div  id=sp" + dcNo + "R" + rowNo + "F" + dcNo + " class=\"editWrapTr grid-stack\"><div class='gridElement " + rowSrNoClass + "''><label id=\"lblSlNo" + rowNo + "F" + dcNo + "\" class=\"form-control w-100 border-0 overflow-hidden resize-none slno\">" + serialNo.ToString() + "</label></div>" + rowHTML + "</div>";
                         }
                     }
                 }
@@ -9826,7 +9529,7 @@ public class TStructDef
             fcwidth = fcwidth / 10;
             colFldCaption = "col-sm-" + fcwidth + "";
             fcwidth = 12 - fcwidth;
-            colFldWidth = "<div class=\"input-group col-sm-" + fcwidth + "\">";
+            colFldWidth = "<div class=\"col-sm-" + fcwidth + "\">";
             colFldGridStackItem = " colFldGridStackWidth ";
             colDivInputPadding = " colDivInputPadding ";
         }
@@ -10064,29 +9767,27 @@ public class TStructDef
                 {
                     if (name.StartsWith("axp_recid") && fld.Value == "")
                         fld.Value = "0";
-                    string cssAutoGen = string.Empty;
-                    if (fld.moe == "AutoGenerate")
-                        cssAutoGen = "class=\"autogen\"";
-                    if (name.StartsWith("axp_recid"))
+
+                    if (isGrid)
                     {
-                        fieldHtml.Append("<div class=\"gridElement d-none form-group\" id=\"dvGrid" + fld.name.Replace(" ", "") + "\"><div class=\"fldhdn" + i + "\"><INPUT id=\"" + name + "\" type=\"hidden\" value=\"0\" name=\"" + name + "\" value=\"" + fld.Value + "\" /></div></div>");
-                        if (isGrid)
-                            gridHiddenHtml.Append("<div class=\" grid-stack-item form-group\"><div class=\"fldhdn" + i + "\"><INPUT id=\"" + hiddenName + "\" type=hidden value=0 name=\"" + hiddenName + "\" /></div></div>");
+                        string afpcss = string.Empty;
+                        if (fld.name.ToLower().StartsWith("axpfilepath_"))
+                        {
+                            var endPart = name.Substring(12);
+                            afpcss = "class=\"axpFilePath_" + endPart + " axpFilePathFld\"";
+                        }
+                        fieldHtml.Append("<div class=\" grid-stack-item form-group\" id=\"dvGrid" + fld.name.Replace(" ", "") + "\" style=\"display:none;\"><label>" + fld.caption + "</label><div style=\"display:none;\"><INPUT style=height:0px;width:0px; id=\"" + name + "\" type=\"hidden\" name=\"" + name + "\" value=\"" + fld.Value + "\" " + afpcss + "/></div></div>");
+                        gridHeadHtml.Append("<th style=\"display:none;\" id=\"th-" + fld.name + "\"><div id=\"th-" + fld.name + "-sizer\"></div><div class='thhead'></div></th>");
                     }
                     else
                     {
-                        if (fld.name.ToLower().StartsWith("axpfilepath_") && cssAutoGen == "")
+                        if (fld.name.ToLower().StartsWith("axpfilepath_"))
                         {
                             var endPart = name.Substring(12);
-                            cssAutoGen = "class=\"axpFilePath_" + endPart + " axpFilePathFld \"";
+                            fieldHtml.Append("<div class=\"d-none\"><INPUT id=\"" + name + "\" type=\"hidden\" name=\"" + name + "\" value=\"" + fld.Value + "\" class=\"axpFilePath_" + endPart + " axpFilePathFld\"/></div>");
                         }
-                        if (fld.moe == "Select")
-                            fieldHtml.Append("<div class=\"gridElement form-group d-none\" id=\"dvGrid" + fld.name.Replace(" ", "") + "\"><div class=\"fldhdn" + i + "\"><INPUT id=\"" + name + "\" type=\"hidden\" name=\"" + name + "\" " + cssAutoGen + " value=\"" + fld.Value + "\" data-val=\"" + fld.moeval + "\"/></div></div>");
                         else
-                            fieldHtml.Append("<div class=\"gridElement form-group d-none\" id=\"dvGrid" + fld.name.Replace(" ", "") + "\"><div class=\"fldhdn" + i + "\"><INPUT id=\"" + name + "\" type=\"hidden\" name=\"" + name + "\" " + cssAutoGen + " value=\"" + fld.Value + "\" /></div></div>");
-                        if (isGrid)
-                            gridHiddenHtml.Append("<div class=\" grid-stack-item form-group\"><div class=\"fldhdn" + i + "\"><INPUT id=\"" + hiddenName + "\" type=\"hidden\" name=\"" + hiddenName + "\" " + cssAutoGen + " /></div></div>");
-
+                            fieldHtml.Append("<div class=\"d-none\"><INPUT id=\"" + name + "\" type=\"hidden\" name=\"" + name + "\" value=\"" + fld.Value + "\" /></div>");
                     }
                 }
                 else
@@ -10153,16 +9854,16 @@ public class TStructDef
                         colCount++;
                         if (fld.caption.Contains("~"))
                         {
-                            gridHeadHtml.Append("<th id=\"th-" + fld.name + "\" style=\"width:" + fdwidth + "px;\" class=\"wordBreak fw-boldest\"><div id=\"th-" + fld.name + "-sizer\"></div><div class='thhead " + allowemptycss + "'>");
+                            gridHeadHtml.Append("<th id=\"th-" + fld.name + "\" style=\"width:" + fdwidth + "px;\" class=\"wordBreak\"><div id=\"th-" + fld.name + "-sizer\"></div><div class='thhead " + allowemptycss + "'>");
                         }
                         else
                         {
-                            gridHeadHtml.Append("<th id=\"th-" + fld.name + "\" style=\"width:" + fdwidth + "px;\" class=\"fw-boldest\"><div id=\"th-" + fld.name + "-sizer\"></div><div class='thhead " + allowemptycss + "'>");
+                            gridHeadHtml.Append("<th id=\"th-" + fld.name + "\" style=\"width:" + fdwidth + "px;\" ><div id=\"th-" + fld.name + "-sizer\"></div><div class='thhead " + allowemptycss + "'>");
                         }
 
                         if (isHyper)
                         {
-                            gridHeadHtml.Append("<a href=\"javascript:void(0)\" class=\"cursor-pointer\" id=\"" + ((HLinkStruct)(hlnks[n])).hlsource.ToString() + "\" onclick='javascript:Tstructhyperlink(this);'>");
+                            gridHeadHtml.Append("<a href=\"javascript:void(0)\" class=\"handCur\" id=\"" + ((HLinkStruct)(hlnks[n])).hlsource.ToString() + "\" onclick='javascript:Tstructhyperlink(this);'>");
                         }
                         if (fldNAME.IndexOf("AXPBUTTON") == -1)
                         {
@@ -10181,7 +9882,7 @@ public class TStructDef
                         //    gridHeadHtml.Append("<span class=\"allowempty\">*</span>");
 
                         if (!string.IsNullOrEmpty(fld.fieldPurpose))
-                            gridHeadHtml.Append("<span><i tabindex=\"-1\" data-bs-trigger=\"hover\" class=\"icon-arrows-question material-icons material-icons-style material-icons-4 align-middle ms-2 cursor-pointer\" id=\"ico_cl\" data-bs-toggle=\"tooltip\" data-bs-placement=\"right\" data-bs-dismiss=\"click\" data-bs-original-title=\"" + fld.fieldPurpose + "\">help_outline</i></span>");
+                            gridHeadHtml.Append("<i tabindex=\"-1\" data-trigger=\"hover\" class=\"icon-arrows-question gridHlpTxt\" id=\"ico_cl\"  data-toggle=\"popover\"  data-content=\"" + fld.fieldPurpose + " \" data-placement=\"right\"></i>");
                         gridHeadHtml.Append("</div></th>");
                     }
                     else
@@ -10189,39 +9890,34 @@ public class TStructDef
                         if (fld.ctype.ToUpper() != "CHECK BOX")
                         {
                             fieldHtml.Append("<div class=' grid-stack-item" + colFldGridStackItem + "' " + gridStackData + " id=\"randomID_" + dc.frameno + randomID + "\"><span class=\"badge-grid-stack position-absolute top-0 end-0\">" + (randomID - 10) + "</span><div class=\"grid-stack-item-content ui-draggable-handle\"></div><div id=\"dv" + fld.name.Replace(" ", "") + "\" class=\"labelcol inputs form-group row " + lblBsClass + " " + colDivInputPadding + " \" data-dataindex=" + lblBsIndex + ">");
+                            if (isHyper)
+                                fieldHtml.Append("<a href=\"javascript:void(0)\" class=\"handCur\" id=\"" + ((HLinkStruct)(hlnks[n])).hlsource.ToString() + "\" onclick='javascript:Tstructhyperlink(this);'>");
+                            else if (designHyperLink != "")
+                                fieldHtml.Append("<a href=\"javascript:void(0)\" class=\"handCur\" id=\"hylnk" + fld.name + "\" onclick='javascript:TstructLabelhyperlink(this);' data-param='" + designHyperLink + "'>");
                             if ((fld.allowempty && fld.caption != "") && (string.IsNullOrEmpty(fld.fieldPurpose)))
                                 fieldHtml.Append("<div class=\"fld-wrap3 " + colFldCaption + "\" >");
-                            else if (!fld.allowempty && fld.caption != "")
-                                fieldHtml.Append("<div class=\"fld-wrap3 required " + colFldCaption + "\" >");
                             else
-                                fieldHtml.Append("<div class=\"fld-wrap3 " + colFldCaption + "\" >");
-                            if (isHyper)
-                                fieldHtml.Append("<a href=\"javascript:void(0)\" class=\"cursor-pointer\" id=\"" + ((HLinkStruct)(hlnks[n])).hlsource.ToString() + "\" onclick='javascript:Tstructhyperlink(this);'>");
-                            else if (designHyperLink != "")
-                                fieldHtml.Append("<a href=\"javascript:void(0)\" class=\"cursor-pointer\" id=\"hylnk" + fld.name + "\" onclick='javascript:TstructLabelhyperlink(this);' data-param='" + designHyperLink + "'>");
-
+                                fieldHtml.Append("<div class=\"fld-wrap1 " + colFldCaption + "\" >");
                             if (designHyperLink != "")
-                                fieldHtml.Append("<label class=\"form-label col-form-label pb-1 fw-boldest \" style=\"text-decoration:underline;cursor: pointer;" + designFontStyle + "\"  for=\"" + name + "\" >" + fld.caption + "</label >");
+                                fieldHtml.Append("<label class=\"form-label col-form-label \" style=\"text-decoration:underline;cursor: pointer;" + designFontStyle + "\"  for=\"" + name + "\" >" + fld.caption + "</label >");
                             else
-                                fieldHtml.Append("<label class=\"form-label col-form-label pb-1 fw-boldest \" style=\"" + designFontStyle + "\" for=\"" + name + "\">" + fld.caption + "</label >");
+                                fieldHtml.Append("<label class=\"form-label col-form-label \" style=\"" + designFontStyle + "\" for=\"" + name + "\">" + fld.caption + "</label >");
 
                             if (isHyper || designHyperLink != "")
                                 fieldHtml.Append("</a>");
 
                             // to handle the mandatory fields.
-                            //if (!fld.allowempty && fld.caption != "")
-                            //    fieldHtml.Append("<span class=\"allowempty\">*</span>");
-                            if (!string.IsNullOrEmpty(fld.fieldPurpose))
-                                fieldHtml.Append("<span><i tabindex=\"-1\" data-bs-trigger=\"hover\" class=\"icon-arrows-question material-icons material-icons-style material-icons-4 align-middle ms-2 cursor-pointer\" id=\"ico_cl\" data-bs-toggle=\"tooltip\" data-bs-placement=\"right\" data-bs-dismiss=\"click\" data-bs-original-title=\"" + fld.fieldPurpose + "\">help_outline</i></span>");
+                            if (!fld.allowempty && fld.caption != "")
+                                fieldHtml.Append("<span class=\"allowempty\">*</span>");
                             fieldHtml.Append("</div>");
                         }
                         else if (fld.datatype.ToUpper() == "DATE/TIME")
                             fieldHtml.Append("<div id=\"dv" + fld.name.Replace(" ", "") + "\" class=\"  input-group grid-stack-item " + lblBsClass + "\"  data-dataindex=\"" + lblBsIndex + "\" " + gridStackData + "><div class=\"grid-stack-item-content ui-draggable-handle\"></div>");
                         else if (fld.ctype.ToUpper() == "CHECK BOX")
                         {
-                            fieldHtml.Append("<div class=' grid-stack-item" + colFldGridStackItem + "'  " + gridStackData + " id=\"randomID_" + dc.frameno + randomID + "\"><span class=\"badge-grid-stack position-absolute top-0 end-0\">" + (randomID - 10) + "</span><div class=\"grid-stack-item-content ui-draggable-handle\"></div><div id=\"dv" + fld.name.Replace(" ", "") + "\" class=\"labelcol inputs checkbox form-group row " + lblBsClass + " " + colDivInputPadding + " \" data-dataindex=" + lblBsIndex + " >");
+                            fieldHtml.Append("<div class=' grid-stack-item" + colFldGridStackItem + "' " + gridStackData + " id=\"randomID_" + dc.frameno + randomID + "\"><span class=\"badge-grid-stack position-absolute top-0 end-0\">" + (randomID - 10) + "</span><div class=\"grid-stack-item-content ui-draggable-handle\"></div><div id=\"dv" + fld.name.Replace(" ", "") + "\" class=\"labelcol inputs checkbox form-group row " + lblBsClass + " " + colDivInputPadding + " \" data-dataindex=" + lblBsIndex + " >");
                             //label normal
-                            fieldHtml.Append("<div class=\"fld-wrap3 " + colFldCaption + /*(!columnModeEnabled ? "" : " d-none ")*/ "  " + "\"><label class=\"form-label col-form-label pb-1 fw-boldest\" style=\"cursor: default;\" for=\"" + name + "\">" + fld.caption + "</label></div>");
+                            fieldHtml.Append("<label for=\"" + name + "\">");
                         }
                         else
                         {
@@ -10258,7 +9954,7 @@ public class TStructDef
                             fieldHtml.Append("<label>" + fld.caption + "</label>");
 
                             if (!string.IsNullOrEmpty(fld.fieldPurpose))
-                                fieldHtml.Append("<span><i tabindex=\"-1\" data-bs-trigger=\"hover\" class=\"icon-arrows-question material-icons material-icons-style material-icons-4 align-middle ms-2 cursor-pointer\" id=\"ico_cl\" data-bs-toggle=\"tooltip\" data-bs-placement=\"right\" data-bs-dismiss=\"click\" data-bs-original-title=\"" + fld.fieldPurpose + "\">help_outline</i></span>");
+                                fieldHtml.Append("<span><i tabindex=\"-1\" data-trigger=\"hover\" class=\"icon-arrows-question\" id=\"ico_cl\"  data-toggle=\"popover\"  data-content=\"" + fld.fieldPurpose + " \" data-placement=\"right\"></i></span>");
                             fieldHtml.Append("</div>");//closing for fld-wrap2 and closing for fld-wrap1
                         }
 
@@ -10296,11 +9992,11 @@ public class TStructDef
                         case "ACCEPT":
                             if (!isGrid && fld.datatype.ToUpper() != "IMAGE")
                                 fieldHtml.Append(colFldWidth);
-                            SetCssClass(fld.freadonly, "tem", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                            SetCssClass(fld.freadonly, "tem", fld.datatype, fld.name, fldBsClass, fld.fldType);
 
                             if (fldCType == "MEMO" || fld.datatype.ToLower() == "text" && fld.ctype.ToUpper() != "CHECK BOX")
                             {
-                                SetCssClass(fld.freadonly, "memotem", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "memotem", fld.datatype, fld.name, fldBsClass, fld.fldType);
                                 if (!isGrid)
                                     width = Convert.ToString(Convert.ToInt32(width) - 10);
 
@@ -10310,7 +10006,7 @@ public class TStructDef
                             }
                             else if (fldCType == "CHECK BOX")
                             {
-                                SetCssClass(fld.freadonly, "checkbox", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "checkbox", fld.datatype, fld.name, fldBsClass, fld.fldType);
                                 if (isGrid)
                                     gridHiddenHtml.Append(GetCheckBoxHTML(fld, isGrid, name, i, fldTlhw, width, fld.visibility, fld.moeval));
                                 fieldHtml.Append(GetCheckBoxHTML(fld, isGrid, name, i, fldTlhw, width, fld.visibility, fld.moeval));
@@ -10390,14 +10086,14 @@ public class TStructDef
 
                             if (fldCType == "CHECK LIST")
                             {
-                                SetCssClass(fld.freadonly, "multiFldChk", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "multiFldChk", fld.datatype, fld.name, fldBsClass, fld.fldType);
                                 if (isGrid)
                                     gridHiddenHtml.Append(GetCheckListHTML(fld, isGrid, name, fldNo, fldTlhw, width, moeValue));
                                 fieldHtml.Append(GetCheckListHTML(fld, isGrid, name, fldNo, fldTlhw, width, moeValue));
                             }
                             else if (fldCType == "RADIO GROUP")
                             {
-                                SetCssClass(fld.freadonly, "multiFld", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "multiFld", fld.datatype, fld.name, fldBsClass, fld.fldType);
                                 if (!isGrid)
                                 {
                                     fieldHtml.Append(GetRadioGroupHTML(fld, isGrid, name, fldNo, fldTlhw, width, moeValue));
@@ -10410,13 +10106,13 @@ public class TStructDef
                             {
                                 bool chkBox = false;
                                 chkBox = IsGridCheckBox(moeValue);
-                                SetCssClass(fld.freadonly, "combo", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "combo", fld.datatype, fld.name, fldBsClass, fld.fldType);
 
                                 if (isGrid)
                                 {
                                     if (chkBox)
                                     {
-                                        SetCssClass(fld.freadonly, "gridChk", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                        SetCssClass(fld.freadonly, "gridChk", fld.datatype, fld.name, fldBsClass, fld.fldType);
                                         width = Convert.ToString(Convert.ToInt32(width) - 10);
                                         gridHiddenHtml.Append(GetCheckBoxHTML(fld, isGrid, name, fldNo, fldTlhw, width, fld.visibility, fld.moeval));
                                         fieldHtml.Append(GetCheckBoxHTML(fld, isGrid, name, fldNo, fldTlhw, width, fld.visibility, fld.moeval));
@@ -10436,7 +10132,7 @@ public class TStructDef
                             }
                             else if (fld.selectmode.ToUpper() == "FROM MASTER")
                             {
-                                SetCssClass(fld.freadonly, "combo", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "combo", fld.datatype, fld.name, fldBsClass, fld.fldType);
 
                                 if (!fld.editcombo)
                                 {
@@ -10448,7 +10144,7 @@ public class TStructDef
                                     {
                                         if (chkBox)
                                         {
-                                            SetCssClass(fld.freadonly, "gridChk", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                            SetCssClass(fld.freadonly, "gridChk", fld.datatype, fld.name, fldBsClass, fld.fldType);
                                             gridHiddenHtml.Append(GetCheckBoxHTML(fld, isGrid, name, fldNo, fldTlhw, width, fld.visibility, fld.moeval));
                                             fieldHtml.Append(GetCheckBoxHTML(fld, isGrid, name, fldNo, fldTlhw, width, fld.visibility, fld.moeval));
                                         }
@@ -10478,7 +10174,7 @@ public class TStructDef
                                 }
                                 else
                                 {
-                                    SetCssClass(fld.freadonly, "tem", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                    SetCssClass(fld.freadonly, "tem", fld.datatype, fld.name, fldBsClass, fld.fldType);
 
 
                                     if (isGrid)
@@ -10492,7 +10188,7 @@ public class TStructDef
                             }
                             else
                             {
-                                SetCssClass(fld.freadonly, "combo", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "combo", fld.datatype, fld.name, fldBsClass, fld.fldType);
 
                                 bool chkBox = false;
                                 chkBox = IsGridCheckBox(moeValue);
@@ -10501,7 +10197,7 @@ public class TStructDef
                                 {
                                     if (chkBox)
                                     {
-                                        SetCssClass(fld.freadonly, "gridChk", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                        SetCssClass(fld.freadonly, "gridChk", fld.datatype, fld.name, fldBsClass, fld.fldType);
 
                                         width = Convert.ToString(Convert.ToInt32(width) - 10);
 
@@ -10538,7 +10234,7 @@ public class TStructDef
                         case "AUTOGENERATE":
                             if (!isGrid)
                                 fieldHtml.Append(colFldWidth);
-                            SetCssClass(fld.freadonly, "auto", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                            SetCssClass(fld.freadonly, "auto", fld.datatype, fld.name, fldBsClass, fld.fldType);
 
 
                             if (isGrid)
@@ -10549,11 +10245,11 @@ public class TStructDef
                         case "FILL":
                             if (!isGrid)
                                 fieldHtml.Append(colFldWidth);
-                            SetCssClass(fld.freadonly, "tem", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                            SetCssClass(fld.freadonly, "tem", fld.datatype, fld.name, fldBsClass, fld.fldType);
 
                             if (fldCType == "MEMO" || fld.datatype.ToLower() == "text" && fld.ctype.ToUpper() != "CHECK BOX")
                             {
-                                SetCssClass(fld.freadonly, "memotem", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "memotem", fld.datatype, fld.name, fldBsClass, fld.fldType);
                                 if (!isGrid)
                                     width = Convert.ToString(Convert.ToInt32(width) - 8);
 
@@ -10565,7 +10261,7 @@ public class TStructDef
 
                             else if (fldCType == "CHECK BOX")
                             {
-                                SetCssClass(fld.freadonly, "checkbox", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "checkbox", fld.datatype, fld.name, fldBsClass, fld.fldType);
                                 if (isGrid)
                                     gridHiddenHtml.Append(GetCheckBoxHTML(fld, isGrid, name, i, fldTlhw, width, fld.visibility, fld.moeval));
                                 fieldHtml.Append(GetCheckBoxHTML(fld, isGrid, name, i, fldTlhw, width, fld.visibility, fld.moeval));
@@ -10583,11 +10279,11 @@ public class TStructDef
                         case "CALCULATE":
                             if (!isGrid)
                                 fieldHtml.Append(colFldWidth);
-                            SetCssClass(fld.freadonly, "tem", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                            SetCssClass(fld.freadonly, "tem", fld.datatype, fld.name, fldBsClass, fld.fldType);
 
                             if (fldCType == "CHECK BOX")
                             {
-                                SetCssClass(fld.freadonly, "checkbox", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "checkbox", fld.datatype, fld.name, fldBsClass, fld.fldType);
                                 if (isGrid)
                                     gridHiddenHtml.Append(GetCheckBoxHTML(fld, isGrid, name, fldNo, fldTlhw, width, fld.visibility, fld.moeval));
                                 fieldHtml.Append(GetCheckBoxHTML(fld, isGrid, name, fldNo, fldTlhw, width, fld.visibility, fld.moeval));
@@ -10905,11 +10601,11 @@ public class TStructDef
 
                     if (isGrid)
                     {
-                        fieldHtml.Append("<td class=\"d-none form-group\"><label>" + fld.caption + "</label><textarea class=\"form-control w-100 border bg-transparent overflow-hidden resize-none \" data-style=\"height:0px;width:0px;\" maxlength=\"\" data-hidden=\"\"   id=\"" + name + "\" data-type=\"hidden\" name=\"" + name + "\" readonly>" + fld.Value + "</textarea></td>");
+                        fieldHtml.Append("<td class=\"d-none form-group\"><label>" + fld.caption + "</label><textarea class=\"form-control w-100 border-0 overflow-hidden resize-none\" data-style=\"height:0px;width:0px;\" maxlength=\"\" data-hidden=\"\"   id=\"" + name + "\" data-type=\"hidden\" name=\"" + name + "\" readonly>" + fld.Value + "</textarea></td>");
                         gridHeadHtml.Append("<th class=\"d-none form-group\" id=\"th-" + fld.name + "\"><label>" + fld.caption + "</label><div id=\"th-" + fld.name + "-sizer\"></div><div class='thhead'></div></th>");
                     }
                     else
-                        fieldHtml.Append("<td class=\"d-none form-group\"><textarea class=\"form-control w-100 border bg-transparent overflow-hidden resize-none \" data-hidden=\"\" maxlength=\"\" data-style=\"height:0px;width:0px;\" id=\"" + name + "\" data-type=\"hidden\" name=\"" + name + "\" readonly>" + fld.Value + "</textarea></td>");
+                        fieldHtml.Append("<td class=\"d-none form-group\"><textarea class=\"form-control w-100 border-0 overflow-hidden resize-none\" data-hidden=\"\" maxlength=\"\" data-style=\"height:0px;width:0px;\" id=\"" + name + "\" data-type=\"hidden\" name=\"" + name + "\" readonly>" + fld.Value + "</textarea></td>");
 
                 }
                 else
@@ -10964,12 +10660,12 @@ public class TStructDef
                         if (fld.caption.Contains("~"))
                         {
                             //   fieldHtml.Append("<label id=\"th-" + fld.name + "\"  \" class=\"wordBreak\"><div>");
-                            gridHeadHtml.Append("<th id=\"th-" + fld.name + "\" style=\"width:" + fdwidth + "px;\" class=\"wordBreak fw-boldest\"><div id=\"th-" + fld.name + "-sizer\"></div><div class='thhead " + allowemptycss + "'>");
+                            gridHeadHtml.Append("<th id=\"th-" + fld.name + "\" style=\"width:" + fdwidth + "px;\" class=\"wordBreak\"><div id=\"th-" + fld.name + "-sizer\"></div><div class='thhead " + allowemptycss + "'>");
                         }
                         else
                         {
                             //    fieldHtml.Append("<label id=\"th-" + fld.name + "\" style=\"width:" + fdwidth + "px\" ><div>");
-                            gridHeadHtml.Append("<th id=\"th-" + fld.name + "\" style=\"width:" + fdwidth + "px;\" class=\"fw-boldest\"><div id=\"th-" + fld.name + "-sizer\"></div><div class='thhead " + allowemptycss + "'>");
+                            gridHeadHtml.Append("<th id=\"th-" + fld.name + "\" style=\"width:" + fdwidth + "px;\" ><div id=\"th-" + fld.name + "-sizer\"></div><div class='thhead " + allowemptycss + "'>");
                         }
                         //if (!string.IsNullOrEmpty(fld.fieldPurpose))
                         //    fieldHtml.Append("<i tabindex=\"-1\" style=\"cursor: pointer; outline: none;\" data-trigger=\"focus\" class=\"fa fa-question-circle-o \" id=\"ico_cl\"  data-toggle=\"popover\"  data-content=\"" + fld.fieldPurpose + " \" data-placement=\"right\"></i>");
@@ -11007,7 +10703,7 @@ public class TStructDef
                         {
                             fieldHtml.Append("<div class=' grid-stack-item'  " + gridStackData + " id=\"randomID_" + dc.frameno + randomID + "\"><span class=\"badge-grid-stack position-absolute top-0 end-0\">" + (randomID - 10) + "</span><div class=\"grid-stack-item-content ui-draggable-handle\"></div><div id=\"dv" + fld.name.Replace(" ", "") + "\" class=\"labelcol inputs form-group row " + lblBsClass + " \" data-dataindex=" + lblBsIndex + ">");
                             if (isHyper)
-                                fieldHtml.Append("<a href=\"javascript:void(0)\"  class=\"cursor-pointer\" id=\"" + ((HLinkStruct)(hlnks[n])).hlsource.ToString() + "\" onclick='javascript:Tstructhyperlink(this);'>");
+                                fieldHtml.Append("<a href=\"javascript:void(0)\"  class=\"handCur\" id=\"" + ((HLinkStruct)(hlnks[n])).hlsource.ToString() + "\" onclick='javascript:Tstructhyperlink(this);'>");
                             fieldHtml.Append("<label for=\"" + name + "\">" + fld.caption + "</label >");
                             //  fieldHtml.Append(string.Format("<label class='control-label  >{0}:</label>", fld.caption));
 
@@ -11055,11 +10751,11 @@ public class TStructDef
                     {
                         // accept- simple input type which accepts the user input, mostly except image.
                         case "ACCEPT":
-                            SetCssClass(fld.freadonly, "tem", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                            SetCssClass(fld.freadonly, "tem", fld.datatype, fld.name, fldBsClass, fld.fldType);
 
                             if (fldCType == "MEMO" || fld.datatype.ToLower() == "text" && fld.ctype.ToUpper() != "CHECK BOX")
                             {
-                                SetCssClass(fld.freadonly, "memotem", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "memotem", fld.datatype, fld.name, fldBsClass, fld.fldType);
                                 if (!isGrid)
                                     width = Convert.ToString(Convert.ToInt32(width) - 10);
 
@@ -11069,7 +10765,7 @@ public class TStructDef
                             }
                             else if (fldCType == "CHECK BOX")
                             {
-                                SetCssClass(fld.freadonly, "checkbox", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "checkbox", fld.datatype, fld.name, fldBsClass, fld.fldType);
                                 if (isGrid)
                                     gridHiddenHtml.Append(GetCheckBoxHTML(fld, isGrid, name, i, fldTlhw, width, fld.visibility, fld.moeval));
                                 fieldHtml.Append(GetCheckBoxHTML(fld, isGrid, name, i, fldTlhw, width, fld.visibility, fld.moeval));
@@ -11148,14 +10844,14 @@ public class TStructDef
 
                             if (fldCType == "CHECK LIST")
                             {
-                                SetCssClass(fld.freadonly, "multiFldChk", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "multiFldChk", fld.datatype, fld.name, fldBsClass, fld.fldType);
                                 if (isGrid)
                                     gridHiddenHtml.Append(GetCheckListHTML(fld, isGrid, name, fldNo, fldTlhw, width, moeValue));
                                 fieldHtml.Append(GetCheckListHTML(fld, isGrid, name, fldNo, fldTlhw, width, moeValue));
                             }
                             else if (fldCType == "RADIO GROUP")
                             {
-                                SetCssClass(fld.freadonly, "multiFld", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "multiFld", fld.datatype, fld.name, fldBsClass, fld.fldType);
                                 if (!isGrid)
                                 {
                                     fieldHtml.Append(GetRadioGroupHTML(fld, isGrid, name, fldNo, fldTlhw, width, moeValue));
@@ -11168,13 +10864,13 @@ public class TStructDef
                             {
                                 bool chkBox = false;
                                 chkBox = IsGridCheckBox(moeValue);
-                                SetCssClass(fld.freadonly, "combo", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "combo", fld.datatype, fld.name, fldBsClass, fld.fldType);
 
                                 if (isGrid)
                                 {
                                     if (chkBox)
                                     {
-                                        SetCssClass(fld.freadonly, "gridChk", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                        SetCssClass(fld.freadonly, "gridChk", fld.datatype, fld.name, fldBsClass, fld.fldType);
                                         width = Convert.ToString(Convert.ToInt32(width) - 10);
                                         gridHiddenHtml.Append(GetCheckBoxHTML(fld, isGrid, name, fldNo, fldTlhw, width, fld.visibility, fld.moeval));
                                         fieldHtml.Append(GetCheckBoxHTML(fld, isGrid, name, fldNo, fldTlhw, width, fld.visibility, fld.moeval));
@@ -11194,7 +10890,7 @@ public class TStructDef
                             }
                             else if (fld.selectmode.ToUpper() == "FROM MASTER")
                             {
-                                SetCssClass(fld.freadonly, "combo", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "combo", fld.datatype, fld.name, fldBsClass, fld.fldType);
 
                                 if (!fld.editcombo)
                                 {
@@ -11206,7 +10902,7 @@ public class TStructDef
                                     {
                                         if (chkBox)
                                         {
-                                            SetCssClass(fld.freadonly, "gridChk", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                            SetCssClass(fld.freadonly, "gridChk", fld.datatype, fld.name, fldBsClass, fld.fldType);
                                             gridHiddenHtml.Append(GetCheckBoxHTML(fld, isGrid, name, fldNo, fldTlhw, width, fld.visibility, fld.moeval));
                                             fieldHtml.Append(GetCheckBoxHTML(fld, isGrid, name, fldNo, fldTlhw, width, fld.visibility, fld.moeval));
                                         }
@@ -11236,7 +10932,7 @@ public class TStructDef
                                 }
                                 else
                                 {
-                                    SetCssClass(fld.freadonly, "tem", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                    SetCssClass(fld.freadonly, "tem", fld.datatype, fld.name, fldBsClass, fld.fldType);
 
 
                                     if (isGrid)
@@ -11250,7 +10946,7 @@ public class TStructDef
                             }
                             else
                             {
-                                SetCssClass(fld.freadonly, "combo", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "combo", fld.datatype, fld.name, fldBsClass, fld.fldType);
 
                                 bool chkBox = false;
                                 chkBox = IsGridCheckBox(moeValue);
@@ -11259,7 +10955,7 @@ public class TStructDef
                                 {
                                     if (chkBox)
                                     {
-                                        SetCssClass(fld.freadonly, "gridChk", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                        SetCssClass(fld.freadonly, "gridChk", fld.datatype, fld.name, fldBsClass, fld.fldType);
 
                                         width = Convert.ToString(Convert.ToInt32(width) - 10);
 
@@ -11295,7 +10991,7 @@ public class TStructDef
                             break;
                         case "AUTOGENERATE":
 
-                            SetCssClass(fld.freadonly, "auto", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                            SetCssClass(fld.freadonly, "auto", fld.datatype, fld.name, fldBsClass, fld.fldType);
 
 
                             if (isGrid)
@@ -11304,11 +11000,11 @@ public class TStructDef
 
                             break;
                         case "FILL":
-                            SetCssClass(fld.freadonly, "tem", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                            SetCssClass(fld.freadonly, "tem", fld.datatype, fld.name, fldBsClass, fld.fldType);
 
                             if (fldCType == "MEMO" || fld.datatype.ToLower() == "text" && fld.ctype.ToUpper() != "CHECK BOX")
                             {
-                                SetCssClass(fld.freadonly, "memotem", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "memotem", fld.datatype, fld.name, fldBsClass, fld.fldType);
                                 if (!isGrid)
                                     width = Convert.ToString(Convert.ToInt32(width) - 8);
 
@@ -11320,7 +11016,7 @@ public class TStructDef
 
                             else if (fldCType == "CHECK BOX")
                             {
-                                SetCssClass(fld.freadonly, "checkbox", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "checkbox", fld.datatype, fld.name, fldBsClass, fld.fldType);
                                 if (isGrid)
                                     gridHiddenHtml.Append(GetCheckBoxHTML(fld, isGrid, name, i, fldTlhw, width, fld.visibility, fld.moeval));
                                 fieldHtml.Append(GetCheckBoxHTML(fld, isGrid, name, i, fldTlhw, width, fld.visibility, fld.moeval));
@@ -11336,11 +11032,11 @@ public class TStructDef
                             }
                             break;
                         case "CALCULATE":
-                            SetCssClass(fld.freadonly, "tem", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                            SetCssClass(fld.freadonly, "tem", fld.datatype, fld.name, fldBsClass, fld.fldType);
 
                             if (fldCType == "CHECK BOX")
                             {
-                                SetCssClass(fld.freadonly, "checkbox", fld.datatype, fld.name, fldBsClass, fld.fldType, fld);
+                                SetCssClass(fld.freadonly, "checkbox", fld.datatype, fld.name, fldBsClass, fld.fldType);
                                 if (isGrid)
                                     gridHiddenHtml.Append(GetCheckBoxHTML(fld, isGrid, name, fldNo, fldTlhw, width, fld.visibility, fld.moeval));
                                 fieldHtml.Append(GetCheckBoxHTML(fld, isGrid, name, fldNo, fldTlhw, width, fld.visibility, fld.moeval));
@@ -11431,15 +11127,6 @@ public class TStructDef
             if (dcNo == Convert.ToInt32(pageActionDcNo[m].ToString()))
                 actionButton.Append(pageActionButtons[m].ToString());
         }
-        var designMode = false;
-        if (HttpContext.Current.Session[transId + "IsDesignMode"] != null && HttpContext.Current.Session[transId + "IsDesignMode"].ToString() != string.Empty)
-        {
-            designMode = Convert.ToBoolean(HttpContext.Current.Session[transId + "IsDesignMode"]);
-        }
-
-        string dcBoolean = string.Empty;
-        if (!designMode && ((DcStruct)(dcs[dcNo - 1])).DcDefaultstate != "" && ((DcStruct)(dcs[dcNo - 1])).DcDefaultstate.ToLower() == "collapse")
-            dcBoolean = " d-none ";
 
         if (((DcStruct)(dcs[dcNo - 1])).isgrid)
         {
@@ -11453,12 +11140,12 @@ public class TStructDef
                 xywhGridStack(new FieldStruct { visibility = false, fldFrameNo = dcNo, name = ("uniqueThHead" + dcNo) }, true);
                 if (((DcStruct)(dcs[dcNo - 1])).ispopgrid)
                 {
-                    defaultColsHtml.Append("<th id='uniqueThHead" + dcNo + "' class='thhead fw-boldest'><div>#</div></th>");
+                    defaultColsHtml.Append("<th id='uniqueThHead" + dcNo + "' class='thhead'><div>#</div></th>");
                     colCount++;
                 }
                 else
                 {
-                    defaultColsHtml.Append("<th id=\"uniqueThHead" + dcNo + "\" class='thhead fw-boldest'><div id=\"uniqueThHead" + dcNo + "-sizer\"></div><div class='thhead'>S.No</div></th>");
+                    defaultColsHtml.Append("<th id=\"uniqueThHead" + dcNo + "\" class='thhead'><div id=\"uniqueThHead" + dcNo + "-sizer\"></div><div class='thhead'>S.No</div></th>");
                     colCount = colCount++;
                 }
             }
@@ -11469,7 +11156,7 @@ public class TStructDef
                 else
                 {
                     xywhGridStack(new FieldStruct { visibility = false, fldFrameNo = dcNo, name = ("uniqueThHead" + dcNo) }, true);
-                    defaultColsHtml.Append("<th id=\"uniqueThHead" + dcNo + "\" class='thhead fw-boldest'><div id=\"uniqueThHead" + dcNo + "-sizer\"></div><div class='thhead'>S.no</div></th>");
+                    defaultColsHtml.Append("<th id=\"uniqueThHead" + dcNo + "\" class='thhead'><div id=\"uniqueThHead" + dcNo + "-sizer\"></div><div class='thhead'>S.no</div></th>");
                     colCount++;
                 }
             }
@@ -11493,7 +11180,7 @@ public class TStructDef
                 gridwidth = gridwidth + 40;//40 width for sl no column and 40 for delete button
             string dcBtns = GetGridButtonHtml(dcNo.ToString());
             colCount = 100;
-            gridHdHtml.Append("<div id=\"containerDc\" class=\"tab-pane fade show active grid-icons\"><div class=\"card card-xl-stretch mb-1 mb-xl-2 shadow-sm\"><div class=\"card-body px-3 pt-1 pb-3\">" + dcBtns);
+            gridHdHtml.Append("<div id=\"containerDc\" class=\"tab-pane fade show active grid-icons\"><div class=\"card card-xl-stretch mb-1 mb-xl-2 shadow-sm overflow-auto\"><div class=\"card-body pt-5\">" + dcBtns);
             if (IsFillGridCall)
             {
                 gridHdHtml.Append("<div id=\"gridheaddiv\"><span id=\"disgridhead" + dcNo + "\"></span></div><div class=\"clear\"></div>");
@@ -11512,18 +11199,18 @@ public class TStructDef
             }
             if (HttpContext.Current.Session["language"].ToString().ToLower() == "arabic")
             {
-                gridHdHtml.Append("<div id=\"dvgridwrapper\"><div id=\"colScroll" + dcNo + "\" class=\"griddivColumn wrapperForGridData" + dcNo + " " + dcBoolean + "\">");
-                gridHdHtml.Append("<table class='customSetupTableMN gridHeader g-1 table table-striped table-bordered mt-1 mb-0 border-gray-300 ' id=\"gridHd" + dcNo + "\"><thead><tr>");
+                gridHdHtml.Append("<div id=\"dvgridwrapper\"><div id=\"colScroll" + dcNo + "\" class=\"griddivColumn wrapperForGridData" + dcNo + "\">");
+                gridHdHtml.Append("<table class='customSetupTableMN gridHeader table' id=\"gridHd" + dcNo + "\"><thead><tr>");
 
             }
             else
             {
-                gridHdHtml.Append("<div id=\"colScroll" + dcNo + "\" class=\"griddivColumn wrapperForGridData" + dcNo + " " + dcBoolean + "\">");
-                gridHdHtml.Append("<table class='customSetupTableMN gridHeader g-1 table table-striped table-bordered mt-1 mb-0 border-gray-300 ' id=\"gridHd" + dcNo + "\"><thead><tr class=\"fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-300\">");
+                gridHdHtml.Append("<div id=\"colScroll" + dcNo + "\" class=\"griddivColumn wrapperForGridData" + dcNo + "\">");
+                gridHdHtml.Append("<table class='customSetupTableMN gridHeader table table-bordered mt-6 ' id=\"gridHd" + dcNo + "\"><thead><tr class=\"fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200\">");
             }
             xywhGridStack(new FieldStruct { visibility = false, fldFrameNo = dcNo, name = ("uniqueEditDeleteAct" + dcNo) }, true);
             //gridHdHtml.Append("<th id=\"uniqueEditDeleteAct" + dcNo + "\" class='editDeleteAct'></th>" + defaultColsHtml.ToString());
-            gridHdHtml.Append("<th id =\"uniqueEditDeleteAct" + dcNo + "\" class=\"text-center fw-boldest\"><div class=\"form-check form-check-sm form-check-custom ms-2\"><input type=\"checkbox\" name=\"chkallgridrow" + dcNo + "\" class=\"form-check-input fgHdrChk gridHdrChk opacity-100\" id=\"chkallgridrow" + dcNo + "\" onclick=\"javascript:CheckAllGridRow(this, " + dcNo + ");\" disabled></div></th>" + defaultColsHtml.ToString());
+            gridHdHtml.Append("<th id =\"uniqueEditDeleteAct" + dcNo + "\" class=\"text-center\"><div class=\"form-check form-check-sm form-check-custom form-check-solid ms-2\"><input type=\"checkbox\" name=\"chkallgridrow" + dcNo + "\" class=\"form-check-input fgHdrChk gridHdrChk\" id=\"chkallgridrow" + dcNo + "\" onclick=\"javascript:CheckAllGridRow(this, " + dcNo + ");\"></div></th>" + defaultColsHtml.ToString());
 
             if (IsFillGridCall)
             {
@@ -11547,7 +11234,7 @@ public class TStructDef
             }
             else
             {
-                gridHdHtml.Append("<div id=\"contentScroll" + dcNo + "\" class=\"divGridContent\">");
+                gridHdHtml.Append("<div id=\"contentScroll" + dcNo + "\" style=\"overflow:auto;height:" + ((DcStruct)(dcs[dcNo - 1])).dcHeight + "px\" class=\"divGridContent\">");
                 gridHdHtml.Append("<table class='gridContent' id='gridDc" + dcNo + "'><tbody>");
             }
 
@@ -11568,23 +11255,14 @@ public class TStructDef
             else if (isTab == "formatGrid")
             {
                 fullGridHtml1 = "<div class='col-12 pb-2 dvdcframe' id=\"DivFrame" + dcNo + "\">";
-                fullGridHtml1 += "<div id=head" + dcNo + " class='dcTitle'" + divDirection + " ><a href=\"javascript:void(0)\" onclick='javascript:ShowDc(\"" + dcNo + "\");'><span data-type=\"hide\" title=\"Hide Dc\" class=\"material-icons\" id=dcButspan" + dcNo + " >keyboard_arrow_up</span></a><span class=\"frameCap fw-boldest fs-4 text-gray-900\" " + divDirection + " id=\"dcCaption" + dcNo + "\"><h3>" + ((DcStruct)(dcs[dcNo - 1])).caption + "</h3></span></div>";
-                fullGridHtml1 += "<div id=head" + dcNo + " class='dcTitle'" + divDirection + " ><span class=\"frameCap\" " + divDirection + " id=\"dcCaption" + dcNo + "\"><h3>" + ((DcStruct)(dcs[dcNo - 1])).caption + "</h3></span></div>";
+                fullGridHtml1 += "<div id=head" + dcNo + " class='dcTitle'" + divDirection + " ><a href=\"javascript:void(0)\" onclick='javascript:ShowDc(\"" + dcNo + "\");'><span data-type=\"hide\" title=\"Hide Dc\" class=\"material-icons\" id=dcButspan" + dcNo + " >keyboard_arrow_up</span></a><span class=\"frameCap\" " + divDirection + " id=\"dcCaption" + dcNo + "\"><h3>" + ((DcStruct)(dcs[dcNo - 1])).caption + "</h3></span></div>";
                 fullGridHtml1 += gridHdHtml.ToString() + rowCountHtml + "</div>";
             }
             else
             {
                 fullGridHtml1 = "<div class='col-12 pb-2 dc dvdcframe' id=\"DivFrame" + dcNo + "\">";
-                fullGridHtml1 += "<ul class=\"cursor-pointer nav nav-tabs mb-n2\">";
-                string dcBooleanHtml = string.Empty;
-                if (((DcStruct)(dcs[dcNo - 1])).DcBlean != "" && ((DcStruct)(dcs[dcNo - 1])).DcBlean.ToUpper() == "TRUE")
-                {
-                    dcBooleanHtml = "<div class=\"form-check form-switch form-check-custom px-1 align-self-end my-auto \"><input type=\"checkbox\" id=\"dcBlean" + dcNo + "\" data-dcname=\"" + ((DcStruct)(dcs[dcNo - 1])).name + "\" title=\"\" style=\"\" name=\"dcBlean" + dcNo + "\" class=\"form-check-input opacity-100 gridHeaderSwitch \" " + (dcBoolean == string.Empty ? "checked" : "") + "></div>";
-                    //fullGridHtml1 += "<div class=\"nav-link fw-boldest d-flex p-4 shadow-sm active\">";
-                    fullGridHtml1 += "<li id=head" + dcNo + " class=\"nav-item d-flex p-3 shadow-sm bg-white rounded-top\"><a class=\"fs-4 nav-link fw-boldest text-gray-900 rounded-0 border-0 active\" data-bs-toggle=\"tab\" aria-current=\"page\" href=\"javascript:void(0);\" onclick='javascript:ShowDc(\"" + dcNo + "\");'>" + ((DcStruct)(dcs[dcNo - 1])).caption + "</a>" + dcBooleanHtml + "</li></ul>";
-                }
-                else
-                    fullGridHtml1 += "<li id=head" + dcNo + " class=\"nav-item\"><a class=\"nav-link fw-boldest shadow-sm fs-4 text-gray-900 p-4 active\" data-bs-toggle=\"tab\" aria-current=\"page\" href=\"javascript:void(0);\" onclick='javascript:ShowDc(\"" + dcNo + "\");'>" + ((DcStruct)(dcs[dcNo - 1])).caption + "</a></li></ul>";
+                //fullGridHtml1 += "<div id=head" + dcNo + " class='dcTitle'><a href=\"javascript:void(0)\" onclick='javascript:ShowDc(\"" + dcNo + "\");'><span data-type=\"hide\" title=\"Hide Dc\" class=\"material-icons\"  id=dcButspan" + dcNo + " ></span></a><span class=\"frameCap\" " + divDirection + " id=\"dcCaption" + dcNo + "\" >" + ((DcStruct)(dcs[dcNo - 1])).caption + "</span></div><hr class='hrline' />";
+                fullGridHtml1 += "<ul class=\"cursor-pointer nav nav-tabs mb-n2\"><li id=head" + dcNo + " class=\"nav-item\"><a class=\"nav-link shadow-sm fw-bold fs-6 text-gray-800 p-4 active\" data-bs-toggle=\"tab\" aria-current=\"page\" href=\"javascript:void(0);\" onclick='javascript:ShowDc(\"" + dcNo + "\");'>" + ((DcStruct)(dcs[dcNo - 1])).caption + "</a></li></ul>";
 
                 fullGridHtml1 += gridHdHtml.ToString() + rowCountHtml;
             }
@@ -11602,46 +11280,35 @@ public class TStructDef
                 {
                     lastDcHeight = ((DcStruct)(dcs[dcNo - 1])).dcHeight;
                 }
-                ngBorder = "<div id=\"divDc" + dcNo + "\" class=\"row mainIframe " + (((DcStruct)(dcs[dcNo - 1])).isgrid ? "" : "grid-stack") + " " + (((DcStruct)(dcs[dcNo - 1])).isgrid ? "" : dcBoolean) + "\">";
+                ngBorder = "<div id=\"divDc" + dcNo + "\" class=\"row mainIframe " + (((DcStruct)(dcs[dcNo - 1])).isgrid ? "" : "grid-stack") + "\">";
             }
             else
             {
-                ngBorder = "<div id=\"divDc" + dcNo + "\" class=\"row mainIframe " + (((DcStruct)(dcs[dcNo - 1])).isgrid ? "" : "grid-stack") + " " + (((DcStruct)(dcs[dcNo - 1])).isgrid ? "" : dcBoolean) + "\"  >";
+                ngBorder = "<div id=\"divDc" + dcNo + "\" class=\"row mainIframe " + (((DcStruct)(dcs[dcNo - 1])).isgrid ? "" : "grid-stack") + "\"  >";
             }
             string ngFldHtml = ngBorder + fieldhtml + customLabel.ToString() + actionButton.ToString();
             if (isTab == "true")
             {
                 if (dcNo > 1)
                 {
-                    dcHtml.Append("<div id=\"DivFrame" + dcNo + "\" class=\"col-12 pb-2 dvdcframe\"><div class='card card-xl-stretch mb-1 mb-xl-2 shadow-sm'><div class='card-body px-3 pt-1 pb-3'>");
-                    //dcHtml.Append(ngFldHtml + "</div></div></div><div class='clear'></div><div>" + ((DcStruct)(dcs[dcNo - 1])).purpose + "</div>");//muralli
-                    dcHtml.Append(ngFldHtml + "</div></div></div><div class='clear'></div>");//muralli
+                    dcHtml.Append("<div id=\"DivFrame" + dcNo + "\" class=\"col-12 pb-2 dvdcframe\"><div class='card card-xl-stretch mb-1 mb-xl-2 shadow-sm overflow-auto'><div class='card-body pt-5'>");
+                    dcHtml.Append(ngFldHtml + "</div></div></div><div class='clear'></div><div>" + ((DcStruct)(dcs[dcNo - 1])).purpose + "</div>");//muralli
 
                 }
                 else
                 {
                     //TODO: the primary dc can also be a tabbed dc
-                    dcHtml.Append("<div id=\"DivFrame" + dcNo + "\" class=\"col-12 pb-2 dvdcframe\"><div class='card card-xl-stretch mb-1 mb-xl-2 shadow-sm'><div class='card-body px-3 pt-1 pb-3'>");
-                    //dcHtml.Append(ngFldHtml + "</div></div></div><div class='clear'></div><div>" + ((DcStruct)(dcs[dcNo - 1])).purpose + "</div>");//muralli
-                    dcHtml.Append(ngFldHtml + "</div></div></div><div class='clear'></div>");//muralli
+                    dcHtml.Append("<div id=\"DivFrame" + dcNo + "\" class=\"col-12 pb-2 dvdcframe\"><div class='card card-xl-stretch mb-1 mb-xl-2 shadow-sm overflow-auto'><div class='card-body pt-5'>");
+                    dcHtml.Append(ngFldHtml + "</div></div></div><div class='clear'></div><div>" + ((DcStruct)(dcs[dcNo - 1])).purpose + "</div>");//muralli
+
                 }
             }
             else
             {
                 dcHtml.Append("<div id=\"DivFrame" + dcNo + "\" class=\"col-12 pb-2 dvdcframe\">");
                 if (dcNo > 1)
-                {
-                    dcHtml.Append("<ul class=\"cursor-pointer nav nav-tabs mb-n2\">");
-                    string dcBooleanHtml = string.Empty;
-                    if (((DcStruct)(dcs[dcNo - 1])).DcBlean != "" && ((DcStruct)(dcs[dcNo - 1])).DcBlean.ToUpper() == "TRUE")
-                    {
-                        dcBooleanHtml = "<div class=\"form-check form-switch form-check-custom px-1 align-self-end my-auto \"><input type=\"checkbox\" id=\"dcBlean" + dcNo + "\" data-dcname=\"" + ((DcStruct)(dcs[dcNo - 1])).name + "\" title=\"\" style=\"\" name=\"dcBlean" + dcNo + "\" class=\"form-check-input opacity-100 gridHeaderSwitch \" " + (dcBoolean == string.Empty ? "checked" : "") + "></div>";
-                        //dcHtml.Append("<div class=\"nav-link fw-boldest d-flex p-4 shadow-sm active\">");
-                        dcHtml.Append("<li id=head" + dcNo + " class=\"nav-item d-flex p-3 shadow-sm bg-white rounded-top\"><a class=\"fs-4 nav-link fw-boldest text-gray-900 rounded-0 border-0 active\" data-bs-toggle=\"tab\" aria-current=\"page\" href=\"javascript:void(0);\" onclick='javascript:ShowDc(\"" + dcNo + "\");'>" + ((DcStruct)(dcs[dcNo - 1])).caption + "</a>" + dcBooleanHtml + "</li></ul>");
-                    }
-                    else
-                        dcHtml.Append("<li id=head" + dcNo + " class=\"nav-item\"><a class=\"nav-link fw-boldest shadow-sm fs-4 text-gray-900 p-4 active\" data-bs-toggle=\"tab\" aria-current=\"page\" href=\"javascript:void(0);\" onclick='javascript:ShowDc(\"" + dcNo + "\");'>" + ((DcStruct)(dcs[dcNo - 1])).caption + "</a></li></ul>");
-                }
+                    //dcHtml.Append("<div id=head" + dcNo + " class='dcTitle " + divDirection + "'><a href=\"javascript:void(0)\" onclick='javascript:ShowDc(\"" + dcNo + "\");'><span data-type=\"hide\" title=\"Hide Dc\" class=\"material-icons\" id=dcButspan" + dcNo + " ></span></a>  <span class=\"frameCap " + divDirection + "\" id=\"dcCaption" + dcNo + "\">><h3>" + ((DcStruct)(dcs[dcNo - 1])).caption + "</h3></span></div>");
+                    dcHtml.Append("<ul class=\"cursor-pointer nav nav-tabs mb-n2\"><li id=head" + dcNo + " class=\"nav-item\"><a class=\"nav-link shadow-sm fw-bold fs-6 text-gray-800 p-4 active\" data-bs-toggle=\"tab\" aria-current=\"page\" href=\"javascript:void(0);\" onclick='javascript:ShowDc(\"" + dcNo + "\");'>" + ((DcStruct)(dcs[dcNo - 1])).caption + "</a></li></ul>");
                 if (flgEnblPurpose) //murali
                     dcHtml.Append(ngFldHtml + "</div><div class='clear'></div><div>" + ((DcStruct)(dcs[dcNo - 1])).purpose + "</div>");//muralli
                 else
@@ -12246,10 +11913,10 @@ public class TStructDef
                     rowSrNoClass = "gridtdclass d-none";
                 }
                 if (((DcStruct)(dcs[dcNo - 1])).isallowdeletrows.ToString().ToLower() == "false")
-                    dcRowHtml = "<div  id=sp" + dcNo + "R" + rowNo + "F" + dcNo + " class=\"editWrapTr grid-stack\"><div class='gridElement " + rowSrNoClass + "'><label id=\"lblSlNo" + rowNo + "F" + dcNo + "\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  slno\">" + serialNo.ToString() + "</label></div>" + rowHTML + "</div>";
+                    dcRowHtml = "<div  id=sp" + dcNo + "R" + rowNo + "F" + dcNo + " class=\"editWrapTr grid-stack\"><div class='gridElement " + rowSrNoClass + "'><label id=\"lblSlNo" + rowNo + "F" + dcNo + "\" class=\"form-control w-100 border-0 overflow-hidden resize-none slno\">" + serialNo.ToString() + "</label></div>" + rowHTML + "</div>";
                 else
                     //delete grid row
-                    dcRowHtml = "<div  id=sp" + dcNo + "R" + rowNo + "F" + dcNo + " class=\"editWrapTr grid-stack\"><div class='gridElement " + rowSrNoClass + "'><label id=\"lblSlNo" + rowNo + "F" + dcNo + "\" class=\"form-control w-100 border bg-transparent overflow-hidden resize-none  slno\">" + serialNo.ToString() + "</label></div>" + rowHTML + "</div>";
+                    dcRowHtml = "<div  id=sp" + dcNo + "R" + rowNo + "F" + dcNo + " class=\"editWrapTr grid-stack\"><div class='gridElement " + rowSrNoClass + "'><label id=\"lblSlNo" + rowNo + "F" + dcNo + "\" class=\"form-control w-100 border-0 overflow-hidden resize-none slno\">" + serialNo.ToString() + "</label></div>" + rowHTML + "</div>";
             }
             else
                 dcRowHtml = rowHTML;
@@ -12313,25 +11980,23 @@ public class TStructDef
 
     protected string bsClassByDatawidth(int datawidth, int i, FieldStruct fld)
     {
-        bool columnModeEnabled = axdesignJObject.dcLayout != null && axdesignJObject.dcLayout != "" && axdesignJObject.dcLayout != "default";
-
         if (fld.ctype.ToUpper() == "MEMO" || fld.datatype.ToLower() == "text")
         {
-            return " w-100 agform " + (!columnModeEnabled ? " d-block " : "") + " grid-stack-item-content form-group fldindex" + i;
+            return " w-100 agform grid-stack-item-content form-group fldindex" + i;
         }
         else if (fld.datatype.ToUpper() == "DATE/TIME")
         {
-            return " w-100 agform " + (!columnModeEnabled ? " d-block " : "") + " grid-stack-item-content form-group fldindex" + i;
+            return " w-100 agform grid-stack-item-content form-group fldindex" + i;
         }
         else if (fld.ctype.ToUpper() == "CHECK LIST" || fld.ctype.ToUpper() == "RADIO GROUP")
         {
-            return " w-100 agform " + (!columnModeEnabled ? " d-block " : "") + " grid-stack-item-content form fldindex" + i;
+            return " w-100 agform grid-stack-item-content form fldindex" + i;
         }
         else
         {
             int col = Convert.ToInt32(datawidth / 15) + 2;
             col = col - 2;
-            return (datawidth <= 15) ? " w-100 agform " + (!columnModeEnabled ? " d-block " : "") + " grid-stack-item-content form-group fldindex" + i : " w-100 agform " + (!columnModeEnabled ? " d-block " : "") + " grid-stack-item-content form-group fldindex" + i;
+            return (datawidth <= 15) ? " w-100 agform grid-stack-item-content form-group fldindex" + i : " w-100 agform grid-stack-item-content form-group fldindex" + i;
         }
     }
 
@@ -12580,7 +12245,7 @@ public class TStructDef
             {
                 minH = 2;
             }
-            else if (fld.ctype.ToUpper() == "RADIO GROUP" && fld.type.ToLower() != "h")//fld.ctype.ToUpper() == "CHECK LIST" || (
+            else if (fld.ctype.ToUpper() == "CHECK LIST" || (fld.ctype.ToUpper() == "RADIO GROUP" && fld.type.ToLower() != "h"))
             {
                 minH = 2;
             }

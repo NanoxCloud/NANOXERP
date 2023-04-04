@@ -35,10 +35,10 @@ var initAdvFilters = true;
 var isPerf = false;
 var tableWidth = 0;
 var visibleTableWidth = 0;
+//var minCellWidth = 10;
 var minCellWidth = 15;
 var listViewCheckBoxSize = 40;
 var responsiveColumnWidth = false;
-var containsDefaultWidth = false;
 var configNavProp = "default";
 var enableCardsUi = false;
 var isMobile = false;
@@ -77,7 +77,7 @@ var toolbarHTML = "";
 var exportType = "";
 var scrollBarWidths = 5;
 
-var loadViewName = "";
+var loadViewName = "main";
 var toolbarPinArr = [];
 var popupContentcall = false;
 
@@ -105,17 +105,17 @@ var tstFldsRequested = false;
 
 let paramValuesArray = [];
 var exportPerf = false;
-var pivotCreated = false;
-var dtColumns = [];
+//var loadViewDepParams = 0;
 
-var currView = "";
+// // //to close all popups on unload of ListView
+// // $j(window).on("unload", function () { // This needs to be replicated further, temp comments
+// //     if (loadPop && !loadPop.closed) {
+// //         loadPop.close();
+// //     }
+// //     callParentNew("removeOverlayFromBody()", "function"); //if any remodal popup is opened & user clicks on browser back button then remove window - header, footer & menu overlay css
+// // });
 
 var isLnkClicked = false;
-
-var multipleCachedPages = false;
-
-var dtInitalising = false;
-var dtInitCompleted = false;
 
 //This function clears the cache files on unload and on opening another iview.
 function DeleteIviewCacheFiles() {
@@ -188,24 +188,6 @@ $.fn.single_double_click = function (single_click_callback, double_click_callbac
 }
 
 /**
- * delay any callback by some interval while continous event
- * @author Prashik
- * @Date   2019-02-28T15:12:10+0530
- * @param  {function}               callback    callback function
- * @param  {int}                 ms         delay time in milliseconds
- */
-    function delay(callback, ms) {
-    var timer = 0;
-    return function () {
-        var context = this, args = arguments;
-        clearTimeout(timer);
-        timer = setTimeout(function () {
-            callback.apply(context, args);
-        }, ms || 0);
-    };
-}
-
-/**
  * page load callback function trigerred from c# for an update panel's postback and not of postback page loads and should be used instead of $(document).ready() function since that won't call on postback
  * @author Prashik
  * @Date   2019-04-11T10:31:38+0530
@@ -239,7 +221,7 @@ function pageLoad(sender, args) {
 
     requestJSON && $("body").addClass("requestJSON");
 
-    // requestJSON && iviewButtonStyle == "old" && $("body").addClass("requestJsonOldUi");
+    requestJSON && iviewButtonStyle == "old" && $("body").addClass("requestJsonOldUi");
 
     inputControlType == "border" && $("body").addClass("borderInput");
 
@@ -248,9 +230,10 @@ function pageLoad(sender, args) {
     constructToolbar();
 
     $(".animationLoading").show();
-    $("#dvSqlPages").show();
-    $("#nextPrevBtns").hide();
-
+    if (typeof getAjaxIviewData != "undefined" && getAjaxIviewData) {
+        $("#dvSqlPages").show();
+        $("#nextPrevBtns").hide();
+    }
     if (typeof capturedButton1Submit != "undefined" && capturedButton1Submit == true) {
         capturedButton1Submit = false;
         $("#button1").click();
@@ -261,11 +244,38 @@ function pageLoad(sender, args) {
         $("#lblNoOfRecs").html(" of " + totRowCount);
     }
 
+    $("table#GridView1").each(function () {
+        var jTbl = $(this);
+        if (typeof getAjaxIviewData != "undefined" && !getAjaxIviewData) {
+
+            if (jTbl.find("tbody>tr>th").length > 0) {
+                jTbl.find("tbody").before("<thead></thead>");
+                jTbl.find("tbody>tr").each(function () {
+                    var thElem = $(this);
+                    if (thElem.find("th").length > 0) {
+                        jTbl.find("thead:first").append(thElem);
+                    }
+                });
+                jTbl.find("tbody>tr>th").parent("tr").remove();
+            }
+
+            if (jTbl.find("table#GridView1 tfoot").length == 0) {
+                var thLength = jTbl.find("thead tr:last th").length;
+                var tfootHtml = "<tfoot>"
+                for (var i = 0; i < thLength; i++) {
+                    tfootHtml += "<td></td>"
+                }
+                tfootHtml += "</tfoot>";
+                jTbl.find("tbody").before(tfootHtml);
+            }
+
+        }
+
+    });
+
+
     if (!$("#tasks").parent('li').hasClass('dropdown-submenu')) {
-        $("#tasks").html(callParentNew('lcm')[407] + " " + "<span class='menu-arrow'></span>").prop({ 'title': callParentNew('lcm')[407] });
-        try {
-            KTMenu?.init();
-        } catch (error) {}
+        $("#tasks").html(callParentNew('lcm')[407] + " " + "<span class='icon-arrows-down'></span>").prop({ 'title': callParentNew('lcm')[407] });
     }
     else {
 
@@ -283,13 +293,15 @@ function pageLoad(sender, args) {
      * @author Prashik
      * @Date   2019-04-11T10:40:40+0530
      */
+
+    if (document.title == "Iview" && typeof getAjaxIviewData != "undefined" && getAjaxIviewData) {
         var iVData = $("#hdnIViewData").val();
         if (iVData != "") {
             try {
                 if (iVData) {
                     createIvir(iVData);
                     try {
-                        nxtScrollSize = ivDatas.length;//100; //default record size for datatable initilization
+                        nxtScrollSize = 100; //default record size for datatable initilization
                         defaultRecsPerPage = 100; //fetch size value
                         dtTotalRecords = getDtRecordCount();
                         checkIfNextDBRowsExist(true);
@@ -310,6 +322,13 @@ function pageLoad(sender, args) {
             checkIfNextDBRowsExist(true);
         }
 
+    } else if (document.title == "Iview" && typeof ivirHeaderData != "undefined" && typeof getAjaxIviewData != "undefined" && !getAjaxIviewData) {
+        if (Object.keys(ivirHeaderData).length) {
+            createIvir(JSON.stringify(ivirHeaderData));
+        }
+    }
+
+
     if (!ivConfigurations && typeof globalIvConfigurations != "undefined" && globalIvConfigurations) {
         try {
             ivConfigurations = globalIvConfigurations.configurations.config.length == undefined ? [globalIvConfigurations.configurations.config] : globalIvConfigurations.configurations.config;
@@ -323,10 +342,9 @@ function pageLoad(sender, args) {
 
             $("table#GridView1").removeAttr('cellspacing rules border style');
             $("table#GridView1").addClass('table table-row-bordered ms-0 ivirMainGrid ');
-            if (stripedReport || appGlobalVarsObject?._CONSTANTS?.window?.getSessionValue?.("AxShowStripedReport") == "true") {
+            if (stripedReport) {
                 $("table#GridView1").addClass("table-striped");
             }
-
             $("#ivContainer").addClass("interactiveReport");
             $(".iviewTableWrapper").addClass('interactiveReportWrapper');
             if (requestJSON && iviewButtonStyle != "old") {
@@ -342,11 +360,11 @@ function pageLoad(sender, args) {
     $('#Filterscollapse').on('shown.bs.collapse', function () {
         $("#myFilters").removeClass("disabled");
         $("#searchBar").find(".ccolapsee").removeClass("glyphicon-plus icon-arrows-plus").addClass("glyphicon-minus icon-arrows-minus");
-        $("#accordion").addClass("shadow").css({"top": `${$(".toolbar").outerHeight(true)}px`});
+        $("#accordion").addClass("shadow");
     }).on('hidden.bs.collapse', function () {
         $("#myFilters").removeClass("disabled");
         $("#searchBar").find(".ccolapsee").removeClass("glyphicon-minus icon-arrows-minus").addClass("glyphicon-plus icon-arrows-plus");
-        $("#accordion").addClass("shadow").css({"top": `${$(".toolbar").outerHeight(true)}px`});
+        $("#accordion").addClass("shadow");
     });
     if (ivirColumnTypeObj == "") {
         $('#Filterscollapse').off('show.bs.collapse').off('hide.bs.collapse');
@@ -356,6 +374,9 @@ function pageLoad(sender, args) {
             }
             $("#myFilters").addClass("disabled");
             $("#accordion").removeClass("shadow");
+            if (accordionHeight != 0) {
+                // $(".gridData.clonedHtml").animate({ "top": (parseInt($(".gridData.clonedHtml").css('top')) + accordionHeight) + "px" }, 300);
+            }
         }).on('hide.bs.collapse', function () {
             if ($("#myFilters").hasClass("disabled")) {
                 return;
@@ -368,10 +389,10 @@ function pageLoad(sender, args) {
     if (document.title == "Iview") {
         timePickerSecChecker();
 
-        $(window).resize(delay(function () {
+        $(window).resize(function () {
             setSmartViewHeight();
             setPinedIconContainerWidth();
-        }, 100));
+        });
     }
 
     $("#lnkPrev").single_double_click(function (e) {
@@ -461,14 +482,14 @@ function pageLoad(sender, args) {
                 axAttachExternalCustomPlugin(ivDatas, FieldName, HeaderText, ColumnType, HideColumn, isChkBox, filteredColumns, hiddenColumnIndex, ivConfigurations);
                 $(".animationLoading").hide();
             } catch (ex) {
-                if (requestJSON) {
+                if (requestJSON && iviewButtonStyle != "old") {
                     var tempWebServiceViewName = $("#hdnWebServiceViewName").val();
                     if (tempWebServiceViewName) {
                         loadViewName = tempWebServiceViewName;
 
                         if ($(`#viewTabs li a#${loadViewName}`).length > 0) {
-                            $("#viewTabs li a").removeClass("active");
-                            $(`#viewTabs li a#${loadViewName}`).addClass("active");
+                            $("#viewTabs li").removeClass("active")
+                            $(`#viewTabs li a#${loadViewName}`).parent("li").addClass("active")
                         }
 
                         $("#hdnWebServiceViewName").val("");
@@ -490,6 +511,24 @@ function pageLoad(sender, args) {
 
 
     /**
+     * delay any callback by some interval while continous keyup
+     * @author Prashik
+     * @Date   2019-02-28T15:12:10+0530
+     * @param  {function}               callback    callback function
+     * @param  {int}                 ms         delay time in milliseconds
+     */
+    function delay(callback, ms) {
+        var timer = 0;
+        return function () {
+            var context = this, args = arguments;
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+                callback.apply(context, args);
+            }, ms || 0);
+        };
+    }
+
+    /**
      * search callback function for gridview
      * @author Prashik
      * @Date   2019-02-28T15:14:27+0530
@@ -499,7 +538,7 @@ function pageLoad(sender, args) {
         if (typeof ivirDataTableApi == "undefined") {
             //is classic iview
             var value = $(this).val().toLowerCase();
-            $("#GridView1 tbody tr[role=row]").filter(function () {
+            $("#GridView1 tbody tr").filter(function () {
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
             });
         } else {
@@ -508,18 +547,17 @@ function pageLoad(sender, args) {
         }
     }
 
-    $("#ivInSearchInput").on("input", delay(searchCallBack, 500)).on('blur', function (e) {
+    $("#ivInSearchInput").on("keyup", delay(searchCallBack, 500)).on('blur', function (e) {
         if (requestJSON && iviewButtonStyle != "old") {
-            if(!$(e.relatedTarget).is($("#ivInSearchInputButton"))){
-                $('.searchBoxChildContainer').addClass('d-none');
-                $('#idsearch').removeClass('fa-remove');
-                $("#idsearch").off("click.searchExpandCollapse");
-                setTimeout(() => {
-                    $("#idsearch").on("click.searchExpandCollapse", searchExpandCollapse);
-                }, 500);
-                e.preventDefault();
-                e.stopPropagation();
-            }
+            $('.searchBoxChildContainer').addClass('d-none');
+            $('#idsearch').removeClass('fa-remove');
+            // // $('#idsearch').addClass('fa-search');
+            $("#idsearch").off("click.searchExpandCollapse");
+            setTimeout(() => {
+                $("#idsearch").on("click.searchExpandCollapse", searchExpandCollapse);
+            }, 500);
+            e.preventDefault();
+            e.stopPropagation();
         }
     }).on("mouseover", function () {
         $(this).focus()
@@ -529,26 +567,13 @@ function pageLoad(sender, args) {
         $("#idsearch").on("click.searchExpandCollapse", searchExpandCollapse);
     }
 
-    $("#ivInSearchInputButton").on("click", function(e){
-        e.preventDefault();
-        e.stopPropagation();
-
-        $("#ivInSearchInputButtonLoader").removeClass("d-none");
-
-        // ShowDimmer(true);
-        setTimeout(function () {
-            setTimeout(() => {
-                $("#ivInSearchInput").focus();
-                getNextDtRecords(0);
-            }, 0);
-        }, 100);
-    });
-
     function searchExpandCollapse(e) {
         if ($('#idsearch').hasClass('fa-remove')) {
             $('#idsearch').removeClass('fa-remove');
+            // // $('#idsearch').addClass('fa-search');
         } else {
             $('#idsearch').addClass('fa-remove');
+            // // $('#idsearch').removeClass('fa-search');
             $("#ivInSearchInput").focus();
         }
         e.stopPropagation();
@@ -556,21 +581,18 @@ function pageLoad(sender, args) {
     }
 
     if (document.title == "Iview") {
-        if (!showParam || recordsExist || dataFetched) {
+        if (!showParam || recordsExist) {
             $("#accordion").removeClass("shadow");
             $('#myFilters').addClass("collapsed").attr("aria-expanded", "false");
             $('#Filterscollapse').removeClass("in show").attr("aria-expanded", "false");
         } else {
-            $("#accordion").addClass("shadow").css({"top": `${$(".toolbar").outerHeight(true)}px`});
+            $("#accordion").addClass("shadow");
             $('#myFilters').removeClass("collapsed").attr("aria-expanded", "true");
             $('#Filterscollapse').addClass("in show").attr("aria-expanded", "true");
         }
     }
 
-    if(!dtInitalising && !dotNetSubmit){
-        $("body").removeClass("stay-page-loading");
-        ShowDimmer(false);
-    }
+    ShowDimmer(false);
 
     if (breadCrumbStr) {
         var pageCaption = document.getElementsByClassName("page-caption")[0].innerText;
@@ -586,8 +608,8 @@ function pageLoad(sender, args) {
     }
 
     if (requestJSON == true && iviewButtonStyle != "old") {
-        // $("#rowsTxtCountNew").append($('#rowsTxtCount').detach().html());
-        // $("#ivInSearch").append($("#searchBar").detach());
+        $("#rowsTxtCountNew").append($('#rowsTxtCount').detach().html());
+        $("#ivInSearch").append($("#searchBar").detach());
 
 
         $("#iconsNew .right").off("click.subMenu", '.dropdown-submenu a').on("click.subMenu", '.dropdown-submenu a', function (e) {
@@ -699,13 +721,19 @@ function pageLoad(sender, args) {
     }
 
     $("#dvRefreshParamIcon").off("click").on("click", refreshIview);
-
-    $(".btn.btn-icon").addClass("btn-sm").find(".material-icons").addClass("material-icons-style material-icons-2");
 }
 
 
 window.onbeforeunload = BeforeWindowClose;
 function BeforeWindowClose() {
+    //var ivKey = $j("#hdnKey").val();
+    ////eval(callParent('IsContentAxpIframe') + "= false");
+    //try {
+    //    if (document.title.toLowerCase() == "iview")
+    //        ASB.WebService.DeleteIviewDataObj(ivKey);
+    //}
+    //catch (ex) {
+    //}
 }
 
 
@@ -1156,13 +1184,13 @@ $(document).ready(function () {
             ivirSortColumns(["!"]);
         }
 
-        if (loadViewName != "main" && (requestJSON && loadViewName != "charts")) {
+        if (loadViewName != "main" && (requestJSON && iviewButtonStyle != "old" && loadViewName != "charts")) {
             loadViewTab($(this).attr("id"));
             toggleGridView('grid');
 
             window.loadViewName = loadViewName;
         } else {
-            if ((firstTimeParams || (requestJSON && loadViewName == "main" && isListView)) && (requestJSON && loadViewName != "charts")) {
+            if ((firstTimeParams || (requestJSON && iviewButtonStyle != "old" && loadViewName == "main" && isListView)) && (requestJSON && iviewButtonStyle != "old" && loadViewName != "charts")) {
 
                 if (firstTimeParams) {
                     try {
@@ -1196,26 +1224,23 @@ $(document).ready(function () {
             } else {
 
                 clearExistingPills();
-                if (requestJSON && loadViewName == "charts") {
+                if (requestJSON && iviewButtonStyle != "old" && loadViewName == "charts") {
                     ivirMainObj = {}
                     ivirMainObj.key = "charts";
                     ivirMainObj.chart = getAllCommonCharts();
                 }
-                if (requestJSON && loadViewName == "main") {
+                if (requestJSON && iviewButtonStyle != "old" && loadViewName == "main") {
                     ivirMainObj = {};
                 }
                 createPillsOnLoad();
 
-                if(loadViewName){
-                    $('.nav-tabs a[id=' + loadViewName + ']')?.tab?.('show');
-                }
-                
+                $('.nav-tabs a[id=' + loadViewName + ']').tab('show');
                 scrollToActiveView(loadViewName);
 
                 window.loadViewName = loadViewName;
             }
 
-            if (requestJSON && loadViewName == "charts") {
+            if (requestJSON && iviewButtonStyle != "old" && loadViewName == "charts") {
                 $("#ivirChartPillsList .ivirChartCheckBox:first").change();
                 $("#ivirChartPillsDiv .ivirChartCheckBox:first").change();
 
@@ -1564,10 +1589,10 @@ function callActWithFile(aname, fileup, iName, confirm, appl) {
         var ivKey = $j("#hdnKey").val();
         if (confirm != "") {
             if (confirm(confirm)) {
-                ASB.WebService.CallActionWS(dummyArray, dummyArray, dummyArray, dummyArray, dummyArray, "", "", txt, fup, "i", "", "", ivKey, "", isScript, "", false, CActSucceededCallback);
+                ASB.WebService.CallActionWS(dummyArray, dummyArray, dummyArray, dummyArray, dummyArray, "", "", txt, fup, "i", "", "", ivKey, "", isScript, CActSucceededCallback);
             }
         } else {
-            ASB.WebService.CallActionWS(dummyArray, dummyArray, dummyArray, dummyArray, dummyArray, "", "", txt, fup, "i", "", "", ivKey, "", isScript, "", false, CActSucceededCallback);
+            ASB.WebService.CallActionWS(dummyArray, dummyArray, dummyArray, dummyArray, dummyArray, "", "", txt, fup, "i", "", "", ivKey, "", isScript, CActSucceededCallback);
         }
     }
     closeParentFrame();
@@ -1675,7 +1700,7 @@ function callAction(a, x, conf, appl) {
     var dummyArray = new Array();
     try {
         var ivKey = $j("#hdnKey").val();
-        ASB.WebService.CallActionWS(dummyArray, dummyArray, dummyArray, dummyArray, dummyArray, "", "", actXML, fup, "i", "", "", ivKey, "", isScript, "", false, CActSucceededCallback);
+        ASB.WebService.CallActionWS(dummyArray, dummyArray, dummyArray, dummyArray, dummyArray, "", "", actXML, fup, "i", "", "", ivKey, "", isScript, CActSucceededCallback);
 
     } catch (ex) { showAlertDialog("error", ex.toString()); }
 
@@ -1752,7 +1777,9 @@ function ActButtonClick(btnId, confirmMsg, allRow, NavigationURL) {
                         action: function () {
                             disableBackDrop('destroy');
                             ActButtonClickCB.close();
-                            callRemoteDoActionWS(rows);
+                            if (getAjaxIviewData) {
+                                callRemoteDoActionWS(rows);
+                            }
                         }
                     },
                     buttonB: {
@@ -1940,9 +1967,42 @@ function callHLaction(a, x, name) {
     if ($("#hdnAct").length)
         $("#hdnAct").val("btn_" + a);
 
+    if (!getAjaxIviewData) {
 
-    selXML = jsonToXml(x.toString());
+        callParentNew("loadFrame()", "function");
+        var tid = "";
+        var res = "";
+        var b = form1.elements.length;
 
+        if (document.getElementById("rXml") != null) {
+            res = document.getElementById("rXml").value;
+        }
+        if (res.indexOf("<?xml") != -1)
+            res = res.substring(38, res.length); // to remove <xml version.....  
+        // for IE
+        try {
+            xmlObj = new ActiveXObject("Microsoft.XMLDOM");
+            xmlObj.loadXML(res);
+        } catch (e) {
+            try //Firefox, Mozilla, Opera, etc.
+            {
+                parser = new DOMParser();
+                xmlObj = parser.parseFromString(res, "text/xml");
+            } catch (e) { showAlertDialog("error", e.message) }
+        }
+        var s = xmlObj.getElementsByTagName(xmlObj.childNodes[0].tagName.toString());
+
+        if (xmlObj.getElementsByTagName("row")[x].xml == undefined) {
+            nodeXml = new XMLSerializer().serializeToString(xmlObj.getElementsByTagName("row")[x]);
+            selXML = selXML + nodeXml;
+        } else {
+            selXML = selXML + xmlObj.getElementsByTagName("row")[x].xml;
+        }
+
+    }
+    else {
+        selXML = jsonToXml(x.toString());
+    }
 
     var dummyArray = new Array();
     var trace = traceSplitStr + "CallHLAction-" + a + traceSplitChar;
@@ -1956,7 +2016,7 @@ function callHLaction(a, x, name) {
     }
     catch (e) { }
     GetProcessTime();
-    ASB.WebService.CallActionWS(dummyArray, dummyArray, dummyArray, dummyArray, dummyArray, "", "", actXML, fup, "i", "", "", ivKey, "", isScript, "", false, CHlActSucceededCallback);
+    ASB.WebService.CallActionWS(dummyArray, dummyArray, dummyArray, dummyArray, dummyArray, "", "", actXML, fup, "i", "", "", ivKey, "", isScript, CHlActSucceededCallback);
 }
 
 function ConstructFldDataNodes(selXML) {
@@ -2049,7 +2109,7 @@ function EndRequestHandler(sender, args) {
     if (args.get_error() == undefined) {
         parent.window.scrollTo(0, 0);
 
-        if (document.title == "Iview" || document.title == "Listview") {
+        if (document.title == "Iview" || document.title == "List IView") {
             calledFrom = "";
 
             ShowVisibleFilters();
@@ -2057,6 +2117,7 @@ function EndRequestHandler(sender, args) {
             CheckMyViewFilters();
             SetParamValues($j("#hdnparamValues").val());
             evalParamExprHandler();
+            //parafilterfixer(); //not required since we are displaying params window as a popup #AXP000203
         }
         try {
             AxAfterIviewLoad();
@@ -2071,6 +2132,12 @@ function EndRequestHandler(sender, args) {
         document.body.style.cursor = 'default';
 
         ShowDimmer(false);
+    }
+
+    // window.parent.closeFrame();
+    if (document.title != "IView Picklist") {
+        //TODO:The below line is commented as in IE the self iview was getting closed and alert was displayed in the browser.
+        //parent.window.close();
     }
 
     if (typeof isFromClearBtn != "undefined" && isFromClearBtn == true) {
@@ -2131,6 +2198,7 @@ function CheckUrlSplChars(value) {
     value = value.replace(/'/g, "%27");
     value = value.replace(/"/g, "%22");
     value = value.replace(/#/g, "%23");
+    //value = encodeURIComponent(value);
     return value;
 }
 
@@ -2448,17 +2516,23 @@ function getRecordid() {
 
 
 function generateFullIviewXML(res) {
-    var rows = "";
-    $j("#GridView1" + " tr").each(function () {
-        $j(this).find("input:checkbox").each(function () {
-            if ($j(this).attr("name") == "chkItem") {
-                var rowIdx = $j(this).val();
-                rows += rowIdx + "♣";
-            }
-        });
-    });
 
-    res = "<table>" + jsonToXml(rows) + "</table>";
+    if (typeof getAjaxIviewData == "undefined" || !getAjaxIviewData) {
+        if (res.indexOf("<?xml") != -1) {
+            res = res.substring(38, res.length); // to remove <xml version.....
+        }
+    } else {
+        var rows = "";
+        $j("#GridView1" + " tr").each(function () {
+            $j(this).find("input:checkbox").each(function () {
+                if ($j(this).attr("name") == "chkItem") {
+                    var rowIdx = $j(this).val();
+                    rows += rowIdx + "♣";
+                }
+            });
+        });
+        res = "<table>" + jsonToXml(rows) + "</table>";
+    }
     return res;
 }
 
@@ -2715,7 +2789,6 @@ function SuccessCallbackDRow(result, eventArgs) {
         if (myJSONObject.error) {
             ExecuteErrorMsg(myJSONObject.error, "Delete");
         } else if (myJSONObject.message) {
-            ClearRedisDataCache();
             ExecuteMessage(myJSONObject.message, "Delete");
         }
     }
@@ -2794,7 +2867,7 @@ function callOpenAction(a, b) {
 
         callParentNew("loadFrame()", "function");
         GetProcessTime();
-        $j(location).attr("href", "../aspx/tstruct.aspx?transid=" + b + "&hdnbElapsTime=" + callParentNew("browserElapsTime") + "" + `&openerIV=${iName}&isIV=${!isListView}`);
+        $j(location).attr("href", "../aspx/tstruct.aspx?transid=" + b + "&hdnbElapsTime=" + callParentNew("browserElapsTime"));
         ResetNavGlobalVariables();
     }
 }
@@ -2923,7 +2996,7 @@ function LoadPopPage(poppath, pageno, isParentListView, navigationType) {
         }
         GetProcessTime();
         var hyperlinkPopupURL = `${poppath}&hdnbElapsTime=${callParentNew("browserElapsTime")}`;
-        createPopup(hyperlinkPopupURL, true);
+        createPopup(hyperlinkPopupURL);
         callParentNew("loadFrame()", "function");
     }
 }
@@ -3010,7 +3083,7 @@ function GetParamValues(calledFrom, evt) {
             var ctrl = $j("#" + parentArr[i]);
             if (ctrl.length) {
                 var fldType = ctrl.prop("type");
-                if (fldType == "select-one" && !ctrl.parents(".paramtd2").hasClass("pick-list")) {
+                if (fldType == "select-one") {
                     var result = ctrl.find("option:selected").val();
                     result = typeof result == "undefined" ? "" : result;
                     if ((result == "" || result == null) && (calledFrom != "clear"))// If any select parameter is empty should not call getIview
@@ -3065,11 +3138,7 @@ function GetParamValues(calledFrom, evt) {
                     pValue = GetChkParamValues(pValue, parentArr[i]);
                     if (pValue != "") pValue += "¿";
                 } else {
-                    if(ctrl.data("select2")){
-                        var newval = ctrl.val() === null ? "" : ctrl.val();
-                    }else{
-                        var newval = ctrl.val();
-                    }
+                    var newval = ctrl.val();
                     if (ctrl.hasClass("trySelectMs")) {
                         try {
                             if (ctrl.data('bs.tokenfield')) {
@@ -3844,11 +3913,6 @@ function SuccGetDependents(result, eventArgs) {
                 setParamsValueList(fldname, pType, resultArr, fldValue, attriuteArr);
                 var cnt = resultArr.length;
                 resultArr.splice(0, cnt);
-
-                if($(parentCtrl).data('select2')?.isOpen()){
-                    $(parentCtrl).select2('close');
-                    $(parentCtrl).select2('open');
-                }                
             }
             if (pType.toLowerCase() == "select" && isHidden == "true") {
                 parentCtrl.value = fldValue;
@@ -3863,19 +3927,9 @@ function SuccGetDependents(result, eventArgs) {
                 setParamsValueList(fldname, pType, resultArr, fldValue);
                 var cnt = resultArr.length;
                 resultArr.splice(0, cnt);
-
-                if($(parentCtrl).data('select2')?.isOpen()){
-                    $(parentCtrl).select2('close');
-                    $(parentCtrl).select2('open');
-                }
             }
             else if (pType.toLowerCase() == "pick list" && isHidden == "false") {
                 parentCtrl.value = fldValue;
-
-                if($(parentCtrl).data('select2')?.isOpen()){
-                    $(parentCtrl).select2('close');
-                    $(parentCtrl).select2('open');
-                }
             }
         }
     }
@@ -3948,7 +4002,7 @@ function ValidateOnSubmit() {
             linkParams = ReplaceUrlSpecialChars(linkParams);
             if (linkParams != "") {
                 setIviewNavigationData(linkParams, iName);
-                callParentNew("updateAppLinkObj")?.(window.location.href.replace("iview.aspx?ivname=", "ivtoivload.aspx?ivname=") + "&AxIvNav=true",1,window?.frameElement?.id == "axpiframe");
+                callParentNew("updateAppLinkObj(" + window.location.href.replace("iview.aspx?ivname=", "ivtoivload.aspx?ivname=") + "&AxIvNav=true,1)", "function");
             }
             resetSmartViewVariables();
             try {
@@ -3959,12 +4013,10 @@ function ValidateOnSubmit() {
                     }
                 });
                 $("select.trySelect, select.trySelectPl, select.trySelectMs").each(function () {
-                    try {
-                        $(this).select2('destroy');
-                    } catch (ex) {}
+                    $(this).select2('destroy');
                 });
             } catch (ex) { }
-            $(".multiFldChk, select.trySelect, select.trySelectPl, select.trySelectMs").length > 0 && $('#Filterscollapse')?.collapse?.('hide') && $j("#hdnParamHtml").val($j("#dvParamCont").html());
+            $(".multiFldChk, select.trySelect, select.trySelectPl, select.trySelectMs").length > 0 && $('#Filterscollapse').collapse('hide') && $j("#hdnParamHtml").val($j("#dvParamCont").html());
         }
         else {
             $(".animationLoading").hide();
@@ -4237,11 +4289,7 @@ function AddDatePicker(parentID = "") {
         $(parentID + ".date").parent().flatpickr({
             dateFormat: dtFormat,
             disableMobile: "true",
-            allowInput: true,
-            wrap: true,
-            onChange(selectedDates, dateStr, instance) {
-                isDtSelected = true;
-            }
+            wrap: true
         });
     }
 }
@@ -4276,8 +4324,7 @@ function AddTimePicker(parentID = "") {
         $(parentID + ".onlyTime").parent().flatpickr({
             enableTime: true,
             noCalendar: true,
-            dateFormat: "H:i",
-            time_24hr: true,
+            dateFormat: "H:i K",
             disableMobile: "true",
             wrap: true
         });
@@ -4344,7 +4391,7 @@ function SetSelectedValue(listcontrol, listctrl, b) {
             }
         }
 
-        callParentNew("loadPopUpPage", "id").dispatchEvent(new CustomEvent("close"));
+        callParentNew("ivPlAdvSearch", "id").dispatchEvent(new CustomEvent("close"));
     }
 }
 
@@ -4461,6 +4508,7 @@ function openListActionWin() {
     $j(".ListCust").hide();
     $j("#divtr1").show();
     $j("#tr1").css('background-color', '#D9D2D4');
+    //$j("#divAction").show();
     $j("#divAction").dialog({ title: "List view actions", height: 400, width: 800, position: 'center', modal: true, buttons: { "Ok": function () { ApplyCondition($j(this)); } } });
     Adjustwin();
 }
@@ -4494,6 +4542,7 @@ function client_OnTreeNodeCheckedList() {
     var obj = window.event.srcElement;
     var treeNodeFound = false;
     var checkedState;
+    // // var currentNode;
     ValidateGridDc();
 
     if (griddccnt > 1) {
@@ -4964,6 +5013,7 @@ function AddNewListCondition() {
     anc.className = "ancLink";
 
     var delImg = document.createElement("span");
+    //delImg.src = "../AxpImages/icons/16x16/delete.png";
     delImg.className = "curHand icon-arrows-circle-minus";
     delImg.id = "delCond" + index;
     anc.appendChild(delImg);
@@ -4990,6 +5040,7 @@ function AddCondition() {
         anc.href = "javascript:DeleteListCondition('" + index + "');";
 
         var delImg = document.createElement("span");
+        //delImg.src = "../AxpImages/icons/16x16/delete.png";
         delImg.className = "curHand icon-arrows-circle-minus";
         delImg.id = "delCond" + index;
 
@@ -5754,6 +5805,7 @@ function bindSubtotalList() {
         var html = '';
         for (var i = 0; i < count; i++) {
             var subtotl = subtotallst[i].split(',');
+            // // var subcount = subtotl.length;
 
             html += '<tr><td class="tableCell">' + subtotl[0] + '</td>';
             html += '<td  class="tableCell" >' + subtotl[1] + '</td>';
@@ -5872,9 +5924,11 @@ function SetListCondition(condText) {
         } else {
             AddCondition();
             var OprId = "#grpAndOr" + i;
+            //radOr1
             var Opr = $j("#rad" + wfCond[4] + i);
             Opr.prop("checked", true);
 
+            // i += 1;
             suffix = i;
             ddlCol = $j("#ddlListFilter" + suffix);
             txtValue1 = $j("#txtFilter" + suffix);
@@ -5961,7 +6015,7 @@ var lname = "";
 
 function isExistViewName() {
 
-    if ($j("#txtViewName").val().toLowerCase() == "new" || $j("#txtViewName").val().toLowerCase() == "" || $j("#txtViewName").val().toLowerCase() == "main" || (requestJSON && $j("#txtViewName").val().toLowerCase() == "charts")) {
+    if ($j("#txtViewName").val().toLowerCase() == "new" || $j("#txtViewName").val().toLowerCase() == "" || $j("#txtViewName").val().toLowerCase() == "main" || (requestJSON && iviewButtonStyle != "old" && $j("#txtViewName").val().toLowerCase() == "charts")) {
         showAlertDialog("warning", 3019, "client");
         return false;
     }
@@ -6492,7 +6546,7 @@ function BindGrid(viewName) {
 ///Function to click the new button from iview ,display the tstruct page.
 function pgReload() {
     ResetNavGlobalVariables();
-    $j(location).attr("href", "tstruct.aspx?transid=" + tst + `&openerIV=${iName}&isIV=${!isListView}`);
+    $j(location).attr("href", "tstruct.aspx?transid=" + tst);
     try {
         if (!window.parent.isSessionCleared && window.document.title == "List IView") {
             ASB.WebService.ClearNavigationSession();
@@ -6526,7 +6580,7 @@ function submitIt() {
 }
 //to set clicked rowIndex,column name and parent as IView
 function SetColumnName(columnName, dataRowIndex, isParentIview) {
-    // ShowDimmer(true);
+    ShowDimmer(true);
     window.parent.dataRowIndex = dataRowIndex;
     window.parent.clickedColumn = columnName;
     if (isParentIview)
@@ -6768,6 +6822,7 @@ function SetDynamicScrollWdith(action) {
 
 //To make filter visible on show filter click
 function ShowFilter() {
+    // $j("#dvShowFilter").show();
     $j("#dvHideFilter").css("display", "block");
     $j(".dvContent").css("height", "60vh");
     document.getElementById("hdnIsParaVisible").value = "1";
@@ -6894,6 +6949,7 @@ function HighLightSelected() {
 //#End Region Filter Iview and List View
 
 function toExcelWeb(a, c) {
+    //if (recordsFieldsValidForSave()) {
     var left = (screen.width / 2) - (840 / 2);
     var top = (screen.height / 2) - (600 / 2);
     var pa = "";
@@ -7036,7 +7092,7 @@ function OpenIviewFromIv(srcUrl, params, ivname, navigationType) {
 
 function SuccOpenIvAction(result, eventArgs) {
     if (result != "") {
-        callParentNew("updateAppLinkObj")?.(result,1,window?.frameElement?.id == "axpiframe");
+        callParentNew("updateAppLinkObj(" + result + ",1)", "function")
         //todo : need to remove
         var parFrm = $j("#axpiframe", parent.document);
 
@@ -7143,6 +7199,7 @@ function SetFileToDownload(proj, tid, fldname, filename, attachtype = "image", o
             async: !onlygetPath,
             url: "../WebService.asmx/GetFilePathForIviewAttachment",
             contentType: "application/json;charset=utf-8",
+            //data: '{proj: "' + proj + '",tid: "' + tid + '",fldname: "' + fldname + '",filename: "' + filename + '"}',
             data: JSON.stringify({ proj, tid, fldname, filename, attachtype, onlyRecordId, onlyFileName, isDbAttachment, onlygetPath }),
             dataType: "json",
             success: function (data) {
@@ -7353,7 +7410,7 @@ function parafilterfixer() {
         }
         $j("#Filterscollapse").addClass("in");
         $j("#Filterscollapse").attr("aria-expanded", "true");
-        $("#accordion").addClass("shadow").css({"top": `${$(".toolbar").outerHeight(true)}px`});
+        $("#accordion").addClass("shadow");
     }
 }
 
@@ -7368,136 +7425,136 @@ function UpdateGetParamCache() {
     capturedButton1Submit = true;
 }
 
-//function GetStagRecords(checkLink) {
-//    callParentNew("loadFrame()", "function");
+function GetStagRecords(checkLink) {
+    callParentNew("loadFrame()", "function");
 
-//    $j("#hdnIViewShow").val(checkLink);
+    $j("#hdnIViewShow").val(checkLink);
 
-//    var key = $j("#hdnKey").val();
-//    var tableno = $j("#hdnStagTableNo").val();
-//    var totalRecords = $j("#hdnTotalIViewRec").val();
-//    if (totalRecords > 20) {
-//        if (checkLink == 'More') {
-//            try {
-//                ASB.WebService.GetNextStagPage(key, tableno, SuccessGetStag);
-//            } catch (ex) { AxWaitCursor(false); }
-//        } else if (checkLink == 'All') {
-//            try {
-//                ASB.WebService.GetAllPages(key, tableno, SuccessGetStag);
-//            } catch (ex) { AxWaitCursor(false); }
-//        }
-//    } else {
-//        showMore = false;
-//        DisableStagLoad();
-//        callParentNew("closeFrame()", "function");
-//    }
+    var key = $j("#hdnKey").val();
+    var tableno = $j("#hdnStagTableNo").val();
+    var totalRecords = $j("#hdnTotalIViewRec").val();
+    if (totalRecords > 20) {
+        if (checkLink == 'More') {
+            try {
+                ASB.WebService.GetNextStagPage(key, tableno, SuccessGetStag);
+            } catch (ex) { AxWaitCursor(false); }
+        } else if (checkLink == 'All') {
+            try {
+                ASB.WebService.GetAllPages(key, tableno, SuccessGetStag);
+            } catch (ex) { AxWaitCursor(false); }
+        }
+    } else {
+        showMore = false;
+        DisableStagLoad();
+        callParentNew("closeFrame()", "function");
+    }
 
-//}
+}
 
-//function FailureGetStag(result, eventArgs) {
-//    closeParentFrame();
-//}
+function FailureGetStag(result, eventArgs) {
+    closeParentFrame();
+}
 
-//function SuccessGetStag(result, eventArgs) {
-//    if (CheckSessionTimeout(result))
-//        return;
-//    var xmlDoc = $j.parseXML(result);
-//    var xml = $j(xmlDoc);
-//    var tableno = $j("#hdnStagTableNo").val();
-//    tableno = parseInt(tableno, 10) + 1;
-//    $j("#hdnStagTableNo").val(tableno);
+function SuccessGetStag(result, eventArgs) {
+    if (CheckSessionTimeout(result))
+        return;
+    var xmlDoc = $j.parseXML(result);
+    var xml = $j(xmlDoc);
+    var tableno = $j("#hdnStagTableNo").val();
+    tableno = parseInt(tableno, 10) + 1;
+    $j("#hdnStagTableNo").val(tableno);
 
-//    var iViewShowCat = $j("#hdnIViewShow").val();
-//    var customers;
-//    if (iViewShowCat == 'More') {
-//        customers = xml.find("Table_" + tableno);
-//    } else {
-//        customers = $j(xml).find("Table1");
-//    }
+    var iViewShowCat = $j("#hdnIViewShow").val();
+    var customers;
+    if (iViewShowCat == 'More') {
+        customers = xml.find("Table_" + tableno);
+    } else {
+        customers = $j(xml).find("Table1");
+    }
 
-//    customers.each(function () {
-//        var customer = $j(this);
-//        var row = $j("[id$=GridView1] tr").eq(1).clone(true);
-//        var rowHtml = "";
-//        if (customer[0].childNodes) {
-//            var idx = 0;
-//            for (var j = 0; j < customer[0].childNodes.length; j++) {
-//                var colText = customer[0].childNodes[j].textContent;
-//                if (colText != "\n    ") {
+    customers.each(function () {
+        var customer = $j(this);
+        var row = $j("[id$=GridView1] tr").eq(1).clone(true);
+        var rowHtml = "";
+        if (customer[0].childNodes) {
+            var idx = 0;
+            for (var j = 0; j < customer[0].childNodes.length; j++) {
+                var colText = customer[0].childNodes[j].textContent;
+                if (colText != "\n    ") {
 
-//                    if (j == 0 || j == 1) {
-//                        var htmlString = row.find("td").eq(idx).html();
-//                        if (htmlString.indexOf("checkbox") > -1) {
-//                            row.find("td").eq(idx).html(htmlString.replace('value="1"', 'value="' + colText + '"'));
-//                        } else
-//                            row.find("td").eq(idx).html(colText);
-//                    } else {
-//                        if (colText == "Grand Total")
-//                            row.find("td").eq(idx - 1).html("");
-//                        row.find("td").eq(idx).html(colText);
-//                    }
-//                    idx++;
-//                }
-//            }
-//        } else {
-//            for (var j = 0; j < customer[0].children.length; j++) {
-//                var colText = customer[0].children[j].textContent;
-//                if (j == 0) {
-//                    var htmlString = row.find("td").eq(j).html();
-//                    if (htmlString.indexOf("checkbox") > -1) {
-//                        row.find("td").eq(j).html(row[0].children[0].innerHTML.replace('value="1"', 'value="' + colText + '"'));
-//                    } else {
-//                        row.find("td").eq(j).html(colText);
-//                    }
-//                } else {
-//                    row.find("td").eq(j).html(colText);
-//                }
-//            }
-//        }
-//        $j("[id$=GridView1]").append(row);
-//    });
+                    if (j == 0 || j == 1) {
+                        var htmlString = row.find("td").eq(idx).html();
+                        if (htmlString.indexOf("checkbox") > -1) {
+                            row.find("td").eq(idx).html(htmlString.replace('value="1"', 'value="' + colText + '"'));
+                        } else
+                            row.find("td").eq(idx).html(colText);
+                    } else {
+                        if (colText == "Grand Total")
+                            row.find("td").eq(idx - 1).html("");
+                        row.find("td").eq(idx).html(colText);
+                    }
+                    idx++;
+                }
+            }
+        } else {
+            for (var j = 0; j < customer[0].children.length; j++) {
+                var colText = customer[0].children[j].textContent;
+                if (j == 0) {
+                    var htmlString = row.find("td").eq(j).html();
+                    if (htmlString.indexOf("checkbox") > -1) {
+                        row.find("td").eq(j).html(row[0].children[0].innerHTML.replace('value="1"', 'value="' + colText + '"'));
+                    } else {
+                        row.find("td").eq(j).html(colText);
+                    }
+                } else {
+                    row.find("td").eq(j).html(colText);
+                }
+            }
+        }
+        $j("[id$=GridView1]").append(row);
+    });
 
-//    var totalGridRows = $j("#GridView1 tr").length - 1;
+    var totalGridRows = $j("#GridView1 tr").length - 1;
 
-//    if ($j("#GridView1 tr:last td:eq(0)").text() == "Grand Total" || $j("#GridView1 tr:last td:eq(1)").text() == "Grand Total" || $j("#GridView1 tr:first td:eq(1)").text() == "Grand Total") {
-//        if ($j("#GridView1 tr:last td:eq(0)").text() == "Grand Total") {
-//            $j("#GridView1 tr:last td:eq(1)").text("Grand Total");
-//            $j("#GridView1 tr:last td:eq(1)").css("color", "DarkGreen");
-//            $j("#GridView1 tr:last td:eq(1)").css("font-weight", "bold");
-//            $j("#GridView1 tr:last td:eq(0)").text(" ")
-//        } else if ($j("#GridView1 tr:last td:eq(1)").text() == "Grand Total") {
-//            $j("#GridView1 tr:last td:eq(2)").text("Grand Total");
-//            $j("#GridView1 tr:last td:eq(2)").css("color", "DarkGreen");
-//            $j("#GridView1 tr:last td:eq(2)").css("font-weight", "bold");
-//            $j("#GridView1 tr:last td:eq(1)").text(" ");
-//        }
-//        totalGridRows = totalGridRows - 1;
-//    }
-//    var totalRecords = $j("#hdnTotalIViewRec").val();
-//    if ($j("#nextPrevBtns").is(':visible')) {
-//        $j("#lblNoOfRecs").text("Total no of Rows :  " + (totalGridRows) + " of " + totalRecords);
-//    } else {
-//        if ($j("#dvFilteredRowCount").is(':visible')) {
-//            var cutMsg = appGlobalVarsObject.lcm[12];
-//            cutMsg = cutMsg.replace('{0}', totalGridRows).replace('{1}', totalRecords);
-//            $j("#lblFilteredRowCount").text(cutMsg);
-//        }
-//    }
-//    if (iViewShowCat == 'All' || totalGridRows == totalRecords) {
-//        showMore = false;
-//        DisableStagLoad();
-//    }
+    if ($j("#GridView1 tr:last td:eq(0)").text() == "Grand Total" || $j("#GridView1 tr:last td:eq(1)").text() == "Grand Total" || $j("#GridView1 tr:first td:eq(1)").text() == "Grand Total") {
+        if ($j("#GridView1 tr:last td:eq(0)").text() == "Grand Total") {
+            $j("#GridView1 tr:last td:eq(1)").text("Grand Total");
+            $j("#GridView1 tr:last td:eq(1)").css("color", "DarkGreen");
+            $j("#GridView1 tr:last td:eq(1)").css("font-weight", "bold");
+            $j("#GridView1 tr:last td:eq(0)").text(" ")
+        } else if ($j("#GridView1 tr:last td:eq(1)").text() == "Grand Total") {
+            $j("#GridView1 tr:last td:eq(2)").text("Grand Total");
+            $j("#GridView1 tr:last td:eq(2)").css("color", "DarkGreen");
+            $j("#GridView1 tr:last td:eq(2)").css("font-weight", "bold");
+            $j("#GridView1 tr:last td:eq(1)").text(" ");
+        }
+        totalGridRows = totalGridRows - 1;
+    }
+    var totalRecords = $j("#hdnTotalIViewRec").val();
+    if ($j("#nextPrevBtns").is(':visible')) {
+        $j("#lblNoOfRecs").text("Total no of Rows :  " + (totalGridRows) + " of " + totalRecords);
+    } else {
+        if ($j("#dvFilteredRowCount").is(':visible')) {
+            var cutMsg = appGlobalVarsObject.lcm[12];
+            cutMsg = cutMsg.replace('{0}', totalGridRows).replace('{1}', totalRecords);
+            $j("#lblFilteredRowCount").text(cutMsg);
+        }
+    }
+    if (iViewShowCat == 'All' || totalGridRows == totalRecords) {
+        showMore = false;
+        DisableStagLoad();
+    }
 
-//    callParentNew("closeFrame()", "function");
-//}
+    callParentNew("closeFrame()", "function");
+}
 
-//function DisableStagLoad() {
-//    var lnkShow = $j("#dvStagLoad").find('a');
-//    lnkShow.removeAttr('onclick');
-//    lnkShow.removeClass('handCursor');
-//    lnkShow.attr("disabled", "disabled");
-//    lnkShow.css("color", "GREY");
-//}
+function DisableStagLoad() {
+    var lnkShow = $j("#dvStagLoad").find('a');
+    lnkShow.removeAttr('onclick');
+    lnkShow.removeClass('handCursor');
+    lnkShow.attr("disabled", "disabled");
+    lnkShow.css("color", "GREY");
+}
 
 
 function CheckValidTime(fldValue) {
@@ -8007,17 +8064,14 @@ function CallSearchOpen(plEle = "") {
     if ($j("#hdnparamValues").val() != "")
         isPlDepParBound = true;
 
+    if ($(`#${plEle.id}`).data("select2").dropdown.$search.val() != "") {
         try {
+            var plAdvanceSearchUrl = `./ivpicklist.aspx?sqlsearch=${plEle.id}&searchval=${$(`#${plEle.id}`).data("select2").dropdown.$search.val()}&ivname=${iName}&isPlDepParBound=${isPlDepParBound}`;
 
-            let thisDfVal = window[`dfval${plEle.id}`] || "";
-            //$(`#${plEle.id}`).data("select2").dropdown.$search.val()
-            var plAdvanceSearchUrl = `./iviewAutoComplete.aspx?isIV=${!isListView}&srchTxt=${""}&fldname=${plEle.id}&transid=${iName}&key=${$("#hdnKey").val()}&params=${$("#hdnparamValues").val()}&dF=${thisDfVal}`;
+            var plAdvSearchHtml = `<iframe id="ivPlAdvSearch" name="ivPlAdvSearch" class="col-12 flex-column-fluid w-100 h-100 p-0" src="${plAdvanceSearchUrl}" frameborder="0" allowtransparency="True"></iframe>`;
 
-            var plAdvSearchHtml = `<iframe id="loadPopUpPage" name="loadPopUpPage" class="col-12 flex-column-fluid w-100 h-100 p-0 my-n1" src="${plAdvanceSearchUrl}" frameborder="0" allowtransparency="True"></iframe>`;
-
-            let myModal = new BSModal("loadPopUpPage", "Pick List", plAdvSearchHtml, () => {
+            let myModal = new BSModal("ivPlAdvSearch", "Pick List", plAdvSearchHtml, () => {
                 $(`#${plEle.id}`).select2("close");
-                // $(`#${plEle.id}`).data("select2").dropdown.$search.val("");
             }, () => { });
 
             myModal.changeSize("fullscreen");
@@ -8026,6 +8080,10 @@ function CallSearchOpen(plEle = "") {
         } catch (error) {
 
         }
+
+    } else {
+        showAlertDialog("error", appGlobalVarsObject.lcm[8]);
+    }
     isPlDepParBound = false;
 }
 
@@ -8053,27 +8111,34 @@ function createIvir(jsonString) {
     $("td[data-order^=Grand]").attr("data-order", "");
     ivirColumnTypeObj = {};
     var jsonObject = $.parseJSON(jsonString);
-    let jsonObjectBkp;
 
-    if(typeof jsonObject.length != "undefined"){
-        jsonObjectBkp = [...jsonObject];
+    if (!getAjaxIviewData) {
+        ColumnType = $.parseJSON(jsonObject.ColumnType);
+        HeaderText = $.parseJSON(jsonObject.HeaderText);
+        FieldName = $.parseJSON(jsonObject.FieldName);
+        HideColumn = $.parseJSON(jsonObject.HideColumn);
+        if ((ind = FieldName.indexOf("axrowtype")) > -1) {
+            ColumnType.splice(ind, 1);
+            HeaderText.splice(ind, 1);
+            FieldName.splice(ind, 1);
+            HideColumn.splice(ind, 1);
+        }
+        if ((ind2 = FieldName.indexOf("axp__font")) > -1) {
+            ColumnType.splice(ind2, 1);
+            HeaderText.splice(ind2, 1);
+            FieldName.splice(ind2, 1);
+            HideColumn.splice(ind2, 1);
+        }
 
-        multipleCachedPages = true;
-
-        jsonObject = $.parseJSON(jsonObject[0]);
-    }
-    
+        custBtnIVIR = $.parseJSON(jsonObject.customObjIV);
+        isChkBox = jsonObject.HasCKB;
+    } else {
         if (jsonObject.data) {
-            currView = jsonObject.currView || currView;
-            if(!window.loadViewName){
-                window.loadViewName = (currView || "main");
-            }
-
             ivComps = jsonObject.data.comps;
             ivHeadRows = jsonObject.data.headrow;
             ivExportHF = jsonObject.data.reporthf;
             ivSmartViewSettings = jsonObject.data.smartview && jsonObject.data.smartview.settings;
-            
+            ivDatas = processRowData(jsonObject.data);
             if (jsonObject.data.actions) {
                 ivActions = jsonObject.data.actions;
             }
@@ -8153,17 +8218,6 @@ function createIvir(jsonString) {
         isChkBox = "true";
         $.each(ivHeadRows, (key, value) => {
             if (!key.startsWith("@") && key != "axp__font" && key != "axrowtype" && key != "pivotghead") {
-                // {
-                //     if(key == "username"){
-                //         ivHeadRows[key]["@mask"]= {
-                //             "maskroles": "default",
-                //             "maskchar": "X",
-                //             "firstcharmask": "2",
-                //             "lastcharmask": "3",
-                //             "masking": "Mask all characters"
-                //         };
-                //     }
-                // }
                 FieldName.push(key);
                 HeaderText.push(value["#text"] || "");
                 ColumnType.push(value["@type"] || "c");
@@ -8196,10 +8250,7 @@ function createIvir(jsonString) {
             }
         });
         cardTemplatingHTML = !cardTemplatingHTML && typeof customCardTemplatingHTML != "undefined" ? customCardTemplatingHTML : cardTemplatingHTML;
-    
-    ivDatas = processRowData(jsonObject.data, jsonObjectBkp);
-    dtDbTotalRecords = getDtRecordCount();
-
+    }
     for (var i = 0; i < HeaderText.length; i++) {
         if (HeaderText[i] !== "") {
             ivirColumnTypeObj[FieldName[i]] = ColumnType[i];
@@ -8209,9 +8260,10 @@ function createIvir(jsonString) {
     filteredColumns = FieldName.filter(function (a, b, c) {
         return HideColumn[b] == "false" && (FieldName[b] != "rowno" && FieldName[b] != "axrowtype")
     });
+    if (getAjaxIviewData) {
         var pivotHeaderHtml = ``;
         if (ivHeadRows.pivotghead !== undefined && !$.isEmptyObject(ivHeadRows.pivotghead)) {
-            pivotCreated = true;
+            var pivotCreated = true;
             pivotHeaderHtml += `<tr>`;
             pivotHeaderHtml += generateColumns(1, ``, `width:${minCellWidth}px;`);
             if (ivHeadRows.pivotghead) {
@@ -8233,6 +8285,7 @@ function createIvir(jsonString) {
                     pivotHeaderHtml += generateColumns(colSpan, a.ghead);
                 });
             } else if (jsonObject.data.PivotAndMerge && Object.keys(jsonObject.data.PivotAndMerge).filter((key, ind) => { return jsonObject.data.PivotAndMerge[key]["#text"] !== "" }).length) {
+                //delete jsonObject.data.PivotAndMerge[Object.keys(jsonObject.data.PivotAndMerge)[0]];
                 Object.keys(jsonObject.data.PivotAndMerge).forEach((key, ind) => {
                     var a = jsonObject.data.PivotAndMerge[key];
                     var colSpan = parseInt(a["@e"]) - parseInt(a["@s"]);
@@ -8243,15 +8296,6 @@ function createIvir(jsonString) {
                 pivotCreated = false;
             }
             function generateColumns(colSpan, title, style) {
-                if(title.indexOf("{") == 0 && title.indexOf("}") == title.length - 1){
-                    var parName = title.substring(1, title.length - 1);
-                    if(parentArr.indexOf(parName) > -1){
-                        try {
-                            title = $j("#hdnparamValues").val().split("¿").filter(hdnPar=>hdnPar.indexOf(`${parName}~`) == 0)?.[0]?.split?.("~")?.pop?.()?.toString?.() || "";
-                        } catch (ex) {}
-                    }
-                }
-
                 return `<th ${(typeof style != "undefined" ? (`style="${style}"`) : "")} align="center" colspan="${colSpan}" rowspan="1" class="pivotHeaderStyle dt-center">${title.replace(/~/g, "<br />")}</th>`;
             }
             pivotHeaderHtml += `</tr>`;
@@ -8263,44 +8307,27 @@ function createIvir(jsonString) {
         var footerTdTemplate = `<td></td>`;
         var footerHtml = ``;
         tableWidth = 0;
-        var GridView2THtml = `<table class="gridData table fs-5 ${appGlobalVarsObject._CONSTANTS.compressedMode ? "table-sm" : ""}" rules="all" border="1" id="GridView1" data-row>` +
+        var GridView2THtml = `<table class="gridData table ${appGlobalVarsObject._CONSTANTS.compressedMode ? "table-sm" : ""}" rules="all" border="1" id="GridView1" data-row>` +
             `<thead>` +
             pivotHeaderHtml +
-            `<tr class="fw-bold text-gray-800 border-bottom-2 border-gray-200">`;
+            `<tr class="fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200">`;
 
-        GridView2THtml += `<th id="GridView1_ctl01_rowno" class="fw-boldest" data-header-name="rowno" scope="col" style="width:${findGetParameter("tstcaption") == null ? minCellWidth : listViewCheckBoxSize}px; ">
+        GridView2THtml += `<th id="GridView1_ctl01_rowno" data-header-name="rowno" scope="col" style="width:${findGetParameter("tstcaption") == null ? minCellWidth : listViewCheckBoxSize}px; ">
             ${(rowOptionsExist) ? `<div class="rowOptionsExist float-start form-check form-check-sm form-check-custom invisible">
                 <a href="javascript:void(0);" class="btn btn-sm btn-icon form-check-input">
                     <span class="material-icons material-icons-style material-icons-2">arrow_drop_down</span>
                 </a>
             </div>` : ``}
-            <div class="form-check form-check-sm form-check-custom ${appGlobalVarsObject._CONSTANTS.compressedMode ? "px-2" : "px-3 py-3"}"><input class="form-check-input  border-gray-500 ${isChkBox == "true" ? "" : "d-none"}" name="chkall" id="chkall" onclick="javascript:CheckAll();" type="checkbox" /></div>
+            <div class="form-check form-check-sm form-check-custom form-check-solid ${appGlobalVarsObject._CONSTANTS.compressedMode ? "px-2" : "px-5 py-3"}"><input class="form-check-input ${isChkBox == "true" ? "" : "d-none"}" name="chkall" id="chkall" onclick="javascript:CheckAll();" type="checkbox" /></div>
         </th>`;
         footerHtml += footerTdTemplate;
         tableWidth += (findGetParameter("tstcaption") == null ? minCellWidth : listViewCheckBoxSize) + (isChkBox == "true" ? 40 : 0);
 
-        containsDefaultWidth = Object.keys(ivHeadRows).map((col)=>ivHeadRows?.[col]?.["@width"]).reduce((final, current, index, all) => {
-            let existEntryCallback = (current)=>{
-                return (Number.isNaN(+current) || +current == 80 || +current == 120)
-            }
-            return final ? (final && existEntryCallback(current)) : (final || existEntryCallback(current))
-        }, false);
-
-        HeaderText.forEach(function (title, b, c) {
+        HeaderText.forEach(function (a, b, c) {
             if ((FieldName[b] != "rowno")) {
                 var width = ivHeadRows[FieldName[b]]["@width"] || minCellWidth;
-
-                if(title.indexOf("{") == 0 && title.indexOf("}") == title.length - 1){
-                    var parName = title.substring(1, title.length - 1);
-                    if(parentArr.indexOf(parName) > -1){
-                        try {
-                            title = $j("#hdnparamValues").val().split("¿").filter(hdnPar=>hdnPar.indexOf(`${parName}~`) == 0)?.[0]?.split?.("~")?.pop?.()?.toString?.() || "";
-                        } catch (ex) {}
-                    }
-                }
-
                 (ivHeadRows[FieldName[b]]["@hide"].toString() || "true") == "false" ? tableWidth += parseInt(width, 10) : "";
-                GridView2THtml += `<th id="GridView1_ctl01_${FieldName[b]}" class="fw-boldest" data-header-name="${FieldName[b]}" scope="col" style="width:${width}px;">${title.replace(/~/g, "<br />")}${thMenuTemplete}</th>`;
+                GridView2THtml += `<th id="GridView1_ctl01_${FieldName[b]}" data-header-name="${FieldName[b]}" scope="col" style="width:${width}px;">${a.replace(/~/g, "<br />")}${thMenuTemplete}</th>`;
                 footerHtml += footerTdTemplate;
             }
 
@@ -8319,7 +8346,7 @@ function createIvir(jsonString) {
         try {
             $("#GridView2Wrapper").html(axPostTableHeaderCreationHook($("#GridView2Wrapper").html()));
         } catch (ex) { };
-    
+    }
 
     hiddenColumnIndex = FieldName.map(function (a, b, c) {
         return FieldName[b] == "rowno" || FieldName[b] == "axrowtype" ? "" : (HideColumn[b] == "true" ? b - (rowTypeExist ? 1 : 0) : "")
@@ -8330,6 +8357,7 @@ function createIvir(jsonString) {
     } else {
         hiddenColumnIndex = [0, ...hiddenColumnIndex];
     }
+    if (getAjaxIviewData) {
 
         //Expand/Collapse TreeMethod
         HeaderText.forEach((val, ind) => {
@@ -8362,8 +8390,9 @@ function createIvir(jsonString) {
         } else {
             $("#btnDownloadAll").hide();
         }
+    }
     if (showColumnSeparator) {
-        $("table#GridView1").addClass("table-bordered");
+        $("table#GridView1").addClass("columnSeparator");
     }
 }
 
@@ -8412,7 +8441,7 @@ function clearAdvancedFiltersforNewData() {
  * @return {[type]}                 [description]
  */
 function resetSmartViewVariables() {
-    nxtScrollSize = ivDatas.length;//100;
+    nxtScrollSize = 100;
     defaultRecsPerPage = 100;
     checkNextDBRowsExist = true;
     dtPageNo = 1;
@@ -8432,7 +8461,7 @@ function resetSmartViewVariables() {
 }
 
 function valdDecPts(obj, actValue) {
-    var newVal = !isNaN(parseFloat(obj.value)) ? parseFloat(obj.value).toFixed(actValue) : "";
+    var newVal = parseFloat(obj.value).toFixed(actValue);
     obj.value = newVal;
 }
 
@@ -8447,7 +8476,7 @@ function setRefreshParent(val) {
  * @param  {object}                 processData : json object including full get iview data and additional response
  * @return {object}                 returnData : json object in proper format to be consumed by smartviews
  */
-function processRowData(processData, allPagesObj) {
+function processRowData(processData) {
     processParamBadge();
     var returnData = [];
     if (processData["@perfxml"] && processData["@perfxml"] == "true") {
@@ -8468,106 +8497,17 @@ function processRowData(processData, allPagesObj) {
         }
         isPerf = true;
     } else {
-        if(!multipleCachedPages && !allPagesObj){
-            if (processData.row.length == undefined) {
-                returnData = [processData.row];
-            } else {
-                returnData = processData.row;
-            }
-        }else{
-            allPagesObj.forEach((page, index, pages)=>{
-                page = jsonObject = $.parseJSON(page)?.data;
-
-                let pageData;
-
-                if (page.row.length == undefined) {
-                    pageData = [page.row];
-                } else {
-                    pageData = page.row;
-                }
-
-                dtPageNo = index + 1;
-                var currRowSize = returnData.length;
-                var processedData = pageData;
-                if (processedData.length > 0) { //if records exists
-
-                    var oldGtotIndex = returnData.findIndex((v) => {
-                        return v.axrowtype == "gtot"
-                    });
-
-                    var newGtotIndex = processedData.findIndex((v) => {
-                        return v.axrowtype == "gtot"
-                    });
-
-                    if (oldGtotIndex > -1 && newGtotIndex > -1) {//code for removing multiple grand total rows
-                        returnData.splice(oldGtotIndex, 1);
-                        // ivirDataTableApi.rows(oldGtotIndex).remove();
-                        currRowSize = returnData.length;
-                    }
-
-                    var nullCounter = 0;
-                    var lastSubHeadGroup = Object.keys(subHeadGroup).reverse().reduce((returnObj, obj, ind) => {
-                        if (subHeadGroup[obj] == null) {
-                            nullCounter++;
-                        } else if (nullCounter < 2) {
-                            returnObj.push(parseInt(obj));
-                        }
-                        return returnObj;
-                    }, []).reverse();
-
-                    var newSubHeadIndex = _.findIndex(processedData, ivd => ivd.axrowtype == "subhead");
-
-                    //logic for removing duplicate subhead and its heirarchy
-                    var breakSubheadLoop = false;
-                    if (lastSubHeadGroup.length > 0 && newSubHeadIndex > -1) {
-                        lastSubHeadGroup.forEach((sh, ind) => {
-                            try {
-                                if (!breakSubheadLoop && processedData?.[newSubHeadIndex]?.axrowtype == "subhead") {
-                                    var objDiff = Object.keys(difference(returnData[sh], processedData[newSubHeadIndex]));
-                                    if (objDiff.length == 0 || (objDiff.length == 1 && objDiff[0] == "rowno")) {
-                                        processedData.splice(newSubHeadIndex, 1);
-                                    } else {
-                                        breakSubheadLoop = true;
-                                    }
-                                }
-                            } catch (ex) { }
-                        });
-                    }
-
-                    returnData = returnData.concat(processedData);
-                    ivDatas = [...returnData];
-                    dtDbTotalRecords = getDtRecordCount(); //update total record count on every page change
-
-                    var currScrollSize = nxtScrollSize > returnData.length ? returnData.length : nxtScrollSize;
-
-                    if(index == 0){
-                        nxtScrollSize = returnData.length;
-                    }
-
-                    checkIfNextDBRowsExist();
-
-                    pageScrollToEnd = true;
-                    // ivirDataTableApi.rows.add(returnData.slice(currRowSize, returnData.length)).draw(false);  //append next records to the datatable & redraw it
-
-                    // $(".dataTables_scrollBody").scrollTop(scrollTopPosition);
-                    pageScrollToEnd = false;
-                }
-                else {
-                    //when checking/getting for the next records if no records came from webservice then update record count
-                    checkNextDBRowsExist = false;
-                    $("#ivInSearchInputButton").addClass("d-none");
-                    $("#lnkShowAll").remove();
-                    $("#lblCurPage").text('Rows: 1-' + dtDbTotalRecords + ' of ');
-                    $("#lblNoOfRecs").text(dtDbTotalRecords);
-                }
-            });
+        if (processData.row.length == undefined) {
+            returnData = [processData.row];
+        } else {
+            returnData = processData.row;
         }
     }
 
     //remove single dummy empty row response from WebService
-    // returnData.length == 1 && Object.keys(returnData[0]).filter(col => !((/^column[0-9]+$/g).test(col))).filter(function(data){
-    //     return returnData[0][data] != "" && returnData[0][data] != null && (typeof returnData[0][getPropertyAccess("recordid")] == "undefined" || returnData[0][getPropertyAccess("recordid")] != "0") && (fieldIdentifier = getColumnName(data)) != "rowno" && (ColumnType[FieldName.indexOf(fieldIdentifier)] != "n" ? true : +returnData[0][data] != 0);
-    // }).length == 0 && (returnData = []);
+    returnData.length == 1 && Object.keys(returnData[0]).filter(function (data) {
+        return returnData[0][data] != "" && returnData[0][data] != null && (typeof returnData[0][getPropertyAccess("recordid")] == "undefined" || returnData[0][getPropertyAccess("recordid")] != "0") && getColumnName(data) != "rowno";
+    }).length == 0 && (returnData = []);
     return returnData;
 }
 
@@ -8582,14 +8522,15 @@ function processParamBadge() {
         if (Object.keys(paramValuesArray).length) {
             var filterValuesRowsString = ``;
             var paramsRowsCount = 0;
+            //paramValuesArray.forEach((val, ind)=>{
             Object.keys(paramValuesArray).forEach((val, ind) => {
                 if ($(`.paramtd2 #${val}:not([type=hidden])`).length && paramValuesArray[val] != "") {
                     paramsRowsCount++;
                     paramValuesArray[val] = paramValuesArray[val].replace(/\~/g, ",");
-                    filterValuesRowsString += ((!requestJSON && iviewButtonStyle == "old") ? "<div><b>" : (`<span><span>`)) + ($("#" + val).data("caption") || val) + ((!requestJSON && iviewButtonStyle == "old") ? "</b> </td><td>: " : "</span>: ") + paramValuesArray[val] + ((!requestJSON && iviewButtonStyle == "old") ? "</div>" : "</span><span class=\"seperator\">;&nbsp;</span>");
+                    filterValuesRowsString += ((!requestJSON || iviewButtonStyle == "old") ? "<div><b>" : (`<span><span>`)) + ($("#" + val).data("caption") || val) + ((!requestJSON || iviewButtonStyle == "old") ? "</b> </td><td>: " : "</span>: ") + paramValuesArray[val] + ((!requestJSON || iviewButtonStyle == "old") ? "</div>" : "</span>;&nbsp;");
                 }
             });
-            if (requestJSON) {
+            if (requestJSON && iviewButtonStyle != "old") {
                 var filterValuesHTML = "<span class=\"filtertooltipNew\">Params" + "<span class=\"ms-10 cursor-pointer tooltiptext\" style=\"display:none;\" >" + filterValuesRowsString + "</span></span>"
                 $("#FilterValues").html(filterValuesHTML);
 
@@ -8601,11 +8542,11 @@ function processParamBadge() {
                     <span data-caption="main" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-dismiss="click" data-bs-original-title="${appGlobalVarsObject.lcm[318]}" onclick="$('#button2').click();" class="material-icons material-icons-style material-icons-5 position-absolute pt-1">clear</span>
                 `);
             }
-            // else {
-            //     var filterValuesHTML = "<span class=\"filtertooltip\">" + paramsRowsCount + "<span class=\"ms-10 cursor-pointer tooltiptext\"><div>" + filterValuesRowsString + "</div></span></span>";
-            //     $("#FilterValues").html(filterValuesHTML);
+            else {
+                var filterValuesHTML = "<span class=\"filtertooltip\">" + paramsRowsCount + "<span class=\"ms-10 cursor-pointer tooltiptext\"><div>" + filterValuesRowsString + "</div></span></span>"
+                $("#FilterValues").html(filterValuesHTML);
 
-            // }
+            }
         } else {
             $("#FilterValues").html("");
 
@@ -8675,20 +8616,15 @@ function ReloadIframe(NavigationURL) {
         parFrm = reloadingFrameSwitch() || parFrm;
     } catch (ex) { }
     GetProcessTime();
-    // parFrm.attr("src", NavigationURL + "&hdnbElapsTime=" + callParentNew("browserElapsTime"));
-    try {
-        parFrm[0].contentWindow.location.href = NavigationURL + "&hdnbElapsTime=" + callParentNew("browserElapsTime");
-    } catch (ex) {}
+    parFrm.attr("src", NavigationURL + "&hdnbElapsTime=" + callParentNew("browserElapsTime"));
+
 
 }
 function popupFullPage(NavigationURL) {
     callParentNew("splitfull()", 'function');
     var frm = $j("#middle1", parent.document);
     GetProcessTime();
-    // frm.attr("src", NavigationURL + "&hdnbElapsTime=" + callParentNew("browserElapsTime"));
-    try {
-        frm[0].contentWindow.location.href = NavigationURL + "&hdnbElapsTime=" + callParentNew("browserElapsTime");
-    } catch (ex) {}
+    frm.attr("src", NavigationURL + "&hdnbElapsTime=" + callParentNew("browserElapsTime"));
 }
 
 //to get all iview records - displays an option only if pagination exists
@@ -8715,9 +8651,7 @@ function getAllRecords() {
                         ConfirmDeleteCB.close();
                         ShowDimmer(true);
                         setTimeout(function () {
-                            setTimeout(() => {
-                                getNextDtRecords(0);
-                            }, 0);
+                            getNextDtRecords(0);
                         }, 100);
 
                     }
@@ -8754,9 +8688,7 @@ function getAllRecords() {
                         ConfirmDeleteCB.close();
                         ShowDimmer(true);
                         setTimeout(function () {
-                            setTimeout(() => {
-                                getNextDtRecords(0);
-                            }, 0);
+                            getNextDtRecords(0);
                         }, 100);
                     }
                 },
@@ -8813,26 +8745,7 @@ function getNextDtRecords(pageNo) {
         lvXml = `<listviewCols><selectedCols>${cols}</selectedCols><selectedHyperlink>${hyp}</selectedHyperlink></listviewCols>`;
     }
 
-    // var data = '{ivKey: "' + ivKey + '", recsPerPage: "' + defaultRecsPerPage + '", pageno: "' + pageNo + '", paramX: "' + paramX + '", lvXml: "' + lvXml + '", lvStructure: "' + $("#hdnLvChangedStructure").val() + '"}'
-
-    if(+originalRecsPerPage){
-        pageNo = (Math.ceil(defaultRecsPerPage / +originalRecsPerPage) || 1) + 1;
-        dtPageNo = [+pageNo - 1][0];
-        
-        defaultRecsPerPage = iviewDataWSRows = dtTotalRecords = [+originalRecsPerPage][0];
-    }
-
-    var data = JSON.stringify(
-        {
-            ivKey,
-            recsPerPage: defaultRecsPerPage,
-            pageno: pageNo,
-            paramX,
-            lvXml,
-            lvStructure: $("#hdnLvChangedStructure").val()
-        }
-    );
-    
+    var data = '{ivKey: "' + ivKey + '", recsPerPage: "' + defaultRecsPerPage + '", pageno: "' + pageNo + '", paramX: "' + paramX + '", lvXml: "' + lvXml + '", lvStructure: "' + $("#hdnLvChangedStructure").val() + '"}'
     $j.ajax({
         url,
         type: 'POST',
@@ -8842,9 +8755,6 @@ function getNextDtRecords(pageNo) {
         dataType: 'json',
         contentType: "application/json",
         success: function (data) {
-            $("#ivInSearchInputButtonLoader").addClass("d-none");
-            originalRecsPerPage = "";
-            multipleCachedPages = false;
             if (data && data.d != "" && data.d.result != "") {
                 if (data.d.status == "success") {
 
@@ -8854,16 +8764,15 @@ function getNextDtRecords(pageNo) {
                             ivDatas = processRowData(parsedData.data);
                             dtDbTotalRecords = getDtRecordCount(); //update total record count on every page change
 
-                            // if (exportType && ivDatas.length >= 1000) {
+                            if (exportType && ivDatas.length >= 1000) {
                                 lazyBinding = true;
                                 ivirDatatable.DataTable.settings[0].oInit.scroller = true;
                                 $(ivirTable).trigger($.Event('preInit' + '.dt'), ivirDatatable.DataTable.settings);
                                 $(ivirTable).trigger($.Event('init' + '.dt'), ivirDatatable.DataTable.settings);
                                 setSmartViewHeight();
-                            // }
+                            }
 
                             checkNextDBRowsExist = false;
-                            $("#ivInSearchInputButton").addClass("d-none");
                             ivirDataTableApi.rows().remove();
                             ivirDataTableApi.rows.add(ivDatas).draw();  //append next records to the datatable & redraw it
                             $("#lnkShowAll, #requestNextRecords").remove();
@@ -8883,48 +8792,48 @@ function getNextDtRecords(pageNo) {
                             var processedData = processRowData(parsedData.data);
                             if (processedData.length > 0) { //if records exists
 
-                                    var oldGtotIndex = ivDatas.findIndex((v) => {
-                                        return v.axrowtype == "gtot"
-                                    });
+                                var oldGtotIndex = ivDatas.findIndex((v) => {
+                                    return v.axrowtype == "gtot"
+                                });
 
-                                    var newGtotIndex = processedData.findIndex((v) => {
-                                        return v.axrowtype == "gtot"
-                                    });
+                                var newGtotIndex = processedData.findIndex((v) => {
+                                    return v.axrowtype == "gtot"
+                                });
 
-                                    if (oldGtotIndex > -1 && newGtotIndex > -1) {//code for removing multiple grand total rows
-                                        ivDatas.splice(oldGtotIndex, 1);
-                                        ivirDataTableApi.rows(oldGtotIndex).remove();
-                                        currRowSize = ivDatas.length;
+                                if (oldGtotIndex > -1 && newGtotIndex > -1) {//code for removing multiple grand total rows
+                                    ivDatas.splice(oldGtotIndex, 1);
+                                    ivirDataTableApi.rows(oldGtotIndex).remove();
+                                    currRowSize = ivDatas.length;
+                                }
+
+                                var nullCounter = 0;
+                                var lastSubHeadGroup = Object.keys(subHeadGroup).reverse().reduce((returnObj, obj, ind) => {
+                                    if (subHeadGroup[obj] == null) {
+                                        nullCounter++;
+                                    } else if (nullCounter < 2) {
+                                        returnObj.push(parseInt(obj));
                                     }
+                                    return returnObj;
+                                }, []).reverse();
 
-                                    var nullCounter = 0;
-                                    var lastSubHeadGroup = Object.keys(subHeadGroup).reverse().reduce((returnObj, obj, ind) => {
-                                        if (subHeadGroup[obj] == null) {
-                                            nullCounter++;
-                                        } else if (nullCounter < 2) {
-                                            returnObj.push(parseInt(obj));
-                                        }
-                                        return returnObj;
-                                    }, []).reverse();
+                                var newSubHeadIndex = _.findIndex(processedData, ivd => ivd.axrowtype == "subhead");
 
-                                    var newSubHeadIndex = _.findIndex(processedData, ivd => ivd.axrowtype == "subhead");
-
-                                    //logic for removing duplicate subhead and its heirarchy
-                                    var breakSubheadLoop = false;
-                                    if (lastSubHeadGroup.length > 0 && newSubHeadIndex > -1) {
-                                        lastSubHeadGroup.forEach((sh, ind) => {
-                                            try {
-                                                if (!breakSubheadLoop && processedData?.[newSubHeadIndex]?.axrowtype == "subhead") {
-                                                    var objDiff = Object.keys(difference(ivDatas[sh], processedData[newSubHeadIndex]));
-                                                    if (objDiff.length == 0 || (objDiff.length == 1 && objDiff[0] == "rowno")) {
-                                                        processedData.splice(newSubHeadIndex, 1);
-                                                    } else {
-                                                        breakSubheadLoop = true;
-                                                    }
+                                //logic for removing duplicate subhead and its heirarchy
+                                var breakSubheadLoop = false;
+                                if (lastSubHeadGroup.length > 0 && newSubHeadIndex > -1) {
+                                    lastSubHeadGroup.forEach((sh, ind) => {
+                                        try {
+                                            if (!breakSubheadLoop && processedData?.[newSubHeadIndex]?.axrowtype == "subhead") {
+                                                var objDiff = Object.keys(difference(ivDatas[sh], processedData[newSubHeadIndex]));
+                                                if (objDiff.length == 0 || (objDiff.length == 1 && objDiff[0] == "rowno")) {
+                                                    processedData.splice(newSubHeadIndex, 1);
+                                                } else {
+                                                    breakSubheadLoop = true;
                                                 }
-                                            } catch (ex) { }
-                                        });
-                                    }
+                                            }
+                                        } catch (ex) { }
+                                    });
+                                }
 
                                 ivDatas = ivDatas.concat(processedData);
                                 dtDbTotalRecords = getDtRecordCount(); //update total record count on every page change
@@ -8943,7 +8852,6 @@ function getNextDtRecords(pageNo) {
                             else {
                                 //when checking/getting for the next records if no records came from webservice then update record count
                                 checkNextDBRowsExist = false;
-                                $("#ivInSearchInputButton").addClass("d-none");
                                 $("#lnkShowAll").remove();
                                 $("#lblCurPage").text('Rows: 1-' + dtDbTotalRecords + ' of ');
                                 $("#lblNoOfRecs").text(dtDbTotalRecords);
@@ -8957,10 +8865,6 @@ function getNextDtRecords(pageNo) {
                             setIviewNotificationInfo(parsedData);
                         }
                     }
-
-                    try {
-                        KTMenu?.init();                                
-                    } catch (error) { }
                 }
                 else {
                     showAlertDialog("warning", data.d.result);
@@ -8976,13 +8880,11 @@ function getNextDtRecords(pageNo) {
             exportType = "";
         },
         failure: function (response) {
-            $("#ivInSearchInputButtonLoader").addClass("d-none");
             AxWaitCursor(false);
             ShowDimmer(false);
             exportType = "";
         },
         error: function (response) {
-            $("#ivInSearchInputButtonLoader").addClass("d-none");
             AxWaitCursor(false);
             ShowDimmer(false);
             exportType = "";
@@ -9035,11 +8937,7 @@ function checkIfNextDBRowsExist(onPageLoad) {
                 axpertPageSize = JSON.parse($("#hdnIViewData").val()).data.headrow["@pagesize"];
             } else {
                 try {
-                    let thisJSON = JSON.parse($("#hdnIViewData").val());
-                    if(typeof thisJSON.length != "undefined"){
-                        thisJSON = JSON.parse(thisJSON[0]);
-                    }
-                    axpertPageSize = thisJSON.pagesize.pagesize;
+                    axpertPageSize = JSON.parse($("#hdnIViewData").val()).pagesize.pagesize;
                 } catch (ex) { }
             }
             if (axpertPageSize != undefined) {
@@ -9064,15 +8962,11 @@ function checkIfNextDBRowsExist(onPageLoad) {
         */
         if (isPivotReport || dtDbTotalRecords == 0 || allRecsCached || (dtDbTotalRecords % iviewDataWSRows != 0) && (axpertPageSize == undefined ? true : dtDbTotalRecords < axpertPageSize)) {
             checkNextDBRowsExist = false;
-            $("#ivInSearchInputButton").addClass("d-none");
             $("#lnkShowAll").addClass("d-none");
             return false;
         }
         else {
-            if(!multipleCachedPages){
-                defaultRecsPerPage = iviewDataWSRows = dtTotalRecords;
-            }
-            
+            defaultRecsPerPage = iviewDataWSRows = dtTotalRecords;
             checkNextDBRowsExist = true;
             $("#lnkShowAll").removeClass("d-none");
             return true;
@@ -9256,18 +9150,18 @@ function constructToolbar() {
     }
 
     var filterBtnHtml = `
-    <li id="myFiltersLi" class="${iviewButtonStyle == "old" ? `btn btn-white btn-sm btn-color-gray-600 btn-active-primary shadow-sm me-2 ${$("#hdnIsParaVisible").val() != "hidden" ? "" : "d-none"}"` : "menu-item px-3"} ${$("#hdnIsParaVisible").val()} onclick="$('#Filterscollapse').collapse('toggle');">
-        <a href="#Filterscollapse" id="myFilters" class="filterBuTTon ${iviewButtonStyle == "old" ? "text-gray-600 text-hover-white" : ""}" data-bs-toggle="collapse" data-bs-parent="#accordion" aria-expanded="false" onclick="$('#Filterscollapse').collapse('toggle');">
-            <span class="ccolapsee material-icons material-icons-style ${iviewButtonStyle == "old" ? "d-none" : ""}">search</span>
+    <li id="myFiltersLi" class="menu-item px-3 ${$("#hdnIsParaVisible").val()}" onclick="$('#Filterscollapse').collapse('toggle');">
+        <a href="#Filterscollapse" id="myFilters" class="filterBuTTon" data-bs-toggle="collapse" data-bs-parent="#accordion" aria-expanded="false" onclick="$('#Filterscollapse').collapse('toggle');">
+            <span class="ccolapsee material-icons material-icons-style">search</span>
             <span id="lblfilters" title="Params">
                 Params
             </span>
         </a> `;
-    // if (requestJSON && iviewButtonStyle == "old") {
-    //     filterBtnHtml += ` <div id="dvSelectedFilters" class="badge badge-primary cursor-pointer d-none">
-    //         <span id="FilterValues"></span>      
-    //     </div>`;
-    // }
+    if (!requestJSON || iviewButtonStyle == "old") {
+        filterBtnHtml += ` <div id="dvSelectedFilters" class="badge badge-primary cursor-pointer d-none">
+            <span id="FilterValues"></span>      
+        </div>`;
+    }
     filterBtnHtml += `</li>`;
 
     if (iviewButtonStyle != "modern") {
@@ -9275,7 +9169,7 @@ function constructToolbar() {
     }
 
     toolbarHTML += `
-    ${(iviewButtonStyle == "old") ? `<li id='filterWrapper' class="menu-item">
+    ${(!requestJSON || iviewButtonStyle == "old") ? `<li id='filterWrapper' class="dropdown-item">
         <span class="material-icons pinIcon customIcon d-none" title="Pin to taskbar">
             push_pin
         </span>
@@ -9301,7 +9195,7 @@ function constructToolbar() {
         </div>`;
     }
 
-    if (iviewButtonStyle == "old") {
+    if (!requestJSON || iviewButtonStyle == "old") {
         toolbarHTML += constructToolbarHTML(getFormattedToolbarJSON(toolbarJSON), false);
     }
 
@@ -9312,8 +9206,7 @@ function constructToolbar() {
     }
     constuctDataButton();
 
-    $("#iconsNewUtility ul li:not(.d-none)").length > 0 ? $("#iconsNewUtility").removeClass("d-none") : $("#iconsNewUtility").addClass("d-none");
-
+    $("#iconsNewUtility ul li").hasClass("d-none") ? $("#iconsNewUtility").addClass("d-none") : $("#iconsNewUtility").removeClass("d-none");
     if (requestJSON && iviewButtonStyle != "old") {
         $("#iconsUl li ul").each((ind, elem) => {
             $(elem).find("li").length == 0 && $(elem).parent("li").remove();
@@ -9374,14 +9267,13 @@ function constructToolbarHTML(toolbarJSON, parentRoot) {
                         <span class="iconUIPin"><i class="fa fa-thumb-tack"></i></span>
                         <span class="material-icons pinIcon customIcon d-none ${iName == "inmemdb" ? "d-none" : ""} " title="Pin to taskbar">push_pin</span>
                         <a href="javascript:void(0)" id="${button.key}" class="menu-link px-3" title="${finalCaption = getModernButtonIconInfo(button.groupName)}" data-close-others="true">
-                            <div class="menu-icon symbol ${iviewButtonStyle == "modern" ? "symbol-40px" : "symbol-25px"} symbol-circle me-5 dropdownIconUI">
+                            <div class="symbol ${iviewButtonStyle == "modern" ? "symbol-40px" : "symbol-25px"} symbol-circle me-5 dropdownIconUI">
                                 <span class="symbol-label bg-primary text-white fw-normal fs-3 iconUITitle">${(button.icon && button.icon != "" && getButtonIconHTML(button.icon)) || getModernButtonIconInfo(button.groupName)}</span>
                             </div>
-                            <span class="menu-title dropdownIconName text-break text-wrap">${getModernButtonIconInfo(button.groupName, false)}</span>
-                            <!--<i class="fa fa-angle-down modernDropdownIcon" aria-hidden="true"></i>-->
-                            <span class="menu-arrow"></span>
+                            <span class="dropdownIconName text-break text-wrap">${getModernButtonIconInfo(button.groupName, false)}</span>
+                            <i class="fa fa-angle-down modernDropdownIcon" aria-hidden="true"></i>
                         </a>
-                        <ul class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bolder mh-450px scroll-y ${iviewButtonStyle == "modern" ? "w-100 w-sm-350px py-4" : "w-200px py-3"} ">
+                        <ul class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold mh-450px scroll-y ${iviewButtonStyle == "modern" ? "w-100 w-sm-350px py-4" : "w-200px py-3"} ">
                             ${iviewButtonStyle == "modern" ? `<div class="col-12 d-flex flex-wrap">` : ``}
                                 ${constructToolbarHTML(getFormattedToolbarJSON(button), true)}
                             ${iviewButtonStyle == "modern" ? `</div>` : ``}
@@ -9438,14 +9330,15 @@ function constructToolbarHTML(toolbarJSON, parentRoot) {
                  * @returns : html string
                  */
                 toolbarHTML += ((typeof axToolbarRootGenerator != "undefined" && axToolbarRootGenerator(button)) || `
-                    <li class="btn btn-white btn-sm btn-color-gray-600 btn-active-primary shadow-sm me-2 menu-item menu menu-dropdown" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-start">
-                        <a href="javascript:void(0)" id="${button.key}" class="menu-link text-gray-600 text-hover-white p-0" title="${button.groupName}">
-                            <span class="tbIcon menu-icon ${(typeof button.icon == "undefined" || button.icon == "" ? "d-none" : "") || ""}">${(button.icon && button.icon != "" && getButtonIconHTML(button.icon)) || ""}</span>
-                            <span class="tbTitle menu-title">${button.groupName}</span>
-                            <span class="menu-arrow">
+                    <li class="dropdown-item">
+                        <a href="javascript:void(0)" id="${button.key}" class="dropdown-toggle" data-bs-toggle="dropdown"
+                            data-hover="dropdown" title="${button.groupName}" data-close-others="true">
+                            <span class="tbIcon">${(button.icon && button.icon != "" && getButtonIconHTML(button.icon)) || ""}</span>
+                            <span class="tbTitle">${button.groupName}</span>
+                            <span class="icon-arrows-down">
                             </span>
                         </a>
-                        <ul class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-bold w-200px" data-kt-menu="true">
+                        <ul class="dropdown-menu">
                             ${constructToolbarHTML(getFormattedToolbarJSON(button), true)}
                         </ul>
                     </li>
@@ -9473,10 +9366,10 @@ function constructToolbarHTML(toolbarJSON, parentRoot) {
                          * @returns : html string
                          */
                         toolbarHTML += ((typeof axToolbarSingleNodeGenerator != "undefined" && axToolbarSingleNodeGenerator(buttonNew, parentRoot)) || `
-                        <li class="${parentRoot ? "" : "btn"} btn-white ${parentRoot ? "" : "btn-sm"} btn-color-gray-600 btn-active-primary shadow-sm me-2 ${parentRoot ? "liTaskItems" : "actionWrapper"} menu-item">
-                            <a onclick="${buttonNew.onclick || ""}" id="btn_${buttonNew.key}" title="${buttonNew.hint || buttonNew.caption || buttonNew.key}" class="action singleaction handCur l2 text-gray-600 text-hover-white menu-link ${parentRoot? "" : "p-0"}" href="${buttonNew.href || ""}">
-                            <span class="tbIcon menu-icon ${(typeof buttonNew.icon == "undefined" || buttonNew.icon == "" ? "d-none" : "") || ""}">${(buttonNew.icon && buttonNew.icon != "" && getButtonIconHTML(buttonNew.icon)) || ""}</span>
-                            <span class="tbTitle menu-title"> ${buttonNew.caption || buttonNew.hint || buttonNew.key}</span>
+                        <li class="dropdown-item ${parentRoot ? "liTaskItems" : "actionWrapper"}">
+                            <a onclick="${buttonNew.onclick || ""}" id="btn_${buttonNew.key}" title="${buttonNew.hint || buttonNew.caption || buttonNew.key}" class="action singleaction handCur l2" href="${buttonNew.href || ""}">
+                            <span class="tbIcon">${(buttonNew.icon && buttonNew.icon != "" && getButtonIconHTML(buttonNew.icon)) || ""}</span>
+                            <span class="tbTitle"> ${buttonNew.caption || buttonNew.hint || buttonNew.key}</span>
                             </a>
                         </li>
                     `);
@@ -9617,9 +9510,9 @@ function setIviewNotificationInfo(jsonObject) {
         updateSessionVar = callParentNew("updateSessionVar");
 
         var viewName = "";
-        // if (requestJSON && iviewButtonStyle != "old") {
-            viewName = $(".viewtabEdit").parents("li a.active").find(".viewtabEdit").data("name") || "main";
-        // }
+        if (requestJSON && iviewButtonStyle != "old") {
+            viewName = $(".viewtabEdit").parents("li.active").find(".viewtabEdit").data("name") || "main";
+        }
 
         var saveJSON = {};
         saveJSON["params"] = $("#hdnparamValues").val();
@@ -9676,13 +9569,13 @@ function setParamsValueList(fldname, pType, resultArr, fldValue = "", attriuteAr
             var k = 0;
             parentCtrl.options.length = 0;
             if (resultArr.length < 1) {
-                parentCtrl.options[0] = new Option(appGlobalVarsObject.lcm[441], 0);
+                parentCtrl.options[0] = new Option("", 0);
                 n = 1;
             } else {
                 n = 0;
                 for (k = 0; k < resultArr.length; k++) {
                     if (k == 0) {
-                        parentCtrl.options[n] = new Option(appGlobalVarsObject.lcm[441], "");
+                        parentCtrl.options[n] = new Option("", "");
                         parentCtrl.options[n].title = "";
                         n++;
                     }
@@ -9755,6 +9648,10 @@ function showParamsPlaceholder() {
     //         <div class="fa fa-fa-exclamation-circle fa-2x iviewPlaceHolder" title="${appGlobalVarsObject.lcm[0]}"></div>
     //     `); 
     // }
+    // if (requestJSON) {
+    //     Waves.attach('#ivirActionButton, .dropDownButton__item, #Panel1 > .fa', ['waves-block']);
+    //     Waves.init();
+    // }
 }
 
 /**
@@ -9826,12 +9723,12 @@ function processIvConfiguration(InnerIvConfigurations) {
         }
     }
 
-    // try {
-    //     responsiveColumnWidth = getCaseInSensitiveJsonProperty(ivConfigurations.filter((val, ind) => {
-    //         var thisVal = getCaseInSensitiveJsonProperty(val, "PROPS");
-    //         return thisVal && thisVal.toString() && thisVal.toString().toLowerCase() == "iview responsive column width"
-    //     })[0], ["PROPSVAL"]).toString().toLowerCase() == "true";
-    // } catch (ex) { }
+    try {
+        responsiveColumnWidth = getCaseInSensitiveJsonProperty(ivConfigurations.filter((val, ind) => {
+            var thisVal = getCaseInSensitiveJsonProperty(val, "PROPS");
+            return thisVal && thisVal.toString() && thisVal.toString().toLowerCase() == "iview responsive column width"
+        })[0], ["PROPSVAL"]).toString().toLowerCase() == "true";
+    } catch (ex) { }
 
     try {
         stripedReport = getCaseInSensitiveJsonProperty(ivConfigurations.filter((val, ind) => {
@@ -9883,7 +9780,7 @@ function getModernButtonIconInfo(iconCaption, isIcon = true) {
 }
 function getButtonIconHTML(icon) {
     if (typeof icon == "object") {
-        return `<span class="${icon.addClass.replace("material-icons", "material-icons material-icons-style material-icons-3")}">${icon.text}</span>`;
+        return `<span class="${icon.addClass}">${icon.text}</span>`;
     }
     else {
         return `<img src="${icon}" class="menuIcon">`;
@@ -10119,7 +10016,7 @@ function difference(object, base) {
 
 function createPlSmartSelect(paramName) {
     const PlSmartSelect = $(paramName);
-    
+
     PlSmartSelect.select2({
         ajax: {
             contentType: "application/json;charset=utf-8",
@@ -10135,7 +10032,7 @@ function createPlSmartSelect(paramName) {
                     iviewName: iName,
                     pageNo: 1,
                     pageSize: 10,
-                    fieldName: $(this)[0].id,
+                    fieldName: $(paramName)[0].id,
                     fieldValue: params.term || "",
                     depParamVal: $("#hdnparamValues").val()
                 });
@@ -10143,7 +10040,7 @@ function createPlSmartSelect(paramName) {
             processResults: function (data, params) {
                 params.page = params.page || 1;
                 var pageSize = 10;
-                
+
                 if (CheckSessionTimeout(data.d)) {
                     ShowDimmer(false);
                     return;
@@ -10158,16 +10055,11 @@ function createPlSmartSelect(paramName) {
                     
                     if (processPlData.sqlresultset.response != null) {
                         data.total_count = processPlData.sqlresultset.response.totalrows || 10;
-                        
-                        if (processPlData.sqlresultset.response.row.length == undefined) {
-                            processPlData.sqlresultset.response.row = [processPlData.sqlresultset.response.row];
-                        }
-                        
                         data.items = processPlData.sqlresultset.response.row.map((row, index) => {
-                            var pkData = $(`<span>${row[Object.keys(row)[0]]["#text"]}</span>`).html();
                             return {
-                                id: pkData,
-                                text: pkData,
+                                // id: ((params.page - 1) * pageSize) + (index + 1),
+                                id: row[Object.keys(row)[0]]["#text"],
+                                text: row[Object.keys(row)[0]]["#text"],
                                 row
                             }
                         });
@@ -10187,18 +10079,31 @@ function createPlSmartSelect(paramName) {
         allowClear: true,
         placeholder: appGlobalVarsObject.lcm[441],
         templateResult__t: function (data, container) {
+            //var $container; // This is custom templete container.
+            // Create header
+                
+            // $container = $(
+            //     '<div class="row">' +
+            //     '<div class="col-xs-3"><b>Product ID</b></div>' +
+            //     '<div class="col-xs-3"><b>Product Name</b></div>' +
+            //     '</div>' +
+            //     '<div class="row">' +
+            //     '<div class="col-xs-3">' + item.id + '</div>' +
+            //     '<div class="col-xs-3">' + item.text + '</div>' +
+            //     '</div>'
+            // );
             
             let internalContainer = $(container);
             let returnHTML = "";
             if (!data.loading) {
                 let { row } = data;
-                
+
                 if (row) {
                     returnHTML = "Hi";
                 } else {
                     returnHTML = data.text;
                 }
-                
+
             } else {
                 returnHTML = data.text;
             }
@@ -10210,10 +10115,8 @@ function createPlSmartSelect(paramName) {
     }).on('select2:open', (selectEv) => {
         var curDropdown = $(selectEv.currentTarget).data("select2")?.$dropdown;
 
-        let thisDfVal = window[`dfval${selectEv.currentTarget.id}`];
-
-        if (thisDfVal && curDropdown.find(".select2-search").find(".plAdvanceSearch").length == 0) {
-            curDropdown.find(".select2-search").addClass("d-flex input-group").append(`<span class="input-group-text rounded-circle btn btn-icon btn-white btn-color-gray-600 btn-active-primary shadow-sm ms-2 plAdvanceSearch" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-dismiss="click" data-bs-original-title="Advance Search" onclick="javascript:CallSearchOpen(${$(paramName)[0].id});"><span class="material-icons material-icons-style cursor-pointer">manage_search</span></span>`).find(".select2-search__field").addClass("form-control w-auto");
+        if (curDropdown.find(".select2-search").find(".plAdvanceSearch").length == 0) {
+            curDropdown.find(".select2-search").addClass("input-group").append(`<span class="input-group-text rounded-circle btn btn-icon btn-white btn-color-gray-500 btn-active-primary shadow-sm ms-2 plAdvanceSearch" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-dismiss="click" data-bs-original-title="Advance Search" onclick="javascript:CallSearchOpen(${$(paramName)[0].id});"><span class="material-icons material-icons-style cursor-pointer">manage_search</span></span>`).find(".select2-search__field").addClass("form-control");
         }
     });
 }
@@ -10221,9 +10124,10 @@ function createPlSmartSelect(paramName) {
 function createMsSmartSelect(paramName) {
     const MsSmartSelect = $(paramName);
     
-    var valueList = [...new Set($(paramName).data("valuelist")?.split($(paramName).data("separator")))].filter((val) => val != "");
+    var valueList = [...new Set($(paramName).data("valuelist").split($(paramName).data("separator")))].filter((val) => val != "");
     var processedList = $.map(valueList, (val, index) => {
         return {
+            // id: index,
             id: val,
             text: val
         }
@@ -10244,7 +10148,7 @@ function createMsSmartSelect(paramName) {
 
                 var selectAllHTML = `<div class="msSelectAllOption form-check form-check-custom form-check-solid align-self-end px-5">
                     <input type="checkbox" class="form-check-input msSelectAll" onchange="checkAllCheckBoxTokens(this, '${$(selectEv.currentTarget).attr("id")}')"/>
-                    <label for="SelectAll" class="ps-2 form-check-label form-label col-form-label pb-1 fw-boldest">
+                    <label for="SelectAll" class="ps-2 form-check-label form-label col-form-label">
                         Select All
                     </label>
                 </div>`;
@@ -10270,52 +10174,16 @@ function createMsSmartSelect(paramName) {
 }
 
 function refreshIview(e) {
-    try {
-        var appUrl = top.window.location.href.toLowerCase().substring("0", top.window.location.href.indexOf("/aspx/"));
-        
-        var updatedJSON = JSON.parse(localStorage["drilldownScrollInfo-" + appUrl] || "{}");
-        delete updatedJSON?.[iName];
-        
-        localStorage["drilldownScrollInfo-" + appUrl] = JSON.stringify(updatedJSON);
-    } catch (ex) {}
-    
-    ClearRedisDataCache();
-
     if (iName == "inmemdb" || isListView || $("#hdnIsParaVisible").val() == "hidden") {
-        callParentNew("loadFrame()", "function");
         e.preventDefault();
-        // window.location.href = window.location.href;
-        window.location.reload();
+        window.location.href = window.location.href;
     }
     else {
         if ($j("#hdnparamValues").val() != "") {
-            callParentNew("loadFrame()", "function");
             UpdateGetParamCache();
         } else {
             e.preventDefault();
             $('#Filterscollapse').collapse("show");
         }
     }
-}
-
-function ClearRedisDataCache() {
-    try {
-        var ivKey = $j("#hdnKey").val();
-        $.ajax({
-            type: "POST",
-            url: "iview.aspx/ClearRedisDataCache",
-            cache: false,
-            async: false,
-            contentType: "application/json",
-            dataType: "json",
-            data: JSON.stringify({
-                ivKey,
-                isListView
-            }),
-            success: function (data) {
-            },
-            error: function (response) {
-            }
-        });
-    } catch (ex) {}
 }

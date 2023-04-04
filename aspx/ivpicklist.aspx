@@ -44,7 +44,7 @@
         <div>
             <asp:ScriptManager ID="ScriptManager1" runat="server">
                 <Scripts>
-                    <asp:ScriptReference Path="../Js/iview.min.js?v=312" />
+                    <asp:ScriptReference Path="../Js/iview.min.js?v=272" />
                 </Scripts>
                 <Services>
                     <asp:ServiceReference Path="../WebService.asmx" />
@@ -79,7 +79,7 @@
                             <asp:DropDownList ID="lvPage" runat="server" AutoPostBack="true" Visible="false">
                             </asp:DropDownList>
                         </asp:Panel>
-                        <asp:Label ID="lblErrMsg" runat="server" CssClass="form-label fw-boldest text-danger p-5  seartem" Visible="false"></asp:Label>
+                        <asp:Label ID="lblErrMsg" runat="server" CssClass="form-label text-danger p-5  seartem" Visible="false"></asp:Label>
 
                         <asp:TextBox ID="pgno" runat="server" Text="0" CssClass="form-control-sm"></asp:TextBox>
 
@@ -110,9 +110,9 @@
         <%:Scripts.Render("~/UI/axpertUI/bundleJs") %>
     </asp:PlaceHolder>
     <script type="text/javascript" src="../Js/noConflict.min.js?v=1"></script>
-    <script type="text/javascript" src="../Js/alerts.min.js?v=30"></script>
-    <script type="text/javascript" src="../Js/lang/content-<%=langType%>.js?v=59"></script>
-    <script type="text/javascript" src="../Js/common.min.js?v=120"></script>
+    <script type="text/javascript" src="../Js/alerts.min.js?v=29"></script>
+    <script type="text/javascript" src="../Js/lang/content-<%=langType%>.js?v=51"></script>
+    <script type="text/javascript" src="../Js/common.min.js?v=99"></script>
     <script type="text/javascript" src="../Js/ivpicklist.min.js?v=13"></script>
     <script type="text/javascript" src="../Js/JDate.min.js?v=3"></script>
 </body>

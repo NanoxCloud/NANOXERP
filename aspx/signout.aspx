@@ -27,9 +27,9 @@
         <%:Scripts.Render("~/UI/axpertUI/bundleJs") %>
     </asp:PlaceHolder>
     <script src="../Js/noConflict.min.js?v=1" type="text/javascript"></script>
-    <script src="../Js/common.min.js?v=120"></script>
-    <script type="text/javascript" src="../Js/lang/content-<%=langType%>.js?v=59"></script>
-    <script type="text/javascript" src="../Js/alerts.min.js?v=30"></script>
+    <script src="../Js/common.min.js?v=99"></script>
+    <script type="text/javascript" src="../Js/lang/content-<%=langType%>.js?v=51"></script>
+    <script type="text/javascript" src="../Js/alerts.min.js?v=29"></script>
     <script>
         let appSessUrl = top.window.location.href.toLowerCase().substring("0", top.window.location.href.indexOf("/aspx/"));
         let instanceName = localStorage.getItem("instanceName-" + appSessUrl);

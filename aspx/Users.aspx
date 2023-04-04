@@ -399,9 +399,9 @@
         <asp:HiddenField ID="hdnStatus" runat="server" />
 
         <%=acScript%>
-        <script src="../Js/user.min.js?v=18" type="text/javascript"></script>
+        <script src="../Js/user.min.js?v=15" type="text/javascript"></script>
 
-        <script src="../Js/common.min.js?v=120" type="text/javascript"></script>
+        <script src="../Js/common.min.js?v=99" type="text/javascript"></script>
     </form>
 </body>
 </html>

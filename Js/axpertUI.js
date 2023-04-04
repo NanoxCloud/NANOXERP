@@ -106,11 +106,7 @@
                                                 childObj.target = `${childObj.target.replace("tstruct.aspx?transid=", "iview.aspx?ivname=")}&tstcaption=${(childObj.name || findGetParameter("transid", childObj.target))}`;
 
                                                 isListView = true;
-                                            }else{
-                                                childObj.target += `&openerIV=${findGetParameter("transid", childObj.target)}&isIV=false`;
                                             }
-                                        }else{
-                                            childObj.target += `&openerIV=${findGetParameter("transid", childObj.target)}&isIV=false`;
                                         }
                                     }
                                 } catch (ex) {}
@@ -259,7 +255,7 @@
                     </div>
                     `,
                     kpi: `
-                    <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 mt-3 widgetWrapper kpiWrapper">
+                    <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 mt-6 widgetWrapper kpiWrapper">
                         <div class="card shadow-sm h-100">
                             <!--begin::Card header-->
                             <div class="card-header border-0">
@@ -295,7 +291,7 @@
                                 </div>
                             </div>
                             <!--end::Card body-->
-                            <div class="card-footer border-0 d-none">
+                            <div class="card-footer border-0">
                                 <div class="fs-7 fw-normal text-muted">
                                     <footerContent></footerContent>
                                 </div>
@@ -304,7 +300,7 @@
                     </div>
                     `,
                     chart: `
-                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 mt-3 widgetWrapper chartWrapper">
+                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 mt-6 widgetWrapper chartWrapper">
                         <div class="card h-100 shadow-sm">
                             <div class="card-header border-0---">
                                 <div class="card-title">
@@ -325,9 +321,9 @@
                                             more_vert
                                         </span>
                                     </a>
-                                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bolder w-200px" data-kt-menu="true" style="">
+                                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold w-200px" data-kt-menu="true" style="">
                                         <div class="menu-item px-3">
-                                            <div class="menu-content fs-6 text-dark fw-boldest px-3 py-4">Quick Actions</div>
+                                            <div class="menu-content fs-6 text-dark fw-bolder px-3 py-4">Quick Actions</div>
                                         </div>
                                         <div class="separator mb-3 opacity-75"></div>
                                         <div class="menu-item px-3">
@@ -343,7 +339,7 @@
                     </div>
                     `,
                     list: `
-                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 mt-3 widgetWrapper listWrapper">
+                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 mt-6 widgetWrapper listWrapper">
                         <div class="card h-100 shadow-sm">
                             <div class="card-header border-0---">
                                 <div class="card-title">
@@ -366,7 +362,7 @@
                     </div>
                     `,
                     menu: `
-                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 mt-3 widgetWrapper menuWrapper">
+                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 mt-6 widgetWrapper menuWrapper">
                         <div class="card h-100 shadow-sm">
                             <div class="card-header border-0---">
                                 <div class="card-title">
@@ -399,7 +395,7 @@
                     </div>
                     `,
                     modernMenuContent:`
-                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 mt-3">
+                    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 mt-6">
                         <div class="card h-100 shadow-sm">
                             <div class="card-body cursor-pointer">
                                 <div class="text text-center header---">
@@ -413,7 +409,7 @@
                     </div>
                     `,
                     "image card": `
-                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 mt-3 widgetWrapper imageWrapper">
+                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 mt-6 widgetWrapper imageWrapper">
                         <div class="card h-100 shadow-sm">
                             <div class="h-400px heightControl">
                                 <imageContent></imageContent>
@@ -445,7 +441,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="card-footer bg-transparent border-0 d-none">
+                                    <div class="card-footer bg-transparent border-0">
                                         <div class="fs-7 fw-normal text-white text-muted">
                                             <footerContent></footerContent>
                                         </div>
@@ -456,7 +452,7 @@
                     </div>
                     `,
                     calendar: `
-                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 mt-3 widgetWrapper calendarWrapper">
+                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 mt-6 widgetWrapper calendarWrapper">
                         <div class="card h-100 shadow-sm">
                             <div class="card-header border-0---">
                                 <div class="card-title">
@@ -477,27 +473,22 @@
                                             more_vert
                                         </span>
                                     </a>
-                                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bolder w-200px" data-kt-menu="true" style="">
+                                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold w-200px" data-kt-menu="true" style="">
                                         <div class="menu-item px-3">
-                                            <div class="menu-content fs-6 text-dark fw-boldest px-3 py-4">Quick Actions</div>
+                                            <div class="menu-content fs-6 text-dark fw-bolder px-3 py-4">Quick Actions</div>
                                         </div>
                                         <div class="separator mb-3 opacity-75"></div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-body min-h-600px h-600px heightControl pt-0---">
+                            <div class="card-body min-h-500px h-500px heightControl pt-0---">
                                 <bodyContent>No Data Found</bodyContent>
-                            </div>
-                            <div class="card-footer py-2 border-0--- d-flex justify-content-evenly d-none">
-                                <div class="fs-7 fw-normal text-white text-muted">
-                                    <footerContent></footerContent>
-                                </div>
                             </div>
                         </div>
                     </div>
                     `,
                     "html": `
-                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 mt-3 widgetWrapper htmlDomWrapper">
+                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 mt-6 widgetWrapper htmlDomWrapper">
                         <div class="card h-100 shadow-sm">
                             <div class="d-none card-header border-0---">
                                 <div class="card-title">
@@ -774,34 +765,21 @@
                         $(_this.options.staging.iframes).removeClass("d-none");
                         $(_this.options.staging.cardsFrame.div).addClass("d-none");
                     }
-                    // if(typeof closeFrame!="undefined")
-                    //     closeFrame();
+                    if(typeof closeFrame!="undefined")
+                        closeFrame();
                 }, 0);
-
-                if(!_this.options.setCards){
-                    $(_this.options.staging.cardsFrame.divControl).addClass("d-none");
-                }
             },
             editSaveCardDesignToggle(reset = false) {
                 let _this = this;
                 let isEdit = $(_this.options.staging.cardsFrame.cardsDesigner).hasClass("d-none");
-
-                if($(isEdit && _this.options.staging.cardsFrame.div).hasClass("d-none")){
-                    // _this._showCardsFrame(true);
-                    $(_this.options.staging.iframes).addClass("d-none");
-                    $(_this.options.staging.cardsFrame.div).removeClass("d-none");
-                }
-
                 if (!reset && isEdit) {
                     $(_this.options.staging.cardsFrame.cardsDiv).addClass("d-none");
                     $(_this.options.staging.cardsFrame.cardsDesigner).removeClass("d-none");
-                    $(_this.options.staging.cardsFrame.cardsDesignerToolbar).removeClass("d-none");
                     $(_this.options.staging.cardsFrame.editSaveButton).removeClass("btn-default").addClass("btn-primary");
                     $(_this.options.staging.cardsFrame.editSaveButton + " " + _this.options.staging.cardsFrame.icon).text("save");
                 } else {
                     $(_this.options.staging.cardsFrame.cardsDiv).removeClass("d-none");
                     $(_this.options.staging.cardsFrame.cardsDesigner).addClass("d-none");
-                    $(_this.options.staging.cardsFrame.cardsDesignerToolbar).addClass("d-none");
                     $(_this.options.staging.cardsFrame.editSaveButton).addClass("btn-default").removeClass("btn-primary");
                     $(_this.options.staging.cardsFrame.editSaveButton + " " + _this.options.staging.cardsFrame.icon).text("edit");
 
@@ -882,7 +860,7 @@
                 }
 
                 try {
-                    callParentNew("updateAppLinkObj")?.("loadhomepage");
+                    callParentNew("updateAppLinkObj(loadhomepage)", "function");
                 } catch (ex) {
                     
                 }
@@ -908,7 +886,7 @@
 
                             <div class="agform form-check form-check-custom form-check-solid px-1 align-self-end">
                                 <input id="chkBox${cardId}" class="showHideChkBox form-check-input h-20px w-20px" type="checkbox" ${cardVisible ? `checked="checked"` : ``} data-card-id="${cardId}" />
-                                <label class="form-check-label form-label fw-boldest my-2" for="chkBox${cardId}" >
+                                <label class="form-check-label form-label my-2" for="chkBox${cardId}" >
                                     <span class="dragName">${card["cardname"]} (${cardType})</span>
                                 </label>
                             </div>
@@ -1126,11 +1104,7 @@
                                     if (col.toLowerCase() == "link" || col.toLowerCase().endsWith("_ui") || col.toLowerCase().startsWith("axphide_")) {
                                         hiddenColumns.push(ind);
                                     }
-                                    if(col.toLowerCase().startsWith("axphideh_")){
-                                        return `<th></th>`;
-                                    }else{
-                                        return `<th>${col}</th>`;
-                                    }
+                                    return `<th>${col}</th>`;
                                 }).join('')}
                             </tr>
                         </thead>
@@ -1189,7 +1163,6 @@
                 }
 
                 if (cardData && cardData[0] && cardData[0]["footer"]) {
-                    cardElement.find("footerContent").parents(".card-footer").removeClass("d-none");
                     cardElement.find("footerContent").replaceWith($("<div>" + cardData[0]["footer"] + "</div>").attr("title", `${(cardData[0]["footer"]) || ""}`) || "");
                 }else{
                     cardElement.find("footerContent").parents(".card-footer").addClass("d-none");
@@ -1223,12 +1196,11 @@
                 }
 
                 if (card.htransid && card.htype) {
-                    cardElement.find("footerContent").parents(".card-footer").removeClass("d-none");
                     let linkStr = "";
                     if (card["htype"].toLowerCase() === "iview") {
                         linkStr = "ivtoivload.aspx?ivname=" + card.htransid;
                     } else if (card["htype"].toLowerCase() === "tstruct") {
-                        linkStr = "tstruct.aspx?transid=" + card.htransid + `&openerIV=${card.htransid}&isIV=false`;
+                        linkStr = "tstruct.aspx?transid=" + card.htransid;
                     }
 
                     let footerHyperLink = `AxLoadUrl('${linkStr}');`;
@@ -1456,10 +1428,9 @@
 
                 cardElement.find(".card-toolbar").removeClass("d-none");
                 cardElement.find(".card-toolbar .menu.menu-sub.menu-sub-dropdown .separator + .menu-item").remove();
-                cardElement.find(".card-toolbar .menu.menu-sub.menu-sub-dropdown .menu-item.dynamic-item").remove();
                 headerOptions.forEach((opt)=>{
                     cardElement.find(".card-toolbar .menu.menu-sub.menu-sub-dropdown").append(`
-                    <div class="menu-item px-3 dynamic-item">
+                    <div class="menu-item px-3">
                         <a href="${opt.href}" onclick="${opt.onclick}" class="menu-link px-3">
                             <i class="menu-icon material-icons material-icons-style material-icons-2">${opt.icon}</i>
                             <span>${opt.caption}</span>
@@ -1480,7 +1451,7 @@
                     headerToolbar: {
                         start: 'title',
                         center: '',
-                        end: 'addEvent today,prev,next'
+                        end: 'today,prev,next'
                     },
                     buttonText:{
                         today: "today",
@@ -1499,26 +1470,16 @@
                     },
                     events: _this._calendarEventData(cardElement, cardData, card),
                     eventClick(info) {
+                        $(".popover.in, .fc-popover").remove();
 
-                        $(".popover.in, .popover.show, .fc-popover").remove();
-
-                        let {recordid} = info?.event?._def?.extendedProps;
-                        _this._calendarEventClick(recordid, cardElement.data("cardIndex"));
+                        _this._calendarEventClick(info?.event?._def?.publicId, cardElement.data("cardIndex"));
                     },
                     dateClick: function(info) {
-                        $(".popover.in, .popover.show, .fc-popover").remove();
+                        $(".popover.in, .fc-popover").remove();
 
                         _this._calendarEventClick(``, cardElement.data("cardIndex"), (info.dateStr ? `${moment(info.dateStr).format("DD/MM/YYYY")}`: ``));
                     },
                     eventDidMount(info) {
-                        $(info.el).find(".fc-event-title").addClass("fw-boldest");
- 
-                        let eventColor;                   
-                        if (info.event && (eventColor = info?.event?._def?.extendedProps?.statusColor)) {
-                            // info.el.insertAdjacentHTML("afterBegin", `<p style="color:${eventColor}">•</p>`);
-                            $(info.el).find(".fc-event-main-frame").prepend(`<span style="background-color:${eventColor}" class="bullet border mx-1 mt-2 w-7px h-7px"></span>`);
-                        }
-
                         $(info.el).popover({
                             get title(){
                                 let {title} = info?.event?._def;
@@ -1546,44 +1507,14 @@
                             html: true,
                             animation: false,
                             delay: { show: 0, hide: 0 }
-                        }).on("shown.bs.popover", function(){
-                            setTimeout(() => {
-                                $(".popover.show").css("z-index", 9999);
-                            }, 0);
                         });
                     }
                 });
 
                 setTimeout(() => {
-                    let _this = $.axpertUI.cardsPage;
-
                     calendar.render();
                     card["obj"] = calendar;
-
-                    _this._generateCalendarLegend(body, card);
                 }, 0);
-            },
-            _generateCalendarLegend(body, card){
-                let _this = $.axpertUI.cardsPage;
-
-                let footer = body.next();
-                let legendObj = [...new Set(card.cardsql.row.map((row)=>{return JSON.stringify({type: row.eventtype, color: row.eventcolor})}))].map(legend=>JSON.parse(legend)) || [];
-
-                if(legendObj.length > 0){
-                    footer.removeClass("d-none");
-                    footer.find(".dynamic-item").remove();
-                    footer.append($(legendObj.map(leg=>`
-                    <span class="d-flex dynamic-item">
-                        <span style="background-color:${leg.color}" class="bullet border mx-1 w-20px h-20px">
-                        </span>
-                        <span class="fw-boldest">
-                            ${leg.type}
-                        </span>
-                    </span>
-                    `).join("") || `<span></span>`));
-                }else{
-                    footer.addClass("d-none");
-                }
             },
             _calendarEventClick(recordObj = "", ind = "", date = "") {
                 let _this = $.axpertUI.cardsPage;
@@ -1594,8 +1525,6 @@
                 let card;
                 let cardData;
 
-                let transid;
-
                 if(typeof recordObj == "object"){
                     cardElement = $(recordObj.currentTarget).parents(".widgetWrapper");
 
@@ -1605,7 +1534,7 @@
 
                     cardData = _this._getCardData(card);
 
-                    // recordid = card["axp_cardsid"];
+                    recordid = card["axp_cardsid"];
                 }else{
                     cardElement = $(`.widgetWrapper[card-index=${ind}]`);
 
@@ -1616,68 +1545,37 @@
                     recordid = recordObj;
                 }
 
-                transid = card.calendarstransid || "axcal";
-
                 let popTitle = "Calendar Events";
+                displayBootstrapModalDialog(popTitle, 'xxl', 'calc(100vh - 50px)', true, `tstruct.aspx?transid=axcal${typeof recordid == "string" && recordid != "" ? `&recordid=${recordid}` : ``}${typeof date == "string" && date != "" ? `&startdate=${date}` : ``}&AxPop=true&act=open`, false,
+                ()=>{
+                    try {
+                        removePageHeaders();
+                    } catch (ex) {}
 
-                try {
-                    var modalId = "loadPopUpPage";//"iFrame" + popTitle.split(" ").join("");
-                    var modalBodyLink = "";
+                    let iFrameId = "iFrame" + popTitle.split(" ").join("");
+                    let dialogWindow = $(`#${iFrameId}`);
 
-                    // if(transid == "axcal"){
-                        modalBodyLink = `tstruct.aspx?transid=${transid}${typeof recordid != "undefined" && recordid != "" ? `&recordid=${recordid}` : ``}${typeof date == "string" && date != "" ? `&startdate=${date}` : ``}&AxPop=true&act=open`
-                    // }else{
-                    //     modalBodyLink = `tstruct.aspx?transid=${transid}${typeof recordid != "undefined" && recordid != "" ? `&recordid=${recordid}` : ``}&AxPop=true${typeof recordid != "undefined" && recordid != "" ? `&act=load` : `&act=open`}`
-                    // }
+                    try {
+                        iframePopupLoadOpts(dialogWindow);
+                    } catch (ex) {}
+                },
+                ()=>{
+                    try {
+                        if(callParentNew('isSuccessAlertInPopUp')){
+                            callParentNew('isSuccessAlertInPopUp=', false);
 
-                    var iFrameModalBody = `<iframe id="${modalId}" name="${modalId}" class="col-12 flex-column-fluid w-100 h-100 p-0 my-n1" src="${""}" frameborder="0" allowtransparency="True"></iframe>`;
-            
-                    let myModal = new BSModal(modalId, "", iFrameModalBody,
-                    (opening, modal) => {
-                        // if(delayLoad){
-                        try {
-                            modal.url = modalBodyLink;
-                            myModal.modalBody.querySelector(`#${modalId}`).contentWindow.location.href = modalBodyLink;
-                        } catch (ex) {}
-                        // }
-                    },
-                    (closing, modal) => {
-                        var isAxPop = modalBodyLink.indexOf("AxPop=true") > -1;
-            
-                        if (isAxPop && eval(callParent('isSuccessAlertInPopUp'))) {
-                            eval(callParent('isSuccessAlertInPopUp') + "= false");
-                            try {
-                                // callParentNew("updateSessionVar")('IsFromChildWindow', 'true')
+                            let obj = card["obj"];
 
-                                let obj = card["obj"];
+                            card = _this._refreshData(card["axp_cardsid"], true).filter(c=>c["axp_cardsid"] == card["axp_cardsid"])[0];
 
-                                card = _this._refreshData(card["axp_cardsid"], true).filter(c=>c["axp_cardsid"] == card["axp_cardsid"])[0];
+                            cardData = _this._getCardData(card);
 
-                                cardData = _this._getCardData(card);
+                            card["obj"] = obj;
 
-                                card["obj"] = obj;
-
-                                _this._setCalendar(cardElement, cardData, card);
-                            } catch (ex) {}
-                            // if (eval(callParent('isRefreshParentOnClose'))) {
-                            //     eval(callParent('isRefreshParentOnClose') + "= false");
-                            //     window.location.href = window.location.href;
-                            // }
+                            _this._setCalendar(cardElement, cardData, card);
                         }
-                    }
-                    );
-                    
-                    myModal.changeSize("lg");
-                    myModal.scrollableDialog();
-                    // myModal.verticallyCentered();
-                    myModal.hideHeader();
-                    myModal.hideFooter();        
-                    myModal.showFloatingClose();
-                    myModal.modalBody.classList.add(...["bg-light", "overflow-hidden"]);
-                    myModal.modalContent.classList.add("h-100");
-                } catch (error) {
-                    // showAlertDialog("error", error.message);
-                }
+                    } catch (ex) {}
+                });
             },
             _calendarEventData(cardElement, cardData, card){
                 let _this = this;
@@ -1740,95 +1638,36 @@
                                 type: d.eventtype || "",
                                 description: d.messagetext || "",
                                 get status(){
-                                    if(d.eventstatus){
-                                        return d.eventstatus;
-                                    }else{
-                                        switch(d.status){
-                                            case 0:
-                                                return "New event";
-                                            case 1:
-                                                return "Accepted";
-                                            case 2:
-                                                return "Rejected";
-                                            case 3:
-                                                return "Reschedule request";
-                                            case 4:
-                                                return "Cancel";
-                                            default:
-                                                return "";
-                                        }
-                                    }
-                                },
-                                get statusColor(){
-                                    if(d.eventstatcolor){
-                                        return rgbToHex(getCssByAttr("style", `color: ${d.eventstatcolor}`, "color"))
-                                    }else{
-                                        return "";
+                                    switch(d.status){
+                                        case 0:
+                                            return "New event";
+                                        case 1:
+                                            return "Accepted";
+                                        case 2:
+                                            return "Rejected";
+                                        case 3:
+                                            return "Reschedule request";
+                                        case 4:
+                                            return "Cancel";
+                                        default:
+                                            return "";
                                     }
                                 },
                                 location: d.location || "",
                                 get classNames(){
                                     switch(this.type.toLowerCase()){
-                                        // case "personal":
-                                        //     return "cardbg-cyan";
-                                        // case "meeting":
-                                        //     return "cardbg-pink";
-                                        // case "online meet":
-                                        //     return "cardbg-purple";
-                                        // case "leave":
-                                        //     return "cardbg-red";
+                                        case "personal":
+                                            return "cardbg-cyan";
+                                        case "meeting":
+                                            return "cardbg-pink";
+                                        case "online meet":
+                                            return "cardbg-purple";
+                                        case "leave":
+                                            return "cardbg-red";
                                         default:
                                             return "";
                                     }
                                 },
-                                get color(){
-                                    switch(this.type.toLowerCase()){
-                                        // case "":
-                                        //     return "";
-                                        // case "personal":
-                                        // case "meeting":
-                                        // case "online meet":
-                                        // case "leave":
-                                        //     return "";
-                                        default:
-                                            {
-                                                if(d.eventcolor){
-                                                    return rgbToHex(getCssByAttr("style", `color: ${d.eventcolor}`, "color"));
-                                                }else{
-                                                    return ""
-                                                }
-                                            }
-                                    }
-                                },
-                                get textColor(){
-                                    switch(this.type.toLowerCase()){
-                                        // case "personal":
-                                        // case "meeting":
-                                        // case "online meet":
-                                        // case "leave":
-                                        //     return "#ffffff";
-                                        default:
-                                            {
-                                                if(d.eventcolor){
-                                                    return invert(this.color, {...appGlobalVarsObject._CONSTANTS.colors, threshold: 0.2});
-                                                }else{
-                                                    return ""
-                                                }
-                                            }
-                                    }
-                                },
-                                get borderColor(){
-                                    return this.textColor;
-                                },
-                                
-                                get recordid(){
-                                    if(card.calendarstransid){
-                                        return d.recordid;
-                                    }else{
-                                        return d.axcalendarid;
-                                    }
-                                },
-                                display: "block",
                                 url: `javascript:void(0);`
                             };
                         }) || [];
@@ -1853,7 +1692,7 @@
                     let objCardHTML = $(cardHTML);
 
                     if(objCardHTML.data("theme")){
-                        cardHTML = bundleCss.map(file=>`<link rel="stylesheet" href="${file}" />`).join("") + cardHTML;
+                        cardHTML = `<link rel="stylesheet" href="${bundleCss}" />` + cardHTML;
                     }
 
                     if(objCardHTML.data("handlebars")){
@@ -2254,8 +2093,8 @@
                 } else {
                     GlobalSrchCondition = 'StartsWith';
                 }
-                // var searchElem = $(_this.options.staging.div)
-                // searchElem.val() && searchElem.val().length > 1 && searchElem.focus().autocomplete("search", searchElem.val());
+                var searchElem = $(_this.options.staging.div)
+                searchElem.val() && searchElem.val().length > 1 && searchElem.focus().autocomplete("search", searchElem.val());
             },
             hideKTSearch(){
                 var _this = this;
@@ -2328,8 +2167,6 @@
 
                     datas.forEach(data=>{
                         var searchType = data.link.split('♦')[0];
-                        let tsivName=data.link.split('♦')[1];
-                        let srcDtls = tsivName.split('*♠*');
                         var toolTip = data.label;
                         itemText = toolTip;
                         
@@ -2339,24 +2176,13 @@
 
                         itemText = CheckSpCharsForXml(itemText);
                         searchType = searchType.toLowerCase();
-                        var tsLvLoad=false;
+                        
                         var icon = "";
                         if (searchType == "iview" || searchType == "iviewinteractive") {
                             icon = "view_list";
                         } else if (searchType == "tstruct") {
-                            if(typeof appGlobalVarsObject._CONSTANTS.search.listviewLoadSearch!="undefined" && appGlobalVarsObject._CONSTANTS.search.listviewLoadSearch.length > 0){
-                                var listviewLoadSearch= appGlobalVarsObject._CONSTANTS.search.listviewLoadSearch;
-                                if(openListviewSearchConf = listviewLoadSearch.filter(list => list.structname == srcDtls[0])?.[0]){                                   
-                                }else if(openListviewSearchConf = listviewLoadSearch.filter(list => list.structname == "ALL Forms")?.[0]){
-                                }
-                                    if(openListviewSearchConf?.propsval == "true")
-                                       tsLvLoad=true;
-                            }
-                            if(tsLvLoad)
-                                icon="format_list_bulleted";
-                            else
-                                icon = "assignment";                            
-                        } else if (searchType == "page" || searchType == "htmlpages" || searchType == "standardpage") {
+                            icon = "assignment";
+                        } else if (searchType == "page" || searchType == "htmlpages") {
                             icon = "insert_drive_file";
                         } else if (searchType == "help") {
                             icon = "live_help";
@@ -2364,15 +2190,8 @@
                         else {
                             icon = "search";
                         }
-                        if(tsLvLoad){
-                            searchType="listview";
-                            var qstr ="";
-                            if(srcDtls[1]!="null" && srcDtls[1]!="")
-                                qstr= GetGloSrchQueryString(srcDtls[1]);
-                            loadurl = `iview.aspx?ivname=${srcDtls[0]}&tstcaption=${(itemText || srcDtls[0])+qstr}`;
-                        }
-                        else
-                            var loadurl = searchLoadIframe(searchType, data.link.split('♦')[1], true);
+
+                        var loadurl = searchLoadIframe(searchType, data.link.split('♦')[1], true);
                         if (loadurl != "") {
                             if(loadurl.startsWith("help.aspx")){
                                 loadurl = `javascript:window.open(\"${loadurl}\", \"_blank\");`;
@@ -2396,8 +2215,6 @@
                                     switch(searchType){
                                         case "iview":
                                             return "Report";
-                                        case "listview":
-                                            return "ListView";
                                         case "tstruct":
                                             return "Form";
                                         default:
@@ -2556,10 +2373,7 @@
                 });
 
                 //Popover
-                $('[data-toggle="popover"]').popover()
-                .on('shown.bs.modal', ()=>{
-                    alert();
-                });
+                $('[data-toggle="popover"]').popover();
             }
         }
 
@@ -2845,16 +2659,6 @@
                     $(_thisStag.Adminconsole.div).find(_thisStag.Adminconsole.subTitle.div).attr("title", _thisStag.Adminconsole.subTitle.title).text(_thisStag.Adminconsole.subTitle.title);
                 }
                 
-                if(_thisStag.ArrangeCards)
-                {
-                    // $(_thisStag.ArrangeCards.div).attr("style", "display:" +_this.ArrangeCards.display);
-                    // $(_thisStag.ArrangeCards.div).attr("onclick", _this.ArrangeCards.onclick);
-
-                    $(_thisStag.ArrangeCards.div).find(_thisStag.ArrangeCards.title.div).attr("title", _thisStag.ArrangeCards.title.title).text(_thisStag.ArrangeCards.title.title);
-
-                    $(_thisStag.ArrangeCards.div).find(_thisStag.ArrangeCards.subTitle.div).attr("title", _thisStag.ArrangeCards.subTitle.title).text(_thisStag.ArrangeCards.subTitle.title);
-                }
-
                 if(_thisStag.developerworkbench)
                 {
                     $(_thisStag.developerworkbench.div).attr("style", "display:" +_this.developerworkbench.display);
@@ -2863,15 +2667,6 @@
                     $(_thisStag.developerworkbench.div).find(_thisStag.developerworkbench.title.div).attr("title", _thisStag.developerworkbench.title.title).text(_thisStag.developerworkbench.title.title);
 
                     $(_thisStag.developerworkbench.div).find(_thisStag.developerworkbench.subTitle.div).attr("title", _thisStag.developerworkbench.subTitle.title).text(_thisStag.developerworkbench.subTitle.title);
-                }
-                if(_thisStag.configurationStudio)
-                {
-                    $(_thisStag.configurationStudio.div).attr("style", "display:" +_this.configurationStudio.display);
-                    $(_thisStag.configurationStudio.div).attr("onclick", _this.configurationStudio.onclick);
-
-                    $(_thisStag.configurationStudio.div).find(_thisStag.configurationStudio.title.div).attr("title", _thisStag.configurationStudio.title.title).text(_thisStag.configurationStudio.title.title);
-
-                    $(_thisStag.configurationStudio.div).find(_thisStag.configurationStudio.subTitle.div).attr("title", _thisStag.configurationStudio.subTitle.title).text(_thisStag.configurationStudio.subTitle.title);
                 }
                 if (_this.AppConfig) {
                     $(_thisStag.AppConfig.div).attr("style", "display:" + _this.AppConfig.display);

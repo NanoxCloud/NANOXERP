@@ -26,7 +26,7 @@
     <link href="../Css/thirdparty/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" />
     <script src="../Js/Jquery-2.2.2.min.js" type="text/javascript"></script>
     <script src="../Js/thirdparty/bootstrap/3.3.6/bootstrap.min.js" type="text/javascript"></script>
-    <script src="../Js/common.min.js?v=120" type="text/javascript"></script>
+    <script src="../Js/common.min.js?v=99" type="text/javascript"></script>
     <script src="../Js/thirdparty/jquery-ui/1.12.1/jquery-ui.min.js"></script>
     <script src="../Js/script.js"></script>
     <script src="../Js/DND.js"></script>
@@ -340,7 +340,7 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group" style="display: none;">
-                                <label for="recipient-name" class="col-form-label fw-boldest">
+                                <label for="recipient-name" class="col-form-label">
                                     Edit:</label>
                                 <asp:TextBox ID="tbTitle" runat="server" CssClass="form-control"></asp:TextBox>
                                 <asp:TextBox ID="tbType" runat="server" CssClass="form-control"></asp:TextBox>
@@ -348,12 +348,12 @@
                                 <asp:TextBox ID="tbxEdit" runat="server" CssClass="form-control"></asp:TextBox>
                             </div>
                             <div class="form-group">
-                                <label for="recipient-name" class="col-form-label fw-boldest">
+                                <label for="recipient-name" class="col-form-label">
                                     Title:</label>
                                 <asp:TextBox ID="tbxTitle" runat="server" CssClass="form-control"></asp:TextBox>
                             </div>
                             <div class="form-group">
-                                <label for="message-text" class="col-form-label fw-boldest">
+                                <label for="message-text" class="col-form-label">
                                     Type:</label>
                                 <asp:DropDownList ID="cboType" runat="server" CssClass="form-control" AutoPostBack="true" ValidationGroup="test1">
                                 </asp:DropDownList>
@@ -361,7 +361,7 @@
                             <asp:UpdatePanel ID="UpdatePanel3" runat="server">
                                 <ContentTemplate>
                                     <div class="form-group" id="divcbo" runat="server">
-                                        <label for="message-text" class="col-form-label fw-boldest">
+                                        <label for="message-text" class="col-form-label">
                                             Details:</label>
                                         <asp:DropDownList ID="cboTstruct" runat="server" CssClass="form-control" ValidationGroup="test1">
                                         </asp:DropDownList>
@@ -373,7 +373,7 @@
                             <asp:UpdatePanel ID="UpdatePanel1" runat="server">
                                 <ContentTemplate>
                                     <div class="form-group" id="divupload" style="display: none;">
-                                        <label for="message-text" class="col-form-label fw-boldest">
+                                        <label for="message-text" class="col-form-label">
                                             Custom File :</label>
                                         <asp:FileUpload ID="fileUploadCustom" runat="server" />
                                         <br />
@@ -421,7 +421,7 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="message-text" class="col-form-label fw-boldest">
+                                <label for="message-text" class="col-form-label">
                                     Tab Name:</label>
                                 <asp:DropDownList ID="cboTabName" runat="server" CssClass="form-control" ValidationGroup="test1">
                                 </asp:DropDownList>
@@ -521,12 +521,12 @@
                         <div class="container"></div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="recipient-name" class="col-form-label fw-boldest">
+                                <label for="recipient-name" class="col-form-label">
                                     Page  Title:</label>
                                 <asp:TextBox ID="tbxPageTitle" runat="server" CssClass="form-control"></asp:TextBox>
                             </div>
                             <div class="form-group">
-                                <label for="recipient-name" class="col-form-label fw-boldest">
+                                <label for="recipient-name" class="col-form-label">
                                     Description:</label>
                                 <asp:TextBox ID="tbxDescription" runat="server" TextMode="MultiLine" CssClass="form-control"></asp:TextBox>
                             </div>
@@ -553,7 +553,7 @@
                                     <ContentTemplate>
                                         <div class="col-xs-12 col-lg-3 col-md-3" style="z-index: 1;">
                                             <div class="form-group">
-                                                <label for="message-text" class="col-form-label fw-boldest">
+                                                <label for="message-text" class="col-form-label">
                                                     Pages:</label>
                                                 <asp:DropDownList ID="cboCont1" AutoPostBack="true" runat="server" CssClass="form-control" ValidationGroup="test1">
                                                 </asp:DropDownList>
@@ -598,7 +598,7 @@
                                     <ContentTemplate>
                                         <div class="col-xs-12 col-lg-3 col-md-3">
                                             <div class="form-group">
-                                                <label for="message-text" class="col-form-label fw-boldest">
+                                                <label for="message-text" class="col-form-label">
                                                     Pages:</label>
                                                 <asp:DropDownList ID="cboCont2" AutoPostBack="true" runat="server" CssClass="form-control" ValidationGroup="test1">
                                                 </asp:DropDownList>

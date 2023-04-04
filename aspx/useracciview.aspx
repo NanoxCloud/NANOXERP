@@ -38,12 +38,12 @@
     <script src="../Js/thirdparty/bootstrap/3.3.6/bootstrap.min.js"></script>
     <script src="../Js/noConflict.min.js?v=1" type="text/javascript"></script>
     <script src="../ThirdParty/jquery-confirm-master/jquery-confirm.min.js?v=2" type="text/javascript"></script>
-    <script src="../Js/alerts.min.js?v=30" type="text/javascript"></script>
+    <script src="../Js/alerts.min.js?v=29" type="text/javascript"></script>
     <script src="../Js/gen.min.js?v=14" type="text/javascript"></script>
-    <script src="../Js/helper.min.js?v=142" type="text/javascript"></script>
+    <script src="../Js/helper.min.js?v=124" type="text/javascript"></script>
     <script src="../Js/useracciview.min.js?v=11" type="text/javascript"></script>
-    <script src="../Js/common.min.js?v=120" type="text/javascript"></script>
-    <script type="text/javascript" src="../Js/lang/content-<%=langType%>.js?v=59"></script>
+    <script src="../Js/common.min.js?v=99" type="text/javascript"></script>
+    <script type="text/javascript" src="../Js/lang/content-<%=langType%>.js?v=51"></script>
        <style>
        .tab-content{
            margin-top:15px;

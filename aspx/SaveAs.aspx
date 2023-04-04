@@ -43,15 +43,15 @@
 
     <%--custom alerts start--%>
     <link href="../Css/animate.min.css" rel="stylesheet" />
-    <script src="../Js/alerts.min.js?v=30" type="text/javascript"></script>
+    <script src="../Js/alerts.min.js?v=29" type="text/javascript"></script>
     <%--custom alerts end--%>
     <!-- ________ JAVASCRIPT __________ -->
 
-    <script type="text/javascript" src="../Js/iview.min.js?v=312"></script>
+    <script type="text/javascript" src="../Js/iview.min.js?v=272"></script>
 
-    <script src="../Js/helper.min.js?v=142" type="text/javascript"></script>
+    <script src="../Js/helper.min.js?v=124" type="text/javascript"></script>
     <script src="../Js/SaveAs.min.js?v=2" type="text/javascript"></script>
-    <script src="../Js/common.min.js?v=120" type="text/javascript"></script>
+    <script src="../Js/common.min.js?v=99" type="text/javascript"></script>
     <link href="../Css/SaveAs.min.css" rel="stylesheet" />
 </head>
 

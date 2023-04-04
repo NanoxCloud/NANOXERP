@@ -164,7 +164,7 @@ function ShowDimmer(status) {
             document.onkeydown = function EatKeyPress() {
                 return false;
             }
-        } else if(!$("body").hasClass("stay-page-loading")) {
+        } else {
             $("body").removeClass("page-loading");
             document.onkeydown = function EatKeyPress() {
                 if (DimmerCalled == true) {
@@ -181,7 +181,7 @@ function ShowDimmer(status) {
             if (dv.length > 0) {
                 if (status == true) {                    
                     $("body", window.opener.document).addClass("page-loading");
-                } else if(!$("body", window.opener.document).hasClass("stay-page-loading")) {
+                } else {
                     $("body", window.opener.document).removeClass("page-loading");
                 }
             }
@@ -309,144 +309,6 @@ function GetFieldValue(componentName, fillGrid) {
                 });
 
             } else if (fldType == "textarea") {
-                let _thisId = fld.attr("id");
-                if (AllFieldNames.length > 0) {
-                    var idx = $j.inArray(_thisId, AllFieldNames);
-                    if (idx != -1)
-                        fldValue = AllFieldValues[idx];
-                    else {
-                        fldValue = fld.val().replace(/\n/gi, "<br>");
-                        fldValue = fld.val();
-                    }
-                } else {
-                    fldValue = fld.val().replace(/\n/gi, "<br>");
-                    fldValue = fld.val();
-                }
-            } else if (fldType == "checkbox") {
-                var isChecked = "";
-                isChecked = fld.is(":checked");
-
-                var isFldFound = false;
-                if ($j(".multiFldChk").length > 0) {
-
-                    var fldChkSep = GetChkSeparator(GetFieldsName(componentName));
-
-                    $j("input:checkbox:checked.multiFldChk").each(function () {
-                        if ($j(this).attr("id") == componentName && $j(this).prop("checked") == true) {
-                            if (fldValue == "")
-                                fldValue = $j(this).val();
-                            else
-                                fldValue += fldChkSep + $j(this).val();
-
-                            isFldFound = true;
-                        }
-                    });
-                }
-                if (!isFldFound) {
-                    if (!$j("#" + componentName).hasClass("multiFldChk"))
-                        fldValue = GetChkValue(componentName, isChecked);
-                }
-            } else if (fldType == "select-multiple") {
-                if (fillGrid != undefined) {
-                    if (fldValue.indexOf("#") != -1) {
-                        fldValue = fldValue.replace(/#/, "hash;");
-                    }
-                }
-                if (fld.hasClass("multiFldChk")) {
-                    if (fld.data("control") == "select2" && fld.data("separator")) {
-                        fldValue = (fld.val()?.join(fld.data("separator")) ?? fld.val());
-                    } else {
-                        fldValue = fld.val();
-                    }
-                } else {
-                    if (fld.data("control") == "select2" && fld.data("sep")) {
-                        fldValue = (fld.val()?.join(fld.data("sep")) ?? fld.val());
-                    } else {
-                        fldValue = fld.val();
-                    }
-                }
-                //if(fld.data("control") == "select2" && fld.data("separator")){
-                //    fldValue = (fld.val()?.join(fld.data("separator")) ?? fld.val());
-                //}else{
-                //    fldValue = fld.val();
-                //}
-                ////fldValue = fld.val();
-                //if (fldValue == "" && typeof fld.attr("data-selected") != "undefined") {
-                //    fldValue = fld.attr("data-selected");
-                //    let fldSep = fld.attr("data-sep");
-                //    if (fldValue != "")
-                //        fldValue = (fldValue?.join(fldSep) ?? fldValue);
-                //        //fldValue = fldValue.split(fldSep);
-                //}
-                if (fldValue == dateString) fldValue = "";
-
-            } else {
-
-                if (fillGrid != undefined) {
-                    if (fldValue.indexOf("#") != -1) {
-                        fldValue = fldValue.replace(/#/, "hash;");
-                    }
-                }
-                //fldValue = fld.val();
-                var _thisId = fld.attr("id");
-                if (AllFieldNames.length > 0) {
-                    var idx = $j.inArray(_thisId, AllFieldNames);
-                    if (idx != -1)
-                        fldValue = AllFieldValues[idx];
-                }
-                if (fldType == "hidden" && fldValue == "" && fld.attr("defaultvalue") != undefined) {
-                    fldValue = fld.attr("defaultvalue");
-                }
-                if (fldValue == dateString) fldValue = "";
-            }
-        }
-    }
-    try {
-        let fldCustVal = AxAfterGetFieldValue();
-        if (typeof fldCustVal != "undefined" && fldCustVal != "@*#")
-            fldValue = fldCustVal;
-    } catch (ex) { }
-    return fldValue;
-}
-
-function GetFieldValueNew(componentName, fillGrid) {
-
-    var fldValue = "";
-    if (componentName != "") {
-        var fld = $j("#" + componentName);
-
-        if (fld.length > 0) {
-            var fldType = fld.attr("type");
-
-            if (fldType == undefined)
-                fldType = fld.prop("type");
-
-            if (fldType == "select-one") {
-
-                fldValue = fld.find("option:selected").text();
-                if (fldValue == aXEmptyOption) fldValue = "";
-                if (fillGrid != undefined) {
-                    if (fldValue.indexOf("#") != -1) {
-                        fldValue = fldValue.replace(/#/, "hash;");
-                    }
-                }
-            } else if (fldType == "radio") {
-
-                if ($j(".multiFldRdg").length > 0) {
-                    $j("input:radio.multiFldRdg").each(function () {
-                        if ($j(this).attr("id") == componentName && $j(this).prop("checked") == true) {
-                            fldValue = $j(this).val();
-                        }
-                    });
-                }
-
-                $j("input:radio[name=" + componentName + "]").each(function () {
-                    if ($j(this).prop("checked") == true || $j(this).prop("checked") == "checked") {
-                        fldValue = $j(this).val();
-                    }
-                });
-
-            } else if (fldType == "textarea") {
                 fldValue = fld.val().replace(/\n/gi, "<br>");
                 fldValue = fld.val();
             } else if (fldType == "checkbox") {
@@ -479,27 +341,18 @@ function GetFieldValueNew(componentName, fillGrid) {
                         fldValue = fldValue.replace(/#/, "hash;");
                     }
                 }
-                if (fld.hasClass("multiFldChk")) {
-                    if (fld.data("control") == "select2" && fld.data("separator")) {
-                        fldValue = (fld.val()?.join(fld.data("separator")) ?? fld.val());
-                    } else {
-                        fldValue = fld.val();
-                    }
-                } else {
-                    if (fld.data("control") == "select2" && fld.data("sep")) {
-                        fldValue = (fld.val()?.join(fld.data("sep")) ?? fld.val());
-                    } else {
-                        fldValue = fld.val();
-                    }
+                if(fld.data("control") == "select2" && fld.data("separator")){
+                    fldValue = (fld.val()?.join(fld.data("separator")) ?? fld.val());
+                }else{
+                    fldValue = fld.val();
                 }
-                ////fldValue = fld.val();
-                //if (fldValue == "" && typeof fld.attr("data-selected") != "undefined") {
-                //    fldValue = fld.attr("data-selected");
-                //    let fldSep = fld.attr("data-sep");
-                //    if (fldValue != "")
-                //        fldValue = (fldValue?.join(fldSep) ?? fldValue);
-                //        //fldValue = fldValue.split(fldSep);
-                //}
+                //fldValue = fld.val();
+                if (fldValue == "" && typeof fld.attr("data-selected") != "undefined") {
+                    fldValue = fld.attr("data-selected");
+                    let fldSep = fld.attr("data-sep");
+                    if (fldValue != "")
+                        fldValue = fldValue.split(fldSep);
+                }
                 if (fldValue == dateString) fldValue = "";
 
             } else {
@@ -532,27 +385,26 @@ function GetChkValue(componentName, isChecked) {
     var chkValues = $j("#" + componentName).attr("alt");
     if (chkValues != undefined)
         var chkVal = chkValues.split(",");
-    try {
-        if (isChecked != undefined) {
-            if (IsDcGrid(dcNo)) {
-                chkVal = $j.grep(chkVal, function (n) { //Removing empty string
-                    return (n);
-                });
-                if (chkVal.length > 1) {
-                    if (isChecked)
-                        chkValue = chkVal[0].toString();
-                    else
-                        chkValue = chkVal[1].toString();
-                }
-            } else {
 
-                if (isChecked)
-                    chkValue = "T";
-                else
-                    chkValue = "F";
-            }
+    if (IsDcGrid(dcNo)) {
+        chkVal = $j.grep(chkVal, function (n) { //Removing empty string
+            return (n);
+        });
+        if (chkVal.length > 1) {
+            if (isChecked)
+                chkValue = chkVal[0].toString();
+            else
+                chkValue = chkVal[1].toString();
         }
-    } catch (ex) { }
+    } else {
+
+        if (isChecked)
+            chkValue = "T";
+        else
+            chkValue = "F";
+    }
+
+
     return chkValue;
 }
 
@@ -595,9 +447,8 @@ function SetFieldValue(componentName, value, fromNumFocus, calledFrom) {
         //Code to set the value from textarea to Rich text box
         if ((componentName.indexOf("rtf_", 0) === 0 || componentName.indexOf("rtfm_", 0) === 0 || componentName.indexOf("fr_rtf_", 0) === 0 || GetDWBFieldType(fieldName) == "Rich Text") && (calledFrom == "LoadData" || calledFrom == "GetDep" || calledFrom == undefined) && isReadyCK) {
             value = RepSpecialCharForRTB(value);
-            UpdateAllFieldValues(componentName, value);
-            value = value.replace(/<gmi/g, '<img');
-            CKEDITOR.instances[componentName].setData(value);            
+            //$j("#dv_" + componentName).html(value);
+            CKEDITOR.instances[componentName].setData(value);
         }
         let lowComponentName = componentName.toLowerCase();
         if ((lowComponentName.indexOf("sql_editor_", 0) === 0 || lowComponentName.indexOf("exp_editor_", 0) === 0 || GetDWBFieldType(fieldName) == "SQL Editor" || GetDWBFieldType(fieldName) == "Expression Editor") && (calledFrom == "LoadData" || calledFrom == "GetDep" || calledFrom == undefined)) {
@@ -605,7 +456,6 @@ function SetFieldValue(componentName, value, fromNumFocus, calledFrom) {
             let editor = $("#" + componentName).data("myeditor");
             if (editor) {
                 editor.setValue(value);
-                UpdateAllFieldValues(componentName, value);
             }
         }
 
@@ -629,19 +479,11 @@ function SetFieldValue(componentName, value, fromNumFocus, calledFrom) {
             if (fldType == "select-one") {
                 if (fld.prev('textarea').length > 0) {
                     fld.prev('textarea').text(value);
-                    UpdateAllFieldValues(fld.attr("id"), value);
                 }
                 var ddlValue = "";
                 //In chrome , the dropdown values are not getting cleared.
                 if (fld.hasClass("fldFromSelect")) {
-                    if (value == "") {
-                        UpdateAllFieldValues(fld.attr("id"), "");
-                        fld.empty().trigger('change');
-                    }
-                    else {
-                        UpdateAllFieldValues(fld.attr("id"), value);
-                        fld.append('<option value="' + value + '" selected="selected">' + value + '</option>');
-                    }
+                    fld.append('<option value="' + value + '" selected="selected">' + value + '</option>');
                 } else {
                     if (!$j.browser.msie)
                         fld = CloneCombo(fld);
@@ -669,29 +511,16 @@ function SetFieldValue(componentName, value, fromNumFocus, calledFrom) {
                 if (ddlValue != "" && !fromNumFocus)
                     ComboFillDependents(componentName, ddlValue);
             } else if (fldType == "select-multiple" || fldType == "multigroupselect") {
+                if(!fld.hasClass("multiFldChklist")){
                 let _separator = fldType == "select-multiple" ? fld.data("separator") : fld.data("sep");
                 if (value != "") {
-                    UpdateAllFieldValues(fld.attr("id"), value);
                     if (!Array.isArray(value)) {
-                        value = [...new Set([...value.split(_separator)])].join(_separator);
-                        if (fld.find("option").length == 0) {
-                            $.each(value.split(_separator), function (ind, val) {
-                                fld.append('<option value="' + val + '" selected="selected">' + val + '</option>');
-                            });
-                        }
+                        $.each(value.split(_separator), function (ind, val) {
+                            fld.append('<option value="' + val + '" selected="selected">' + val + '</option>');
+                        });
                     }
-                    fld.attr("data-selected", value);
-                } else if (value == "" && (fld.hasClass("multiFldChk") || fld.hasClass("fldmultiSelect"))) {
-                    UpdateAllFieldValues(fld.attr("id"), value);
-                    fld.attr("data-selected", value);
-                    fld.empty().trigger('change');
                 }
-                else if (value == "" && fld.hasClass("multiFldChklist")) {
-                    UpdateAllFieldValues(fld.attr("id"), value);
-                    fld.attr("data-selected", value);
-                    $(`#${fld.attr("id")} > option`).prop("selected", "");
-                    fld.parent().find(".select2-selection__choice").remove();
-                }
+            }
             } else if (fldType == "radio") {
 
                 if ($j(".multiFldRdg").length > 0) {
@@ -720,15 +549,6 @@ function SetFieldValue(componentName, value, fromNumFocus, calledFrom) {
                     }
                     if (!isFldFound) {
                         fld.text(value);
-                        try {
-                            let _thisfId = fld.attr("id");
-                            if (typeof $("#dvgrdchkbox" + _thisfId) != "undefined") {
-                                if (value != "" && (value.toLowerCase() == "yes" || value.toLowerCase() == "t"))
-                                    $("#dvgrdchkbox" + _thisfId + " input").prop("checked", true);
-                                else
-                                    $("#dvgrdchkbox" + _thisfId + " input").prop("checked", false);
-                            }
-                        } catch (ex) { }
                     }
                 } else {
                     try {
@@ -776,25 +596,16 @@ function SetFieldValue(componentName, value, fromNumFocus, calledFrom) {
                         if (IsParentField(fieldName, dcNo) && value == 0)
                             value = "";
                     }
-                    UpdateAllFieldValues(fld.attr("id"), value);
                     fld.val(value);
                     fld.attr("value", value);
                     isValSet = true;
-                    ApplyFldMask(fld.attr("id"), value);
+
                 }
                 if (!isValSet) {
                     var newValue = value.replace(new RegExp("<br>", "g"), "¿");
                     newValue = newValue.replace(new RegExp("¿", "g"), "\n");
                     newValue = newValue.replace(new RegExp("&#9;", "g"), "\t");
-                    try {
-                        if (fld.next("div").attr("id") == "cke_" + fld.attr("id"))
-                            newValue = newValue.replace(new RegExp("<img", "g"), "<gmi");
-                        else if (FFieldType[fldIndex] == "Rich Text")
-                            newValue = newValue.replace(new RegExp("<gmi", "g"), "<img");
-                    } catch (ex) { }
-                    UpdateAllFieldValues(fld.attr("id"), newValue);
                     fld.val(newValue);
-                    ApplyFldMask(fld.attr("id"), newValue);
                 }
 
             } else {
@@ -815,14 +626,11 @@ function SetFieldValue(componentName, value, fromNumFocus, calledFrom) {
                         if (IsParentField(fieldName, dcNo) && value == 0)
                             value = "";
                     }
-                    UpdateAllFieldValues(fld.attr("id"), value);
                     fld.val(value);
                     fld.attr("value", value);
-                    ApplyFldMask(fld.attr("id"), value);
                 } else if (fld.hasClass("fldmultiSelect")) { // Set value to Multi select field.
                     if (value != "") {
                         if (fld[0].type == "textarea") {
-                            UpdateAllFieldValues(fld.attr("id"), value);
                             fld.val(value);
                             fld.attr("value", value);
                         }
@@ -837,23 +645,17 @@ function SetFieldValue(componentName, value, fromNumFocus, calledFrom) {
                         if (typeof AutosaveDraft != "undefined" && AutosaveDraft == "true" && checkIsdraft == "true") {
                             if (fldType != undefined && fldType.toLowerCase() != "image") {
                                 if (!fldsdId.startsWith("axp_nga_") && fldsdId.indexOf("axp_gridattach_") == -1 && fldsdId.toLowerCase().indexOf("dc" + dcNo + "_image") == -1 && fldsdId.toLowerCase().indexOf("dc" + dcNo + "_referimages") == -1) {
-                                    UpdateAllFieldValues(fld.attr("id"), value);
                                     fld.val(value);
                                     fld.attr("value", value);
-                                    ApplyFldMask(fld.attr("id"), value);
                                 }
                             }
                         } else {
-                            UpdateAllFieldValues(fld.attr("id"), value);
                             fld.val(value);
                             fld.attr("value", value);
-                            ApplyFldMask(fld.attr("id"), value);
                         }
                     } catch (ex) {
-                        UpdateAllFieldValues(fld.attr("id"), value);
                         fld.val(value);
                         fld.attr("value", value);
-                        ApplyFldMask(fld.attr("id"), value);
                     }
                 }
             }
@@ -1889,11 +1691,9 @@ function UpdateFieldArray(fieldName, fieldDbRowNo, fieldValue, sourcewin, called
     var id = "";
     if ($j("#" + fieldName).prop("type") == "select-one") {
         if ($j("#" + fieldName).hasClass("fldFromSelect")) {
-            if (typeof fieldValue == "undefined" || fieldValue == "") {
-                id = $j("#" + fieldName).find("option:selected").val();
-                if (id != undefined && id != "")
-                    fieldValue = id;
-            }
+            id = $j("#" + fieldName).find("option:selected").val();
+            if (id != undefined && id != "")
+                fieldValue = id;
         } else {
             id = $j("#" + fieldName).find("option:selected").val();
             if (id != undefined && id != "")
@@ -2056,7 +1856,7 @@ function ShowDialog(title, message, messageType, messageVars, functionality, hol
     //    shMessage = "<div class='AX" + title + " shortMessageWrapper animated pulse'>";
     //}
     var wrapperClassForApp = "";
-    if (parent.document.location.href.indexOf("mainnew.aspx") != -1 || parent.document.location.href.indexOf("axmain.aspx") != -1) {
+    if (parent.document.location.href.indexOf("mainnew.aspx") != -1) {
         wrapperClassForApp = "shortMessageWrapperInApp";
     }
     shMessage = "<div class='shortMessageWrapper " + wrapperClassForApp + " animated pulse'>";
@@ -2120,7 +1920,6 @@ function ShowDialog(title, message, messageType, messageVars, functionality, hol
             tapToDismiss: false,
             newestOnTop: false,
             preventDuplicates: true,
-            positionClass: "toast-top-center",
             get timeOut() {
                 if (title == "failure" || title == "error") {
                     if (errorEnable == true && errorTimeout > 0) {
@@ -2217,9 +2016,6 @@ function HideDialog() {
                 callParentNew("closeModalDialog()", "function");
             } else {
                 $j("#axpertPopupWrapper .remodal-close", window.parent.document).click();
-                try {
-                    callParentNew("loadPopUpPage", "id").dispatchEvent(new CustomEvent("close"));
-                } catch (ex) {}
             }
             eval(callParent("closeFrame()", "function"));
         }
@@ -2229,7 +2025,7 @@ function HideDialog() {
             url = ApplySaveDirective(axCustomTstAction);
             if (url == "") {
                 if (lvNavDetails == "") {
-                    url = "tstruct.aspx?transid=" + tst + `&openerIV=${typeof isListView != "undefined" ? iName : tst}&isIV=${typeof isListView != "undefined" ? !isListView : "false"}`;
+                    url = "tstruct.aspx?transid=" + tst;
                 } else {
                     navValidator = true;
                     listViewNavigating = true;
@@ -2248,9 +2044,9 @@ function HideDialog() {
                 if (btnSaveContVal.substring(0, 1) == "i")
                     url = "iview.aspx?ivname=" + btnSaveContVal.substring(1);
                 else
-                    url = "tstruct.aspx?transid=" + btnSaveContVal.substring(1) + `&openerIV=${typeof isListView != "undefined" ? iName : btnSaveContVal.substring(1)}&isIV=${typeof isListView != "undefined" ? !isListView : "false"}`;
+                    url = "tstruct.aspx?transid=" + btnSaveContVal.substring(1);
             } else if ((axFooAction == "ax_savenew") || (axFooAction == "ax_savesend")) {
-                url = "tstruct.aspx?transid=" + tst + "&recordid=" + axSaveRecId + `&openerIV=${typeof isListView != "undefined" ? iName : tst}&isIV=${typeof isListView != "undefined" ? !isListView : "false"}`;
+                url = "tstruct.aspx?transid=" + tst + "&recordid=" + axSaveRecId;
             }
 
             var customUrl = url;
@@ -2301,7 +2097,7 @@ function HideDialog() {
                 if (url == "") {
                     if (lvNavDetails == "") {
                         navValidator = true;
-                        var url = "tstruct.aspx?transid=" + tst + "&recordid=" + recordid + "&recPos=" + recPos + `&openerIV=${typeof isListView != "undefined" ? iName : tst}&isIV=${typeof isListView != "undefined" ? !isListView : "false"}`;
+                        var url = "tstruct.aspx?transid=" + tst + "&recordid=" + recordid + "&recPos=" + recPos;
                     } else {
                         navValidator = true;
                         listViewNavigating = true;
@@ -2320,9 +2116,9 @@ function HideDialog() {
                     if (btnSaveContVal.substring(0, 1) == "i")
                         url = "iview.aspx?ivname=" + btnSaveContVal.substring(1);
                     else
-                        url = "tstruct.aspx?transid=" + btnSaveContVal.substring(1) + `&openerIV=${typeof isListView != "undefined" ? iName : btnSaveContVal.substring(1)}&isIV=${typeof isListView != "undefined" ? !isListView : "false"}`;
+                        url = "tstruct.aspx?transid=" + btnSaveContVal.substring(1);
                 } else if (axFooAction == "ax_savereset") {
-                    url = "tstruct.aspx?transid=" + tst + `&openerIV=${typeof isListView != "undefined" ? iName : tst}&isIV=${typeof isListView != "undefined" ? !isListView : "false"}`;
+                    url = "tstruct.aspx?transid=" + tst;
                 }
 
                 var customUrl = url;
@@ -2401,7 +2197,7 @@ function HideDialog() {
                 if (btnSaveContVal.substring(0, 1) == "i")
                     url = "iview.aspx?ivname=" + btnSaveContVal.substring(1);
                 else
-                    url = "tstruct.aspx?transid=" + btnSaveContVal.substring(1) + `&openerIV=${typeof isListView != "undefined" ? iName : btnSaveContVal.substring(1)}&isIV=${typeof isListView != "undefined" ? !isListView : "false"}`;
+                    url = "tstruct.aspx?transid=" + btnSaveContVal.substring(1);
                 if (fromHyperLink.toString().toLowerCase() == "true")
                     window.document.location.href = url + "&AxHypTstRefresh=" + fromHyperLink;
                 else {
@@ -2413,7 +2209,7 @@ function HideDialog() {
                         window.document.location.href = url;
                 }
             } else if (((axFooAction == "ax_savenew") || (axFooAction == "ax_savesend")) && !listViewNavigating) {
-                url = "tstruct.aspx?transid=" + tst + "&recordid=" + axSaveRecId + `&openerIV=${typeof isListView != "undefined" ? iName : tst}&isIV=${typeof isListView != "undefined" ? !isListView : "false"}`;
+                url = "tstruct.aspx?transid=" + tst + "&recordid=" + axSaveRecId;
                 if (fromHyperLink.toString().toLowerCase() == "true")
                     window.document.location.href = url + "&AxHypTstRefresh=" + fromHyperLink;
                 else {
@@ -2446,7 +2242,7 @@ function HideDialog() {
                         AvoidPostBackAfterSave(url);
                     }
                 } else {
-                    url = "../aspx/tstruct.aspx?transid=" + tst + `&openerIV=${typeof isListView != "undefined" ? iName : tst}&isIV=${typeof isListView != "undefined" ? !isListView : "false"}`;
+                    url = "../aspx/tstruct.aspx?transid=" + tst;
                     if (!listViewNavigating) {
                         if (recordid != 0)
                             url += "&recordid=" + axSaveRecId;
@@ -2499,7 +2295,7 @@ function ApplySaveDirective(axCustomTstAction) {
     var url = "";
     if (axCustomTstAction != undefined && axCustomTstAction != "") {
         if (axCustomTstAction.toLowerCase() == "reloadaftersave") {
-            url = "tstruct.aspx?transid=" + tst + "&recordid=" + axSaveRecId + "&axp_IsSaveUrl=true" + `&openerIV=${typeof isListView != "undefined" ? iName : tst}&isIV=${typeof isListView != "undefined" ? !isListView : "false"}`;
+            url = "tstruct.aspx?transid=" + tst + "&recordid=" + axSaveRecId + "&axp_IsSaveUrl=true";
         } else {
             if (axCustomTstAction.toLowerCase().indexOf("transid") > -1 || axCustomTstAction.toLowerCase().indexOf("ivname") > -1) {
                 url = axCustomTstAction;
@@ -3310,7 +3106,6 @@ function SetKeyColValue(dcNo, rowNo, keyColValue) {
     SetFieldValue(keyColName + rowNo + "F" + dcNo, keyColValue);
     var dbRowNo = GetDbRowNo(rowNo, dcNo);
     UpdateFieldArray(keyColName + rowNo + "F" + dcNo, dbRowNo, keyColValue, "parent");
-    UpdateAllFieldValues(keyColName + rowNo + "F" + dcNo, keyColValue);
 }
 
 //Function to delete the entire group, header data and the sub total rows in the given format grid dc.
@@ -3620,8 +3415,7 @@ function SuccessButtonClicked(result) {
 function OnNavException(result) {
     AxWaitCursor(false);
     ShowDimmer(false);
-    // parent.closeFrame();
-    callParentNew("closeFrame()", "function");
+    parent.closeFrame();
     showAlertDialog("error", result._message);
 }
 
@@ -4111,91 +3905,5 @@ function dateAutoGenerator(elem, dateRoundToLastDate) {
                 $(elem).val(dateDate + "/" + dateMonth + "/" + dateYear);
             }
         }
-    }
-}
-
-// Function for masking the character
-function MaskCharacter(str, mask, n) {
-    // Slice the string and replace with
-    // mask then add remaining string
-    return [...str].reduce((acc, x, i) =>
-        (i < str.length - n) ? acc + mask : acc + x, '');
-}
-
-function RevMaskCharacter(str, mask, n) {
-
-    // Slice the string and replace with
-    // mask then add remaining string
-    return [...str].reduce((acc, x, i) =>
-        (i >= str.length - n) ? acc + mask : acc + x, '');
-}
-
-function ApplyFldMask(_thisId, _thisVal) {
-    let fieldName = GetFieldsName(_thisId);
-    let fldInd = GetFieldIndex(fieldName);
-    if (typeof FldMaskType != "undefined") {
-        let maskType = FldMaskType[fldInd];
-        if (maskType == "Show few characters") {
-            let maskDtl = FldMaskDetails[fldInd];
-            var maskDtls = maskDtl.split('♦');
-            let _thisMaskVal = _thisVal
-            if (maskDtls[0] != "" && maskDtls[0] != 0 && _thisMaskVal != "" && _thisMaskVal != 0)
-                _thisMaskVal = MaskCharacter(_thisMaskVal.toString(), maskDtls[2], _thisMaskVal.toString().length - maskDtls[0]);
-            if (maskDtls[1] != "" && maskDtls[1] != 0 && _thisMaskVal != "" && _thisMaskVal != 0)
-                _thisMaskVal = RevMaskCharacter(_thisMaskVal.toString(), maskDtls[2], maskDtls[1]);
-            $("#" + _thisId).val(_thisMaskVal);
-            $("#" + _thisId).attr("value", _thisMaskVal);
-
-        } else if (maskType == "Mask all characters") {
-            let maskDtl = FldMaskDetails[fldInd];
-            var maskDtls = maskDtl.split('♦');
-            let _thisMaskVal = _thisVal
-            if (_thisMaskVal != "" && _thisMaskVal != 0)
-                _thisMaskVal = MaskCharacter(_thisMaskVal.toString(), maskDtls[2], 0);
-            $("#" + _thisId).val(_thisMaskVal);
-            $("#" + _thisId).attr("value", _thisMaskVal);
-        }
-    }
-}
-
-//Function to update the field arrays on change of any field.
-function UpdateAllFieldValues(fieldName, fieldValue) {
-    if (typeof fieldValue != "string") fieldValue = fieldValue.toString();
-
-    var id = "";
-    if ($j("#" + fieldName).prop("type") == "select-one") {
-        if ($j("#" + fieldName).hasClass("fldFromSelect")) {
-            if (typeof fieldValue == "undefined" || fieldValue == "") {
-                id = $j("#" + fieldName).find("option:selected").val();
-                if (id != undefined && id != "")
-                    fieldValue = id;
-            }
-        } else {
-            id = $j("#" + fieldName).find("option:selected").val();
-            if (id != undefined && id != "")
-                fieldValue = id + "¿" + fieldValue;
-        }
-    } else if ($j("#" + fieldName).prop("type") == "textarea") {
-        var newValue = fieldValue.replace(new RegExp("<br>", "g"), "¿");
-        newValue = newValue.replace(new RegExp("¿", "g"), "\n");
-        fieldValue = newValue;
-    }
-
-    if (fieldValue == undefined) fieldValue = "";
-    var _isAlreadyFound = false;
-    if (AllFieldNames.length > 0) {
-        var idx = $j.inArray(fieldName, AllFieldNames);
-        if (idx != -1) {
-            AllFieldValues[idx] = fieldValue;
-            _isAlreadyFound = true;
-        }
-
-        if ((!_isAlreadyFound)) {
-            AllFieldNames.push(fieldName);
-            AllFieldValues.push(fieldValue);
-        }
-    } else {
-        AllFieldNames.push(fieldName);
-        AllFieldValues.push(fieldValue);
     }
 }

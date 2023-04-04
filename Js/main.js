@@ -41,7 +41,6 @@ var isMobile = isMobileDevice();
 var tstAxpFileFlds = false;
 var browserElapsTime = 0;
 var isHybridAddressBarVisible = true;
-var isBackClicked = false;
 
 if (typeof (Storage) !== "undefined") {
     try {
@@ -116,13 +115,13 @@ function appGlobalObj() {
                     }
                 }
 
-                // if((_thisdiv = $($.axpertUI.options.navigation.backButton.div).parent()) && _thisdiv.length > 0 && _thisdiv.hasClass("content")){
-                //     if(_this_._CONSTANTS.compressedMode){
-                //         _thisdiv.removeClass("pt-7 px-7").addClass("pt-6 px-6");
-                //     }else{
-                //         _thisdiv.addClass("pt-7 px-7").removeClass("pt-6 px-6");
-                //     }
-                // }
+                if((_thisdiv = $($.axpertUI.options.navigation.backButton.div).parent()) && _thisdiv.length > 0 && _thisdiv.hasClass("content")){
+                    if(_this_._CONSTANTS.compressedMode){
+                        _thisdiv.removeClass("pt-7 px-7").addClass("pt-6 px-6");
+                    }else{
+                        _thisdiv.addClass("pt-7 px-7").removeClass("pt-6 px-6");
+                    }
+                }
             }
 
             if (_this_._CONSTANTS.compressedMode) {
@@ -142,56 +141,6 @@ function appGlobalObj() {
                     });
                 }
 
-            };
-        },
-        BS5Modal: {
-            shown(e, modal, win){
-                // setTimeout(() => {
-                    try{
-                        var backBtn = $(_this_._CONSTANTS.window.appGlobalVarsObject._CONSTANTS.navigation.backButton.div);
-                        var iframeUrl;
-                        try {
-                            if(!iframeUrl){
-                                iframeUrl = $(modal.elementHtml).attr("src") || undefined;
-                            }
-                        } catch (ex) {}
-                        try {
-                            if(!iframeUrl){
-                                iframeUrl = modal.modalBody.querySelector("iframe")?.contentWindow?.location?.href;
-                            }
-                            if(iframeUrl == "about:blank"){
-                                iframeUrl = undefined;
-                            }
-                        } catch (ex) {}
-                        try {
-                            if(!iframeUrl){
-                                iframeUrl = modal?.url || undefined;
-                            }
-                        } catch (ex) {}
-
-                        if(backBtn?.length > 0 && iframeUrl){
-                            if(backBtn.is(":visible") && (findGetParameter("axispop", iframeUrl) || findGetParameter("axpop", iframeUrl) || eval(callParent('isTstructPopup')))){
-                                backBtn.addClass("d-none");
-                                // backBtn.hide();
-                                _this_._CONSTANTS.window.appGlobalVarsObject._CONSTANTS.isBackBtnHidden = true;
-                            }
-                        }
-                    }catch(ex){}
-                // }, 0);
-            },
-            hide(e, modal, win){
-                // setTimeout(() => {
-                    try {
-                        var backBtn = $(_this_._CONSTANTS.window.appGlobalVarsObject._CONSTANTS.navigation.backButton.div);
-                        if(backBtn?.length > 0){
-                            if(_this_._CONSTANTS.window.appGlobalVarsObject._CONSTANTS.isBackBtnHidden){
-                                backBtn.removeClass("d-none");
-                                // backBtn.show();
-                                _this_._CONSTANTS.window.appGlobalVarsObject._CONSTANTS.isBackBtnHidden = false;
-                            }
-                        }
-                    } catch (ex) {}
-                // }, 0);
             }
         }
     }
@@ -212,12 +161,11 @@ function globalConstants() {
     //this.compressedMode = compressedMode;
     this.isHybrid = hybridGUID && hybridGUID != "" ? true : false;
     this.isHybridAddressBarVisible = isHybridAddressBarVisible;
-    this.isBackBtnHidden = false;
     this.bundles = {
         reportCss,
         reportJs
     };
-    this.compressedMode = compressedMode;//getCompressedMode();
+    this.compressedMode = getCompressedMode();
     this.showMenu = showMenu;
     this.menuConfiguration = {
         menuJson,
@@ -230,20 +178,6 @@ function globalConstants() {
     this.cardsPage = {
         setCards: false,
         cards: []
-    }
-    this.colors = {
-        get light(){
-            return "#ffffff";
-        },
-        get white(){
-            return this.light;
-        },
-        get dark(){
-            return rgbToHex(getCssByAttr("class", "text-gray-900", "color"));
-        },
-        get black(){
-            return this.dark;
-        }
     }
     this.search = {
         staging: {
@@ -1237,7 +1171,7 @@ $(document).ready(function (event) {
         }
     }
 
-    // if ($j(appGlobalVarsObject._CONSTANTS.search.staging.div).length) $j(appGlobalVarsObject._CONSTANTS.search.staging.div).focus();
+    if ($j(appGlobalVarsObject._CONSTANTS.search.staging.div).length) $j(appGlobalVarsObject._CONSTANTS.search.staging.div).focus();
 
 
 
@@ -1379,12 +1313,6 @@ function prevbtn_click(thisobject) {
     if (thisobject.hasClass('linkGray')) {
         return false;
     }
-
-    appLinkHistoryLabel.pop();
-    appLinkHistory.pop();
-    
-    // prevClickFlag = nextClickFlag = histListFlag = false;
-    
     updateLinks(thisobject, 'prev');
 }
 
@@ -1392,9 +1320,6 @@ function nextbtn_click(thisobject) {
     if (thisobject.hasClass('linkGray')) {
         return false;
     }
-
-    // prevClickFlag = nextClickFlag = histListFlag = false;
-
     updateLinks(thisobject, 'next');
 }
 
@@ -1577,15 +1502,6 @@ function menuSellecter(idd) {
 }
 
 function LoadIframe(src,isautoprocess=false) {
-    try {
-        if(!isBackClicked){
-            var appUrl = top.window.location.href.toLowerCase().substring("0", top.window.location.href.indexOf("/aspx/"));
-            localStorage.removeItem("drilldownScrollInfo-" + appUrl);
-        }else{
-            isBackClicked = false;
-        }
-    } catch (ex) {}
-
     if($("#hdKeepMeDefaultUrl").val()!="")
     {
         src=$("#hdKeepMeDefaultUrl").val();
@@ -1835,7 +1751,7 @@ function LoadIframe(src,isautoprocess=false) {
             } else {
                 var transId = url[1].substr(1);
                 if (firstChar === "t") {
-                    LoadIframe("tstruct.aspx?transid=" + transId + `&openerIV=${trsnsId}&isIV=false`);
+                    LoadIframe("tstruct.aspx?transid=" + transId);
                 } else if (firstChar === "i") {
                     LoadIframe("iview.aspx?ivname=" + transId);
                 } else if (firstChar === "p") {
@@ -1935,10 +1851,10 @@ function LoadIframe(src,isautoprocess=false) {
             }
         } else if (type.toLowerCase() == "tstruct") {
             if (srcDtls[1] == "null")
-                loadurl = 'tstruct.aspx?transid=' + srcDtls[0] + `&openerIV=${srcDtls[0]}&isIV=false`;
+                loadurl = 'tstruct.aspx?transid=' + srcDtls[0];
             else {
                 var qstr = GetGloSrchQueryString(srcDtls[1]);
-                loadurl = 'tstruct.aspx?transid=' + srcDtls[0] + `&openerIV=${srcDtls[0]}&isIV=false` + qstr;
+                loadurl = 'tstruct.aspx?transid=' + srcDtls[0] + qstr;
             }
         } else if (type.toLowerCase() == "page") {
             loadurl = 'page.aspx?axpage_id=' + srcDtls[0];
@@ -2325,10 +2241,6 @@ function LoadIframe(src,isautoprocess=false) {
     function GetGLoSrchItems(tblSearchData) {
         var gbSearch = [];
         var splitChar = "~";
-        try {
-            appGlobalVarsObject._CONSTANTS.search.listviewLoadSearch = JSON.parse(listviewLoadFromSearch.value);
-        } catch (ex) {
-        }
         $(tblSearchData.Table).each(function (iIndex, sElement) {
             // if (sElement.SEARCHTEXT != null && sElement.SEARCHTEXT.toLowerCase().indexOf(txtInput) >= 0) {
             if (getCaseInSensitiveJsonProperty(sElement, "SEARCHTEXT") != null) {
@@ -3582,9 +3494,7 @@ function LoadIframe(src,isautoprocess=false) {
         //If Import/Export dialog is opened then user clicks on any dialog prevent it & opened once the Export/Import dialog is closed
         function checkIfAnyActionPerformed() {
             if (actionsClicked == "Change Password")
-            displayBootstrapModalDialog('Change Password', 'md', '230px', true, '../aspx/cpwd.aspx?remark=chpwd', undefined, ()=>{
-                $("#iFrameChangePassword").css("height", `${Math.ceil($("#iFrameChangePassword")[0].contentWindow.$("form").height())}px`)
-            });
+                displayBootstrapModalDialog('Change Password', 'md', '230px', true, '../aspx/cpwd.aspx?remark=chpwd');
             else if (actionsClicked == "Trace File")
                 OpenLogFile();
             actionsClicked = "";
@@ -3657,9 +3567,7 @@ function LoadIframe(src,isautoprocess=false) {
                 if (iFrameId != undefined)
                     window.frames[iFrameId].contentWindow.ConfirmLeave();
             } else {
-                displayBootstrapModalDialog('Change Password', 'md', '230px', true, '../aspx/cpwd.aspx?remark=chpwd', undefined, ()=>{
-                    $("#iFrameChangePassword").css("height", `${Math.ceil($("#iFrameChangePassword")[0].contentWindow.$("form").height())}px`)
-                })
+                displayBootstrapModalDialog('Change Password', 'md', '230px', true, '../aspx/cpwd.aspx?remark=chpwd')
             }
             setTimeout(function () { removeUnclickableMenuCssClass() }, 100)
         }
@@ -4041,7 +3949,7 @@ function DoUtilitiesEvent(type) {
 
             myModal.changeSize("fullscreen");
             myModal.hideFooter();
-            myModal.modalBody.classList.add("p-0", "overflow-hidden");
+            myModal.modalBody.classList.add("p-0");
             myModal.close();
             break;
         case "ImportHistory":
@@ -4072,20 +3980,7 @@ function DoUtilitiesEvent(type) {
 
 //to display import data dialog for any tstruct from iview/tstruct listview(by hyperlink)
 function showCustomImportDlg(transid) {
-    // displayBootstrapModalDialog('Import Data', 'lg', '410px', true, '../aspx/ImportNew.aspx?transid=' + transid, true);
-    let myImportModal = new BSModal("ImportData", "Import Data", "<iframe src='../aspx/ImportNew.aspx?transid=" + transid+"' class='vw-100 vh-100'></iframe>", () => {
-        //shown callback
-        $(".btn-close").focus();
-        // $("#btnClose").hide()
-    }, () => {
-        //hide callback
-    });
-
-    myImportModal.changeSize("fullscreen");
-    myImportModal.hideFooter();
-    myImportModal.modalBody.classList.add("p-0");
-    myImportModal.close();
-
+    displayBootstrapModalDialog('Import Data', 'lg', '410px', true, '../aspx/ImportNew.aspx?transid=' + transid, true);
 }
 
 function createNewLeftMenu(menuConfiguration = {}) {
@@ -4238,16 +4133,6 @@ function resetSplitter(calledFrom) {
             $('.split-btn-vertical i').removeClass('fa-times').addClass('fa-sort');
         $('.panel-fisrt-part').css({ width: '100%', height: '100%' });
         $('.panel-second-part, .panel-splitter').hide();
-        /*let urlFrom = "";
-        if (
-            $("#axpiframe").hasClass("frameSplited") &&
-            ((($("#middle1")[0].contentWindow.location.href.indexOf("iview.aspx") != -1) && (urlFrom = "href") && true) || ($("#middle1").attr("src").indexOf("iview.aspx") != -1 && (urlFrom = "src") && true)) &&
-            findGetParameter("tstcaption", urlFrom == "href" ? $("#middle1")[0].contentWindow.location.href : $("#middle1").attr("src")) != null
-        ) {
-            isTstructSplited = true;
-            $("#middle1")[0].contentWindow.location.href = $("#axpiframe").attr('src');
-        }
-        $("#axpiframe")[0].contentWindow.location.href = "";*/
         if ($("#axpiframe").hasClass("frameSplited") && $("#middle1").attr("src").indexOf("iview.aspx") != -1 && findGetParameter("tstcaption", $("#middle1").attr("src")) != null) {
             isTstructSplited = true;
             $("#middle1").attr("src", $("#axpiframe").attr('src'));
@@ -4365,10 +4250,7 @@ function resetSplitter(calledFrom) {
         if(UrlToOpen.indexOf("&AxSplit")==-1)
             UrlToOpen+="&AxSplit=true";
         GetProcessTime();
-        // $(iframeId).attr('src', UrlToOpen+"&hdnbElapsTime="+ callParentNew("browserElapsTime"));
-        try {
-            $(iframeId)[0].contentWindow.location.href = UrlToOpen+"&hdnbElapsTime="+ callParentNew("browserElapsTime");
-        } catch (ex) {}
+        $(iframeId).attr('src', UrlToOpen+"&hdnbElapsTime="+ callParentNew("browserElapsTime"));
     }
 
     function assocateIframe(directSplit) {
@@ -4409,28 +4291,14 @@ function resetSplitter(calledFrom) {
                             dataType: "json",
                             success: function (data) {
                                 if (data.d)
-                                    srcmiddle1new = "tstruct.aspx?transid=" + data.d + `&openerIV=${data.d}&isIV=false`;
+                                    srcmiddle1new = "tstruct.aspx?transid=" + data.d;
 
                                 else if (srcmiddle1.indexOf("ivtoivload.aspx") != -1 || srcmiddle1.indexOf("iview.aspx") != -1) {
                                     //var middleGridview = $("#middle1").contents().find("#GridView1 a:first");
-                                    var middleGridview;
-                                    try {
-                                        middleGridview = $(`<div>${$("#middle1", parent.document)[0].contentWindow.clickOnDemand($("#middle1", parent.document).contents().find("#GridView1 a:first"), false)}</div>`).find("a[data-url]:first");
-                                    } catch (ex) {
-                                        middleGridview = $("#middle1", parent.document).contents().find("#GridView1 a:first");
-                                    }
+                                    var middleGridview = $("#middle1", parent.document).contents().find("#GridView1 a:first");
                                     if (middleGridview != undefined && middleGridview.length > 0) {
                                         if (middleGridview.data("url") != undefined)
                                             srcmiddle1new = middleGridview.data("url");
-                                        else if(middleGridview.attr("onclick").indexOf("clickOnDemand(") == 0){
-                                            try {
-                                                var dataURL = $(`<div>${$("#middle1", parent.document)[0].contentWindow.clickOnDemand(middleGridview, false)}</div>`).find("a[data-url]:first").data("url");
-
-                                                if(dataURL){
-                                                    srcmiddle1new = dataURL;
-                                                }                                                
-                                            } catch (ex) {}
-                                        }
                                         else {
                                             var ivLink = ""; var isHref = false;
                                             if (middleGridview.attr("onclick") != undefined)
@@ -4483,11 +4351,11 @@ function resetSplitter(calledFrom) {
                     $("#axpiframe").addClass("frameSplited");
 
                     if (srcmiddle1.indexOf("tstruct.aspx") != -1) {
-                        $("#axpiframe")[0].contentWindow.location.href = srcmiddle1+"&AxSplit=true";
-                        $("#middle1")[0].contentWindow.location.href = srcmiddle1new+"&AxSplit=true";
+                        $("#axpiframe").attr('src', srcmiddle1+"&AxSplit=true");
+                        $("#middle1").attr('src', srcmiddle1new+"&AxSplit=true");
                     }
                     else {
-                        $("#axpiframe")[0].contentWindow.location.href = srcmiddle1new+"&AxSplit=true";
+                        $("#axpiframe").attr('src', srcmiddle1new+"&AxSplit=true");
                     }
 
                     if (directSplit)
@@ -4500,8 +4368,7 @@ function resetSplitter(calledFrom) {
                     return;
                 }
                 else {
-                    // $("#axpiframe").attr('src', "");
-                    $("#axpiframe")[0].contentWindow.location.href = "about:blank";
+                    $("#axpiframe").attr('src', "");
                     //if (directSplit)
                     //    splitvertical();
                 }
@@ -4525,7 +4392,7 @@ function resetSplitter(calledFrom) {
         $(".split-btn-vertical").removeClass("hide");
     }
 
-    function updateAppLinkObj(url, forceUnBlock = 0, isSplitFrame = false) {
+    function updateAppLinkObj(url, forceUnBlock = 0) {
         var isCustomURL = -1;
         try {
             isCustomURL = AxCustomLinks(url)
@@ -4547,7 +4414,7 @@ function resetSplitter(calledFrom) {
         }
         else if (url.indexOf("/aspx/") > -1)
             url = url.substr(url.indexOf('/aspx/') + 6);
-        var blockHistory = ["mainnew.aspx", "ivtstload.aspx", "ivtoivload.aspx", "err.aspx", "adminconsole.aspx", "configurationStudio.aspx", "AutoComplete.aspx"];
+        var blockHistory = ["mainnew.aspx", "ivtstload.aspx", "ivtoivload.aspx", "err.aspx"];
         if (!forceUnBlock && blockHistory.filter((val) => (url.indexOf('/aspx/') > -1 ? (url.substr(url.indexOf('/aspx/') + 6) == val) : (url.indexOf(val) > -1))).length > 0) {
             if (appLinkHistory.length > 1 && (typeof navigationshow=="undefined" || navigationshow=="true")) {
                 $(appGlobalVarsObject._CONSTANTS.navigation.backButton.div).show();
@@ -4578,8 +4445,6 @@ function resetSplitter(calledFrom) {
                 appLinkHistory[curPageIndex] = url;
             }
 
-            prevClickFlag = nextClickFlag = histListFlag = false;
-
             return false;
         }
 
@@ -4598,7 +4463,7 @@ function resetSplitter(calledFrom) {
             nextClickFlag = prevClickFlag = histListFlag = false;
             return false;
         }
-        if (isSplitFrame && $("#axpiframe").hasClass("frameSplited")) {
+        if ($("#axpiframe").hasClass("frameSplited")) {
             return false;
         }
         if (url) {
@@ -4794,7 +4659,6 @@ function resetSplitter(calledFrom) {
             // console.log(curPageIndex);
             // console.log('linkNext == ',$('.linkNext').data('index'));
             menuLabel = "";
-            isBackClicked = true;
             LoadIframe(appLinkHistory[curPageIndex]);
             if (curPageIndex == 0) {
                 $(appGlobalVarsObject._CONSTANTS.navigation.backButton.div).hide();
@@ -4980,25 +4844,9 @@ function resetSplitter(calledFrom) {
             myModal.changeSize("fullscreen");
             myModal.hideFooter();
             myModal.hideHeader();
-            myModal.modalBody.classList.add("p-0", "overflow-hidden");
+            myModal.modalBody.classList.add("p-0");
             myModal.showFloatingClose();
         }
-
-        function OpenConfigurationStudio(){
-
-            let myModal = new BSModal("configStudio", "Axpert Configuration Studio", "<iframe src='../aspx/configurationStudio.aspx' class='vw-100 vh-100' ></iframe>", () => {
-                //shown callback
-            }, () => {
-                //hide callback
-            });
-
-            myModal.changeSize("fullscreen");
-            myModal.hideFooter();
-            myModal.hideHeader();
-            myModal.modalBody.classList.add("p-0", "overflow-hidden");
-            myModal.showFloatingClose();
-        }
-
         function AdminConsoleHidemenu()
         {
             $(callParentNew("mainNewPageBody")).removeClass("overlay-open");
@@ -5329,38 +5177,6 @@ function ExecutionTraceInterval(isSignOut=false) {
     else
         return true;
 }
-
-    function ExecutionTraceExceededQuota(strMsg) {
-        try {
-            var ExecutionLongText ="";
-            let appSUrl = top.window.location.href.toLowerCase().substring("0", top.window.location.href.indexOf("/aspx/"));     
-            if(typeof localStorage["ExecutionFullLog-"+appSUrl]!="undefined"){
-                ExecutionLongText =localStorage["ExecutionFullLog-" + appSUrl]; 
-                localStorage.setItem("ExecutionFullLog-" + appSUrl, ''); 
-                ExecutionLongText+=strMsg;
-                ExecutionLongText= ExecutionLongText.replace(/♦/g, '\r\n');
-            }
-            if(ExecutionLongText!=""){           
-                $.ajax({
-                    url: 'mainnew.aspx/ExecutionTraceInterval',
-                    type: 'POST',
-                    cache: false,
-                    async: true,
-                    data: JSON.stringify({
-                        ExecutionLongText:ExecutionLongText,isSingout:false
-                    }),
-                    dataType: 'json',
-                    contentType: "application/json",
-                    success: function (data) {
-                    },
-                    error: function (error) {
-                    }
-                });           
-            }
-        }
-        catch (exp) {
-        }
-    }
 
     function ToggleMobileNotification(status) {
         var imgTrace = $("#spanMobileNotifi");

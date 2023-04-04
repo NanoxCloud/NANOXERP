@@ -27,11 +27,11 @@
     <link href="../Css/animate.min.css" rel="stylesheet" />
     <link href="../ThirdParty/jquery-confirm-master/jquery-confirm.min.css?v=1" rel="stylesheet" />
     <script src="../ThirdParty/jquery-confirm-master/jquery-confirm.min.js?v=2" type="text/javascript"></script>
-    <script src="../Js/alerts.min.js?v=30" type="text/javascript"></script>
+    <script src="../Js/alerts.min.js?v=29" type="text/javascript"></script>
     <%--custom alerts end--%>
     <script src="../Js/gen.min.js?v=14" type="text/javascript"></script>
     
-    <script src="../Js/common.min.js?v=120" type="text/javascript"></script>
+    <script src="../Js/common.min.js?v=99" type="text/javascript"></script>
     <link href="../Css/fileupload.min.css?v=3" rel="stylesheet" /> 
    <script src="../Js/excelimport.min.js?v=3" type="text/javascript"></script>
     <script src="../Js/thirdparty/excelImport/xlsx.full.min.js" type="text/javascript"></script>

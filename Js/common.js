@@ -15,10 +15,7 @@ function CheckSuccCallBackValidate() {
         getSession("nsessionid", function (data) {
             if (data.d != undefined && data.d != pervsid) {
                 var cllMainPage = callParentNew("", "getParent");
-                if (cllMainPage.location.href.toLowerCase().indexOf("/aspx/axmain.aspx") > -1)
-                    cllMainPage.location.href = "../aspx/axmain.aspx";
-                else
-                    cllMainPage.location.href = "../aspx/mainnew.aspx";
+                cllMainPage.location.href = "../aspx/mainnew.aspx";
                 returnValue = true;
             }
         });
@@ -49,7 +46,7 @@ try {
                 mainPageUrl = GetMainPageUrl();
             }
 
-            if (!isMainPage && (mainPageUrl.toLowerCase().indexOf("/aspx/mainnew.aspx") > -1 || mainPageUrl.toLowerCase().indexOf("/aspx/axmain.aspx") > -1)) {
+            if (!isMainPage && mainPageUrl.toLowerCase().indexOf("/aspx/mainnew.aspx") > -1) {
                 LoadMainPage(mainPageUrl, linkHref);
             }
         }
@@ -95,12 +92,9 @@ function GetMainPageUrl() {
             mainPageUrl = localStorage["MainPageUrl_" + projName];
         } else {
             var appUrl = window.location.href;
-            if (appUrl.indexOf("/aspx/") !== -1 && appUrl.toLowerCase().indexOf("/aspx/mainnew.aspx") !== -1) {
+            if (appUrl.indexOf("/aspx/") !== -1) {
                 appUrl = appUrl.substring(0, appUrl.indexOf("/aspx/") + 6);
                 mainPageUrl = appUrl + "Mainnew.aspx";
-            } else if (appUrl.indexOf("/aspx/") !== -1 && appUrl.toLowerCase().indexOf("/aspx/axmain.aspx") !== -1) {
-                appUrl = appUrl.substring(0, appUrl.indexOf("/aspx/") + 6);
-                mainPageUrl = appUrl + "AxMain.aspx";
             }
         }
     } catch (ex) {
@@ -363,14 +357,6 @@ $(document).click(function (e) {
         }
     } catch (ex) {
         console.log(ex.message);
-    }
-});
-
-document.addEventListener('keydown', (e) => {
-    e = e || window.event;
-    if(e.keyCode == 116 || (e.keyCode == 82 && e.ctrlKey)){
-        e.preventDefault();
-        e.stopPropagation();
     }
 });
 
@@ -809,8 +795,8 @@ function callParentNew(name = "", type) {
         }, 200);
     }
 
-    function BootstrapDialogAppParamsShow(url){
-        let myModal = new BSModal("ApplicationParams", "Application Params", "<iframe src=\"" + url + "\" class='d-flex w-100 h-100'></iframe>", () => {
+    function BootstrapDialogAppParamsShow(){
+        let myModal = new BSModal("ApplicationParams", "Application Params", "<iframe src='../aspx/ParamsTstruct.aspx?transid=axglo&recordid=1'   class='vw-100 vh-100'></iframe>", () => {
             //shown callback
             $(".btn-close").focus();
             // $("#btnClose").hide()
@@ -820,7 +806,7 @@ function callParentNew(name = "", type) {
 
         myModal.changeSize("fullscreen");
         myModal.hideFooter();
-        myModal.modalBody.classList.add("p-0", "overflow-hidden");
+        myModal.modalBody.classList.add("p-0");
         myModal.close();
     }
 
@@ -935,9 +921,9 @@ function callParentNew(name = "", type) {
         (appGlobalVarsObject?._CONSTANTS?.window || window).toastr.clear();
         setHybridLocations();
 
-        // $("div").scroll(function () {
-        //     $('#ui-datepicker-div, .ui-widget-content.acOpen').hide();
-        // });
+        $("div").scroll(function () {
+            $('#ui-datepicker-div, .ui-widget-content.acOpen').hide();
+        });
 
         //var parFrame = $("#axpiframe", parent.document);
         //var midFrm = $("#middle1", parent.document);    
@@ -958,10 +944,6 @@ function callParentNew(name = "", type) {
         //    $("#ExportImportCogIcon").addClass("menu-not-allowed");
         //})
 
-        if(findGetParameter("AxPop") == "true" || findGetParameter("AxIsPop") == "true" || (typeof isIviewPopup != "undefined" && isIviewPopup)){
-            iframePopupLoadOptsNew();
-        }
-
         if (isMobileDevice()) {
             document.oncontextmenu = function () {
                 return false;
@@ -975,12 +957,11 @@ function callParentNew(name = "", type) {
     $(window).bind("load", function () {
         if ($(window.frameElement).hasClass('bootStrapModal')) return false;
         if (window && window.frameElement && window.frameElement.id == "popupIframeRemodal") return false;
-        if (window && window.frameElement && window.frameElement.id == "loadPopUpPage") return false;
-        // if (window && window.frameElement && window.frameElement.id == "axpiframeac") return false;     
+        if (window && window.frameElement && window.frameElement.id == "axpiframeac") return false;     
         if (window && window.frameElement && window.frameElement.id.indexOf('iFrame') === 0) return false;
         if(typeof window.location.href!="undefined" && window.location.href.indexOf("adminconsole.aspx?")>0)return false;
         var newLoadUrl = window.location.href;
-        callParentNew("updateAppLinkObj")?.(newLoadUrl,0,window?.frameElement?.id == "axpiframe");
+        callParentNew("updateAppLinkObj(" + newLoadUrl + ")", "function");
     });
 
     //when settings dropdown option & utilities down option clicks on same time 2 popup's will appear at a time, to avoid this once click on one dropdown making other dropdown unclickable, once the first popup is loaded successfully then remove that dropdown unclickable class
@@ -1191,7 +1172,7 @@ function CheckUrlSpecialChars(str) {
     str = str.replace(/\+/g, '%2b');
     str = str.replace(/</g, '%3C');
     str = str.replace(/\\/g, '%5C');
-    str = str.replace(/ /g, '%20');
+    str = str.Replace(/ /g, '%20');
     return str;
 }
 
@@ -1350,7 +1331,7 @@ function findGetParameter(parameterName, locationData = location.search) {
         }).join()
     }
 
-    function getRedisString(key, id, user = "ALL") {
+    function getRedisString(key, id) {
         var result = "";
         $.ajax({
             type: "POST",
@@ -1359,7 +1340,7 @@ function findGetParameter(parameterName, locationData = location.search) {
             async: false,
             contentType: "application/json;charset=utf-8",
             data: JSON.stringify({
-                key, id, user
+                key, id
             }),
             dataType: "json",
             success: function (data) {
@@ -1396,157 +1377,131 @@ function findGetParameter(parameterName, locationData = location.search) {
         return this.get(0).scrollHeight > this.height();
     })
 
-    function UpdateExceptionMessageInET(strMsg){  
-        try{
-            let appSUrl = top.window.location.href.toLowerCase().substring("0", top.window.location.href.indexOf("/aspx/"));
-            if(typeof localStorage["ExecutionLogText-"+appSUrl]=="undefined")
-                localStorage.setItem("ExecutionLogText-" + appSUrl, strMsg);
-            else
-            {
-                let ExecutionLogText =localStorage["ExecutionLogText-" + appSUrl];
-                localStorage.setItem("ExecutionLogText-" + appSUrl,ExecutionLogText + strMsg+"♦");
-            }
-        }catch(ex){
-            if(ex.message.indexOf('exceeded the quota')>-1){
-                callParentNew("ExecutionTraceExceededQuota("+strMsg+")", "function");                
-            }
+    function UpdateExceptionMessageInET(strMsg){        
+        let appSUrl = top.window.location.href.toLowerCase().substring("0", top.window.location.href.indexOf("/aspx/"));
+        if(typeof localStorage["ExecutionLogText-"+appSUrl]=="undefined")
+            localStorage.setItem("ExecutionLogText-" + appSUrl, strMsg);
+        else
+        {
+            let ExecutionLogText =localStorage["ExecutionLogText-" + appSUrl];
+            localStorage.setItem("ExecutionLogText-" + appSUrl,ExecutionLogText + strMsg+"♦");
         }
     }
 
-    function GetProcessTime(){    
-        try{
-            let appSUrl = top.window.location.href.toLowerCase().substring("0", top.window.location.href.indexOf("/aspx/"));
-            let bst = localStorage["BST-" + appSUrl];
-            let bsttime = new Date(bst.split('-')[2].split(' ')[0], bst.split('-')[1] - 1, bst.split('-')[0], bst.split(':')[0].split(' ')[1], bst.split(':')[1], bst.split(':')[2], bst.split('.')[1]).getTime();
-            let ct= localStorage["ProcessBlockTime-" + appSUrl];
-            let cttime = new Date(ct.split('-')[2].split(' ')[0], ct.split('-')[1] - 1, ct.split('-')[0], ct.split(':')[0].split(' ')[1], ct.split(':')[1], ct.split(':')[2], ct.split('.')[1]).getTime();
+    function GetProcessTime(){        
+        let appSUrl = top.window.location.href.toLowerCase().substring("0", top.window.location.href.indexOf("/aspx/"));
+        let bst = localStorage["BST-" + appSUrl];
+        let bsttime = new Date(bst.split('-')[2].split(' ')[0], bst.split('-')[1] - 1, bst.split('-')[0], bst.split(':')[0].split(' ')[1], bst.split(':')[1], bst.split(':')[2], bst.split('.')[1]).getTime();
+        let ct= localStorage["ProcessBlockTime-" + appSUrl];
+        let cttime = new Date(ct.split('-')[2].split(' ')[0], ct.split('-')[1] - 1, ct.split('-')[0], ct.split(':')[0].split(' ')[1], ct.split(':')[1], ct.split(':')[2], ct.split('.')[1]).getTime();
 
-            let currentTime = new Date().getTime(); 
-            let ptDiff=(currentTime-cttime).toFixed(4);
-            var strMsg="Preparing request in client, "+ptDiff +" ms ♦ ";
-            localStorage.setItem("ProcessBlockTimeTaken-"+appSUrl,ptDiff);
-            if(typeof localStorage["ExecutionLogText-"+appSUrl]=="undefined")
-                localStorage.setItem("ExecutionLogText-" + appSUrl, strMsg);
-            else
-            {
-                let ExecutionLogText =localStorage["ExecutionLogText-" + appSUrl];
-                localStorage.setItem("ExecutionLogText-" + appSUrl,ExecutionLogText + strMsg);
-            }
-            let brcurrentTime = new Date().getTime(); 
-            callParentNew("browserElapsTime=", (brcurrentTime-bsttime));
-        }catch(ex){
-            if(ex.message.indexOf('exceeded the quota')>-1){
-                callParentNew("ExecutionTraceExceededQuota('')", "function");                
-            }
+        let currentTime = new Date().getTime(); 
+        let ptDiff=(currentTime-cttime).toFixed(4);
+        var strMsg="Preparing request in client, "+ptDiff +" ms ♦ ";
+        localStorage.setItem("ProcessBlockTimeTaken-"+appSUrl,ptDiff);
+        if(typeof localStorage["ExecutionLogText-"+appSUrl]=="undefined")
+            localStorage.setItem("ExecutionLogText-" + appSUrl, strMsg);
+        else
+        {
+            let ExecutionLogText =localStorage["ExecutionLogText-" + appSUrl];
+            localStorage.setItem("ExecutionLogText-" + appSUrl,ExecutionLogText + strMsg);
         }
+        let brcurrentTime = new Date().getTime(); 
+        callParentNew("browserElapsTime=", (brcurrentTime-bsttime));
     }
 
     function WireElapsTime(serverprocesstime,requestProcess_logtime,ajaxReqRep=false)
         {
-            try{
-                let appSUrl = top.window.location.href.toLowerCase().substring("0", top.window.location.href.indexOf("/aspx/"));
-                let ExecutionLogText =localStorage["ExecutionLogText-" + appSUrl];
-                localStorage.setItem("ExecutionLogText-" + appSUrl,ExecutionLogText + requestProcess_logtime);
+            let appSUrl = top.window.location.href.toLowerCase().substring("0", top.window.location.href.indexOf("/aspx/"));
+            let ExecutionLogText =localStorage["ExecutionLogText-" + appSUrl];
+            localStorage.setItem("ExecutionLogText-" + appSUrl,ExecutionLogText + requestProcess_logtime);
 
-                //let pst = localStorage["ProcessStartTime-" + appSUrl];
-                let pst = localStorage["ProcessBlockTime-" + appSUrl];        
-                let psttime = new Date(pst.split('-')[2].split(' ')[0], pst.split('-')[1] - 1, pst.split('-')[0], pst.split(':')[0].split(' ')[1], pst.split(':')[1], pst.split(':')[2], pst.split('.')[1]).getTime();
+            //let pst = localStorage["ProcessStartTime-" + appSUrl];
+            let pst = localStorage["ProcessBlockTime-" + appSUrl];        
+            let psttime = new Date(pst.split('-')[2].split(' ')[0], pst.split('-')[1] - 1, pst.split('-')[0], pst.split(':')[0].split(' ')[1], pst.split(':')[1], pst.split(':')[2], pst.split('.')[1]).getTime();
                
-                let crtDt = new Date();
-                let currentTime = crtDt.getTime();        
-                var clientWireTime=(currentTime-psttime);
-                clientWireTime=clientWireTime-parseFloat(serverprocesstime);
+            let crtDt = new Date();
+            let currentTime = crtDt.getTime();        
+            var clientWireTime=(currentTime-psttime);
+            clientWireTime=clientWireTime-parseFloat(serverprocesstime);
 
-                let pbtt = localStorage["ProcessBlockTimeTaken-" + appSUrl];     
-                clientWireTime=clientWireTime-pbtt;
+            let pbtt = localStorage["ProcessBlockTimeTaken-" + appSUrl];     
+            clientWireTime=clientWireTime-pbtt;
 
-                clientWireTime=clientWireTime.toFixed(4);
+            clientWireTime=clientWireTime.toFixed(4);
 
-                //var strMsg=ExecutionLogText + requestProcess_logtime+ "Response received in client, wire transfer time "+clientWireTime +" ms ♦ ";
+            //var strMsg=ExecutionLogText + requestProcess_logtime+ "Response received in client, wire transfer time "+clientWireTime +" ms ♦ ";
 
-                var strMsg='';
-                if(ajaxReqRep)
-                    strMsg= ExecutionLogText + requestProcess_logtime+ "Request and Response wire transfer time "+clientWireTime +" ms ♦ ";
-                else
-                    strMsg= ExecutionLogText + requestProcess_logtime+ "Response received in client, wire transfer time "+clientWireTime +" ms ♦ ";
+            var strMsg='';
+            if(ajaxReqRep)
+                strMsg= ExecutionLogText + requestProcess_logtime+ "Request and Response wire transfer time "+clientWireTime +" ms ♦ ";
+            else
+                strMsg= ExecutionLogText + requestProcess_logtime+ "Response received in client, wire transfer time "+clientWireTime +" ms ♦ ";
 
-                localStorage.setItem("ExecutionLogText-" + appSUrl,strMsg);     
-                var ct = new Date();
-                var ctTime = ct.getDate() + "-" + (ct.getMonth() + 1) + "-" + ct.getFullYear() + " " + ct.getHours() + ":" + ct.getMinutes() + ":" + ct.getSeconds() + "." + ct.getMilliseconds();
-                localStorage.setItem("ProcessBlockTime-" + appSUrl,ctTime);
-                //return ctTime;
-            }catch(ex){
-                if(ex.message.indexOf('exceeded the quota')>-1){
-                    callParentNew("ExecutionTraceExceededQuota("+requestProcess_logtime+")", "function");                
-                }
-            }
+            localStorage.setItem("ExecutionLogText-" + appSUrl,strMsg);     
+            var ct = new Date();
+            var ctTime = ct.getDate() + "-" + (ct.getMonth() + 1) + "-" + ct.getFullYear() + " " + ct.getHours() + ":" + ct.getMinutes() + ":" + ct.getSeconds() + "." + ct.getMilliseconds();
+            localStorage.setItem("ProcessBlockTime-" + appSUrl,ctTime);
+            //return ctTime;
         }
 
         function GetCurrentTime(strVar)
         {
-            try{
-                let appSUrl = top.window.location.href.toLowerCase().substring("0", top.window.location.href.indexOf("/aspx/"));   
-                var ct = new Date();
-                var ctTime = ct.getDate() + "-" + (ct.getMonth() + 1) + "-" + ct.getFullYear() + " " + ct.getHours() + ":" + ct.getMinutes() + ":" + ct.getSeconds() + "." + ct.getMilliseconds();
-                localStorage.setItem("ProcessStartTime-" + appSUrl,ctTime);
-                localStorage.setItem("ProcessBlockTime-" + appSUrl,ctTime);
-                localStorage.setItem("ExecutionLogText-" + appSUrl,strVar+" process started at "+ ctTime+" ♦♦ ");
-            }catch(ex){
-                if(ex.message.indexOf('exceeded the quota')>-1){
-                    callParentNew("ExecutionTraceExceededQuota("+strVar+")", "function");                
-                }
-            }
+            let appSUrl = top.window.location.href.toLowerCase().substring("0", top.window.location.href.indexOf("/aspx/"));      
+            //if(typeof localStorage["ExecutionLogText-"+appSUrl]!="undefined"){
+            //    let ExecutionLogText =localStorage["ExecutionLogText-" + appSUrl];
+            //    if(typeof localStorage["ExecutionFullLog-"+appSUrl]=="undefined")
+            //        localStorage.setItem("ExecutionFullLog-" + appSUrl, ExecutionLogText);
+            //    else
+            //    {
+            //        let ExecutionLongText =localStorage["ExecutionFullLog-" + appSUrl];
+            //        localStorage.setItem("ExecutionFullLog-" + appSUrl,ExecutionLongText + " ♦♦ "+ExecutionLogText);
+            //    }
+            //}
+            var ct = new Date();
+            var ctTime = ct.getDate() + "-" + (ct.getMonth() + 1) + "-" + ct.getFullYear() + " " + ct.getHours() + ":" + ct.getMinutes() + ":" + ct.getSeconds() + "." + ct.getMilliseconds();
+            localStorage.setItem("ProcessStartTime-" + appSUrl,ctTime);
+            localStorage.setItem("ProcessBlockTime-" + appSUrl,ctTime);
+            localStorage.setItem("ExecutionLogText-" + appSUrl,strVar+" process started at "+ ctTime+" ♦♦ ");
         }
 
         function GetTotalElapsTime()
         {
-            try{
-                let appSUrl = top.window.location.href.toLowerCase().substring("0", top.window.location.href.indexOf("/aspx/"));      
-                let psTime= localStorage["ProcessStartTime-" + appSUrl];
-                let ProcessStartTime = new Date(psTime.split('-')[2].split(' ')[0], psTime.split('-')[1] - 1, psTime.split('-')[0], psTime.split(':')[0].split(' ')[1], psTime.split(':')[1], psTime.split(':')[2], psTime.split('.')[1]).getTime();
-                let currentTime = new Date().getTime(); 
-                var et = new Date();
-                var etTime = et.getDate() + "-" + (et.getMonth() + 1) + "-" + et.getFullYear() + " " + et.getHours() + ":" + et.getMinutes() + ":" + et.getSeconds() + "." + et.getMilliseconds();
+            let appSUrl = top.window.location.href.toLowerCase().substring("0", top.window.location.href.indexOf("/aspx/"));      
+            let psTime= localStorage["ProcessStartTime-" + appSUrl];
+            let ProcessStartTime = new Date(psTime.split('-')[2].split(' ')[0], psTime.split('-')[1] - 1, psTime.split('-')[0], psTime.split(':')[0].split(' ')[1], psTime.split(':')[1], psTime.split(':')[2], psTime.split('.')[1]).getTime();
+            let currentTime = new Date().getTime(); 
+            var et = new Date();
+            var etTime = et.getDate() + "-" + (et.getMonth() + 1) + "-" + et.getFullYear() + " " + et.getHours() + ":" + et.getMinutes() + ":" + et.getSeconds() + "." + et.getMilliseconds();
 
-                var TotalElp=currentTime-ProcessStartTime;
+            var TotalElp=currentTime-ProcessStartTime;
 
-                let ExecutionLogText =localStorage["ExecutionLogText-" + appSUrl];
-                ExecutionLogText+=" ♦ Total time elapsed "+TotalElp +" ms ♦ ";
-                ExecutionLogText+="Process ended at "+etTime+" ♦";
-                localStorage.setItem("ExecutionLogText-" + appSUrl,ExecutionLogText);     
+            let ExecutionLogText =localStorage["ExecutionLogText-" + appSUrl];
+            ExecutionLogText+=" ♦ Total time elapsed "+TotalElp +" ms ♦ ";
+            ExecutionLogText+="Process ended at "+etTime+" ♦";
+            localStorage.setItem("ExecutionLogText-" + appSUrl,ExecutionLogText);     
 
-                if(typeof localStorage["ExecutionLogText-"+appSUrl]!="undefined"){
-                    let ExecutionEndText =localStorage["ExecutionLogText-" + appSUrl];
-                    if(typeof localStorage["ExecutionFullLog-"+appSUrl]=="undefined")
-                        localStorage.setItem("ExecutionFullLog-" + appSUrl, ExecutionEndText);
-                    else
-                    {
-                        let ExecutionLongText =localStorage["ExecutionFullLog-" + appSUrl];
-                        localStorage.setItem("ExecutionFullLog-" + appSUrl,ExecutionLongText + " ♦♦ "+ExecutionEndText);
-                    }
-                }
-            }catch(ex){
-                if(ex.message.indexOf('exceeded the quota')>-1){
-                    callParentNew("ExecutionTraceExceededQuota('')", "function");                
+            if(typeof localStorage["ExecutionLogText-"+appSUrl]!="undefined"){
+                let ExecutionEndText =localStorage["ExecutionLogText-" + appSUrl];
+                if(typeof localStorage["ExecutionFullLog-"+appSUrl]=="undefined")
+                    localStorage.setItem("ExecutionFullLog-" + appSUrl, ExecutionEndText);
+                else
+                {
+                    let ExecutionLongText =localStorage["ExecutionFullLog-" + appSUrl];
+                    localStorage.setItem("ExecutionFullLog-" + appSUrl,ExecutionLongText + " ♦♦ "+ExecutionEndText);
                 }
             }
         }
 
 
-        function AdditionalRunTimeMsg(strRuntimemsg){     
-            try{
-                let appSUrl = top.window.location.href.toLowerCase().substring("0", top.window.location.href.indexOf("/aspx/")); 
-                if(typeof localStorage["ExecutionLogText-"+appSUrl]=="undefined")
-                    localStorage.setItem("ExecutionLogText-" + appSUrl, strRuntimemsg+" ♦ ");
-                else
-                {
-                    let ExecutionLogText =localStorage["ExecutionLogText-" + appSUrl];
-                    localStorage.setItem("ExecutionLogText-" + appSUrl,ExecutionLogText + " ♦ "+strRuntimemsg+" ♦ ");
-                }
-            }catch(ex){
-                if(ex.message.indexOf('exceeded the quota')>-1){
-                    callParentNew("ExecutionTraceExceededQuota("+strRuntimemsg+")", "function");                
-                }
+        function AdditionalRunTimeMsg(strRuntimemsg){        
+            let appSUrl = top.window.location.href.toLowerCase().substring("0", top.window.location.href.indexOf("/aspx/")); 
+            if(typeof localStorage["ExecutionLogText-"+appSUrl]=="undefined")
+                localStorage.setItem("ExecutionLogText-" + appSUrl, strRuntimemsg+" ♦ ");
+            else
+            {
+                let ExecutionLogText =localStorage["ExecutionLogText-" + appSUrl];
+                localStorage.setItem("ExecutionLogText-" + appSUrl,ExecutionLogText + " ♦ "+strRuntimemsg+" ♦ ");
             }
         }
 
@@ -1574,12 +1529,6 @@ function iframePopupLoadOpts(dialogWindow){
                     right: 30px;
                     top:0px;
                 }
-
-                .toolbarRightMenu{
-                    position: relative;
-                    right: 50px !important;
-                }
-
                 .requestJSON #ivInSearch {
                     position: absolute;
                 }
@@ -1624,96 +1573,6 @@ function iframePopupLoadOpts(dialogWindow){
             </style>
             `));
         dialogWindow.contents().find("head")
-            .append($(`
-            <script>
-                $(document).ready(function () {
-                    if ($('[id^=gridToggleBtn]').length > 0 && recordid != '0') {
-                        $($('[id^=gridToggleBtn]')).each(function (index) {
-                            toggleTheEditLayout($('[id^=gridToggleBtn]')[index].id.substr($('[id^=gridToggleBtn]')[index].id.indexOf('gridToggleBtn') + 13));
-                        });
-                    }
-                });
-                window['isAxpertPopup'] = true;
-            </script>
-            `));
-        // hiding popup struct buttons except save
-    }
-}
-
-function iframePopupLoadOptsNew(){
-    if ($) {
-        $("head")
-            .append($(`
-            <style>
-                /*html {
-                    overflow: hidden;
-                }*/
-                #backforwrdbuttons {
-                    display: none;
-                }
-                a[onclick^="javascript:CallListView("] {
-                    display: none !important;
-                }
-                #new,.ftbtn_iNewLi {
-                    display: none !important;
-                }
-                #dvGoBack {
-                    display: none !important;
-                }
-                #ivInSearch {
-                    right: 30px;
-                    top:0px;
-                }
-
-                .toolbarRightMenu{
-                    position: relative;
-                    right: 50px !important;
-                }
-
-                .requestJSON #ivInSearch {
-                    position: absolute;
-                }
-                .requestJSON.isMobile #ivInSearch {
-                    right: 40px;
-                }
-                .requestJSON.requestJsonOldUi #ivInSearch {
-                    top:5px;
-                }
-                .btextDir-rtl #ivInSearch {
-                    left: 25px;
-                    right: auto;
-                }
-                .btextDir-rtl.requestJsonOldUi #ivInSearch{
-                    left:40px;
-                    top:4px;
-                }
-                .btextDir-rtl.requestJSON:not(.requestJsonOldUi).isMobile #ivInSearch{
-                    left: 26px;
-                }
-                .requestJSON.isMobile #ivInSearch ul#iconsUl,
-                .requestJSON.isMobile #ivInSearch ul#iconsExportUl,
-                .requestJSON.isMobile #ivInSearch ul.dropDownButton__list.dropdown-menu {
-                    right: -23px !important;
-                }
-                .btextDir-rtl.requestJSON.isMobile #ivInSearch ul#iconsUl,
-                .btextDir-rtl.requestJSON.isMobile #ivInSearch ul#iconsExportUl,
-                .btextDir-rtl.requestJSON.isMobile #ivInSearch ul.dropDownButton__list.dropdown-menu {
-                    left: -12px !important;
-                    right: auto !important;
-                }
-                .requestJSON.isMobile div#searchBar #iconsNew .searchBoxChildContainer {
-                    right: -17px !important;
-                }
-                .btextDir-rtl.requestJSON.isMobile div#searchBar #iconsNew .searchBoxChildContainer {
-                    left: 0px !important;
-                    right: auto !important;
-                }
-                .btextDir-rtl div#searchBar {
-                    right: -16px !important;
-                }
-            </style>
-            `));
-        $("head")
             .append($(`
             <script>
                 $(document).ready(function () {
@@ -1767,85 +1626,20 @@ function getProjectAppLogo(proj, async = false, success=(data)=>{}, error=(err)=
     return returnData;
 }
 
-function createPopup (modalBodyLink, delayLoad = false, shownCallBack = "", hideCallback = "") {
+function createPopup (modalBodyLink) {
 
     try {
         var modalId = "loadPopUpPage";
 
-        var iFrameModalBody = `<iframe id="${modalId}" name="${modalId}" class="col-12 flex-column-fluid w-100 h-100 p-0 my-n1" src="${delayLoad ? "" : modalBodyLink}" frameborder="0" allowtransparency="True"></iframe>`;
+        var iFrameModalBody = `<iframe id="${modalId}" name="${modalId}" class="col-12 flex-column-fluid w-100 h-100 p-0" src="${modalBodyLink}" frameborder="0" allowtransparency="True"></iframe>`;
 
-        let myModal = new BSModal(modalId, "", iFrameModalBody,
-        (opening, modal) => {
-            try {
-                shownCallBack && shownCallBack(opening, modal);
-            } catch (ex) {}
-
-            if(delayLoad){
-                try {
-                    modal.url = modalBodyLink;
-                    myModal.modalBody.querySelector(`#${modalId}`).contentWindow.location.href = modalBodyLink;
-                } catch (ex) {}
-            }
-        },
-        (closing, modal) => {
-            try {
-                hideCallback && hideCallback(opening, modal);
-            } catch (ex) {}
-
-            /**
-             * @description nested child popup closing logic
-             * @author Prashik 
-             */
-            try {                
-                if(closingModal = $((function getClosingModal(frame) {
-                    if(innerFrame = frame.contentDocument?.getElementById(myModal.elementId)?.querySelectorAll(`iframe[name=${myModal.elementId}]`)?.[0]) {
-                        return getClosingModal(innerFrame);
-                    }
-                    else {
-                        return frame;
-                    }
-                })(myModal.modal._element.querySelectorAll(`iframe[name=${myModal.elementId}]`)?.[0])).parents(".modal")){
-                    if(!$((myModal.modal._element.querySelectorAll(`iframe[name=${myModal.elementId}]`)?.[0])).parents(".modal").is(closingModal)){
-                        closingModal?.[0].dispatchEvent(new CustomEvent("close"));
-                        closing.preventDefault();
-                        return;
-                    }
-                }
-            } catch (ex) {}
-
-            var isAxPop = modalBodyLink.indexOf("AxPop=true") > -1;
-
-            if (isAxPop && (window.document.title == "Iview" || window.document.title == "Listview")) {
-                if(eval(callParent('isSuccessAlertInPopUp'))){
-                    eval(callParent('isSuccessAlertInPopUp') + "= false");
-                    try {
-                        callParentNew("updateSessionVar")('IsFromChildWindow', 'true')
-                    } catch (ex) {}
-                    // if (eval(callParent('isRefreshParentOnClose'))) {
-                    //     eval(callParent('isRefreshParentOnClose') + "= false");
-                    //     window.location.href = window.location.href;
-                    // }
-                    //else if(isRefresh){
-                    //    window.location.href = window.location.href;
-                    //}
-                    window.location.href = window.location.href;
-                } else {
-                    try {
-                        scrollToLastKnownDrilldown();
-                    } catch (ex) {}
-                }
-                
-            }
-        }
-        );
+        let myModal = new BSModal(modalId, "", iFrameModalBody);
         
         myModal.changeSize("fullscreen");
         myModal.hideHeader();
         myModal.hideFooter();        
         myModal.showFloatingClose();
-        myModal.modalBody.classList.add("p-0", "overflow-hidden");
-
-        return myModal;
+        myModal.modalBody.classList.add("p-0");
     } catch (error) {
         showAlertDialog("error", error.message);
     }    
@@ -1863,130 +1657,4 @@ function UrlExists(fileUrl)
     http.open('HEAD', fileUrl, false);
     http.send();
     return http.status != 404;
-}
-
-function callRuntimeStudio(additionalInfo){
-    try {
-        $.ajax({
-            type: "POST",
-            url: "../WebService.asmx/GetAxpertCunfigInfo",
-            data: JSON.stringify({ additionalInfo }),
-            cache: false,
-            async: false,
-            contentType: "application/json;charset=utf-8",
-            dataType: "json",
-            success: function (data) {
-                if (data.d != "") {
-                    callParentNew(`showWorkBench(` + data.d + `)`, `function`);
-                }
-            },
-        });
-
-    } catch (ex) { }
-}
-
-function callAxpertConfigStudio(configType, sourceTransId, sourceCaption) {
-    try {
-        if (configType == "addform") {
-            sourceTransId = document.getElementById("addFormTransId").value;
-            sourceCaption = document.getElementById("addFormCaption").value;
-            if (sourceTransId == "" || sourceCaption == "") {
-                return showAlertDialog("warning", "Please fill the fields");
-            } else if (sourceTransId.length > 5) {
-                return showAlertDialog("warning", "Form Name cannot be greater than 5 characters");
-            }
-            callParentNew("axpstudioaddform", "id").dispatchEvent(new CustomEvent("close"));
-        }
-        configType = configType + "~" + sourceTransId + "~" + sourceCaption;
-
-        callRuntimeStudio(configType);
-    } catch (ex) { }
-}
-
-/**
- *  @description : A modal for Axpert Studio's get "Add New Form" input*/
-function getAxpertStudioAddFormData() {
-    var addFormDetailsHTML = `
-    <div class="col-12">
-        <label for="addFormId" class="form-label fw-boldest required">Form Name</label>
-        <input type="text" class="form-control" id="addFormTransId" placeholder="(Trans ID)">
-    </div>
-    <div class="col-12">
-        <label for="addFormCaption" class="form-label fw-boldest required">Form Caption</label>
-        <input type="text" class="form-control" id="addFormCaption" placeholder="Axpert Form">
-    </div>
-    `;
-    let myModal = new BSModal("axpstudioaddform", "Add Form", addFormDetailsHTML, () => {
-        //shown callback
-    }, () => {
-        //hide callback
-    });
-
-    myModal.okBtn.removeAttribute("data-bs-dismiss");
-    myModal.okBtn.setAttribute(`onClick`, `return callAxpertConfigStudio("addform", "", "")`);
-}
-
-/**
- * @description: get css property for specified classes
- * @author Prashik
- * @date 14/12/2022
- * @param {*} attrName: attribute name
- * @param {*} attrValue: classes seperated by comma
- * @param {*} cssProperty: css property to get value of
- * @return {*}  
- */
-function getCssByAttr(attrName = "class", attrValue, cssProperty){
-    var cssValue = "";
-
-    var dummyDiv;
-    
-    $("body").append(dummyDiv = $(`<div ${attrName}="${attrValue}" />`));
-
-    try {
-        cssValue = dummyDiv.css(cssProperty);
-    } catch (ex) {}
-
-    try {
-        dummyDiv.remove();
-    } catch (ex) {}
-
-    return cssValue;
-}
-
-
-
-function rgbToHex(rgb) {
-    var rgbRegex = /^rgb\(\s*(-?\d+)(%?)\s*,\s*(-?\d+)(%?)\s*,\s*(-?\d+)(%?)\s*\)$/;
-    var result, r, g, b, hex = "";
-    if ( (result = rgbRegex.exec(rgb)) ) {
-        r = componentFromStr(result[1], result[2]);
-        g = componentFromStr(result[3], result[4]);
-        b = componentFromStr(result[5], result[6]);
-
-        hex = "#" + (0x1000000 + (r << 16) + (g << 8) + b).toString(16).slice(1);
-    }
-    return hex;
-
-    function componentFromStr(numStr, percent) {
-        var num = Math.max(0, parseInt(numStr, 10));
-        return percent ?
-            Math.floor(255 * Math.min(100, num) / 100) : Math.min(255, num);
-    }
-}
-
-function getInternalSSOToken(_thisProj) {
-    $.ajax({
-        type: "POST",
-        url: "../WebService.asmx/GetInternalSSOToken",
-        cache: false,
-        async: false,
-        contentType: "application/json;charset=utf-8",
-        data: JSON.stringify({ _thisProj: _thisProj }),
-        dataType: "json",
-        success: function (data) {
-            if (data.d != "") {
-                window.open(data.d);
-            }
-        },
-    });
 }

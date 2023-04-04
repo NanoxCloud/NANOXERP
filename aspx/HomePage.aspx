@@ -75,7 +75,7 @@
         </div>
     </div>
     <script type="text/javascript" src="../Js/thirdparty/jquery/3.1.1/jquery.min.js"></script>
-    <script type="text/javascript" src="../Js/common.min.js?v=120"></script>
+    <script type="text/javascript" src="../Js/common.min.js?v=99"></script>
     <script src="../ThirdParty/jquery-mousewheel/jquery-mousewheel.min.js"></script>
     <script src="../ThirdParty/scrollbar-plugin-master/jquery.mCustomScrollbar.js"></script>
     <script src="../ThirdParty/materialize/js/materialize.min.js?v=11"></script>
@@ -83,7 +83,7 @@
     <script src="../ThirdParty/jquery-confirm-master/jquery-confirm.min.js"></script>
     <script src="../newPopups/Remodal/remodal.min.js"></script>
     <script src="../newPopups/axpertPopup.min.js?v=45"></script>
-    <script src="../Js/alerts.min.js?v=30"></script>
+    <script src="../Js/alerts.min.js?v=29"></script>
     <script src="../ThirdParty/Highcharts/highcharts.js"></script>
     <script src="../ThirdParty/Highcharts/highcharts-3d.js"></script>
     <script src="../ThirdParty/Highcharts/highcharts-more.js"></script>

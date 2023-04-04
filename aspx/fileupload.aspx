@@ -38,11 +38,11 @@
     <link href="../Css/animate.min.css" rel="stylesheet" />
     <link href="../ThirdParty/jquery-confirm-master/jquery-confirm.min.css?v=1" rel="stylesheet" />
     <script src="../ThirdParty/jquery-confirm-master/jquery-confirm.min.js?v=2" type="text/javascript"></script>
-    <script src="../Js/alerts.min.js?v=30" type="text/javascript"></script>
+    <script src="../Js/alerts.min.js?v=29" type="text/javascript"></script>
     <%--custom alerts end--%>
     <script src="../Js/gen.min.js?v=14" type="text/javascript"></script>
     <script src="../Js/fileUpload.min.js?v=22" type="text/javascript"></script>
-    <script src="../Js/common.min.js?v=120" type="text/javascript"></script>
+    <script src="../Js/common.min.js?v=99" type="text/javascript"></script>
 
 
 </head>

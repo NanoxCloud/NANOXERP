@@ -193,10 +193,10 @@
                                             id="imWizardDataSearch">
                                             <section class="form-group col-md-12 mb-4">
                                                 <asp:Label runat="server" AssociatedControlID="ddlImpTbl"
-                                                    class="selectalign form-label col-form-label pb-1 fw-boldest required">
+                                                    class="selectalign form-label col-form-label">
                                                     <asp:Label ID="lblImptbl" runat="server"
                                                         meta:resourcekey="lblImptbl" Text="Select Form"></asp:Label>
-                                                    <span class="allowempty d-none">*</span>
+                                                    <span class="allowempty">*</span>
                                                 </asp:Label>
                                                 <i tabindex="0" data-trigger="focus" class="icon-arrows-question"
                                                     data-toggle="popover" id="icocl1"
@@ -210,11 +210,11 @@
                                                 </asp:DropDownList>
                                             </section>
                                             <section class="form-group col-md-12">
-                                                <label class="selectalignn my-4 required" for="txtExFields"
+                                                <label class="selectalignn my-4" for="txtExFields"
                                                     onclick="$('.ms-selectable ul.ms-list').focus();">
-                                                    <asp:Label ID="lbltxtim" CssClass="form-label col-form-label pb-1 fw-boldest"
+                                                    <asp:Label ID="lbltxtim" CssClass="form-label col-form-label"
                                                         runat="server" meta:resourcekey="lbltxtim" Text="Fields">
-                                                    </asp:Label><span class="allowempty d-none">*</span>
+                                                    </asp:Label><span class="allowempty">*</span>
                                                 </label>
                                                 <i tabindex="0" data-trigger="focus" class="icon-arrows-question"
                                                     data-toggle="popover" id="icocl2"
@@ -222,9 +222,9 @@
                                                     data-placement="right"></i>
                                                 <table class="table table-borderless w-100">
                                                     <tr class="d-flex flex-row-auto flex-center">
-                                                        <td class="d-block d-sm-table-cell col-12 col-sm-5 p-0">
+                                                        <td class="d-block d-sm-table-cell col-12 col-sm-5">
                                                             <select id="mSelectLeft" name="from[]"
-                                                                class="multiselect form-control scroll-x" size="8"
+                                                                class="multiselect form-control" size="8"
                                                                 multiple="multiple" data-right="#mSelectRight"
                                                                 data-right-all="#right_All_1"
                                                                 data-right-selected="#right_Selected_1"
@@ -241,7 +241,7 @@
                                                                 </asp:Repeater>
                                                             </select>
                                                         </td>
-                                                        <td class="d-block d-sm-table-cell col-12 col-sm-2 py-0">
+                                                        <td class="d-block d-sm-table-cell col-12 col-sm-2">
                                                             <%--button icons are updating based on the lang selection
                                                                 <,>, <<,>>--%>
                                                                     <div class="text-center py-1"><a
@@ -269,9 +269,9 @@
                                                                                 class="material-icons material-icons-style">keyboard_double_arrow_left</span></a>
                                                                     </div>
                                                         </td>
-                                                        <td class="d-block d-sm-table-cell col-12 col-sm-5 p-0">
+                                                        <td class="d-block d-sm-table-cell col-12 col-sm-5">
                                                             <select name="to[]" id="mSelectRight"
-                                                                class="multiselect form-control scroll-x" size="8"
+                                                                class="multiselect form-control" size="8"
                                                                 multiple="multiple"></select>
                                                         </td>
                                                     </tr>
@@ -283,9 +283,6 @@
                                                     <asp:Button Text="text" class="btn btn-primary btn-icon d-none"
                                                         runat="server" ID="btnCreateTemplate"
                                                         OnClick="btnCreateTemplate_Click" />
-                                                    <asp:Button Text="text" class="btn btn-primary btn-icon d-none"
-                                                        runat="server" ID="ColHeaderClick"
-                                                        OnClick="btnColHeader_Click" />
                                                 </ContentTemplate>
                                             </asp:UpdatePanel>
                                             <asp:HiddenField ID="hdnMandatoryColCount" runat="server" Value="0" />
@@ -311,11 +308,6 @@
                                                     Download Data Template
                                                     <span class="caret"></span>
                                                 </button>
-                                                  <span tabindex="0" 
-                                                            class="material-icons material-icons-style material-icons-2 align-middle ms-2" data-bs-toggle="tooltip"
-                                                            id="datetip"
-                                                            data-bs-original-title="Date should be in DD/MM/YYYY or MM/DD/YYYY format"
-                                                            data-bs-placement="bottom" data-bs-dismiss="click">help_outline</span>
                                             </div>
                                             <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-primary fw-bold py-4 fs-6 w-200px" data-kt-menu="true">                                               
                                                     <div id="exceldiv" class="menu-item px-3"><a href="#"
@@ -351,11 +343,11 @@
                                         ForeColor="#cf4444" Visible="false"></asp:Label>
                                     </section>
                                     <section class="col-md-12  d-flex justify-content-center">
-                                        <asp:UpdatePanel ID="updatePnl2" class="w-100" runat="server" UpdateMode="conditional">
+                                        <asp:UpdatePanel ID="updatePnl2" runat="server" UpdateMode="conditional">
                                             <ContentTemplate>
                                                 <div class="my-4">
                                                     <span class="file-upload ">
-                                                        <div class="form-group form-control">
+                                                        <div class="form-group form-control p-0">
                                                             <div id="dropzone_AxpFileImport"
                                                                 class="dropzone dropzone-queue min-h-1px border-0 px-3 py-3">
                                                                 <div
@@ -439,21 +431,15 @@
                                                                 onchange="ColNameInfileChanged()" checked="checked"
                                                                 meta:resourcekey="lblFileHeaders" runat="server">
                                                             <span id="lblstaysin"
-                                                                class="form-check-label form-label col-form-label pb-1 fw-boldest text-dark fs-6 mb-0"
+                                                                class="form-check-label form-label col-form-label fw-bolder text-dark fs-6 mb-0"
                                                                 for="ChkColNameInfile" runat="server">File contains
                                                                 Headers</span>
-                                                             <span tabindex="0" 
-                                                            class="material-icons material-icons-style material-icons-2 align-middle ms-2 my-3" data-bs-toggle="tooltip"
-                                                            id="headertip"
-                                                            data-bs-original-title="Enable this after uploading the file only."
-                                                            data-bs-placement="bottom" data-bs-dismiss="click">help_outline</span>
-                                                           <%-- <span tabindex="0" class="material-icons material-icons-style material-icons-2 align-middle ms-2 initialized my-3" data-bs-toggle="tooltip" id="headertip" data-bs-original-title="Enable this after uploading the file only" data-bs-placement="bottom" data-bs-dismiss="click">help_outline</span>--%>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <%--<div class="d-flex justify-content-center customclscol">
                                                     <asp:Label runat="server"
-                                                        class="form-check-label form-label col-form-label pb-1 fw-boldest text-dark fs-6 mb-0"
+                                                        class="form-check-label form-label col-form-label fw-bolder text-dark fs-6 mb-0"
                                                         AssociatedControlID="ChkColNameInfile">
                                                         <asp:CheckBox runat="server" ID="ChkColNameInfile"
                                                             class="m-wrap placeholder-no-fix form-check-input h-25px w-40px"
@@ -478,7 +464,7 @@
 
                             <div class="form-group col-md-12 row g-3 align-items-center my-2">
                                 <div class="col-sm-6">
-                                    <asp:Label class="form-label fw-boldest text-dark fs-6 mb-2" runat="server" ID="lblseparator"
+                                    <asp:Label class="form-label text-dark fs-6 mb-2" runat="server" ID="lblseparator"
                                         meta:resourcekey="lblseparator" AssociatedControlID="ddlSeparator">
                                     </asp:Label>
                                     <i tabindex="0" data-trigger="focus" class="icon-arrows-question helptxt"
@@ -492,7 +478,7 @@
                                     </asp:DropDownList>
                                 </div>
                                 <div class="col-sm-6 customclscol">
-                                    <asp:Label runat="server" class="form-label fw-boldest text-dark fs-6 mb-2" ID="lblimgroupby"
+                                    <asp:Label runat="server" class="form-label text-dark fs-6 mb-2" ID="lblimgroupby"
                                         meta:resourcekey="lblimgroupby" AssociatedControlID="ddlGroupBy">
                                     </asp:Label>
                                     <i tabindex="0" data-trigger="focus" class="icon-arrows-question helptxt"
@@ -523,7 +509,7 @@
                                                             class="m-wrap placeholder-no-fix form-check-input h-25px w-40px align-middle"
                                                             checked="checked" />
                                                         <asp:Label ID="lblForIgnoreErr"
-                                                            class="form-check-label form-label col-form-label pb-1 fw-boldest text-dark fs-6"
+                                                            class="form-check-label form-label col-form-label fw-bolder text-dark fs-6"
                                                             AssociatedControlID="chkForIgnoreErr"
                                                             meta:resourcekey="lblForIgnoreErr" runat="server"> Ignore
                                                             errors</asp:Label>
@@ -547,9 +533,9 @@
                                                             class="m-wrap placeholder-no-fix form-check-input h-25px w-40px align-middle"
                                                             onclick="javascript: ChkAllowUpdate();" />
                                                         <asp:Label ID="lblAllowUpdate"
-                                                            AssociatedControlID="chkForAllowUpdate" runat="server" CssClass="form-check-label form-label col-form-label pb-1 fw-boldest text-dark fs-6">Allow Update
+                                                            AssociatedControlID="chkForAllowUpdate" runat="server" CssClass="form-check-label form-label col-form-label fw-bolder text-dark fs-6">Allow Update
                                                             <%--<asp:Label ID="lblAllowUpdte"
-                                                                class="form-check-label form-label col-form-label pb-1 fw-boldest text-dark fs-6"
+                                                                class="form-check-label form-label col-form-label fw-bolder text-dark fs-6"
                                                                 runat="server" meta:resourcekey="lblAllowUpdte">Allow
                                                                 Update</asp:Label>--%>
                                                         </asp:Label>
@@ -567,13 +553,13 @@
                                                         <td>--%>
                                     <div class ="d-flex justify-content-between my-1">
                                                             <asp:Label ID="lblprimarycolmn" runat="server"
-                                                                meta:resourcekey="lblprimarycolmn" CssClass="form-label col-form-label pb-1 fw-boldest d-none">Primary Column
+                                                                meta:resourcekey="lblprimarycolmn" CssClass="form-label col-form-label d-none">Primary Column
                                                             </asp:Label>
                                                       <%--  </td>
                                                         <td>--%>
                                                             <asp:DropDownList runat="server" ID="ddlPrimaryKey" CssClass="form-select form-select-sm w-100px">
                                                             </asp:DropDownList>
-                                        <span tabindex="0" class="material-icons material-icons-style material-icons-2 align-middle my-2 me-n7 ms-3" data-bs-toggle="tooltip" data-bs-original-title="Please select a Primary key column to allow update." data-bs-placement="bottom" data-bs-dismiss="click">help_outline</span>
+                                        <span tabindex="0" class="material-icons material-icons-style material-icons-2 align-middle my-2 me-n7 ms-3" data-bs-toggle="tooltip" data-bs-original-title="Please select a column to allow update." data-bs-placement="bottom" data-bs-dismiss="click">help_outline</span>
                                                             <asp:HiddenField ID="hdnPrimaryKey" runat="server"
                                                                 Value="" />
                                         </div>
@@ -592,7 +578,7 @@
                                     <asp:UpdatePanel runat="server">
                                         <ContentTemplate>
                                             <div class="importrecord">
-                                                <asp:Label ID="lblrecords" CssClass ="form-label col-form-label pb-1 fw-boldest text-dark fs-6 mb-0" runat="server" meta:resourcekey="lblrecords">
+                                                <asp:Label ID="lblrecords" CssClass ="form-label col-form-label fw-bolder text-dark fs-6 mb-0" runat="server" meta:resourcekey="lblrecords">
                                                     Top 5 records</asp:Label>
                                             </div>
                                             <hr class="text-gray-500" />
@@ -607,7 +593,6 @@
                                 <section class="col-sm-12">
                                     <asp:HiddenField ID="hdnIgnoredColumns" runat="server" Value="" />
                                     <asp:HiddenField ID="colheader" runat="server" Value="" />
-                                    <asp:HiddenField ID="hdnCOLheaders" runat="server" Value="" />
                                 </section>
                             </div>
                     </div>
@@ -647,7 +632,6 @@
                                         <asp:HiddenField ID="hdnGroupBy" runat="server" Value="NA" />
                                         <asp:HiddenField ID="hdnGroupByColName" runat="server" Value="" />
                                         <asp:HiddenField ID="hdnGroupByColVal" runat="server" Value="" />
-                                        <asp:HiddenField ID="hdnCheckHeader" runat="server" Value="" />
                                         <asp:Button ID="btnImport" runat="server" Text="Import"
                                             OnClick="btnImport_Click" CssClass="cloudButton btn btn-primary d-none"  OnClientClick="callParentNew('loadFrame();','function');"/>
                                         <br />
@@ -742,13 +726,13 @@
                                                 </script>--%>
                                                 <%--<script src="../Js/wizard.min.js?v=10">
                                                     </script>--%>
-                                                    <script src="../Js/helper.min.js?v=142"></script>
-                                                    <script src="../Js/common.min.js?v=120"></script>
+                                                    <script src="../Js/helper.min.js?v=124"></script>
+                                                    <script src="../Js/common.min.js?v=99"></script>
                                                     <%--<script src="../Js/wizardComp.min.js?v=10"
                                                         type="text/javascript">
                                                         </script>--%>
-                                                        <script src="../Js/alerts.min.js?v=30"></script>
-                                                        <script src="../Js/import.min.js?v=39"></script>
+                                                        <script src="../Js/alerts.min.js?v=29"></script>
+                                                        <script src="../Js/import.js?v=32"></script>
                                                         <script src="../Js/multiselect.min.js"
                                                             type="text/javascript"></script>
                                                         <script src="../Js/jquery.multi-select.min.js"

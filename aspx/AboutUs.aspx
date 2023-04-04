@@ -35,7 +35,7 @@
             }
         }
     </script>
-    <script src="../Js/common.min.js?v=120"></script>
+    <script src="../Js/common.min.js?v=99"></script>
     <link href="../Css/aboutus.min.css?v=3" rel="stylesheet" />
     <script>
         $(document).ready(function () {
@@ -71,7 +71,7 @@
         </div>
         <div runat="server">
             <asp:Label ID="lblappsrvr" runat="server" meta:resourcekey="lblappsrvr" class="control-label castLbl" for="version">Application Server:</asp:Label>
-            <asp:Label class="fontclass" Text="IIS" ID="Label13" runat="server" />
+            <asp:Label class="fontclass" Text="IIS, Node JS" ID="Label13" runat="server" />
         </div>
         <div runat="server">
             <asp:Label ID="lbldb" runat="server" meta:resourcekey="lbldb" class="control-label castLbl" for="version">Database: </asp:Label>
@@ -110,7 +110,7 @@
             <div class="fontclass" id="divBugContent" runat="server" />
         </div>--%>
 
-        <button type="button" id="btnClose" class="btn" onclick="parent.closeModalDialog()" title=""></button>
+        <button type="button" id="btnClose" class="coldbtn btn" onclick="parent.closeModalDialog()" title=""></button>
 
     </div>
 </body>
