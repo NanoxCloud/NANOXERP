@@ -44,10 +44,10 @@
     <script src="../ThirdParty/jquery-confirm-master/jquery-confirm.min.js?v=2" type="text/javascript"></script>
     <script src="../Js/gen.min.js?v=14" type="text/javascript"></script>
     <script src="../assets/plugins/jquery-ui/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
-    <script src="../Js/common.min.js?v=118" type="text/javascript"></script>
-    <script src="../Js/alerts.min.js?v=30" type="text/javascript"></script>
+    <script src="../Js/common.min.js?v=98" type="text/javascript"></script>
+    <script src="../Js/alerts.min.js?v=28" type="text/javascript"></script>
     <script src="../Js/umgmt.min.js?v=18" type="text/javascript"></script>
-    <script type="text/javascript" src="../Js/lang/content-<%=langType%>.js?v=59"></script>
+    <script type="text/javascript" src="../Js/lang/content-<%=langType%>.js?v=51"></script>
 </head>
 <body class="btextDir-<%=direction%>" dir="<%=direction%>">
     <form id="form1" runat="server">

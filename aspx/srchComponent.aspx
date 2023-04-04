@@ -36,14 +36,14 @@
         }
     </script>
     <script src="../ThirdParty/jquery-confirm-master/jquery-confirm.min.js?v=2"></script>
-    <script src="../Js/alerts.min.js?v=30" type="text/javascript"></script>
+    <script src="../Js/alerts.min.js?v=28" type="text/javascript"></script>
     <%--custom alerts end--%>
     <script src="../Js/thirdparty/bootstrap/3.3.6/bootstrap.min.js" type="text/javascript"></script>
     <link id="themecss" type="text/css" rel="Stylesheet" />
     <link href="../Css/GridTable.min.css?v=1" rel="stylesheet" />
-    <script type="text/javascript" src="../Js/tstruct.min.js?v=489"></script>
-    <script type="text/javascript" src="../Js/helper.min.js?v=141"></script>
-    <script type="text/javascript" src="../Js/jsclient.min.js?v=77"></script>
+    <script type="text/javascript" src="../Js/tstruct.min.js?v=431"></script>
+    <script type="text/javascript" src="../Js/helper.min.js?v=123"></script>
+    <script type="text/javascript" src="../Js/jsclient.min.js?v=51"></script>
     <script src="../Js/gen.min.js?v=14" type="text/javascript"></script>
 
     <script type="text/javascript">
@@ -122,7 +122,7 @@
     <form id="form1" runat="server">
         <asp:ScriptManager ID="ScriptManager1" runat="server">
             <Scripts>
-                <asp:ScriptReference Path="../Js/tstruct.min.js?v=489" />
+                <asp:ScriptReference Path="../Js/tstruct.min.js?v=431" />
             </Scripts>
             <Services>
                 <asp:ServiceReference Path="../WebService.asmx" />
@@ -304,6 +304,6 @@
         Sys.WebForms.PageRequestManager.getInstance().add_pageLoading(disposeTree);
 
     </script>
-    <script src="../Js/common.min.js?v=118"></script>
+    <script src="../Js/common.min.js?v=98"></script>
 </body>
 </html>

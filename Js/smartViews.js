@@ -1,7 +1,7 @@
 ﻿/*********
  *Smart Views extended from Interactive Report(IvIr)
  *01/01/2019(03/05/2017)
- *By Prashik + Abhishek(Manikanta)
+ *By Prashik + Abhishek (mohsin/Manikanta/Niglin)
  *
  *
  *
@@ -22,7 +22,6 @@ var pillDependentCols = {};
 var numericColumns = [];
 var anchorRegexPatter = /<a [^>]/;
 var custBtnIVIR = "";
-var oldLoadViewName = "";
 var svHtmlGeneratorRef, saveViewActionRef, cancelViewActionRef, onContentReadyRef, onCloseRef, isOpenSmartStepper = false;
 var dateOptions = ["Custom", "Today", "Yesterday", "Tomorrow", "This week", "Last week", "Next week", "This month", "Last month", "Next month", "This quarter", "Last quarter", "Next quarter", "This year", "Last year", "Next year"];
 
@@ -30,6 +29,7 @@ var dateOptionsId = ["customOption", "todayOption", "yesterdayOption", "tomorrow
 
 var dateOptionsCaption = callParentNew('lcm')[445];
 
+//var anchorRegexPatter = /<a[^>]*>([\s\S]*?)/g;
 var errorMessages = {
     "emptyField": eval(callParent('lcm[13]')),
     "invalidName": eval(callParent('lcm[14]')),
@@ -84,6 +84,7 @@ let newBtnGroup = {
             return svHtmlGeneratorRef(this, $(`<input value="${this.type}">`), isEdit);
         },
         get visible() {
+            // return ($("#hdnIsParaVisible").val() != "hidden" ? true : false)
             return false;
         },
         get value() {
@@ -138,6 +139,7 @@ let newBtnGroup = {
             if (moreFiltersBody.length > 0) {
                 moreFiltersBody.data("pillindex", -1);
             }
+            // elem.prev("input").val("");
         },
         apply() {
             $("#btnFilterApply").click();
@@ -165,6 +167,7 @@ let newBtnGroup = {
         clear(elem) {
             $("#clearSorting").click();
             delete ivirMainObj.sorting;
+            // elem.prev("input").val("");
         },
         apply() {
             ivirSortColumns();
@@ -195,8 +198,12 @@ let newBtnGroup = {
             }
         },
         clear(elem) {
+            // let pill = $("[onclick=deleteThePill\\(\\'group\\'\\,0\\)]");
+            // if (pill.length) {
+            //     pill.click();
+            // }
             delete ivirMainObj.group;
-            $("#grpColName").val("").trigger("change");
+            // elem.prev("input").val("");
         },
         apply(indexOfArray, isPillChecked) {
             ivirRowGrouping(indexOfArray, isPillChecked);
@@ -222,11 +229,12 @@ let newBtnGroup = {
             $(this.stage).click();
         },
         clear(elem) {
-            if (!isListView) {
+            if (!isListView || $("#hdnListViewFieldsJSON").val() == "") {
                 ivirMainObj.hiddenColumns = [];
             } else {
                 ivirMainObj.visibleColumns = [];
             }
+            // elem.prev("input").val("");
         },
         apply() {
             ivirshowHideColumns();
@@ -235,10 +243,10 @@ let newBtnGroup = {
             return svHtmlGeneratorRef(this, $(`<input value="${this.type}">`), isEdit);
         },
         get visible() {
-            return (iName != "inmemdb" && (!enableCardsUi ? true : false));
+            return (iName != "inmemdb" && !enableCardsUi ? true : false)
         },
         get value() {
-            if (!isListView) {
+            if (!isListView || $("#hdnListViewFieldsJSON").val() == "") {
                 return ivirMainObj.hiddenColumns && ivirMainObj.hiddenColumns.length > 0 && JSON.stringify({ hidden: ivirMainObj.hiddenColumns }) || "";
             } else {
                 return ivirMainObj.visibleColumns && ivirMainObj.visibleColumns.length > 0 && JSON.stringify({ visible: ivirMainObj.visibleColumns }) || "";
@@ -256,7 +264,13 @@ let newBtnGroup = {
             $(this.stage).click();
         },
         clear(elem) {
+
+
+
+
+
             delete ivirMainObj.design;
+            // elem.prev("input").val("");
         },
         apply() {
             ivirDesignColumn();
@@ -289,10 +303,10 @@ let newBtnGroup = {
         clear(elem) {
 
 
-            clearIvirHighlight(0);
 
 
             delete ivirMainObj.highlight;
+            // elem.prev("input").val("");
         },
         apply(indexOfArray, isPillChecked) {
             ivirHighlightRow(indexOfArray, isPillChecked);
@@ -327,6 +341,7 @@ $j(document).ready(function ($) {
     });
 
     /** Will trigger when actions dropdown like highlight,group is selected */
+    // $(document).on("change", "#IvirActions , #pinnedIvirActions", function (event) {
     svHtmlGeneratorRef = function svHtmlGenerator(svOption, that = this, isEdit = false) {
         isOpenSmartStepper = true;
         if (($("#ivirCButtonsWrapper").is(":visible") && !$("#ivirCButtonsWrapper a.active").hasClass('grdView')) || ($("#pinnedivirCButtonsWrapper").is(":visible") && !$("#pinnedivirCButtonsWrapper a.active").hasClass('grdView'))) {
@@ -338,10 +353,10 @@ $j(document).ready(function ($) {
             if (selectedVal == 'SHcolumns' && iName != "inmemdb") {
                 //Show hide colums in the report
                 requestTstructFieldsObj();
-                if (!isListView) {
+                if (!isListView || $("#hdnListViewFieldsJSON").val() == "") {
                     htmlToShow = '<div class="d-flex form-check form-check-sm form-check-custom form-check-solid gap-10 checkbox">';
                     htmlToShow += '<input class="form-check-input" type="checkbox" id="showAllColumns" />';
-                    htmlToShow += '<label class="form-label col-form-label pb-1 fw-boldest">' + callParentNew('lcm')[446] + '</label>';
+                    htmlToShow += '<label class="form-label col-form-label">' + callParentNew('lcm')[446] + '</label>';
                     htmlToShow += '</div>';
                     htmlToShow += '<hr />';
                 }
@@ -364,7 +379,7 @@ $j(document).ready(function ($) {
                     chartCol = checkForPillDependentFlds("chart", chartArrayIndex, true);
                 }
 
-                if (!isListView) {
+                if (!isListView || $("#hdnListViewFieldsJSON").val() == "") {
                     var allColumns = ivirDataTableApi.columns();
                     var allColumnsLength = allColumns[0].length;
 
@@ -376,7 +391,7 @@ $j(document).ready(function ($) {
                          * @author Prashik
                          * @Date   2019-04-11T11:45:39+0530
                          */
-                        if ((ivHeadRows[getColumnName(ivirDataTableApi.context[0].aoColumns[i].mData)]["@hide"] == "true")) {
+                        if ((getAjaxIviewData && ivHeadRows[getColumnName(ivirDataTableApi.context[0].aoColumns[i].mData)]["@hide"] == "true") || (!getAjaxIviewData && HideColumn[FieldName.indexOf(getColumnName(ivirDataTableApi.context[0].aoColumns[i].mData))] == "true")) {
                             continue;
                         }
 
@@ -412,74 +427,35 @@ $j(document).ready(function ($) {
                             htmlToShow += '<input class="form-check-input customCheckBox ' + disabled + '" ' + disabled + ' checked type="checkbox" data-index=' + i + ' value="' + headerName + '">';
                         else
                             htmlToShow += '<input class="form-check-input customCheckBox ' + disabled + '" ' + disabled + ' type="checkbox" data-index=' + i + ' value="' + headerName + '">';
-                        htmlToShow += '<label class="form-label col-form-label pb-1 fw-boldest ivirSortLabel">' + (headerName == "" && i == 0 && isChkBox == "true" ? "Checkbox" : headerName == "arrow_drop_down" && rowOptionsExist && i == 0 ? "AxRowOptions_Checkbox" : headerName) + '</label>';
+                        htmlToShow += '<label class="form-label col-form-label ivirSortLabel">' + (headerName == "" && i == 0 && isChkBox == "true" ? "Checkbox" : headerName == "arrow_drop_down" && rowOptionsExist && i == 0 ? "AxRowOptions_Checkbox" : headerName) + '</label>';
                         htmlToShow += '</div>';
 
                     }
                 } else {
                     var listDropdowns = ``;
                     if ($("#hdnListViewFieldsJSON").val() != "") {
-                        var lvFldsObj = JSON.parse($("#hdnListViewFieldsJSON").val());
-                    }else{
-                        var lvFldsObj = {
-                            1: {
-                                caption: iName,
-                                fields: FieldName.map((fld, ind)=>{
-                                    return {
-                                        caption: HeaderText[ind],
-                                        component: "",
-                                        dcNo: 1,
-                                        index: ind + 1,
-                                        isGridField: false,
-                                        length: undefined,
-                                        name: fld,
-                                        save: fld == "rowno" ? false : !(HideColumn[ind] == "true"),
-                                        visible: fld == "rowno" ? false : !(HideColumn[ind] == "true")
-                                    }
-                                }),
-                                index: 1,
-                                isGrid: false,
-                                name: "dc1"
-                            }
-                        }
-                    }
                         try {
-                            // var lvFldsObj = JSON.parse($("#hdnListViewFieldsJSON").val());
+                            var lvFldsObj = JSON.parse($("#hdnListViewFieldsJSON").val());
 
                             htmlToShow += Object.keys(lvFldsObj).map((dcInd) => {
                                 let dc = lvFldsObj[dcInd];
-                                
-                                let extraFIelds = [];
-                                if(dcInd == 1){
-                                    extraFIelds = ["Created By", "Created On", "Modified By", "Modified On"].map((fld, ind)=>{
-                                        return {
-                                            ...dc?.fields?.find(field=>field.visible && field.save),
-                                            index: ((dc?.fields?.length > -1 ? dc?.fields?.length : 0) + (ind + 1)),
-                                            name: fld.toLowerCase().replaceAll(" ", ""),
-                                            caption: fld
-                                        }
-                                    }) || extraFIelds;
-                                }
                                 return `
                                 <div id="lstColSel_${dc.name}" class="d-block gap-10 lstColSelWrapper">
                                     <div class="d-flex flex-row-auto form-check form-check-sm form-check-custom form-check-solid gap-10">
                                         <input id="showAllColumns${dcInd}" class="form-check-input showAllColumns" type="checkbox" value="${dc.name}" ${Object.keys(dc).map((propName) => { return (propName != "fields" ? `data-${propName}="${dc[propName]}"` : ``) }).join(" ")} /> 
                                         <!-- <span> -->
-                                            <label class="form-label col-form-label pb-1 fw-boldest fst-bolder"for="showAllColumns${dcInd}">
+                                            <label class="form-label col-form-label fst-bolder"for="showAllColumns${dcInd}">
                                                 ${dc.name}<i> (${dc.caption}) - ${dc.isGrid ? `Grid` : `Non-Grid`}</i>
                                             </label>
                                         </div>
                                     <div class="mx-15">
-                                            ${[
-                                                ...dc.fields,
-                                                ...extraFIelds
-                                            ].map((field) => {
+                                            ${dc.fields.map((field) => {
                                     return field.visible && field.save ? `
                                             <div class="d-flex form-check form-check-sm form-check-custom form-check-solid gap-10 checkbox ivirLabelWrapper">
                                             <input id="customCheckBox_${dcInd}_${field.index}" class="form-check-input customCheckBox" type="checkbox"
-                                            ${($("#newViewTabId").is(":visible") || isOpenSmartStepper) && ((ivirMainObj.visibleColumns && (ivirMainObj.visibleColumns.length > 0 && ivirMainObj.visibleColumns[0].dcs && ivirMainObj.visibleColumns[0].dcs[dcInd] && typeof ivirMainObj.visibleColumns[0].dcs[dcInd].fields != "undefined" && (checkIt = ivirMainObj.visibleColumns[0].dcs[dcInd].fields.indexOf(field.name) > -1))) || (FieldName.indexOf(field.name) > -1 || (isListView && (field.name == "modifiedby" && FieldName.indexOf("username") > -1)) && (typeof checkIt == "undefined" || checkIt))) ? ((listDropdowns += `<option>${field.name}</option>`) && `checked="checked"`) : ``}
+                                            ${($("#newViewTabId").is(":visible") || isOpenSmartStepper) && ((ivirMainObj.visibleColumns && (ivirMainObj.visibleColumns.length > 0 && ivirMainObj.visibleColumns[0].dcs && ivirMainObj.visibleColumns[0].dcs[dcInd] && typeof ivirMainObj.visibleColumns[0].dcs[dcInd].fields != "undefined" && (checkIt = ivirMainObj.visibleColumns[0].dcs[dcInd].fields.indexOf(field.name) > -1))) || (FieldName.indexOf(field.name) > -1) && (typeof checkIt == "undefined" || checkIt)) ? ((listDropdowns += `<option>${field.name}</option>`) && `checked="checked"`) : ``}
                                             value="${field.name}" ${Object.keys(field).map((propName) => { return `data-${propName}="${field[propName]}"` }).join(" ")} />
-                                                <label class="form-label col-form-label pb-1 fw-boldest ivirSortLabel" for="customCheckBox_${dcInd}_${field.index}">
+                                                <label class="form-label col-form-label ivirSortLabel" for="customCheckBox_${dcInd}_${field.index}">
                                                     ${field.name}<i> (${field.caption})</i>
                                                 </label>
                                             </div>
@@ -492,7 +468,7 @@ $j(document).ready(function ($) {
                             }).join("");
 
                             htmlToShow += `<div class="form-group">
-                                <label for="grpColName" class="form-label col-form-label pb-1 fw-boldest required"> 
+                                <label for="grpColName" class="form-label col-form-label required"> 
                                     Select column for Hyperlink
                                 </label>
                                 <select class="form-select dialogSlctFld stepperSelect" id="selColHypOpts">
@@ -500,7 +476,7 @@ $j(document).ready(function ($) {
                                 </select>
                             </div>`;
                         } catch (ex) { }
-                    // }
+                    }
                 }
 
 
@@ -510,11 +486,11 @@ $j(document).ready(function ($) {
                 var dialogObj = ivirActionDialog(callParentNew('lcm')[401], 'column', htmlToShow, 'ivirshowHideColumns');
 
                 setTimeout(function () {
-                    if (!(!isListView)) {
+                    if (!(!isListView || $("#hdnListViewFieldsJSON").val() == "")) {
                         dialogObj.$btnc.css({ "width": "100%" });
                         dialogObj.$btnc.prepend(`
                         <div class="form-group">
-                            <label for="grpColName" class="form-label col-form-label pb-1 fw-boldest required"> Select column for Hyperlink </label>
+                            <label for="grpColName" class="form-label col-form-label required"> Select column for Hyperlink </label>
                             <!-- <span class="red">*</span> -->
                             <select class="form-select dialogSlctFld" id="selColHypOpts" data-control="select2">
                                 ${listDropdowns}
@@ -533,14 +509,8 @@ $j(document).ready(function ($) {
                 <div id="ivirDesignColumnWrapper" class="designList">
                 </div>
                 `;
-
-                if (document.getElementById("IvirActions").value == "design"){
-                    smartDesign(htmlToShow);
-                }
-                else {
-                    return htmlToShow;
-                }
-                
+                return htmlToShow;
+                var dialogObj = ivirActionDialog("Design" || callParentNew('lcm')[401], 'design', htmlToShow, 'ivirDesignColumn');
             }
             else if (selectedVal == 'sort' && iName != "inmemdb") {
 
@@ -565,7 +535,7 @@ $j(document).ready(function ($) {
                     if (groupingCol != ivirDataTableApiOrderArray[j]) {
                         htmlToShow += '<div class="d-flex justify-content-between form-check form-check-sm form-check-custom form-check-solid py-2 checkbox ivirLabelWrapper">';
                         htmlToShow += '<input tabindex="-1" class="form-check-input col-sm-1 customCheckBox" type="checkbox" checked data-index=' + ivirDataTableApiOrderArray[j] + '>';
-                        htmlToShow += '<label class="form-label col-form-label pb-1 fw-boldest col-sm-9 ivirSortLabel">' + headerName + '</label>';
+                        htmlToShow += '<label class="form-label col-form-label col-sm-9 ivirSortLabel">' + headerName + '</label>';
                         htmlToShow += '<span class="d-flex col-sm-2 ascDscWrapper">';
                         if (ivirDataTableApiOrderArray[j + 1] == 'asc') {
                             htmlToShow += '<button tabindex="-1" class="btn btn-sm btn-icon btn-active-light-primary shadow-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-dismiss="click" data-bs-original-title="Descending Order"><span data-order="asc" class="material-icons material-icons-style active">arrow_circle_down</span></button>';
@@ -588,7 +558,7 @@ $j(document).ready(function ($) {
                         var headerName = $(ivirDataTableApi.columns(k).header()).text().trim();
                         htmlToShow += '<div class="d-flex justify-content-between form-check form-check-sm form-check-custom form-check-solid py-2 checkbox ivirLabelWrapper">';
                         htmlToShow += '<input tabindex="-1" class="form-check-input col-sm-1 customCheckBox" type="checkbox" data-index=' + k + '>';
-                        htmlToShow += '<label class="form-label col-form-label pb-1 fw-boldest col-sm-9 ivirSortLabel">' + headerName + '</label>';
+                        htmlToShow += '<label class="form-label col-form-label col-sm-9 ivirSortLabel">' + headerName + '</label>';
                         htmlToShow += '<span class="d-flex col-sm-2 ascDscWrapper">';
                         htmlToShow += '<button tabindex="-1" class="btn btn-sm btn-icon btn-active-light-primary shadow-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-dismiss="click" data-bs-original-title="Ascending Order"><span data-order="asc" class="material-icons material-icons-style">arrow_circle_down</span></button>';
                         htmlToShow += '<button tabindex="-1" class="btn btn-sm btn-icon btn-active-light-primary shadow-sm" type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-dismiss="click" data-bs-original-title="Descending Order"><span data-order="desc" class="material-icons material-icons-style">arrow_circle_up</span></button>';
@@ -661,24 +631,19 @@ $j(document).ready(function ($) {
             } else if (selectedVal == 'chart' && iName != "inmemdb") {
 
                 if (!checkForPillsLength('chart'))
-                    smartCharts();
+                    smartCharts(); // ivirActionDialog(callParentNew('lcm')[410], 'chart', getChartHtml(), "ivirCreateChart");
             } else if (selectedVal == 'save' && iName != "inmemdb") {
-                if (requestJSON) {
+                if (requestJSON && iviewButtonStyle != "old") {
                     if (ivirMainObj.groupName) {
-                        if (hasBuildAccess){
+                        if (hasBuildAccess)
                             saveInSessionBeforeSaveNew(ivirMainObj.groupName, ivirMainObj.caption || ivirMainObj.groupName, ivirMainObj.applyTo);
-                        }
-                        else{
-                            saveInSessionBeforeSaveNew(ivirMainObj.groupName, ivirMainObj.caption || ivirMainObj.groupName, callParentNew("mainUserName"), ivirMainObj.asDefault);
-                        }
+                        else
+                            saveInSessionBeforeSaveNew(ivirMainObj.groupName, ivirMainObj.caption || ivirMainObj.groupName, callParentNew("mainUserName"));
                     }
 
 
 
                     else {
-                        try {
-                            callParentNew("Charts", "id").dispatchEvent(new CustomEvent("close"));
-                        } catch (error) {}                        
                         getViewName();
                     }
                 }
@@ -763,6 +728,7 @@ $j(document).ready(function ($) {
                 switch (colType) {
                     case "c":
 
+                        //data, ivirDataTableApi, filteredColumns;
                         if (isObjectAvailable) {
                             var thisVal = advFiltersObjectToApply[dataKey].split("`");
 
@@ -784,11 +750,11 @@ $j(document).ready(function ($) {
 
 
 
-                        // if (requestJSON) {
+                        if (requestJSON) {
                             thisVal != "" ? validationArray.push(thisVal.filter((val, ind) => { return currentData.indexOf(val) > -1 }).length > 0) : "";
-                        // } else {
-                        //     thisVal != "" ? validationArray.push(thisVal.filter((val, ind) => { return currentData.indexOf(val) > -1 }).length > 0) : "";
-                        // }
+                        } else {
+                            thisVal != "" ? validationArray.push(thisVal.filter((val, ind) => { return currentData.indexOf(val) > -1 }).length > 0) : "";
+                        }
                         break;
                     case "n":
                         var minVal = 0, maxVal = 0;
@@ -917,11 +883,13 @@ $j(document).ready(function ($) {
                         try {
                             var tempData = typeof data[currentIndex] == "object" && data[currentIndex] != null ? data[currentIndex].display : (data[currentIndex] != null ? data[currentIndex] : "");
                             tempData = $($.parseHTML(tempData)).text().trim();
-                          
+                            if (getAjaxIviewData) {
                                 tempData = getDateBasedOnCulture(tempData);
-                      
+                            }
                             currentData = getDateStamp(tempData);
                         } catch (ex) { }
+                        //future regex to split and swap mm & dd
+                        // /[-|.|\/]/
                         if (currentData != "")
                             minVal != 0 || maxVal != 0 ? validationArray.push(isNumberBetweenScope(minVal, maxVal, currentData)) : "";
 
@@ -973,6 +941,7 @@ $j(document).ready(function ($) {
      */
     $(document).on("click", "#btnFilterApply", function () {
         var advSearchNameValue = $("#advSearchName").val() || "a";
+        // var moreFilters = $("#divModalAdvancedFilters .filter-body-cont").parent();
         var pillindex = $("#newViewTabId").find(".filter-body-cont").data("pillindex");
         if (pillindex != -1 || !checkForPillsLength('filter') || ($("#newViewTabId").is(":visible") || isOpenSmartStepper)) {
             if (advSearchNameValue) {
@@ -985,8 +954,12 @@ $j(document).ready(function ($) {
                 var searchJSON = JSON.stringify(generateSearchString("JSON"));
                 if (searchJSON != "{}") {
                     if ($("#newViewTabId").is(":visible") || isOpenSmartStepper) {
+                        // if ($("#divModalAdvancedFilters").is(":visible")) {
+                        //     $("#btnModalClose").click();
+                        // }
                         let filterObj = [{ n: advSearchNameValue, data: JSON.parse(searchJSON) }];
                         ivirMainObj.filter = filterObj;
+                        // $("#newViewfilters").val(JSON.stringify(filterObj));
                     } else {
                         generateFilterPill(searchJSON, advSearchNameValue, pillIndex);
 
@@ -1039,28 +1012,34 @@ function generateAdvFilterDates(dateOption) {
     var advFilterDtCulture = dtCulture == "en-us" ? "MM/DD/YYYY" : "DD/MM/YYYY";
     switch (dateOption) {
         case "customOption":
+            //enableDisable = "enable";
             break;
         case "todayOption":
+            //enableDisable = "disable";
             var dateObj = new Date();
             fromToObj.from = fromToObj.to = moment(dateObj).format(advFilterDtCulture);
             break;
         case "yesterdayOption":
+            //enableDisable = "disable";
             var dateObj = new Date();
             dateObj.setDate(dateObj.getDate() - 1);
             fromToObj.from = fromToObj.to = moment(dateObj).format(advFilterDtCulture);
             break;
         case "tomorrowOption":
+            //enableDisable = "disable";
             var dateObj = new Date();
             dateObj.setDate(dateObj.getDate() + 1);
             fromToObj.from = fromToObj.to = moment(dateObj).format(advFilterDtCulture);
             break;
         case "this_weekOption":
+            //enableDisable = "disable";
             var dateObj = getFirstDayOfWeek(new Date());
             fromToObj.from = moment(dateObj).format(advFilterDtCulture);
             dateObj.setDate(dateObj.getDate() + 6);
             fromToObj.to = moment(dateObj).format(advFilterDtCulture);
             break;
         case "last_weekOption":
+            //enableDisable = "disable";
             var dateObj = getFirstDayOfWeek(new Date());
             dateObj.setDate(dateObj.getDate() - 7)
             fromToObj.from = moment(dateObj).format(advFilterDtCulture);
@@ -1068,6 +1047,7 @@ function generateAdvFilterDates(dateOption) {
             fromToObj.to = moment(dateObj).format(advFilterDtCulture);
             break;
         case "next_weekOption":
+            //enableDisable = "disable";
             var dateObj = getFirstDayOfWeek(new Date());
             dateObj.setDate(dateObj.getDate() + 7)
             fromToObj.from = moment(dateObj).format(advFilterDtCulture);
@@ -1084,32 +1064,39 @@ function generateAdvFilterDates(dateOption) {
         ////    enableDisable = "disable";
         //    break;
         case "this_monthOption":
+            //enableDisable = "disable";
             var dateObj = getFirstDayOfWeek(new Date());
             dateObj.setDate(1);
             fromToObj.from = moment(dateObj).format(advFilterDtCulture);
+            //dateObj.setMonth(dateObj.getMonth() + 1).setDate(0)
             dateObj.setMonth(dateObj.getMonth() + 1);
             dateObj.setDate(0);
             fromToObj.to = moment(dateObj).format(advFilterDtCulture);
             break;
         case "last_monthOption":
+            //enableDisable = "disable";
             var dateObj = getFirstDayOfWeek(new Date());
             dateObj.setDate(1);
             dateObj.setMonth(dateObj.getMonth() - 1);
             fromToObj.from = moment(dateObj).format(advFilterDtCulture);
+            //dateObj.setMonth(dateObj.getMonth() + 1).setDate(0)
             dateObj.setMonth(dateObj.getMonth() + 1);
             dateObj.setDate(0);
             fromToObj.to = moment(dateObj).format(advFilterDtCulture);
             break;
         case "next_monthOption":
+            //enableDisable = "disable";
             var dateObj = getFirstDayOfWeek(new Date());
             dateObj.setDate(1);
             dateObj.setMonth(dateObj.getMonth() + 1);
             fromToObj.from = moment(dateObj).format(advFilterDtCulture);
+            //dateObj.setMonth(dateObj.getMonth() + 1).setDate(0)
             dateObj.setMonth(dateObj.getMonth() + 1);
             dateObj.setDate(0);
             fromToObj.to = moment(dateObj).format(advFilterDtCulture);
             break;
         case "this_quarterOption":
+            //enableDisable = "disable";
             var dateObj = new Date();
             var thisQuarter = Math.floor(((dateObj).getMonth() + 3) / 3);
             dateObj.setDate(1);
@@ -1120,6 +1107,7 @@ function generateAdvFilterDates(dateOption) {
             fromToObj.to = moment(dateObj).format(advFilterDtCulture);
             break;
         case "last_quarterOption":
+            //enableDisable = "disable";
             var dateObj = new Date();
             var thisQuarter = Math.floor(((dateObj).getMonth() + 3) / 3) - 1;
             if (thisQuarter == 0) {
@@ -1134,6 +1122,7 @@ function generateAdvFilterDates(dateOption) {
             fromToObj.to = moment(dateObj).format(advFilterDtCulture);
             break;
         case "next_quarterOption":
+            //enableDisable = "disable";
             var dateObj = new Date();
             var thisQuarter = Math.floor(((dateObj).getMonth() + 3) / 3) + 1;
             if (thisQuarter == 5) {
@@ -1148,6 +1137,7 @@ function generateAdvFilterDates(dateOption) {
             fromToObj.to = moment(dateObj).format(advFilterDtCulture);
             break;
         case "this_yearOption":
+            //enableDisable = "disable";
             var dateObj = new Date();
             dateObj.setDate(1);
             dateObj.setMonth(0);
@@ -1158,6 +1148,7 @@ function generateAdvFilterDates(dateOption) {
             fromToObj.to = moment(dateObj).format(advFilterDtCulture);
             break;
         case "last_yearOption":
+            //enableDisable = "disable";
             var dateObj = new Date();
             dateObj.setFullYear(dateObj.getFullYear() - 1);
             dateObj.setDate(1);
@@ -1169,6 +1160,7 @@ function generateAdvFilterDates(dateOption) {
             fromToObj.to = moment(dateObj).format(advFilterDtCulture);
             break;
         case "next_yearOption":
+            //enableDisable = "disable";
             var dateObj = new Date();
             dateObj.setFullYear(dateObj.getFullYear() + 1);
             dateObj.setDate(1);
@@ -1202,9 +1194,9 @@ function generateUniqueColumnVals(type, columnIndex) {
 
                 columnVals.push(value);
             } else if (type == "d") {
-            
+                if (getAjaxIviewData) {
                     value = getDateBasedOnCulture(value);
-      
+                }
                 var curTimeStamp = getDateStamp(value);
 
                 columnVals.push(curTimeStamp);
@@ -1244,6 +1236,7 @@ function enableDisableDateField(fieldObj, enableDisable) {
         fieldObj.prop("disabled", true);
         fieldObj.parent().addClass("pe-none opacity-50 shadow-none");
     }
+    // fieldObj.datepicker(enableDisable).css({ "height": enableDisable == "enable" ? "" : "30px", "opacity": enableDisable == "enable" ? "1" : "0.5" });
 }
 
 /**
@@ -1292,9 +1285,9 @@ function generateFilterPill(filterJSON, advFilterNameValue, indexOfArray, isPill
 
     var name = advFilterNameValue;
 
-    // if (requestJSON && iviewButtonStyle != "old") {
+    if (requestJSON && iviewButtonStyle != "old") {
         maxNoOfPills = 1;
-    // }
+    }
 
     if (indexOfArray === undefined) {
         //means first time or new one
@@ -1543,7 +1536,7 @@ function ivirCreateChart(indexOfArray, isPillChecked, applyThePill, isFromLoad) 
     } else {
         var chartObj = ivirMainObj.chart[indexOfArray];
         indexOfChartArry = indexOfArray;
-        if (!(processCheckedPill && requestJSON && ((typeof chartObj.checked == "undefined" || chartObj.checked)))) {
+        if (!(processCheckedPill && requestJSON && iviewButtonStyle != "old" && ((typeof chartObj.checked == "undefined" || chartObj.checked)))) {
             processCheckedPill = false;
         }
     }
@@ -1568,7 +1561,7 @@ function ivirCreateChart(indexOfArray, isPillChecked, applyThePill, isFromLoad) 
 
         if (indexOfArray === undefined) {
             chartArr.push(chartObj);
-            if (requestJSON && ivirMainObj && ivirMainObj.chart && ivirMainObj.chart.length > 0) {
+            if (requestJSON && iviewButtonStyle != "old" && ivirMainObj && ivirMainObj.chart && ivirMainObj.chart.length > 0) {
                 $("#ivirMainDataTableWrapper").show();
             }
             if (!$("#ivirChartPills").hasClass('pillsAdded'))
@@ -1579,7 +1572,7 @@ function ivirCreateChart(indexOfArray, isPillChecked, applyThePill, isFromLoad) 
         } else {
             //highlight0pillCB
             if (processCheckedPill) {
-                if (!(requestJSON)) {//temp
+                if (!(requestJSON && iviewButtonStyle != "old")) {//temp
                     $(".ivirChartCheckBox").prop('checked', false).removeAttr('checked');
                 }
                 $("#chartpillCB" + indexOfArray).prop('checked', true).attr('checked', 'checked');
@@ -1618,7 +1611,7 @@ var scrollTopPosition = 0; //to get the scroll position of the div before datata
  * @return {}                              
  */
 function createIvirDataTable(task, index, totalArray, grandTotalArray) {
-    dtInitalising = true;
+
 
     var heightOfDT = $(".iviewTableWrapper")[0].offsetHeight + "px";
     var dataTblObj = {};
@@ -1635,10 +1628,14 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
 
     dataTblObj.scrollY = heightOfDT;
     dataTblObj.scrollX = true;
+    // dataTblObj.dom = "lfrtip";
+    // dataTblObj.dom = "pfltip";
+    //dataTblObj.dom = "<'container-fluid'<'row'<'col-md-12 pull-right'p>><'row ivirFilterRow'<'col-md-3'f><'#filterWrapper.col-md-3'><'col-md-6 pull-right'l>>>tip";
 
     dataTblObj.dom = "<'#ivirCustomContainer.container-fluid'<'row'<'#pillsWrapper.col-md-6 col-sm-6'><'col-md-6 col-sm-6 pull-right'l>>><'#ivirMainDataTableWrapper'<'iviewPreTableCustom'>t<'iviewPostTableCustom'>>";
 
     dataTblObj.scrollCollapse = true;
+    // dataTblObj.searching = false;
     dataTblObj.colReorder = false;
     dataTblObj.language = {
         search: "_INPUT_",
@@ -1648,6 +1645,8 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
          * set next/prev icons
          */
         paginate: {
+            //next: '<span class="glyphicon glyphicon-menu-right"></span>',
+            //previous: '<span class="glyphicon glyphicon-menu-left"></span>'
             next: '<span class="material-icons">navigate_next</span>',
             previous: '<span class="material-icons">navigate_before</span>'
         },
@@ -1662,11 +1661,14 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
     dataTblObj.lengthMenu = [10, 25, 50, 75, 100, 250, 500];
     dataTblObj.lengthChange = false;
     dataTblObj.buttons = [
+        /*'copy', 'csv', 'excel', 'pdf', 'print'*/
         {
             extend: 'copyHtml5',
             text: 'Copy',
             title: IVIRCaption,
             exportOptions: {
+                // columns: ':visible',
+
                 stripHtml: true,
                 trim: false,
                 stripNewlines: false,
@@ -1704,7 +1706,9 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
             extend: 'excelHtml5',
             text: 'Excel',
             title: IVIRCaption,
+            // title: "",
             exportHF: ivExportHF,
+            // autoFilter: true,
             exportOptions: {
                 stripHtml: false,
                 trim: false,
@@ -1773,8 +1777,11 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
         {
             extend: 'print',
             text: 'HTML',
+            // title: '',
             title: "",
+            // message: '<center>' + printTitle + '</center> <br> <center>' + IVIRCaption + '</center> <br>',
             exportHF: ivExportHF,
+            // autoPrint: false,
             exportOptions: {
                 stripHtml: false,
                 trim: false,
@@ -1813,6 +1820,10 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
         style: "multi"
     };
     dataTblObj.paging = true;
+    //var pageLength = ""; //"pageLength": 50
+    //pageLength = ivirDataTableApi ? ivirDataTableApi.page.info().length : (ivirMainObj.pageLength || 10);
+
+    //dataTblObj.pageLength = pageLength;
     dataTblObj.pageLength = pageLength = -1;
     dataTblObj.aaSorting = [];
     dataTblObj.orderClasses = false;
@@ -1833,13 +1844,10 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
 
 
         if ($("#hdnIsParaVisible").val() != "hidden") {
-            if(iviewButtonStyle == "old" && requestJSON) {
-                $("#myFiltersLi").removeClass("d-none");
-            }
             $("[id=dvSelectedFilters]").removeClass("d-none");
         }
 
-        // $("#ivirCButtonsWrapper").removeClass("d-none");
+        $("#ivirCButtonsWrapper").removeClass("d-none");
 
         if (appGlobalVarsObject._CONSTANTS.compressedMode) {
 
@@ -1858,30 +1866,22 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
 
         var specialRowCnt = getSpecialRowCount();
 
-        if (dtDbTotalRecords > nxtScrollSize || specialRowCnt > 0 ? ivDatas.length > nxtScrollSize : false)
+        if (getAjaxIviewData && (dtDbTotalRecords > nxtScrollSize || specialRowCnt > 0 ? ivDatas.length > nxtScrollSize : false))
             appendRowsAfterLoad(); //appends remaining records(except default record count - nxtScrollSize) to the grid after datatable initilization
 
 
         autoSplitChecker();
 
+        if (!responsiveColumnWidth) {
+            // $(".gridData").css({ "width": `${visibleTableWidth}px` });
+        }
+
         try {
             recordsExist = this.fnSettings().fnRecordsTotal() > 0;
         } catch (ex) { }
 
-        
-        if(iName == "ad___acs"){
-            $("#dvRefreshParam").parent().prepend(`<a id="newFormForRuntime" href="javascript:void(0)" onclick="javascript:getAxpertStudioAddFormData();" class="btn btn-white btn-color-gray-600 btn-active-primary d-inline-flex align-items-center shadow-sm me-2 dwbIvBtnbtm"><span class="material-icons">add_circle_outline</span>New Form</a>`);
-        }
 
-        if(iName == "ad___cfd"){
-            $("#dvRefreshParam").parent().prepend(`<a id="newFormForRuntime" href="javascript:void(0)" onclick="javascript:callAxpertConfigStudio('addfield','','');" class="btn btn-white btn-color-gray-600 btn-active-primary d-inline-flex align-items-center shadow-sm me-2 dwbIvBtnbtm"><span class="material-icons">add_circle_outline</span>New Field</a>`);
-        }
 
-        if (iName == "ad___acr") {
-            $("#dvRefreshParam").parent().prepend(`<a id="newAxRules" href="javascript:void(0)" onclick="javascript:loadAxRuleEngineForm('true');" class="btn btn-white btn-color-gray-600 btn-active-primary d-inline-flex align-items-center shadow-sm me-2 dwbIvBtnbtm"><span class="material-icons">add_circle_outline</span>New Rule</a>`);
-        }
-
-        scrollToLastKnownDrilldown();
 
         /**
          * datatable 1st time initialization complete post call back hook
@@ -1892,35 +1892,21 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
             axDatatablePostInitComplete(settings, json);
         } catch (ex) { };
 
-        dtInitCompleted = true;
-
         setTimeout(function () {
-            // $(window).trigger("resize");
-
-            
-            // if (!responsiveColumnWidth) {
-            //     forceColumnWidth();
-            // }
-            setTimeout(() => {
-                $("#GridView1 thead").addClass("headSortUiFix");
-                
-                setTimeout(() => {
-                    hideDataTableLoading();
-
-                    if(oldLoadViewName){
-                        smartStepper(true, ("vw" + (new Date().getTime())), "");
-                    }
-                }, 100);
-            }, 0);
+            $(window).trigger("resize");
+            if (!responsiveColumnWidth) {
+                forceColumnWidth();
+            }
         }, 0);
     };
+    if (getAjaxIviewData) {
         var recCount = `<a href="javascript:void(0)" onclick="getIviewRecordCount();" id="getIviewRecordCountVal" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-dismiss="click" data-bs-original-title="Total Row Count" class="d-flex flex-row-auto w-auto flex-center rounded shadow-sm mx-2">
             <span class="material-icons material-icons-style material-icons-3">
                 question_mark
             </span>
         </a>`;
         dataTblObj.preDrawCallback = function (settings) {
-            scrollTopPosition = Math.round($(".dataTables_scrollBody").scrollTop());
+            scrollTopPosition = Math.round($(".dataTables_scrollBody").scrollTop())
         };
         dataTblObj.drawCallback = function (settings) {
             /**
@@ -1939,15 +1925,12 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
 
 
 
-            
-            
-            // if (!responsiveColumnWidth) {
-            //     forceColumnWidth();
-            // }
-            
             drawCallbackPaginationLogic();
-            
-            // scrollToLastKnownDrilldown();
+
+
+            if (!responsiveColumnWidth) {
+                forceColumnWidth();
+            }
 
             /**
              * datatable post in drawCallback hook
@@ -1958,7 +1941,37 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
                 axDatatablePostInDrawCallBack(settings);
             } catch (ex) { };
         }
-    
+    } else {
+        dataTblObj.drawCallback = function (settings) {
+            /**
+             * datatable pre in drawCallback hook
+             * @author Prashik
+             * @Date   2020-05-20T12:08:56+0530
+             */
+            try {
+                axDatatablePreInDrawCallBack(settings);
+            } catch (ex) { };
+
+            enableMobileCards();
+            expandCollapseCardsLogic();
+
+
+
+
+            if (!responsiveColumnWidth) {
+                forceColumnWidth();
+            }
+
+            /**
+             * datatable post in drawCallback hook
+             * @author Prashik
+             * @Date   2020-05-20T12:08:56+0530
+             */
+            try {
+                axDatatablePostInDrawCallBack(settings);
+            } catch (ex) { };
+        }
+    }
     if (isChkBox == "true" || (rowOptionsExist && !false)) {
         dataTblObj.columnDefs = [{
             "targets": 0,
@@ -1971,10 +1984,10 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
         getAllNumericColumns();
         dataTblObj.columnDefs.push({ className: "dt-right", "targets": numericColumns });
     }
-    // if (!responsiveColumnWidth) {
-    //     dataTblObj.autoWidth = false;
-    // }
-    dataTblObj.autoWidth = false;
+    if (!responsiveColumnWidth) {
+        dataTblObj.autoWidth = false;
+    }
+    if (getAjaxIviewData) {
         /**
          * cell creation and manipulation datatable callback function
          * @author Prashik
@@ -2051,18 +2064,16 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
             }
         }
 
+
         /**
          * smartviews column properties initialization
          * @author Prashik
          * @Date   2019-04-11T12:18:30+0530
          */
         dataTblObj.columns = FieldName.map((fld, ind) => {
-            if(isListView && !ivirMainObj?.design && fld != "rowno"){
-                let fldLength = ivHeadRows[fld]["@width"];//tstFields.filter(fld => fld.name == fld)?.[0]?.length || 15;
-
-                ivHeadRows[fld]["@width"] = (fldLength > 51 ? 400 : (fldLength <= 15) ? 150 : (fldLength * 8)).toString();
-            }
-
+            //return {"data": fld, "title": HeaderText[ind]}
+            //return {"data": getPropertyAccess(fld)}
+            //return {"data": getPropertyAccess(fld), "type": colTypes[ivHeadRows[fld]["@type"] || (fld == "rowno" ? "n" : "c")]}
             var width = ivirMainObj?.design?.filter(dsign => dsign.name == fld)?.[0]?.width || ivHeadRows[fld]["@width"] || (isListView && ind == 0 ? listViewCheckBoxSize : minCellWidth);
 
             if (!responsiveColumnWidth) {
@@ -2074,52 +2085,18 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
             }
 
 
-            let returnData = { "data": getPropertyAccess(fld), "name": getPropertyAccess(fld), "width": `${width}px`, "className": colAlign[ivHeadRows[fld]["@align"] || (fld == "rowno" && !enableCardsUi ? "Center" : "Left")] }
-
-            if (!pivotCreated && (designIndex = ivirMainObj?.design?.findIndex(col => col.name == getPropertyAccess(fld))) >= 0) {
-                returnData.order = designIndex + 1;
-            }
-
-            return returnData;
+            return { "data": getPropertyAccess(fld), "name": getPropertyAccess(fld), "width": `${width}px`, "className": colAlign[ivHeadRows[fld]["@align"] || (fld == "rowno" && !enableCardsUi ? "Center" : "Left")] }
         });
 
         if (!responsiveColumnWidth) {
 
+
+
+
+
         }
-
-        if (!pivotCreated && ivirMainObj?.design) {
-            ivirMainObj.design.forEach((col, ind) => $(`table#GridView1 thead th[data-header-name=${col.name}]`)?.attr("data-order", ind + 1)?.data("order", ind + 1));
-
-            $(`table#GridView1 thead th[data-header-name=rowno]`)?.attr("data-order", 0)?.data("order", 0);
-
-            var orderedColumns = $("table#GridView1 thead th").detach();
-
-            orderedColumns = [...orderedColumns].sort((a, b) => {
-                const contentA = !isNaN(dataA = parseInt($(a).data('order'))) ? dataA : +"1".repeat(7);
-                const contentB = !isNaN(dataB = parseInt($(b).data('order'))) ? dataB : +"1".repeat(7);
-                return (contentA < contentB) ? -1 : (contentA > contentB) ? 1 : 0;
-            });
-
-            $("table#GridView1 thead tr").append(orderedColumns);
-
-            try {
-                dataTblObj.columns.filter(col => col.name == "rowno")[0].order = 0;
-            } catch (ex) { }
-
-            dataTblObj.columns = _.sortBy(dataTblObj.columns, ['order']);
-
-            if(hiddenColumnIndex){
-                hiddenColumnIndex = hiddenColumnIndex.map(col=>{
-                    return dataTblObj.columns.findIndex(dtCol=>dtCol.name==FieldName[col]);
-                });
-            }
-        }
-
-        dtColumns = dataTblObj.columns;
 
         $(ivirTable).css({ "width": `${tableWidth}px` });
-
-        nxtScrollSize = ivDatas.length;
 
         /**
          * smartviews 1st page data initialization
@@ -2129,7 +2106,29 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
         dataTblObj.data = ivDatas.length != undefined ? ivDatas.slice(0, nxtScrollSize) : ivDatas;
 
         dataTblObj.deferRender = true;
- 
+    } else {
+        dataTblObj.columnDefs.push({
+            "targets": "_all",
+            "createdCell": (td, cellData, rowData, row, col) => {
+                isSpecialRow = false;
+                var colID = FieldName[col];
+                var rowDataAccess = getPropertyAccess(colID);
+                if (cellData != "" && cellData != "&nbsp;") {
+                    if (col != 0) {
+                        if (HeaderText[col] != "" && HeaderText[col] != "$nbsp;" && enableCardsUi && !cardTemplatingHTML) {
+                            $(td).children().wrap(`<div class="cardLabelContent"></div>`);
+                            $(td).prepend("<label>" + HeaderText[col] + ":</label>");
+                        }
+                    }
+                }
+                try {
+
+                    createdCellEndCustom(td, cellData, rowData, row, col);
+                } catch (ex) { };
+                $(td).attr("data-field-name", colID);
+            }
+        });
+    }
 
     if (responsiveColumnWidth) {
         var widthOfGrid = tableWidth || $("table#GridView1")[0].offsetWidth;
@@ -2185,6 +2184,8 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
 
                     // Update footer
                     $(api.column(presIndex).footer()).html(
+                        //'$' + pageTotal + ' ( $' + total + ' total)'
+                        //commaSeparateNumber(pageTotal) + '<br>Grand Total : ' + commaSeparateNumber(total)
                         '<br />' + (checkNextDBRowsExist ? 'Running' : 'Grand') + '  Total : ' + commaSeparateNumber(total.toFixed(2))
                     );
                 }
@@ -2196,6 +2197,11 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
     } else {
         $("#iviewFrame").addClass("hideDatatableFooter");
     }
+    // dataTblObj.fixedColumns = true;
+    // dataTblObj.fixedColumns = {
+    //     leftColumns: 3,
+    //     rightColumns: 1
+    // };
     if (ivirVisibleColumns.length > 0) {
 
 
@@ -2233,6 +2239,8 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
          */
         dataTblObj.columnDefs.push({ targets: hiddenColumnIndex, visible: false, searchable: searchHiddenColumnsInReports });
         dataTblObj.columnDefs.push({ targets: 0, searchable: false });
+        //dataTblObj.responsive = true;
+        //dataTblObj.fixedHeader = true;
         $.fn.dataTable.moment('DD/MM/YYYY');
         $.fn.dataTable.ext.errMode = 'none';
         $.fn.dataTable.Api.register('order.neutral()', function () {
@@ -2266,7 +2274,13 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
             */
             dataTblObj = $.isEmptyObject(newDtConfig = axUpdateDtConfig(dataTblObj)) ? dataTblObj : newDtConfig;
         } catch (ex) { }
+        // dataTblObj.sScrollX = "200%";
         ivirDataTableApi = $(ivirTable).DataTable(dataTblObj);
+        //new $.fn.dataTable.FixedHeader( ivirDataTableApi );
+        //ivirDataTableApi.columns(hiddenColumnIndex).visible(false);
+        //if we want to add some validation on initialization of datatable use below code
+        //if (task != "clear")
+        //    ivirInitailCheck();
         if (task == "clear") {
             if (pillsAccordionHtml != "") {
                 $("#pillsWrapper").html(pillsAccordionHtml);
@@ -2279,6 +2293,13 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
         groupingCol = colIndex;
         $(".rightClickMenu li.freeze").addClass('d-none');
         var allColsLength = ivirDataTableApi.columns()[0].length;
+
+        // if (isChkBox == "true") {
+        //     dataTblObj.columnDefs = [{ "targets": 0, "orderable": false }, { "visible": false, "targets": colIndex }];
+
+        // } else {
+        //     dataTblObj.columnDefs = [{ "visible": false, "targets": colIndex }];
+        // }
 
         dataTblObj.columnDefs.push({ targets: colIndex, visible: false, searchable: false });
         dataTblObj.columnDefs.push({ targets: 0, searchable: false });
@@ -2315,6 +2336,9 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
                     if (totalArray == undefined || totalArray.length == 0) {
                         presentGroupHtml += '<td colspan="' + allColsLength + '">' + orgnalGrpName + '</td>';
                     } else {
+                        //if ($.inArray(1, totalArray) == -1)
+                        //    presentGroupHtml += '<td class="groupName" colspan="2">' + group + '</td>';
+                        //else
                         presentGroupHtml += '<td class="groupName">' + orgnalGrpName + '</td>';
                         for (var j = 0; j < allColsLength; j++) {
                             if (j == colIndex)
@@ -2352,9 +2376,16 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
                     if (totalArray) {
                         val = api.row(api.row($(rows).eq(colIdx)).index()).data();
                         if (tmpLastFld == "") {
+                            //presGroupCnt++
                             tmpLastFld = group
                         }
                         else if (tmpLastFld !== group) {
+                            //hook to go inside wheb grouping changed so we can add comma logics for old group sum
+                            //for (var i = 0; i < tmpGrpTotalArray.length; i++) {
+
+                            //    var lastTotalVal = $("#groupTotal" + tmpLastFld.replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '') + tmpGrpTotalArray[i]).text();
+                            //    $("#groupTotal" + tmpLastFld.replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '') + tmpGrpTotalArray[i]).text(commaSeparateNumber(lastTotalVal));
+                            //}
                             _groupChanging("")
                             presGroupCnt = 0;
 
@@ -2363,6 +2394,7 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
                         } else {
                             presGroupCnt++;
                         }
+                        //for (var k = 1; k <= totalArray.length; k = k + 3) {
                         var typeCndtnSelected = totalArray[0];
                         var indexSelected = totalArray[1];
                         var valueSelected = getPropertyAccess(totalArray[2]);
@@ -2418,7 +2450,18 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
 
 
                         }
+                        //else {
+                        //    //$("#groupTotal" + group.replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '') + indexSelected).text(0);
+                        //}
+                        //}
                         if (ivirDataTableApi.page.info().length - 1 == colIdx || (ivirDataTableApi.rows().count() - 1 == colIdx && presGroupCnt !== 0)) {
+                            //hook to go inside at the end of the looping so we can add comma logics
+                            //for (var i = 0; i < tmpGrpTotalArray.length; i++) {
+
+                            //    var lastTotalVal = $("#groupTotal" + tmpLastFld.replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '') + tmpGrpTotalArray[i]).text();
+                            //    $("#groupTotal" + tmpLastFld.replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '') + tmpGrpTotalArray[i]).text(commaSeparateNumber(lastTotalVal));
+
+                            //}
                             _groupChanging();
                         }
 
@@ -2448,15 +2491,12 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
 
 
 
-            
-            
-            // if (!responsiveColumnWidth) {
-            //     forceColumnWidth();
-            // }
-            
             drawCallbackPaginationLogic();
-            
-            // scrollToLastKnownDrilldown();
+
+
+            if (!responsiveColumnWidth) {
+                forceColumnWidth();
+            }
 
             /**
              * datatable post in drawCallback hook
@@ -2514,6 +2554,10 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
             }
         });
     }
+    // new $.fn.dataTable.sScrollX( ivirDataTableApi, "10px" );
+    // new $.fn.dataTable.ColReorder( ivirDataTableApi, {
+    //     bRealtime: false
+    // } );
 
     ivirDataTableApi.on('buttons-processing', function (e, indicator) {
         if (!indicator) {
@@ -2522,34 +2566,29 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
     });
 
     ivirDatatable = $(ivirTable).dataTable();
-  
+    if (getAjaxIviewData) {
         var lastScrollTop = 0;
         //if datatable scrolls bottom of the page then check if next db rows exists & call webservice and append the rows to the grid
-        $(".dataTables_scrollBody").on("scroll", delay(function (e) {
+        $(".dataTables_scrollBody").on("scroll", function (e) {
             var st = Math.round($(this).scrollTop());
             if (st > lastScrollTop) { //append rows to grid only if vertical scroll bar is moved
                 var $o = $(e.currentTarget);
                 var scrollBarExists = $(this).hasScrollBar();
-                var scrollAtTheEnd = scrollBarExists ? $o[0].scrollHeight - $o[0].scrollTop - $o[0].clientHeight < 2 : $o[0].scrollHeight - Math.round($o.scrollTop()) < $o.outerHeight();
+                var scrollAtTheEnd = scrollBarExists ? $o[0].scrollHeight - Math.round($o.scrollTop()) <= $o.outerHeight() : $o[0].scrollHeight - Math.round($o.scrollTop()) < $o.outerHeight();
                 if (!pageScrollToEnd && scrollAtTheEnd) {
                     if (checkNextDBRowsExist && nxtScrollSize < dtDbTotalRecords) //if rows exists in the client side and not binded to the grid then append remaining records to the grid
                         appendNextDtRecords();
                     else if (checkNextDBRowsExist) { //call webservice & append next records to the grid based on fetch size
                         showDataTableLoading();
                         setTimeout(function () {
-                            if(checkNextDBRowsExist){
-                                setTimeout(() => {
-                                    getNextDtRecords(dtPageNo + 1);
-                                }, 100);
-                            }else{
-                                hideDataTableLoading();
-                            }
+                            getNextDtRecords(dtPageNo + 1);
                         }, 0)
                     }
                 }
             }
             lastScrollTop = st;
-        }, 10));
+        });
+    }
 
     /**
      * @description: drawCallback pagination logic
@@ -2569,9 +2608,9 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
                 if (autoAppendRecords)
                     setTimeout(function () {
                         appendNextDtRecords();
-
-                        scrollToLastKnownDrilldown();
                     }, 0);//settimeout 0 means add to last of js call stack and execute immediately once call stack queue finishes
+                // else
+                //     console.log(new Date() + ': append completed')
             }
             else if (!checkNextDBRowsExist) { //record count < fetch size then display, ex: Rows: 1-18 of 18
                 recCount = dtDbTotalRecords;
@@ -2594,19 +2633,9 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
                 if (!checkNextDBRowsExist)
                     recCount = dtDbTotalRecords;
             }
-
-            $("#lblCurPage").html('Rows: 1-' + rowsTo + ' of ' + (totRowCount == "" ? `${recCount}${ivirDataTableApi?.search() ? ` (${ivirDataTableApi.rows(":not(.specialRow)", { search: 'applied' }).count()})` : ``}` : "")); //record count > fetch size then display hyperlink button to get record count
-            if(dtInitCompleted){
-                setTimeout(() => {
-                    hideDataTableLoading();
-                }, 0);
-            }
+            $("#lblCurPage").html('Rows: 1-' + rowsTo + ' of ' + (totRowCount == "" ? recCount : "")); //record count > fetch size then display hyperlink button to get record count
+            hideDataTableLoading();
         }
-
-        setTimeout(() => {
-            $("#GridView1 thead").addClass("headSortUiFix");
-        }, 0);
-
         setSmartViewHeight();
     }
 
@@ -2626,7 +2655,7 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
                 $(this).parents("tr").children("td").toggleClass("forceShow");
                 setSmartViewHeight();
             });
-            $("#GridView1 tbody tr[role=row]").css("height", "");
+            $("#GridView1 tbody tr").css("height", "");
         }
     }
 
@@ -2680,6 +2709,12 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
         }
     }
 
+    //var heightOfFinalDT = $(".iviewTableWrapper")[0].offsetHeight - ($("#ivirCustomContainer")[0].offsetHeight + $(".dataTables_scrollHead")[0].offsetHeight + $(".dataTables_scrollFoot")[0].offsetHeight + $(".dataTables_info")[0].offsetHeight + 5);//dataTables_scrollHead & footer as well 
+    //var heightOfFinalDT = $(".iviewTableWrapper")[0].offsetHeight - ($("#ivirCustomContainer")[0].offsetHeight + 5);//dataTables_scrollHead & footer as well 
+    //var heightOfFinalDT = $(".iviewTableWrapper")[0].offsetHeight - ($("#ivirCustomContainer")[0].offsetHeight + $(".dataTables_scrollHead")[0].offsetHeight + $(".dataTables_scrollFoot")[0].offsetHeight - 17);//dataTables_scrollHead & footer as well 
+
+    //var heightOfFinalDT = $(".iviewTableWrapper")[0].offsetHeight - ($("#ivirCustomContainer")[0].offsetHeight + $(".dataTables_scrollHead")[0].offsetHeight + $(".dataTables_scrollFoot")[0].offsetHeight + 10);//dataTables_scrollHead & footer as well 
+
     setSmartViewHeight();
 
     if (fixedColumnsObj !== "" && task != 'group' && task != 'groupApply') {
@@ -2693,7 +2728,7 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
 
 
     var customButtonHtml = "";
-    if (requestJSON) {
+    if (requestJSON == true && iviewButtonStyle != "old") {
 
         if (task == 'group' || task == 'groupApply') {
 
@@ -2727,7 +2762,7 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
         $("#ivirCButtonsWrapper").html(`
             ${iviewButtonStyle != "modern" ? `` : ``}
             ${customButtonHtml}
-        `);
+        `);//.addClass("dropdown-submenu");
     }
     else {
         if (task == 'group' || task == 'groupApply') {
@@ -2757,9 +2792,9 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
 
         if ($("#accordion")) {
             $("#accordion").find(".panel-collapse.collapse").removeClass("in");
-            // if (!requestJSON || iviewButtonStyle == "old") {
-            //     $("#ivirCustomContainer").append($("#accordion"));
-            // }
+            if (!requestJSON || iviewButtonStyle == "old") {
+                $("#ivirCustomContainer").append($("#accordion"));
+            }
         }
 
 
@@ -2771,8 +2806,10 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
         customHtml += '<select name="IvirCustomActions" class="form-select cup" id="IvirCustomActions" data-control="select2">';
         customHtml += '<option value="">Options</option>';
         var tmpObj = {}
+        //var tmpName = [];
         for (i = 0; i < custBtnIVIR.length; i++) {
             var btnObj = custBtnIVIR[i].split('$');
+            //tmpName[i] = btnObj[2];
             var groupName = btnObj[2];
             if (!groupName) groupName = "customActions"
             if (tmpObj[groupName] === undefined) {
@@ -2835,62 +2872,6 @@ function createIvirDataTable(task, index, totalArray, grandTotalArray) {
 }
 
 /**
- * @description Scroll To The Last clicked Drilldown after reopening iview / back button click.
- * @author Prashik
- * @date 09/11/2022
- */
-function scrollToLastKnownDrilldown(){
-    setTimeout(() => {
-        
-        try {
-            var scrollHeight = $(".dataTables_scrollBody")[0].scrollHeight;
-
-            var appUrl = top.window.location.href.toLowerCase().substring("0", top.window.location.href.indexOf("/aspx/"));
-            
-            var drilldownScrollInfo = localStorage["drilldownScrollInfo-" + appUrl] || "{}";
-
-            var loadedScroll = JSON.parse(drilldownScrollInfo)?.[iName]?.scroll || 0;
-            
-            let scrollParams = {};
-            
-            var loadedIndex = -1;
-            if(!$.isEmptyObject(scrollParams = (JSON.parse(drilldownScrollInfo)[iName]?.params || {}))){
-                loadedIndex = _.findIndex(ivDatas.map(oldData=>{
-                const {rowno, ...newData} = oldData;
-                return newData
-            }), ((val)=>{delete val.rowno;return val;})(scrollParams));
-            }
-            
-            
-            if(loadedScroll > -1 && scrollHeight >= loadedScroll){
-                $(".dataTables_scrollBody").scrollTop(loadedScroll);
-            }
-            // else if(loadedIndex > 0 && lazyBinding){
-                
-            // }
-
-            if(loadedIndex > -1){
-                var tr = $(ivirDatatable.api().row( loadedIndex ).node())
-                if(tr.length > 0){
-                    // function fnBlink() {
-                    //     tr.animate({opacity: 0.1}, 1000).animate({opacity: 1}, 100)
-                    // }
-                    $(".loadedRecord").removeClass("loadedRecord").removeClass("tableStripedFix bg-secondary");
-                    // setInterval(fnBlink, 3000);
-                    tr.addClass("loadedRecord").addClass("tableStripedFix bg-secondary");
-
-                    var updatedJSON = JSON.parse(drilldownScrollInfo);
-                    
-                    delete updatedJSON?.[iName];
-        
-                    localStorage["drilldownScrollInfo-" + appUrl] = JSON.stringify(updatedJSON);
-                }
-            }
-        } catch (ex) {}
-    }, 0);
-}
-
-/**
  * Enable Cards Layout For Mobile
  * @author Prashik
  * @Date   2019-05-22T13:21:51+0530
@@ -2916,7 +2897,9 @@ function enableMobileCards() {
  */
 function autoSplitChecker() {
     let isAutoSplit = ``;
-
+    if (!getAjaxIviewData) {
+        isAutoSplit = $("#hdnAutoSplit").val();
+    } else {
         if (ivConfigurations && (!isMobile || isiPad)) {
             try {
                 isAutoSplit = getCaseInSensitiveJsonProperty(ivConfigurations.filter((val, ind) => {
@@ -2925,6 +2908,7 @@ function autoSplitChecker() {
                 })[0], ["PROPSVAL"]).toString();
             } catch (ex) { }
         }
+    }
     if (isAutoSplit != undefined && isAutoSplit.toLowerCase() == "true")
         callParentNew(`assocateIframe(${true})`, 'function');
 }
@@ -2937,7 +2921,6 @@ function autoSplitChecker() {
  * @return {string}                          : samrtviews data access key
  */
 function getPropertyAccess(property) {
-    
     return isPerf && !property.startsWith("@") ? "@" + property.toUpperCase() : property;
 }
 
@@ -2984,7 +2967,7 @@ function generateCellCheckbox({ td, cellData, rowData, row, col, colID, rowDataA
             data-kt-menu-trigger="click" data-kt-menu-placement="bottom-start" data-kt-menu-flip="top-start">
                     <span class="material-icons material-icons-style material-icons-2">arrow_drop_down</span>
                 </a>
-                <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bolder w-200px py-3" data-kt-menu="true" data-popper-placement="bottom-start">
+                <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold w-200px py-3" data-kt-menu="true" data-popper-placement="bottom-start">
                     ${
                         rowOptionsData.split("~").map((opt) => {
                         let opts = opt.split(",");
@@ -2999,7 +2982,7 @@ function generateCellCheckbox({ td, cellData, rowData, row, col, colID, rowDataA
 
                         return `
 							<div class="menu-item px-3">
-                                <a class="menu-link px-3" href="javascript:void(0);" onclick="${onClick}">
+                                <a class="menu-link px-3" href="javascript:void(0);" onclick='${onClick}'>
                                     <span class="menu-icon material-icons material-icons-style material-icons-2">
                                         <span>${optIcon}</span>
                                     </span>
@@ -3013,7 +2996,7 @@ function generateCellCheckbox({ td, cellData, rowData, row, col, colID, rowDataA
         `;
     }
 
-    returnString += `<div class="form-check form-check-sm form-check-custom ms-2"><input class="form-check-input border-gray-500 ${isChkBox == "true" ? "" : "d-none"}" name="chkItem" type="checkbox" onclick="javascript:ChkHdrCheckbox();" ${isChecked ? ` checked="checked" ` : ``} value="${checkboxVal}">${listViewData}</div>`;
+    returnString += `<div class="form-check form-check-sm form-check-custom form-check-solid ms-2"><input class="form-check-input ${isChkBox == "true" ? "" : "d-none"}" name="chkItem" type="checkbox" onclick="javascript:ChkHdrCheckbox();" ${isChecked ? ` checked="checked" ` : ``} value="${checkboxVal}">${listViewData}</div>`;
 
     return returnString;
 }
@@ -3022,7 +3005,7 @@ function generateFieldCheckbox({ td, cellData, rowData, row, col, colID, rowData
     let isChecked = false;
     isChecked = (cellData == "T");
     
-    let returnString = `<div class="form-check form-check-sm form-check-custom form-check-solid ms-3"><input class="form-check-input border-gray-500 listViewDisabledCb" name="${colID}" type="checkbox" ${isChecked ? ` checked="checked" ` : ``} value="${cellData}"></div>`;
+    let returnString = `<div class="form-check form-check-sm form-check-custom form-check-solid ms-3"><input class="form-check-input listViewDisabledCb" name="${colID}" type="checkbox" ${isChecked ? ` checked="checked" ` : ``} value="${cellData}"></div>`;
 
     return returnString;
 }
@@ -3066,7 +3049,7 @@ function generateCellOnClick(elem, optType, optName, row, rowData) {
  */
 function generateViewNavigation({ td, cellData, rowData, row, col, colID, rowDataAccess }) {
     var returnData = ``;
-    var recPos = +row + 1;
+    var recPos = row + 1;
     var pageType = ``;
     if (recPos == 1 && dtDbTotalRecords == 1) {
         pageType = "single";
@@ -3081,7 +3064,7 @@ function generateViewNavigation({ td, cellData, rowData, row, col, colID, rowDat
         pageType = "middle";
     }
 
-    returnData = `&recPos=${recPos}&curPage=${dtPageNo}&pageType=${pageType}`;
+    returnData = `&recPos=${recPos}&curPage=${dtPageNo}&pageType=${pageType}&openerIV=${iName}`;
     return returnData;
 }
 
@@ -3113,6 +3096,7 @@ function generateExpColTree({ td, cellData, rowData, row, col, colID, rowDataAcc
     var newCellData = $(td).html();
     if (cellHeaderConf.root_atype_index && cellHeaderConf.root_account_index && getPropertyAccess(cellHeaderConf.root_account_index)
         == rowDataAccess && rowData[getPropertyAccess(cellHeaderConf.root_atype_index)].toString().toLowerCase() == "group") {
+        //cellData = 
         var prefixStr = rowData[rowDataAccess].match(/^([\s]+)/g);
         prefixStr = prefixStr != null ? prefixStr[0].replace(/ /g, "&nbsp;") : "";
         newCellData = `${prefixStr}<span class='icon-arrows-plus'>${newCellData}</span>`;
@@ -3149,13 +3133,7 @@ function processCellData({ td, cellData, rowData, row, col, colID, rowDataAccess
         rowData[getPropertyAccess("rowno")] = cellData;
     }
 
-    let dtColumnName = dtColumns[col].name;
-
-    if (iName == "inmemdb") {
-        dtColumnName = getColumnName(dtColumnName);        
-    }
-
-    switch (ColumnType[FieldName.indexOf(dtColumnName)]) {
+    switch (ColumnType[col]) {
         case "c":
             if (trimIviewData) {
                 cellData = cellData.trim();
@@ -3191,6 +3169,7 @@ function processCellData({ td, cellData, rowData, row, col, colID, rowDataAccess
             break;
     }
     if (rowData[getPropertyAccess("axrowtype")] && (rowData[getPropertyAccess("axrowtype")] == "stot" || rowData[getPropertyAccess("axrowtype")] == "subhead" || rowData[getPropertyAccess("axrowtype")] == "gtot")) {
+        //specialRows.add(row + 1);
         isSpecialRow = true;
         SetAxFontCondition($(td), "fontstyle=b");
         switch (rowData[getPropertyAccess("axrowtype")]) {
@@ -3210,9 +3189,9 @@ function processCellData({ td, cellData, rowData, row, col, colID, rowDataAccess
     }
     else if (bulkDownloadEnabled) {
 
-        if (FieldName[FieldName.indexOf(dtColumnName)] == "axp_attach") {
+        if (FieldName[col] == "axp_attach") {
             //check if is grid attachment
-            var gridAttachmentFieldNameRegex = /(dc[0-9]+_image+)|(axp_nga_){1}[a-zA-Z0-9]+/i;
+            var gridAttachmentFieldNameRegex = /(dc[0-9]+_image+)|(axp_nga_){1}[a-zA-Z0-9]+/i;///dc[0-9]+_[a-zA-Z]+/g;/dc2_image/axp_nga_*
 
             cellData = cellData.split(",").map((val) => {
                 val = val.trim();
@@ -3255,24 +3234,16 @@ function processCellData({ td, cellData, rowData, row, col, colID, rowDataAccess
                 }
                 return val;
             }).join(",");
-        } else if (requestJSON && FieldName[FieldName.indexOf(dtColumnName)].toLowerCase().indexOf("axpfile_") == 0) {
+        } else if (requestJSON && FieldName[col].toLowerCase().indexOf("axpfile_") == 0) {
             cellData = cellData.split(",").map((val, ind, data) => {
                 val = val.trim();
 
-                var fieldNameShort = FieldName[FieldName.indexOf(dtColumnName)].substring(8);
-                var fieldNamePrefix = FieldName[FieldName.indexOf(dtColumnName)].substring(0, 7);
+                var fieldNameShort = FieldName[col].substring(8);
+                var fieldNamePrefix = FieldName[col].substring(0, 7);
 
-                var attachFilePath = getCaseInSensitiveJsonProperty(rowData, getPropertyAccess(fieldNamePrefix + "Path_" + fieldNameShort)).toString() || "";
-                
-                if(attachFilePath){
-                    var tempAttachFilePath = (attachFilePath.replace(/\*/g, "\\\\").split("\\").filter((val) => { return (val) }).join("\\\\") || "");
-                }                
-
-                if (tempAttachFilePath) {
-                    if(attachFilePath.indexOf("\\\\") == 0){
-                        attachFilePath = "\\\\\\\\" + tempAttachFilePath;
-                    }
-
+                // var attachFieldname = "";
+                var attachFilePath = getCaseInSensitiveJsonProperty(rowData, getPropertyAccess(fieldNamePrefix + "Path_" + fieldNameShort)).toString().replace(/\*/g, "\\\\").split("\\").filter((val) => { return (val) }).join("\\\\") || "";
+                if (attachFilePath) {
                     attachFilePath += "\\\\";
                 }
                 attachFileName = CheckUrlSpecialChars(CheckUrlSpecialChars(val));
@@ -3299,6 +3270,7 @@ function processCellData({ td, cellData, rowData, row, col, colID, rowDataAccess
             });
             cellData = cellDataObj.html();
         }
+        //}
     }
 
 
@@ -3408,115 +3380,14 @@ function getDateBasedOnCulture(dateStr) {
  * @return {string}                                       :cell data html
  */
 function generateCellHyperlink({ td, cellData, rowData, row, col, colID, rowDataAccess }) {
-    var listViewCbCellData = $(td).find("input:checkbox")?.hasClass("listViewDisabledCb");
+    //var returnString =  typeof cellData != "undefined" && cellData != null ? cellData : ``;
+    var listViewCbCellData = $($(td).html()).find("input").hasClass("listViewDisabledCb");
     var returnString = cellData;
 
     var hLinkData;
-
-    let dtColumnName = dtColumns[col].name;
-
-    if (iName == "inmemdb") {
-        dtColumnName = getColumnName(dtColumnName);        
-    }
-
-    if (returnString && HideColumn[FieldName.indexOf(dtColumnName)] == "false") {
-        if (!(cellData.indexOf("<") == 0 && cellData.indexOf(">") == cellData.length - 1) && !(cellData.indexOf("<") > -1 && (cellData.indexOf("</") > -1 || cellData.indexOf("/>") > -1))) {
-
-            cellData = CheckSpecialChars(cellData);
-        }
-
-        let commonOnClick = `clickOnDemand($(this), true);`
-
+    if (returnString && HideColumn[col] == "false") {
         //hyperlink action
-        if (hLinkData = ivHeadRows[colID]["@hlaction"]) {
-            if (returnString.toString() != "0") {
-
-                returnString = `<a href="javascript:void(0)" onclick="${commonOnClick}" ${className}>${(listViewCbCellData ? $(td).html() : cellData)}</a>`;
-            }
-
-        }
-        //hyperlink
-        else if ((hLinkData = ivHeadRows[colID]["@hlink"]) && returnString != "Grand Total" && (rowData[getPropertyAccess("axrowtype")] != "stot" || rowData[getPropertyAccess("axrowtype")] != "subhead")) {
-            var className = "";
-            rowData[getPropertyAccess("axrowtype")] == "subhead" ? className = " class=ivHeaderLink" : className = " class=l2";
-            var hLinkPageType = hLinkData.substr(0, 1);
-            hLinkData = hLinkData.substr(1);
-            if (hLinkPageType == ":") {
-                try {
-                    hLinkData = rowData[getPropertyAccess(hLinkData)];
-                } catch (ex) { }
-                hLinkPageType = "";
-                if (hLinkData) {
-                    hLinkPageType = hLinkData.substr(0, 1);
-                    hLinkData = hLinkData.substr(1);
-                }
-            }
-            if (returnString.toString() != "0") {
-                switch (hLinkPageType) {
-                    case "t":
-                    case "i":
-                        {
-                            returnString = `<a href="javascript:void(0)" onclick="${commonOnClick}" ${className}>${(listViewCbCellData ? $(td).html() : cellData)}</a>`;
-                        }
-                        break;
-                    case "p":
-                        {
-                            if(hLinkData.indexOf("HP") == 0){
-                                hLinkData = hLinkData.substr(2);
-                                
-                                returnString = `<a href="javascript:void(0)" onclick="${commonOnClick}" ${className}>${(listViewCbCellData ? $(td).html() : cellData)}</a>`;
-                            }                            
-                        }
-                        break;
-                }
-            }
-        } else if (iName == "response" && colID == "rname") {
-            returnString = `<a onclick="${commonOnClick}" class="edit-resp" data-status="true">${listViewCbCellData ? $(td).html() : cellData}</a>`;
-        }
-    }
-    if (returnString.startsWith("<a ")) {
-        commonOnClick = `clickOnDemand($(this), true, \`${cellData}\`, \`${row}\`, \`${FieldName.indexOf(rowDataAccess)}\`);`
-
-        $(td).addClass("isHyperlinkUI");
-
-        returnString =  $(`<dummy>${returnString}</dummy>`).find("a:not('.customLink')").attr("onclick", commonOnClick).attr("data-data", cellData).attr("data-row", row).attr("data-col", FieldName.indexOf(rowDataAccess)).parents("dummy").html();
-    }
-
-    if (returnString == cellData && listViewCbCellData && !$(td).hasClass("isHyperlinkUI")) {   
-        $(td).find("input:checkbox").prop("disabled", true);
-        
-        returnString = $(td).html();
-    }
-
-    return returnString;
-}
-
-
-function clickOnDemand(elem, open = true, cellData, row, col){
-    let td = $(elem);
-    typeof cellData == "undefined" && (cellData = td.data("data").toString());
-    typeof row == "undefined" && (row = td.data("row"));
-    typeof col == "undefined" && (col = td.data("col"));
-    row = +row;
-    col = +col;
-    let rowData = ivDatas[row];
-    let colID = getPropertyAccess(FieldName[col]);
-    let rowDataAccess = getPropertyAccess(colID);
-
-    var listViewCbCellData = $(td).find("input:checkbox")?.hasClass("listViewDisabledCb");
-    var returnString = cellData;
-
-    var hLinkData;
-
-    let dtColumnName = dtColumns[col].name;
-
-    if (iName == "inmemdb") {
-        dtColumnName = getColumnName(dtColumnName);        
-    }
-
-    if (returnString && HideColumn[FieldName.indexOf(dtColumnName)] == "false") {
         var _params = ``;
-        var _paramsObj = {};
         var _lastMapParam = ``;
         var _lastMapCol = ``;
         var _lastMapValue = ``;
@@ -3547,6 +3418,7 @@ function clickOnDemand(elem, open = true, cellData, row, col){
                     _lastMapValue = CheckUrlSpecialChars(_lastMapValue);
                 }
                 if (existingColData && ivHeadRows[_lastMapCol]["@type"] && ivHeadRows[_lastMapCol]["@type"] == "d") {
+                    //_lastMapValue = dateCellProcessor(_lastMapValue);
                     if (_lastMapValue != "") {
                         _lastMapValue = _lastMapValue.split(" ")[0];
                         if (_lastMapValue.split("-").length > 2)
@@ -3559,31 +3431,31 @@ function clickOnDemand(elem, open = true, cellData, row, col){
                     }
                 }
             }
+            // _params += encodeURI("&" + _lastMapParam + "=" + _lastMapValue);
             _params += "&" + _lastMapParam + "=" + _lastMapValue;
-            _paramsObj[_lastMapCol] = _lastMapValue;
         });
 
-        
-        
 
+
+
+        ////REPLACE # not &# with %23
+        //var reg = new RegExp('(?<!&)#', 'g');
+        //_params = _params.replace(reg, '%23');
         _params = _params.split("#").map((val, ind) => {
             return val.endsWith("&") && ind != (_params.split("#").length - 1) ? val + "#" : (ind != _params.split("#").length - 1 ? val + "%23" : val);
         }).join("");
         _params = _params.replace(/\+/g, '%2b');
+        ////Below replacing %3C to &l%3Ct; as '<' symbol even in encoded format cannot be recieved in the ivtstload and ivtoivload page
         _params = _params.replace(/%3C/g, 'l%3tC;');
         cellData = cellData.replace(/&nbsp;/g, " ");
         if (!(cellData.indexOf("<") == 0 && cellData.indexOf(">") == cellData.length - 1) && !(cellData.indexOf("<") > -1 && (cellData.indexOf("</") > -1 || cellData.indexOf("/>") > -1))) {
-            
+
             cellData = CheckSpecialChars(cellData);
         }
         var refresh = ``;
         var isRefreshParent = `false`;
         var isRefreshParentAction = `false`;
-        var listViewCbCellDataProp = ()=>{
-            if(listViewCbCellData){
-                $(td).find("input:checkbox").prop("checked", !$(td).find("input:checkbox").prop("checked"));
-            }
-        };
+        var listViewCbCellDataProp = listViewCbCellData ? "$(this).find(\"input:checkbox\").prop(\"checked\", !$(this).find(\"input:checkbox\").prop(\"checked\"));" : "";
         if (typeof axp_refresh != "undefined" && axp_refresh && axp_refresh == "true") {
             refresh = "&axp_refresh=" + Convert.ToString(iviewObj.Axp_refresh);
         } else if (ivHeadRows[colID]["@refresh"]) {
@@ -3591,22 +3463,16 @@ function clickOnDemand(elem, open = true, cellData, row, col){
         } else if (ivHeadRows[colID]["@parentrefresh"]) {
             isRefreshParent = ivHeadRows[colID]["@parentrefresh"].toLowerCase();
         }
-
-        //hyperlink action
         if (hLinkData = ivHeadRows[colID]["@hlaction"]) {
             if (returnString.toString() != "0") {
                 try {
                     if (ivActions && ivActions[hLinkData]) {
                         isRefreshParentAction = ivActions[hLinkData].r1.param1.Refresh.toLowerCase();
                     } else if (ivScripts && ivScripts[hLinkData]) {
-                        // isRefreshParentAction = ivScripts[hLinkData].r1.param1.Refresh.toLowerCase();
+                        isRefreshParentAction = ivScripts[hLinkData].r1.param1.Refresh.toLowerCase();
                     }
                 } catch (ex) { }
-
-                {
-                    listViewCbCellDataProp();
-                }
-                returnString = "<a href='javascript:void(0);' onclick=\"javascript:callHLaction('" + ivHeadRows[colID]["@hlaction"] + "'," + parseInt(rowData[getPropertyAccess("rowno")], 10) + ",'" + iName + "','" + _urlProp + "');setRefreshParent('" + isRefreshParentAction + "');\" class=l3>" + (listViewCbCellData ? $(td).html() : cellData) + "</a>";
+                returnString = "<a href=\"" + listViewCbCellDataProp + "javascript:callHLaction('" + ivHeadRows[colID]["@hlaction"] + "'," + parseInt(rowData[getPropertyAccess("rowno")], 10) + ",'" + iName + "','" + _urlProp + "');setRefreshParent('" + isRefreshParentAction + "');\" class=l3>" + (listViewCbCellData ? $(td).html() : cellData) + "</a>";
             }
 
         }
@@ -3638,165 +3504,56 @@ function clickOnDemand(elem, open = true, cellData, row, col){
                             } else {
                                 baseLink = "ivtstload.aspx?tstname=";
                             }
-
-                            var navigationData = (ivHeadRows[colID]["@hltype"] == "load" ? generateViewNavigation({ td, cellData, rowData, row, col, colID, rowDataAccess }) : "") + `&openerIV=${iName}&isIV=${!isListView}`;
+                            var navigationData = generateViewNavigation({ td, cellData, rowData, row, col, colID, rowDataAccess });
                             var fullNavigationData = baseLink + "" + hLinkData + _params + _hLinkType + _torecid + navigationData;
                             if (isPopup) {
-                                {
-                                    listViewCbCellDataProp();
-                                }
-                                if(open){
-                                    callParentNew("loadFrame()", "function");
-                                }
-                                returnString = "<a href='javascript:void(0)' onclick='javascript:setListViewDictionary(viewNavigationData[\"" + colID + "\"], " + (row + 1) + ");SetColumnName(\"" + _lastMapCol + "\",\"" + parseInt(row, 10) + "\",\"" + true + "\");setRefreshParent(\"" + isRefreshParent + "\");LoadPopPage(\"" + fullNavigationData + "\",\"\",\"\",\"" + _urlProp + "\");' data-url=\"" + fullNavigationData + "\" class=\"handCur l2\"  >" + (listViewCbCellData ? $(td).html() : cellData) + "</a>";
+                                fullNavigationData += refresh;
+                                viewNavigationData[colID] ? "" : viewNavigationData[colID] = [];
+                                viewNavigationData[colID][row] = (fullNavigationData).replace("ivtstload.aspx?", "tstruct.aspx?");
+
+                                returnString = "<a href='javascript:void(0)' onclick='" + listViewCbCellDataProp + "javascript:setListViewDictionary(viewNavigationData[\"" + colID + "\"], " + (row + 1) + ");SetColumnName(\"" + _lastMapCol + "\",\"" + parseInt(row, 10) + "\",\"" + true + "\");setRefreshParent(\"" + isRefreshParent + "\");LoadPopPage(\"" + fullNavigationData + "\",\"\",\"\",\"" + _urlProp + "\");' data-url=\"" + fullNavigationData + "\" class=\"handCur l2\"  >" + (listViewCbCellData ? $(td).html() : cellData) + "</a>";
 
 
                             } else {
-                                {
-                                    listViewCbCellDataProp();
-                                }
-                                if(open){
-                                    callParentNew("loadFrame()", "function");
-                                }
-                                returnString = "<a href='javascript:void(0)' onclick='" + (ivHeadRows[colID]["@hltype"] == "load" ? ("setListViewDictionary(viewNavigationData[\"" + colID + "\"], " + (row + 1) + ");") : "") + "SetColumnName(\"" + _lastMapCol + "\",\"" + parseInt(row, 10) + "\",\"" + true + "\");LoadTstFrmIview(\"" + "./" + fullNavigationData + "\",\"" + hLinkData + "\",\"" + _urlProp + "\");' data-url=\"" + fullNavigationData + "\" " + className + " >" + (listViewCbCellData ? $(td).html() : cellData) + "</a>";
-
-
-                            }
-
-                            if(ivHeadRows[colID]["@hltype"] == "load"){
                                 viewNavigationData[colID] ? "" : viewNavigationData[colID] = [];
+                                viewNavigationData[colID][row] = (fullNavigationData).replace("ivtstload.aspx?", "tstruct.aspx?");
 
-                                let isTstNavReplaced = fullNavigationData.indexOf("tstruct.aspx?") > -1;
+                                returnString = "<a href='javascript:void(0)' onclick='" + listViewCbCellDataProp + "javascript:setListViewDictionary(viewNavigationData[\"" + colID + "\"], " + (row + 1) + ");SetColumnName(\"" + _lastMapCol + "\",\"" + parseInt(row, 10) + "\",\"" + true + "\");LoadTstFrmIview(\"" + "./" + fullNavigationData + "\",\"" + hLinkData + "\",\"" + _urlProp + "\");' data-url=\"" + fullNavigationData + "\" " + className + " >" + (listViewCbCellData ? $(td).html() : cellData) + "</a>";
 
-                                viewNavigationData[colID][row] = (fullNavigationData).replace("ivtstload.aspx?", "tstruct.aspx?") + (isTstNavReplaced ? `&openerIV=${iName/* || hLinkData*/}&isIV=${!isListView}` : ``);
 
-                                ivDatas.forEach((data, index, originalArray) => {
-                                    if(typeof viewNavigationData[colID][index] == "undefined"){
-                                        let linkTd = null;
-                                        try {
-                                            if((linkTd = $(`#GridView1 tbody tr[role=row]:eq(${index}) [data-field-name=${colID}] [onclick^=clickOnDemand\\(\\$\\(this]:eq(0)`))?.length > 0){
-                                                var dataURL = $(`<div>${clickOnDemand(linkTd, false)}</div>`).find("a[data-url]:first").data("url") || "";
-
-                                                // if(dataURL){
-                                                    viewNavigationData[colID][index] = dataURL;
-
-                                                    let isTstNavReplaced = fullNavigationData.indexOf("tstruct.aspx?") > -1;
-
-                                                    viewNavigationData[colID][row] = (fullNavigationData).replace("ivtstload.aspx?", "tstruct.aspx?") + (isTstNavReplaced ? `&openerIV=${iName/* || hLinkData*/}&isIV=${!isListView}` : ``);
-
-                                                    if(ivHeadRows[colID]["@hltype"] == "load"){
-                                                        viewNavigationData[colID][index] = viewNavigationData[colID][index].replace("ivtstload.aspx?", "tstruct.aspx?")(isTstNavReplaced ? `&openerIV=${iName/* || hLinkData*/}&isIV=${!isListView}` : ``);
-                                                    }
-                                                // }                                                
-                                            }else{
-                                                viewNavigationData[colID][index] = "";
-                                            }
-                                        } catch (ex) {
-                                            viewNavigationData[colID][index] = "";
-                                        }
-                                    }
-                                });
                             }
                         }
                         break;
                     case "i":
                         {
                             if (isPopup) {
-                                {
-                                    listViewCbCellDataProp();
-                                }
-                                if(open){
-                                    callParentNew("loadFrame()", "function");
-                                }
-                                returnString = "<a href='javascript:void(0)' onclick='javascript:LoadPopPage(\"ivtoivload.aspx?ivname=" + hLinkData + _params + _hLinkType + "\",\"\",\"\",\"" + _urlProp + "\");' data-url=\"ivtoivload.aspx?ivname=" + hLinkData + _params + _hLinkType + "\" class=\"handCur l2\"  >" + (listViewCbCellData ? $(td).html() : cellData) + "</a>";
+                                returnString = "<a href='javascript:void(0)' onclick='" + listViewCbCellDataProp + "javascript:LoadPopPage(\"ivtoivload.aspx?ivname=" + hLinkData + _params + _hLinkType + "\",\"\",\"\",\"" + _urlProp + "\");' data-url=\"ivtoivload.aspx?ivname=" + hLinkData + _params + _hLinkType + "\" class=\"handCur l2\"  >" + (listViewCbCellData ? $(td).html() : cellData) + "</a>";
                             } else {
                                 var _urlStr = `ivtoivload.aspx?ivname=` + hLinkData;
                                 _params = _params.replace(/%26/g, "--.--");
-
-                                {
-                                    listViewCbCellDataProp();
-                                }
-                                if(open){
-                                    callParentNew("loadFrame()", "function");
-                                }
-                                returnString = "<a href='javascript:void(0)' onclick=\"javascript:OpenIviewFromIv('" + _urlStr + "','" + _params + _hLinkType + "','" + hLinkData + "','" + _urlProp + "');\"" + className + ">" + (listViewCbCellData ? $(td).html() : cellData) + "</a>";
+                                returnString = "<a href='javascript:void(0)' onclick=\"" + listViewCbCellDataProp + "javascript:OpenIviewFromIv('" + _urlStr + "','" + _params + _hLinkType + "','" + hLinkData + "','" + _urlProp + "');\"" + className + ">" + (listViewCbCellData ? $(td).html() : cellData) + "</a>";
                             }
-                        }
-                        break;
-                    case "p":
-                        {
-                            if(hLinkData.indexOf("HP") == 0){
-                                hLinkData = hLinkData.substr(2);
-                                if (isPopup) {
-                                    {
-                                        listViewCbCellDataProp();
-                                    }
-                                    returnString = "<a href='javascript:void(0)' onclick='javascript:LoadPopPage(\"htmlPages.aspx?load=" + hLinkData + _params + _hLinkType + "\",\"\",\"\",\"" + _urlProp + "\");' data-url=\"htmlPages.aspx?load=" + hLinkData + _params + _hLinkType + "\" class=\"handCur l2\"  >" + (listViewCbCellData ? $(td).html() : cellData) + "</a>";
-                                } else {
-                                    var _urlStr = `htmlPages.aspx?load=` + hLinkData;
-                                    _params = _params.replace(/%26/g, "--.--");
-
-                                    {
-                                        listViewCbCellDataProp();
-                                    }
-                                    returnString = "<a href='javascript:void(0)' onclick=\"javascript:ReloadIframe('" + _urlStr + _params + _hLinkType + "');\"" + className + ">" + (listViewCbCellData ? $(td).html() : cellData) + "</a>";
-                                }
-                            }                            
                         }
                         break;
                 }
             }
         } else if (iName == "flist" && colID == "reportname") {
-            {
-                listViewCbCellDataProp();
-            }
-            returnString = "<a href='javascript:void(0);' onclick=\"ReloadIframe('iviewBuilder.aspx?ivname=" + rowData[getPropertyAccess("name")] + "');\">" + (listViewCbCellData ? $(td).html() : cellData) + "</a>";
+            returnString = "<a href='iviewBuilder.aspx?ivname=" + rowData[getPropertyAccess("name")] + "' onclick=\"" + listViewCbCellDataProp + "\">" + (listViewCbCellData ? $(td).html() : cellData) + "</a>";
         } else if (iName == "response" && colID == "rname") {
-            {
-                listViewCbCellDataProp();
-            }
-            returnString = `<a href='javascript:void(0);' style="cursor:pointer" onclick="ShowDimmer(true);parent.displayBootstrapModalDialog('Edit Responsibility', 'md', '430px', true, '../aspx/AddEditResponsibility.aspx?status=true&amp;action=edit&amp;name=${cellData}', true)" class="edit-resp" data-status="true">${listViewCbCellData ? $(td).html() : cellData}</a>`;
+            returnString = `<a style="cursor:pointer" onclick="${listViewCbCellDataProp}ShowDimmer(true);parent.displayBootstrapModalDialog('Edit Responsibility', 'md', '430px', true, '../aspx/AddEditResponsibility.aspx?status=true&amp;action=edit&amp;name=${cellData}', true)" class="edit-resp" data-status="true">${listViewCbCellData ? $(td).html() : cellData}</a>`;
         }
     }
     if (returnString.startsWith("<a ")) {
         $(td).addClass("isHyperlinkUI");
     }
 
-    if (returnString == cellData && listViewCbCellData && !$(td).hasClass("isHyperlinkUI")) {   
-        $(td).find("input:checkbox").prop("disabled", true);
-        
+    if (returnString == cellData && listViewCbCellData && !$(td).hasClass("isHyperlinkUI")) {
         returnString = $(td).html();
     }
 
-    
-    if(open){
-        try {
-            var appUrl = top.window.location.href.toLowerCase().substring("0", top.window.location.href.indexOf("/aspx/"));
-            localStorage["drilldownScrollInfo-" + appUrl] = JSON.stringify({
-                ...JSON.parse(localStorage["drilldownScrollInfo-" + appUrl] || "{}"),
-                [iName]: {
-                    scroll: Math.round($(".dataTables_scrollBody").scrollTop()),
-                    rowIndex: row,
-                    params: (function(){
-                        if(rowData["recordid"]){
-                            return {
-                                recordid: rowData["recordid"]
-                            };
-                        }else if(!$.isEmptyObject(_paramsObj)){
-                            return _paramsObj;
-                        }else{
-                            return rowData;
-                        }
-                    })()
-                }//Math.round($(".dataTables_scrollBody").scrollTop())
-            });
-        } catch (ex) {}
-        
-        $(returnString).click();
-    }else{
-        return returnString;
-    }
+    return returnString;
 }
+
 
 /**
  * set conditional formatting for cell
@@ -3927,7 +3684,21 @@ function setSmartViewHeight() {
         $(".dataTables_scrollFoot").length ? dtScrollFootOffsetHeight = $(".dataTables_scrollFoot")[0].offsetHeight : "";
     } catch (ex) { }
 
-    var tableWrapperOuterHeight = $(".iviewTableWrapper ").outerHeight(true) - $(".iviewTableWrapper ").height();  
+    var tableWrapperOuterHeight = $(".iviewTableWrapper ").outerHeight(true) - $(".iviewTableWrapper ").height();
+
+    var reqNextPageHeight = 0;
+    //try {
+    //    $("#requestNextRecords").length ? reqNextPageHeight = $("#requestNextRecords")[0].offsetHeight : "";
+    //} catch (ex) { }
+
+    var pillContainerHeight = 0;
+    if (!requestJSON || iviewButtonStyle == "old") {
+        try {
+            //$("#ivirCustomContainer").length ? pillContainerHeight = $("#ivirCustomContainer")[0].offsetHeight : "";
+            $("#dvPills").length ? pillContainerHeight = $("#dvPills")[0].offsetHeight : "";
+
+        } catch (ex) { }
+    }
 
     var subCaptionHeight = 0;
     try {
@@ -3946,12 +3717,15 @@ function setSmartViewHeight() {
     } catch (ex) { }
 
     //latest logic
-    var reduceHeightOfFinalDT = Math.round(($("#breadcrumb-panel").outerHeight(true) + $("#ivContainer").outerHeight(true) + $(".iviewPreTableCustom").outerHeight(true) + $(".iviewPostTableCustom").outerHeight(true) + $(".dataTables_scrollHead").outerHeight(true) + dtScrollFootOffsetHeight + subCaptionHeight + pageInformationNew + viewTabsHeight + tableWrapperOuterHeight));
+    var reduceHeightOfFinalDT = Math.round(($("#breadcrumb-panel").outerHeight(true) + $("#ivContainer").outerHeight(true) + $(".iviewPreTableCustom").outerHeight(true) + $(".iviewPostTableCustom").outerHeight(true) + $(".dataTables_scrollHead").outerHeight(true) + dtScrollFootOffsetHeight + reqNextPageHeight + pillContainerHeight + subCaptionHeight + pageInformationNew + viewTabsHeight + tableWrapperOuterHeight));
     if (requestJSON && iviewButtonStyle != "old") {
+        // // if ($("#ivContainer").outerHeight(true))
+        // //     reduceHeightOfFinalDT += 14;
     }
     else if (!$("#ivContainer").outerHeight(true))
         reduceHeightOfFinalDT -= 14;
 
+    // // reduceHeightOfFinalDT += 3;//added pixels to fix double scroll because of card layout changes
 
     $('.dataTables_scrollBody').height() > reduceHeightOfFinalDT ? $('.dataTables_scrollBody').css({ "max-height": `calc(100vh - ${reduceHeightOfFinalDT}px)`, "height": `calc(100vh - ${reduceHeightOfFinalDT}px)` }) : $('.dataTables_scrollBody').css({ "height": `calc(100vh - ${reduceHeightOfFinalDT}px)`, "max-height": `calc(100vh - ${reduceHeightOfFinalDT}px)` });
 
@@ -3980,7 +3754,9 @@ function ivirMoreFilters(pillindex = -1) {
     var moreFilters = ``;
     var prevDrawnMoreFilters = $("#newViewTabId .filter-body-cont").parent();
     if (prevDrawnMoreFilters.length == true) {
+        //if(pillindex != -1){
         prevDrawnMoreFilters.find(".filter-body-cont").attr("data-pillindex", pillindex).data("pillindex", pillindex);
+        //}
         moreFilters = prevDrawnMoreFilters.detach();
         initAdvFilters = false;
     }
@@ -4001,7 +3777,7 @@ function ivirMoreFilters(pillindex = -1) {
                     var headerName = $(this.header()).attr("id").replace("GridView1_ctl01_", "");
                     if (headerName != "" && headerName != "rowno") {
                         var colType = ivirColumnTypeObj[headerName];
-                        moreFilters += `<tr data-coltype="${colType}" data-field="${headerName}" data-index="${index}"><td><label class="form-label col-form-label pb-1 fw-boldest">${headerCaption}</label></td><td class="d-flex col-12">${getInnerAdvFilter(headerName, colType, index)}</td></tr>`;
+                        moreFilters += `<tr data-coltype="${colType}" data-field="${headerName}" data-index="${index}"><td><label class="form-label col-form-label">${headerCaption}</label></td><td class="d-flex col-12">${getInnerAdvFilter(headerName, colType, index)}</td></tr>`;
                     }
 
                 }
@@ -4024,6 +3800,7 @@ function ivirMoreFilters(pillindex = -1) {
             moreFilters += `No Columns to filter.`
         }
     }
+    // displayBootstrapModalDialog("Advanced Filters", "lg", "330px", false, moreFilters, "", initMoreFiltersAddOns);
     return moreFilters;
 
 }
@@ -4080,6 +3857,8 @@ function initMoreFiltersAddOns() {
         pillindex = -1;
     }
 
+    // var modalHeader = eval(callParent("divModalHeader", "id") + ".getElementById('divModalHeader')");
+    // modalHeader.innerText = callParentNew('lcm')[409];
     if (initAdvFilters) {
         $(".moreFiltersInput.characterFilter").each(function () {
             var source = [...new Set(
@@ -4102,13 +3881,33 @@ function initMoreFiltersAddOns() {
             $(this).select2({
                 allowClear: true,
                 data: processedList,
-                dropdownParent: document.getElementById("newViewTabId"),
                 placeholder: appGlobalVarsObject.lcm[441],
-                tags: true,
-                tokenSeparators: ['`']
             }).on('select2:select', (selectEv) => {
 
             });
+
+            // $(this).tokenfield({
+            //     autocomplete: {
+            //         source,
+            //         delay: 100
+            //     },
+            //     showAutocompleteOnFocus: true,
+            //     delimiter: (requestJSON ? "`" : "♣|♣"),
+            //     beautify: false,
+            //     createTokensOnBlur: true
+            // })
+
+
+            // $('.gridDataFilter .tokenfield').on('tokenfield:createtoken', function (event) {
+            //     if ($(this).find("input.moreFiltersInput").tokenfield('getTokens').filter(function (vals) { return vals.value == event.attrs.value }).length > 0) {
+            //         event.preventDefault();
+            //     }
+            // });
+
+            // $(".filter-body-cont").off("scroll.closeAutoComp").on("scroll.closeAutoComp", function () {
+            //     $(".filter-body-cont .ui-autocomplete-input").autocomplete("close");
+            // });
+
         });
 
         AddDatePicker("newViewTabId");
@@ -4190,6 +3989,12 @@ function generateSearchString(returnType = "string") {
                 if (minValField.val() != "" || maxValField.val() != "") {
                     var columnVals = [];
                     try {
+                        //if(dataIsKey){
+                        var currentIndex = getPropertyAccess(minValField.data("field"));
+                        //}
+                        //else{
+                        //    var currentIndex = FieldName.indexOf(minValField.data("field")) - (rowTypeExist ? 1 : 0);
+                        //}
                         columnVals = generateUniqueColumnVals($(this).data("coltype"), currentIndex + ":name");
                         if (minValField.val() == "") {
                             minValField.val(Math.min(...columnVals) || minVal);
@@ -4213,10 +4018,18 @@ function generateSearchString(returnType = "string") {
                 var maxVal = "";
                 var minValField = $(this).find("input.moreFiltersInput.dateFilter:nth(0)");
                 var maxValField = $(this).find("input.moreFiltersInput.dateFilter:nth(1)");
+                //var minVal = parseFloat(minValField.val()) || 0;
+                //var maxVal = parseFloat(maxValField.val()) || 0;
+
                 if (minValField.val() != "" || maxValField.val() != "") {
                     var columnVals = [];
                     try {
+                        //if(dataIsKey){
                         var currentIndex = getPropertyAccess(minValField.data("field"));
+                        //}
+                        //else{
+                        //    var currentIndex = FieldName.indexOf(minValField.data("field")) - (rowTypeExist ? 1 : 0);
+                        //}
                         columnVals = generateUniqueColumnVals($(this).data("coltype"), currentIndex + ":name");
                         if (minValField.val() == "") {
                             minValField.datepicker("setDate", new Date(Math.min(...columnVals) || minVal));
@@ -4234,6 +4047,7 @@ function generateSearchString(returnType = "string") {
                     searchString += `${minValField.data("field")}:=>${selectField.val()}:::`;
                     searchJSON[`${minValField.data("field")}`] = selectField.val();
                 }
+                //else if (minVal != 0 || maxVal != 0) {
                 else if (minVal != "" || maxVal != "") {
                     searchString += `${minValField.data("field")}:=><=${minVal}=><=${maxVal}=>:::`;
                     searchJSON[`${minValField.data("field")}`] = {};
@@ -4259,6 +4073,7 @@ function generateSearchString(returnType = "string") {
 function pushSearchStringtoFilters(objectVal, inputType = "string") {
     var searchInput = $("#ivInSearchInput");
     var searchStringOBJ = inputType == "string" ? searchInput.val().split(":::").sort() : Object.keys(objectVal);
+    //var filteredArray = [];
     $(searchStringOBJ).each(function (index, val) {
         if (inputType == "string") {
             val = val.trim();
@@ -4269,6 +4084,9 @@ function pushSearchStringtoFilters(objectVal, inputType = "string") {
             var key = val;
             var value = typeof objectVal[key] == "string" ? objectVal[key].trim() : objectVal[key];
         }
+        //filteredArray.push(key);
+        //var baseRow = $(`tr[data-field^=${key.split(" ")[0]}]`);
+        //var baseRow = $(`tr[data-field^=${key}]`);
         var baseRow = $(`tr[data-field]`).filterByData('field', key);
         baseRow.each(function (index, val) {
 
@@ -4276,17 +4094,23 @@ function pushSearchStringtoFilters(objectVal, inputType = "string") {
 
                 switch ($(val).data("coltype")) {
                     case "c":
+                        //baseRow.find
                         var inputField = $(val).find(".moreFiltersInput.characterFilter:nth(0)");
+                        //inputField.tokenfield('setTokens', value.split("| "));
                         value = value.split("`");
                         if (requestJSON) {
+                            // inputField.tokenfield('setTokens', value.split("`"));
                             inputField.val(value).trigger("change");
                         } else {
+                            // inputField.tokenfield('setTokens', value.split("♣|♣"));
                             inputField.val(value).trigger("change");
                         }
                         break;
                     case "n":
                         var minValField = $(this).find("input.moreFiltersInput.numericFilter:nth(0)");
                         var maxValField = $(this).find("input.moreFiltersInput.numericFilter:nth(1)");
+                        //value = value.startsWith("<=") ? value.substr(2, value.length) : value;
+                        //value = value.endsWith("=>") ? value.substr(0, value.length - 1) : value;
                         if (typeof value == "object") {
                             minValField.val(value['min']);
                             maxValField.val(value['max']);
@@ -4305,6 +4129,8 @@ function pushSearchStringtoFilters(objectVal, inputType = "string") {
                             maxValField.val(value['max']);
                             selectField.val("customOption");
                         } else if (value.indexOf("=><=") > -1) {
+                            //value = value.startsWith("<=") ? value.substr(2, value.length) : value;
+                            //value = value.endsWith("=>") ? value.substr(0, value.length - 2) : value;
                             var startEndSplit = value.substr(2, value.length - 4).split("=><=")
                             minValField.val(startEndSplit[0]);
                             maxValField.val(startEndSplit[1]);
@@ -4370,6 +4196,8 @@ function createMainEventsOnGrid() {
 
         if (event.which == 3) {
             event.preventDefault();
+            // var idx = ivirDataTableApi.column(this).index();
+            // var headtitle = ivirDataTableApi.column(idx).header();
             var elem = $(event.target).find('.rightClickMenuIcn');
             var idx = ivirDataTableApi.column(elem.parents('th')).index();
             createRightClick(event, idx);
@@ -4827,6 +4655,7 @@ function highlightAndBindUpDown(presElem, indexOfCol, bindedElement) {
                 return; // exit this handler for other keys
         }
 
+        // e.preventDefault(); // prevent the default action (scroll / move caret)
 
     });
 
@@ -4880,11 +4709,13 @@ function ivirInitailCheck() {
     ivirDataTableApi.row(0).every(function (rowIdx, tableLoop, rowLoop) {
         var data = this.data();
         for (var i = 0; i < data.length; i++) {
+            //var headerName = $(ivirDataTableApi.column(i).header()).text().trim();
             var patt = /<a[^>]*>([\s\S]*?)/g;
             var res = patt.test(typeof data[i] == "object" && data[i] != null ? data[i].display : (data[i] != null ? data[i] : ""));
             if (res)
                 initialChkup.isAnchor = i;
         }
+        // ... do something with data(), or this.node(), etc
     });
 }
 
@@ -4939,13 +4770,13 @@ function highlightUnBindEvents() {
  */
 
 saveViewActionRef = (titleName, task, okFunction, showValuesOnOpen, isEditPill) => {
-    if (task == "group" || task == 'highlight') {
+    if (task == "group" || (task == 'chart' && (!requestJSON || iviewButtonStyle == "old")) || task == 'highlight') {
         var ind = showValuesOnOpen == undefined ? undefined : showValuesOnOpen[1];
         if (!ivirDuplicateCheck(task, isEditPill, ind)) {
             return false;
         }
     }
-    if (task == 'chart') {
+    if (task == 'chart' && requestJSON && iviewButtonStyle != "old") {
         var ind = showValuesOnOpen == undefined ? undefined : showValuesOnOpen[1];
         if (ivirMainObj && ivirMainObj.key != "charts" && !ivirChartNewDuplicateCheck(task, isEditPill, ind)) {
             return false;
@@ -4963,25 +4794,16 @@ saveViewActionRef = (titleName, task, okFunction, showValuesOnOpen, isEditPill) 
             var pillAlreadyChecked = $("input#" + presentAction + "pillCB" + indexOfPill).is(":checked");
 
             if (!okFunction(indexOfPill, pillAlreadyChecked)) {
-                if (presentAction == "chart") {
-                    try {
-                        callParentNew("Charts", "id").dispatchEvent(new CustomEvent("close"));
-                    } catch (error) {}                    
-                } else {
-                    return false;
-                }
+                return false;
             }
 
             if (task == "chart") {
                 $("[data-dropdown-value=save]:eq(0)").click();
             }
         }
-        else {
-            okFunction();
-        }
     } else {
         if (task == "group" || task == 'chart' || task == 'column' || task == 'download') {
-            if (okFunction()) {
+            if (!okFunction()) {
                 return false;
             }
 
@@ -4993,7 +4815,7 @@ saveViewActionRef = (titleName, task, okFunction, showValuesOnOpen, isEditPill) 
                 ivirCustomErrMsg($("#viewCaption"), errorMessages.emptyField);
                 return false;
             }
-            else if (($("#viewName").val().toLowerCase() == "main" && !isListView) || (requestJSON && $("#viewName").val().toLowerCase() == "charts")) {
+            else if (($("#viewName").val().toLowerCase() == "main" && !isListView) || (requestJSON && iviewButtonStyle != "old" && $("#viewName").val().toLowerCase() == "charts")) {
                 ivirCustomErrMsg($("#viewName"), callParentNew('lcm')[483]);
                 return false;
             }
@@ -5015,7 +4837,7 @@ saveViewActionRef = (titleName, task, okFunction, showValuesOnOpen, isEditPill) 
                         ivirMainObj.highlight ||
                         ivirMainObj.design
                     ) {
-                        window[okFunction]($("#viewName").val(), $("#viewCaption").val(), $('#viewAplyTo option:selected').val(), $("#asDefaultView").prop("checked"));
+                        window[okFunction]($("#viewName").val(), $("#viewCaption").val(), $('#viewAplyTo option:selected').val());
                     } else {
                         showAlertDialog("warning", 3011, "client", appGlobalVarsObject.lcm[335] + " " + "\"" + ($("#viewCaption").val() || "") + "\" " + appGlobalVarsObject.lcm[301].toLowerCase() + " ");
                         return false;
@@ -5032,12 +4854,14 @@ saveViewActionRef = (titleName, task, okFunction, showValuesOnOpen, isEditPill) 
     }
 
     setSmartViewHeight();
+    isOpenSmartStepper = false;
 }
 
 cancelViewActionRef = (titleName) => {
     if (titleName == "Edit View" && !_.isEmpty(ivirMainObj) && !_.isEmpty(bkpIvirMainObj)) {
         ivirMainObj = _.cloneDeep(bkpIvirMainObj);
     }
+    isOpenSmartStepper = false;
 }
 
 onContentReadyRef = (task, showValuesOnOpen, isEditPill) => {
@@ -5057,8 +4881,8 @@ onContentReadyRef = (task, showValuesOnOpen, isEditPill) => {
     }
     if (task == 'column') {
         requestTstructFieldsObj();
-        if (!isListView) {
-            if ($("#ivirshowHideColumnWrapper .ivirLabelWrapper input:checkbox:not(:checked)").length > 0)
+        if (!isListView || $("#hdnListViewFieldsJSON").val() == "") {
+            if ($(".ivirLabelWrapper input:checkbox:not(:checked)").length > 0)
                 $("#showAllColumns").prop('checked', false);
 
             else
@@ -5077,7 +4901,7 @@ onContentReadyRef = (task, showValuesOnOpen, isEditPill) => {
         var iframe = document.createElement('iframe');
 
         $(iframe).attr("id", "columnDesigner");
-        $(iframe).addClass("col-xs-12 col-sm-12 col-md-12 col-lg-12 h-250px");
+        $(iframe).addClass("col-xs-12 col-sm-12 col-md-12 col-lg-12");
         $(iframe).css("padding", "0px");
         $(iframe).attr("frameborder", "0");
         $(iframe).attr("allowtransparency", "True");
@@ -5088,6 +4912,7 @@ onContentReadyRef = (task, showValuesOnOpen, isEditPill) => {
         $(iframeWindow.document.getElementsByTagName("body")).attr("oncontextmenu", "return false;").addClass("topSplitDivision").append("<div id='GridView2Wrapper' />");
 
         iframeWindow.dwbiName = iName;
+        // ShowDimmer(true);
         loadAndCall({
             files: {
                 css: [
@@ -5101,14 +4926,14 @@ onContentReadyRef = (task, showValuesOnOpen, isEditPill) => {
                     "/Js/thirdparty/jquery/3.1.1/jquery.min.js",
                     "/Js/noConflict.min.js",
                     "/ThirdParty/lodash.min.js",
-                    "/Js/common.min.js?v=118",
+                    "/Js/common.min.js?v=98",
                     "/ThirdParty/DataTables-1.10.13/media/js/jquery.dataTables.min.js",
                     "/ThirdParty/DataTables-1.10.13/media/js/dataTables.bootstrap.min.js",
                     "/ThirdParty/DataTables-1.10.13/extensions/FixedHeader/js/dataTables.fixedHeader.min.js",
                     "/ThirdParty/DataTables-1.10.13/extensions/ColReorderWithResize/ColReorderWithResize.min.js?v=1",
                     "/ThirdParty/DataTables-1.10.13/extensions/Extras/moment.min.js",
                     "/ThirdParty/DataTables-1.10.13/extensions/Extras/datetime-moment.js",
-                    "/Js/iviewColumnBuilder.min.js?v=14"
+                    "/Js/iviewColumnBuilder.min.js?v=12"
                 ]
             },
             callBack() {
@@ -5221,7 +5046,7 @@ onContentReadyRef = (task, showValuesOnOpen, isEditPill) => {
             $("#grpName").val(name);
             $("#grpColName option[data-index=" + column + "]").prop('selected', true).change();
             if (totalArray) {
-                for (var i = 1; i < totalArray.length; i = i + 3) {
+                for (var i = 1; i < totalArray.length; i = i + 2) {
                     var columnIndex = totalArray[i];
                     var functionType = totalArray[i - 1];
                     if (i !== 1)
@@ -5239,7 +5064,7 @@ onContentReadyRef = (task, showValuesOnOpen, isEditPill) => {
             var column = ivirMainTypeObj.cl;
             var value = ivirMainTypeObj.v;
             var chartType = ivirMainTypeObj.t;
-            $("#ivirChartName").val(name).prop("disabled", true);
+            $("#ivirChartName").val(name);
             $("#ivirChartCol option[data-index=" + FieldName.indexOf(column) + "]").prop('selected', true).change();
             $("#ivirChartVal option[data-index=" + FieldName.indexOf(value) + "]").prop('selected', true).change();
             $("#ivirChartsRow .ivirChartButton").removeClass('active');
@@ -5310,10 +5135,8 @@ function highlightTheFirstFld() {
 function checkForPillsLength(type) {
     if (type == "group" || type == "highlight" || type == "chart" || type == "filter") {
         var pillsArr = ivirMainObj[type];
-        if (type != "chart") {
+        if (requestJSON && iviewButtonStyle != "old" && type != "chart") {
             maxNoOfPills = 1;
-        } else {
-             maxNoOfPills = 5;
         }
         if (pillsArr && pillsArr.length >= maxNoOfPills) {
             if (maxNoOfPills < 1) {
@@ -5321,10 +5144,11 @@ function checkForPillsLength(type) {
                 showAlertDialog("warning", msg);
             }
             $("#IvirActions").val("");
-            if (type != "chart") {
+            if (requestJSON && iviewButtonStyle != "old" && type != "chart") {
                 maxNoOfPills = 5;
             }
             return true;
+            $(".okBtn").addClass('disabled').prop('disabled', true);
         }
     }
 }
@@ -5380,7 +5204,7 @@ function ivirbindEvents(act) {
 
     if (action == 'column') {
         $(document).on('change', '#showAllColumns, .showAllColumns', function (event) {
-            if (!isListView) {
+            if (!isListView || $("#hdnListViewFieldsJSON").val() == "") {
                 if ($(this).is(':checked')) {
                     $("#ivirshowHideColumnWrapper div.checkbox input:not('.disabled')").prop('checked', true);
                 } else {
@@ -5413,7 +5237,7 @@ function ivirbindEvents(act) {
             }
         });
         $(document).on('change', '#ivirshowHideColumnWrapper .customCheckBox', function (event) {
-            if (!isListView) {
+            if (!isListView || $("#hdnListViewFieldsJSON").val() == "") {
                 if (!$(this).is(':checked')) {
                     $("#showAllColumns").prop('checked', false);
                 } else {
@@ -5532,7 +5356,6 @@ function ivirbindEvents(act) {
             /* select2 and tooltip init required */
             $("select.stepperSelect.totalAggrFunction, select.stepperSelect.totalSource").select2({
                 allowClear: true,
-                dropdownParent: document.getElementById("newViewTabId"),
                 placeholder: appGlobalVarsObject.lcm[441],
             });
 
@@ -5630,7 +5453,7 @@ function ivirMoveUpDown(direction, parentId) {
  */
 function ivirshowHideColumns(hvColumns = []) {
     requestTstructFieldsObj();
-    if (!isListView) {
+    if (!isListView || $("#hdnListViewFieldsJSON").val() == "") {
         if ($("#ivirshowHideColumnWrapper div.checkbox input:checked").length == 0 && hvColumns.length == 0) {
             showAlertDialog("warning", errorMessages.columnSelection);
             return false;
@@ -5673,7 +5496,7 @@ function ivirshowHideColumns(hvColumns = []) {
             viewLoadedColumns = false;
         }
 
-        if (requestJSON) {
+        if (requestJSON && iviewButtonStyle != "old") {
             if (hvColumns.length == 1 && hvColumns[0] == "!") {
                 hvColumns = [];
                 viewLoadedColumns = false;
@@ -5683,8 +5506,12 @@ function ivirshowHideColumns(hvColumns = []) {
             }
             else if (hvColumns.length == 0) {
                 delete ivirMainObj.hiddenColumns;
+                $("#newViewcolumns").val("");
             }
 
+            if (($("#newViewTabId").is(":visible") || isOpenSmartStepper) && ivirMainObj.hiddenColumns && ivirMainObj.hiddenColumns.length > 0) {
+                $("#newViewcolumns").val(JSON.stringify({ hidden: ivirMainObj.hiddenColumns }));
+            }
         }
 
         if (!($("#newViewTabId").is(":visible") || isOpenSmartStepper)) {
@@ -5759,11 +5586,8 @@ function ivirshowHideColumns(hvColumns = []) {
                     $("#hdnLvSelectedHyperlink").val(hvColumns[0].hyperlink);
                     $("#hdnLvChangedStructure").val("");
 
-                    var viewName = $(".viewtabEdit").parents("li a.active").find(".viewtabEdit").data("name") || "main";
+                    var viewName = $(".viewtabEdit").parents("li.active").find(".viewtabEdit").data("name") || "main";
                     loadViewName = viewName;
-                    if(oldLoadViewName){
-                        oldLoadViewName = "";
-                    }
                     $("#button1").trigger('click');
                 }
             }
@@ -5775,7 +5599,7 @@ function ivirshowHideColumns(hvColumns = []) {
             viewLoadedColumns = false;
         }
 
-        if (requestJSON) {
+        if (requestJSON && iviewButtonStyle != "old") {
             if (hvColumns.length == 1 && hvColumns[0] == "!") {
                 hvColumns = [];
                 viewLoadedColumns = false;
@@ -5785,15 +5609,15 @@ function ivirshowHideColumns(hvColumns = []) {
             }
             else if (hvColumns.length == 0) {
                 delete ivirMainObj.visibleColumns;
+                $("#newViewcolumns").val("");
+            }
+
+            if (($("#newViewTabId").is(":visible") || isOpenSmartStepper) && ivirMainObj.visibleColumns && ivirMainObj.visibleColumns.length > 0) {
+                $("#newViewcolumns").val(JSON.stringify({ visible: ivirMainObj.visibleColumns }));
             }
         }
     }
-
-    if (!responsiveColumnWidth) {
-        setTimeout(() => {
-            forceColumnWidth();
-        }, 0);
-    }
+    return true;
 }
 
 function ivirDesignColumn() {
@@ -5803,10 +5627,14 @@ function ivirDesignColumn() {
 
     ivirMainObj.design = ivColDesignJSON || [];
 
-    if (document.getElementById("IvirActions").value == "design") {        
+    if ($("#newViewTabId").is(":visible") || isOpenSmartStepper) {
+        $("#newViewdesign").val(newBtnGroup.design.value);
+    }
+    else {
+
         var username = callParentNew("mainUserName");
 
-        ivirMainObj["applyTo"] = $('#viewAplyTo option:selected').val() || username;
+        ivirMainObj["applyTo"] = username;
         ivirMainObj["groupName"] = "main";
         ivirMainObj["caption"] = ivirMainObj["groupName"];
 
@@ -5861,7 +5689,7 @@ function ivirSortColumns(fldSortingArray = []) {
         viewLoadedSort = false;
     }
 
-    if (requestJSON) {
+    if (requestJSON && iviewButtonStyle != "old") {
         if (fldSortingArray.length == 1 && fldSortingArray[0] == "!") {
             fldSortingArray = [];
             viewLoadedColumns = false;
@@ -5979,6 +5807,7 @@ function ivirRowGrouping(indexOfArray, isPillAlreadyChecked) {
     //neeed to validate for added rows(function....)
 
     if ($("#newViewTabId").is(":visible") || isOpenSmartStepper) {
+        // $("#newViewsort").val(searchJSON);
     } else {
         if ((indexOfArray === undefined) || isPillAlreadyChecked)
             createIvirDataTable("group", colIndex, groupTotalArray, allGrandTotal);
@@ -6080,14 +5909,14 @@ function getChartHtml(isFromEdit) {
     htmlToShow += '<div id="ivirchartsCndtn">';
     htmlToShow += ' <div id="ivirgraph" class="row chartCndtnWrapper">';
     htmlToShow += '<div class="col-md-4 col-sm-12">'
-    htmlToShow += '<label for="ivirChartName" class="form-label col-form-label pb-1 fw-boldest required">' + callParentNew('lcm')[413] + '</label>';
+    htmlToShow += '<label for="ivirChartName" class="form-label col-form-label required">' + callParentNew('lcm')[413] + '</label>';
     htmlToShow += '<a href="javascript:void(0)" class="ms-2 align-middle icon-arrows-question" tabindex="-1" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-dismiss="click" data-bs-original-title="' + callParentNew('lcm')[431] + '"><span class="material-icons material-icons-style material-icons-3">help_outline</span></a>';
     htmlToShow += '<div class="input-group">';
     htmlToShow += '<input required type="text" maxlength="20" class="form-control dialogInptFld fldNme" id="ivirChartName">';
     htmlToShow += '</div>';
     htmlToShow += '</div>'
     htmlToShow += '     <div class="col-md-4 col-sm-12">';
-    htmlToShow += '       <label for="ivirChartCol" class="form-label col-form-label pb-1 fw-boldest required">' + callParentNew('lcm')[420] + '</label>';
+    htmlToShow += '       <label for="ivirChartCol" class="form-label col-form-label required">' + callParentNew('lcm')[420] + '</label>';
     htmlToShow += '<a href="javascript:void(0)" class="ms-2 align-middle icon-arrows-question" tabindex="-1" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-dismiss="click" data-bs-original-title="' + callParentNew('lcm')[432] + '"><span class="material-icons material-icons-style material-icons-3">help_outline</span></a>';
     var numericFldsHtml = "";
     var charFldsHml = "";
@@ -6103,7 +5932,7 @@ function getChartHtml(isFromEdit) {
     htmlToShow += '</div>';
 
     htmlToShow += '<div class="col-md-4 col-sm-12">';
-    htmlToShow += '   <label for="ivirChartVal" class="form-label col-form-label pb-1 fw-boldest required">' + callParentNew('lcm')[414] + '</label>';
+    htmlToShow += '   <label for="ivirChartVal" class="form-label col-form-label required">' + callParentNew('lcm')[414] + '</label>';
     htmlToShow += '<a href="javascript:void(0)" class="ms-2 align-middle icon-arrows-question" tabindex="-1" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-dismiss="click" data-bs-original-title="' + callParentNew('lcm')[433] + '"><span class="material-icons material-icons-style material-icons-3">help_outline</span></a>';
     htmlToShow += '<div class="input-group">';
     htmlToShow += '  <select class="form-select chartSelect dialogSlctFld" id="ivirChartVal">';
@@ -6129,17 +5958,17 @@ function getGroupHtml(isFromEdit) {
     isFromEdit = isFromEdit || false;
     var htmlToShow = "";
     htmlToShow = ' <div class="form-group ' + (($("#newViewTabId").is(":visible") || isOpenSmartStepper) ? `d-none` : ``) + '">';
-    htmlToShow += '<label for="grpName" class="form-label col-form-label pb-1 fw-boldest required">' + callParentNew('lcm')[413] + '</label>';
+    htmlToShow += '<label for="grpName" class="form-label col-form-label required">' + callParentNew('lcm')[413] + '</label>';
     htmlToShow += ' <a href="javascript:void(0)" class="ms-2 align-middle icon-arrows-question" tabindex="-1" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-dismiss="click" data-bs-original-title="' + callParentNew('lcm')[430] + '"><span class="material-icons material-icons-style material-icons-3">help_outline</span></a>';
     htmlToShow += '<input required type="text" class="form-control fldNme dialogInptFld" maxlength="20" id="grpName" value="' + (($("#newViewTabId").is(":visible") || isOpenSmartStepper) ? `a` : ``) + '">';
     htmlToShow += '</div>';
     htmlToShow += '<div class="form-group">';
-    htmlToShow += '<label for="grpColName" class="form-label col-form-label pb-1 fw-boldest required">' + callParentNew('lcm')[420] + '</label>';
+    htmlToShow += '<label for="grpColName" class="form-label col-form-label required">' + callParentNew('lcm')[420] + '</label>';
     htmlToShow += '<a href="javascript:void(0)"  class="ms-2 align-middle icon-arrows-question" tabindex="-1" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-dismiss="click" data-bs-original-title="' + callParentNew('lcm')[429] + '" ><span class="material-icons material-icons-style material-icons-3">help_outline</span></a>';
     htmlToShow += '<select class="form-select stepperSelect dialogSlctFld" id="grpColName">';
     htmlToShow += '<option value="">' + callParentNew('lcm')[441] + '</option>';
 
-    var allColumnsArray = getAllColumns(hiddenColumnIndex, true, "group");
+    var allColumnsArray = getAllColumns("", isFromEdit, "group");
     htmlToShow += allColumnsArray[2];
     htmlToShow += ' </select>';
     htmlToShow += '</div>';
@@ -6157,6 +5986,7 @@ $(document).on('change', '.totalAggrFunction', function (event) {
     var elemVal = elem.val();
     var lastSelectedVal = elem.data('lastSelected');
     if (lastSelectedVal && lastSelectedVal == 'count') {
+        // $('.totalAggrFunction option[value="SEL1"]')
         $(".totalAggrFunction").append('<option value="count">Count</option>');
         elem.find('option[value="count"]').last().remove();
     } else {
@@ -6184,7 +6014,7 @@ $(document).on('change', '.totalAggrFunction', function (event) {
                 exceptionArray = indexeSelected;
             }
         }
-        var allColumns = getAllColumns([...exceptionArray, ...hiddenColumnIndex], true);
+        var allColumns = getAllColumns(exceptionArray);
         if (elemVal == "sum" || elemVal == "max" || elemVal == "min" || elemVal == "avg") {
             //means only numeric are allowed
             elem.parents('.ivirTotalCndtn').find('select.totalSource').append(allColumns[0]).trigger("change");
@@ -6255,7 +6085,6 @@ function ivirAddTotalCndtn(indexToAdd) {
     $('#ivirTotalCndtn' + indexToAdd + ' select').prop('disabled', false);
     $('#ivirTotalCndtn' + indexToAdd + ' select').select2({
         allowClear: true,
-        dropdownParent: document.getElementById("newViewTabId"),
         placeholder: appGlobalVarsObject.lcm[441],
     });
     $("#ivirTotalCndtnWrapper").data('cndtns', addedRowsArray).attr('data-cndtns', "[" + addedRowsArray + "]");
@@ -6354,12 +6183,12 @@ function getHighlightHtml(type, index, isFromEdit) {
     htmlToShow = '<div id="ivirHighlightWrapper">';
     htmlToShow += '<div class="row">';
     htmlToShow += '<div class="form-group col-md-6 col-sm-6 ' + (($("#newViewTabId").is(":visible") || isOpenSmartStepper) ? `d-none` : ``) + '">';
-    htmlToShow += '<label for="ivirHltName" class="form-label col-form-label pb-1 fw-boldest required">' + callParentNew('lcm')[413] + '</label>';
+    htmlToShow += '<label for="ivirHltName" class="form-label col-form-label required">' + callParentNew('lcm')[413] + '</label>';
     htmlToShow += '<a href="javascript:void(0)" class="ms-2 align-middle icon-arrows-question" tabindex="-1" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-dismiss="click" data-bs-original-title="' + callParentNew('lcm')[435] + '"><span class="material-icons material-icons-style material-icons-3">help_outline</span></a>';
     htmlToShow += '<input required type="text" maxlength="20" value="' + (($("#newViewTabId").is(":visible") || isOpenSmartStepper) ? `a` : ``) + '" class="form-control fldNme dialogInptFld" id="ivirHltName">';
     htmlToShow += '</div>';
     htmlToShow += '<div class="form-group col-md-6 col-sm-6">';
-    htmlToShow += '<label for="ivirHighlightType" class="form-label col-form-label pb-1 fw-boldest required">' + callParentNew('lcm')[396] + '</label>';
+    htmlToShow += '<label for="ivirHighlightType" class="form-label col-form-label required">' + callParentNew('lcm')[396] + '</label>';
     htmlToShow += '<a href="javascript:void(0)" class="ms-2 align-middle icon-arrows-question" tabindex="-1" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-dismiss="click" data-bs-original-title="' + callParentNew('lcm')[434] + '"><span class="material-icons material-icons-style material-icons-3">help_outline</span></a>';
     htmlToShow += '<select class="form-select stepperSelect dialogSlctFld" id="ivirHighlightType">';
     htmlToShow += '<option value="">' + callParentNew('lcm')[441] + '</option>';
@@ -6371,7 +6200,7 @@ function getHighlightHtml(type, index, isFromEdit) {
     htmlToShow += ' </div>';
     htmlToShow += '<div class="row">';
     htmlToShow += '<div class="form-group col-md-6 col-sm-6">';
-    htmlToShow += '<label for="ivirbgColor" class="form-label col-form-label pb-1 fw-boldest required">' + callParentNew('lcm')[425] + '</label>';
+    htmlToShow += '<label for="ivirbgColor" class="form-label col-form-label required">' + callParentNew('lcm')[425] + '</label>';
     htmlToShow += '<a href="javascript:void(0)"  class="ms-2 align-middle icon-arrows-question" tabindex="-1" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-dismiss="click" data-bs-original-title="' + callParentNew('lcm')[436] + '" ><span class="material-icons material-icons-style material-icons-3">help_outline</span></a>';
     htmlToShow += '<div class="input-group">';
     htmlToShow += '<input required value="#000000" class="col-md-8 col-sm-8 col-xs-8 form-control colorPicker" id="ivirbgColorValue">';
@@ -6379,7 +6208,7 @@ function getHighlightHtml(type, index, isFromEdit) {
     htmlToShow += '</div>';
     htmlToShow += '</div>';
     htmlToShow += '<div class="form-group col-md-6 col-sm-6">';
-    htmlToShow += '<label for="ivirtxtColor" class="form-label col-form-label pb-1 fw-boldest required">' + callParentNew('lcm')[426] + '</label>';
+    htmlToShow += '<label for="ivirtxtColor" class="form-label col-form-label required">' + callParentNew('lcm')[426] + '</label>';
     htmlToShow += '<a href="javascript:void(0)"  class="ms-2 align-middle icon-arrows-question" tabindex="-1" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-dismiss="click" data-bs-original-title="' + callParentNew('lcm')[437] + '"><span class="material-icons material-icons-style material-icons-3">help_outline</span></a>';
     htmlToShow += '<div class="input-group">';
     htmlToShow += '<input required value="#000000" class="col-md-8 col-sm-8 col-xs-8 form-control colorPicker" id="ivirtxtColorValue">';
@@ -6390,23 +6219,23 @@ function getHighlightHtml(type, index, isFromEdit) {
     htmlToShow += '<legend class="mt-4">' + callParentNew('lcm')[424] + '</legend>';
     htmlToShow += '<div class="row">'
     htmlToShow += '<div class="form-group col-md-4 col-sm-4">';
-    htmlToShow += '<label for="ivirHighlightCol" class="form-label col-form-label pb-1 fw-boldest required">' + callParentNew('lcm')[420] + '</label>';
+    htmlToShow += '<label for="ivirHighlightCol" class="form-label col-form-label required">' + callParentNew('lcm')[420] + '</label>';
     htmlToShow += '<a href="javascript:void(0)" class="ms-2 align-middle icon-arrows-question" tabindex="-1" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-dismiss="click" data-bs-original-title="' + callParentNew('lcm')[438] + '"><span class="material-icons material-icons-style material-icons-3">help_outline</span></a>';
     htmlToShow += ' <select class="form-select stepperSelect dialogSlctFld" id="ivirHighlightCol">';
     htmlToShow += '  <option value="">' + callParentNew('lcm')[441] + '</option>';
-    var allColumnsArray = getAllColumns(hiddenColumnIndex, true);
+    var allColumnsArray = getAllColumns("", isFromEdit);
     htmlToShow += allColumnsArray[2];
     htmlToShow += '</select>';
     htmlToShow += '</div>';
     htmlToShow += '<div class="form-group col-md-4 col-sm-4">';
-    htmlToShow += '<label for="ivirHighlightCndtn" class="form-label col-form-label pb-1 fw-boldest required">' + callParentNew('lcm')[424] + '</label>';
+    htmlToShow += '<label for="ivirHighlightCndtn" class="form-label col-form-label required">' + callParentNew('lcm')[424] + '</label>';
     htmlToShow += '<a href="javascript:void(0)" class="ms-2 align-middle icon-arrows-question" tabindex="-1" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-dismiss="click" data-bs-original-title="' + callParentNew('lcm')[439] + '"><span class="material-icons material-icons-style material-icons-3">help_outline</span></a>';
     htmlToShow += '<select class="form-select stepperSelect dialogSlctFld" id="ivirHighlightCndtn">';
     htmlToShow += '<option value="">' + callParentNew('lcm')[441] + '</option>';
     htmlToShow += '</select>';
     htmlToShow += '</div>';
     htmlToShow += '<div class="form-group col-md-4 col-sm-4">';
-    htmlToShow += '<label for="ivirHltValue" class="form-label col-form-label pb-1 fw-boldest required">' + callParentNew('lcm')[414] + '</label>';
+    htmlToShow += '<label for="ivirHltValue" class="form-label col-form-label required">' + callParentNew('lcm')[414] + '</label>';
     htmlToShow += '<a href="javascript:void(0)" class="ms-2 align-middle icon-arrows-question" tabindex="-1" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-dismiss="click" data-bs-original-title="' + callParentNew('lcm')[440] + '"><span class="material-icons material-icons-style material-icons-3">help_outline</span></a>';
     htmlToShow += '<input required type="" maxlength="255" class="form-control dialogInptFld" id="ivirHltValue">';
     htmlToShow += '</div>';
@@ -6487,6 +6316,7 @@ function ivirHighlightRow(indexOfArray, isPillChecked, applyThePill) {
         var ivirbgColor = ivirMainHltObj.bc;
         var ivirtxtColor = ivirMainHltObj.tc;
         var colIndex = ivirMainHltObj.cl;
+        // var colvalue = ivirMainHltObj.cv;
         var colvalue = getPropertyAccess(ivirDataTableApi.context[0].aoColumns[colIndex].mData);
         var ivirHighlightCndtn = ivirMainHltObj.cn;
         var ivirHltValue = ivirMainHltObj.v;
@@ -6795,15 +6625,16 @@ function createPills(type, pillToHighlight) {
     if (!ivirMainObj.highlight && !ivirMainObj.group && !ivirMainObj.filter)
         return
 
-    // if (requestJSON && iviewButtonStyle != "old") {
+    if (requestJSON && iviewButtonStyle != "old") {
         maxNoOfPills = 1;
-    // }
+    }
 
     var pillsArray = "";
     var allPillsArray = "";
     var allPillsType = "";
     var curType = "";
     var icons = "";
+    // if (type == 'all')
     allPillsType = ['highlight', 'group', 'filter'];
 
     icons = {
@@ -6868,7 +6699,7 @@ function createPills(type, pillToHighlight) {
     pillsHtml += '</div></div></div>';
 
     $("#pillsWrapper").html(pillsHtml);
-    if (requestJSON) {
+    if (requestJSON && iviewButtonStyle != "old") {
         var filterCount = 0;
         $('#ivirAllCndtnPillsList').children().remove();
         $.each($('#ivirAllCndtnPills').children('div'), function (idx, ele) {
@@ -6914,7 +6745,7 @@ function upateThePills(type, j, name) {
     pillsHtml += '</span>';
     pillsHtml += '</div>';
 
-    if (requestJSON) {
+    if (requestJSON && iviewButtonStyle != "old") {
         $("#ivirAllCndtnPillsList").append(pillsHtml);
         $('#ivirAllCndtnPillsCount').text($('#ivirAllCndtnPillsList').children('div').length)
     }
@@ -6945,9 +6776,9 @@ function createChartPills() {
     var icons = "";
     var chartArray = ivirMainObj.chart;
     var curType = 'chart';
-    // if (requestJSON && iviewButtonStyle != "old") {
+    if (requestJSON && iviewButtonStyle != "old") {
         maxNoOfPills = 5;
-    // }
+    }
     icons = {
         highlight: "highlight",
         group: "table_rows",
@@ -6962,7 +6793,7 @@ function createChartPills() {
 
         pillsHtml += '<div id="ivir' + curType + j + 'CndtnPill" class="d-flex flex-row-auto flex-center w-auto menu-item px-3 chartPills">';
         pillsHtml += '<span class="form-check form-check-custom form-check-solid menu-link px-3 justify-content-between materialCheckBox pillMainWrapper">';
-        if (((requestJSON) && (typeof currentChart.checked == "undefined" || currentChart.checked)) || (!(requestJSON) && j == 0)) {
+        if (((requestJSON && iviewButtonStyle != "old") && (typeof currentChart.checked == "undefined" || currentChart.checked)) || (!(requestJSON && iviewButtonStyle != "old") && j == 0)) {
             pillsHtml += '<input checked id="' + curType + 'pillCB' + j + '" data-index=' + j + ' data-type="' + curType + '" class="form-check-input p-4 filled-in ivirChartCheckBox" type="checkbox" value="" />';
 
             $("#ivirChartWrapper #ivirChart" + j).show();
@@ -6983,7 +6814,7 @@ function createChartPills() {
     }
 
     $("#ivirChartPills").addClass('pillsAdded').html(pillsHtml);
-    if (requestJSON) {
+    if (requestJSON && iviewButtonStyle != "old") {
         $('#ivirChartPillsList').children().remove();
         $.each($('#ivirChartPills').children('div'), function (idx, ele) {
             $('#ivirChartPillsList').append($(ele).detach());
@@ -7025,12 +6856,12 @@ function upateTheChartPills(j, name) {
     pillsHtml += '</span>';
     pillsHtml += '</div>';
 
-    if (!(requestJSON)) {//temp
+    if (!(requestJSON && iviewButtonStyle != "old")) {//temp
         $("#ivirChartWrapper .chartWrapper").hide(); //chartWrapper
     }
     $("#ivirChartWrapper #ivirChart" + j).show();
 
-    if (requestJSON) {
+    if (requestJSON && iviewButtonStyle != "old") {
         $("#ivirChartPillsList").append(pillsHtml);
         $("#ivirChartPillsdiv").show();
         $('#ivirChartPillsCount').text($('#ivirChartPillsList').children('div').length)
@@ -7068,20 +6899,20 @@ $(document).on('change', '.ivirChartCheckBox', function (event) {
     var index = clickedElement.data('index');
     var id = clickedElement.attr('id');
     try {
-        // if (requestJSON && iviewButtonStyle != "old") {
+        if (requestJSON && iviewButtonStyle != "old") {
             ivirMainObj.chart[index].checked = clickedElement.is(':checked');
-        // }
+        }
     } catch (ex) { }
     if (clickedElement.is(':checked')) {
-        // if (requestJSON && iviewButtonStyle != "old") {
+        if (requestJSON && iviewButtonStyle != "old") {
             clickedElement.attr('checked', 'checked');
-        // }
+        }
         if (!checkForPillDependentFlds('chart', index)) {
             clickedElement.prop('checked', false)//temp
             clickedElement.removeAttr('checked');//temp
             return false;
         }
-        if (!(requestJSON)) {//temp
+        if (!(requestJSON && iviewButtonStyle != "old")) {//temp
             $(".ivirChartCheckBox").not('#' + id).prop('checked', false).removeAttr('checked');
             $("#ivirChartWrapper .chartWrapper").hide();//chartWrapper //temp
         }
@@ -7089,10 +6920,10 @@ $(document).on('change', '.ivirChartCheckBox', function (event) {
         $("#ivirChartWrapper #ivirChart" + index).show();
         ivirCreateChart(index, true, true);
     } else {
-        // if (requestJSON && iviewButtonStyle != "old") {
+        if (requestJSON && iviewButtonStyle != "old") {
             clickedElement.removeAttr('checked');
-        // }
-        if (!(requestJSON)) {
+        }
+        if (!(requestJSON && iviewButtonStyle != "old")) {
             clickedElement.prop('checked', true).attr('checked', 'checked');
         } else {
             $("#ivirChartWrapper #ivirChart" + index).hide();
@@ -7122,9 +6953,9 @@ $(document).on('change', '.ivirFilterCheckBox', function (event) {
         } else if (type == "filter") {
             advFiltersObjectToApply = ivirMainObj.filter[clickedElement.data("index")].data;
             ivirDataTableApi.draw();
-            // if (requestJSON && iviewButtonStyle != "old") {
+            if (requestJSON && iviewButtonStyle != "old") {
                 setFilterInfo();
-            // }
+            }
         }
         clickedElement.attr('checked', 'checked');
         applyThePill(type, clickedElement.data('index'));
@@ -7268,7 +7099,7 @@ function deleteThePill(type, index, isClearAll = false) {
             if ($("#ivirAllCndtns").html() == "") {
                 $("#pillsWrapper").html("");
             }
-            // if (requestJSON && iviewButtonStyle != "old") {
+            if (requestJSON && iviewButtonStyle != "old") {
                 if ($('#ivirAllCndtnPillsDiv .popover-content').children('div').length == 0) {
                     $('#lnkallCndtnPill').popover('hide');
                     $('#ivirAllCndtnPillsDiv').hide();
@@ -7277,9 +7108,9 @@ function deleteThePill(type, index, isClearAll = false) {
                     $('#lnkallCndtnPill').popover('reposition');
 
                 }
-            // }
+            }
         } else {
-            if (!isClearAll && removedPill && removedPill.length == 1 && requestJSON && ivirMainObj.key == "charts") {
+            if (!isClearAll && removedPill && removedPill.length == 1 && requestJSON && iviewButtonStyle != "old" && ivirMainObj.key == "charts") {
                 deleteCommonChart(removedPill[0]);
             }
             if (pillsArray.length == 0) {
@@ -7288,11 +7119,12 @@ function deleteThePill(type, index, isClearAll = false) {
                 $("#pinnedivirCButtonsWrapper").hide();
                 delete ivirMainObj[type];
             } else if (isPillChecked) {
+                // chartpillCB0//ivirChart0
                 $("#chartpillCB0").prop('checked', true).attr('checked', 'checked');
                 $("#ivirChart0").show();
             }
-            // if (requestJSON && iviewButtonStyle != "old") {
-            // }
+            if (requestJSON && iviewButtonStyle != "old") {
+            }
             if ($('#ivirChartPillsDiv .popover-content').children('div').length == 0) {
                 $('#lnkChartPill').popover('hide');
                 $('#ivirChartPillsDiv').hide();
@@ -7448,6 +7280,7 @@ function DownloadAndSave(el) {
 function DownloadFile(val) {
     if (!$("#ivirDownloadWrapper div button").hasClass('active')) {
         showAlertDialog("warning", errorMessages.downloadSelection);
+        // alert(errorMessages.downloadSelection);
         return false;
     } else {
         var typeOfFile = ivirDataTableApi;
@@ -7576,7 +7409,7 @@ function toggleGridView(type, elem) {
         $(ivirTable + "_length").hide();
         $("#pillsWrapper").hide();
         $("#ivirChartPills").show();
-        if (requestJSON) {
+        if (requestJSON && iviewButtonStyle != "old") {
             $("#pillsWrapper").hide();
             $("#ivirChartPills").hide();
             $("#ivirAllCndtnPillsDiv").hide();
@@ -7602,7 +7435,7 @@ function toggleGridView(type, elem) {
         ivirDataTableApi.columns.adjust().draw();
         $("#pillsWrapper").show();
         $("#ivirChartPills").hide();
-        if (requestJSON) {
+        if (requestJSON && iviewButtonStyle != "old") {
             $("#pillsWrapper").hide();
             $("#ivirChartPills").hide();
             if ($('#ivirAllCndtnPillsList').children('div').length) {
@@ -7658,12 +7491,12 @@ function columnChart(isDataExists, datats, title, index, type, valColIndex) {
 
     if ($("#" + idOftheDiv).length == 0)
         $("#ivirChartWrapper").append('<div class="chartWrapper" id="' + idOftheDiv + '"></div>');
-    if (!(requestJSON)) {//temp
+    if (!(requestJSON && iviewButtonStyle != "old")) {//temp
         $("#ivirChartWrapper .chartWrapper").hide(); //chartWrapper
     }
     $("#ivirChartWrapper #ivirChart" + index).show();
     try {
-        var viewName = $(".viewtabEdit").parents("li a.active").find(".viewtabEdit").data("name") || "main";
+        var viewName = $(".viewtabEdit").parents("li.active").find(".viewtabEdit").data("name") || "main";
         if (viewName == "charts") {
         }
     } catch (ex) { }
@@ -7673,6 +7506,7 @@ function columnChart(isDataExists, datats, title, index, type, valColIndex) {
     }
     var chart = $('#ivirChartWrapper #' + idOftheDiv).highcharts({
         colors: ['#f8bd19', '#e44a00', '#008ee4', '#33bdda', '#6baa01', '#583e78'],
+        //colors: ['#EED17F', '#97CBE7', '#074868', '#B0D67A', '#2C560A', '#DD9D82'],
         credits: {
             enabled: false
         },
@@ -7716,9 +7550,9 @@ function columnChart(isDataExists, datats, title, index, type, valColIndex) {
         },
         series: JSON.parse(JSON.stringify(JSON.parse(datats.split('~')[1])))
     });
-    // if (requestJSON && iviewButtonStyle != "old") {
+    if (requestJSON && iviewButtonStyle != "old") {
         chart.highcharts().setSize(undefined, 300, false);
-    // }
+    }
     adjustChartBasedWrapperHeight();
 }
 
@@ -7749,12 +7583,12 @@ function pieChart(isDataExists, datats, title, index, valColIndex, isDonut) {
     if ($("#" + idOftheDiv).length == 0)
         $("#ivirChartWrapper").append('<div class="chartWrapper" id="' + idOftheDiv + '"></div>');
 
-    if (!(requestJSON)) {//temp
+    if (!(requestJSON && iviewButtonStyle != "old")) {//temp
         $("#ivirChartWrapper .chartWrapper").hide(); //chartWrapper
     }
     $("#ivirChartWrapper #ivirChart" + index).show();
     try {
-        var viewName = $(".viewtabEdit").parents("li a.active").find(".viewtabEdit").data("name") || "main";
+        var viewName = $(".viewtabEdit").parents("li.active").find(".viewtabEdit").data("name") || "main";
         if (viewName == "charts") {
 
         }
@@ -7766,6 +7600,7 @@ function pieChart(isDataExists, datats, title, index, valColIndex, isDonut) {
     isDonut ? sizeOfInner = 80 : sizeOfInner = 0;
     var chart = $('#ivirChartWrapper #' + idOftheDiv).highcharts({
         colors: ['#f8bd19', '#e44a00', '#008ee4', '#33bdda', '#6baa01', '#583e78'],
+        //colors: ['#EED17F', '#97CBE7', '#074868', '#B0D67A', '#2C560A', '#DD9D82'],
         credits: {
             enabled: false
         },
@@ -7813,9 +7648,9 @@ function pieChart(isDataExists, datats, title, index, valColIndex, isDonut) {
             data: JSON.parse(JSON.stringify(JSON.parse(datats)))
         }]
     });
-    // if (requestJSON && iviewButtonStyle != "old") {
+    if (requestJSON && iviewButtonStyle != "old") {
         chart.highcharts().setSize(undefined, 300, false);
-    // }
+    }
     adjustChartBasedWrapperHeight();
 }
 
@@ -7831,10 +7666,10 @@ function pieChart(isDataExists, datats, title, index, valColIndex, isDonut) {
         e.preventDefault();
         var presentElem = $(this);
         if (!presentElem.hasClass('is-open')) {
-            // presentElem.find('.dropDownButton__list').css({
-            //     'display': 'block',
-            //     'visibility': 'visible'
-            // });
+            presentElem.find('.dropDownButton__list').css({
+                'display': 'block',
+                'visibility': 'visible'
+            });
         } else {
             setTimeout(function () {
                 presentElem.find('.dropDownButton__list').hide();
@@ -7856,11 +7691,11 @@ function pieChart(isDataExists, datats, title, index, valColIndex, isDonut) {
             if (!$dropdown.hasClass("ivirActionDrpDwn")) {
                 $dropdown.find('.js-dropdown__current').attr('title', 'Search ' + $item.text()).text($item.text());
             }
-            // else {
-            //     if (!requestJSON || iviewButtonStyle == "old") {
-            //         $dropdown.find('.js-dropdown__current').html(callParentNew('lcm')[406] + '<span class="menu-arrow"></span>');
-            //     }
-            // }
+            else {
+                if (!requestJSON || iviewButtonStyle == "old") {
+                    $dropdown.find('.js-dropdown__current').html(callParentNew('lcm')[406] + '<span class="icon-arrows-down"></span>');
+                }
+            }
             svHtmlGeneratorRef($item, $dropdown.find('.js-dropdown__input'));
         } else {
             e.stopPropagation();
@@ -7911,7 +7746,7 @@ function commaSeparateNumber(val) {
 function ivirDuplicateCheck(title, isEditPill, index) {
     title = title.toLowerCase();
     var obj = ivirMainObj[title];
-    var fld = title == "filter" ? $('#divModalAdvancedFilters .fldNme') : title == "chart" ? $(".modal-body .fldNme") : $("#newViewTabId").find(".card-body .flex-column.current .fldNme");
+    var fld = title == "filter" ? $('#divModalAdvancedFilters .fldNme') : $('.jconfirm-content .fldNme');
     if (obj && fld) {
         for (var i = obj.length - 1; i >= 0; i--) {
             if (fld.val().trim() != "") {
@@ -8050,7 +7885,7 @@ function saveInSessionBeforeSave() {
         saveJsonToDB("set", JSON.stringify(jsonToSave));
     }
 }
-function saveInSessionBeforeSaveNew(viewName, viewCaption, uname, asDefault) {
+function saveInSessionBeforeSaveNew(viewName, viewCaption, uname) {
     $("#IvirActions").val("");
 
     ivirMainObj["applyTo"] = uname;
@@ -8084,13 +7919,6 @@ function saveInSessionBeforeSaveNew(viewName, viewCaption, uname, asDefault) {
         ivirMainViewObj["views"] = {};
     ivirMainViewObj["views"][viewName] = JSON.parse(JSON.stringify(ivirMainObj));
 
-    if(asDefault){
-        ivirMainViewObj["views"]["@defaultView"] = viewName;
-        currView = viewName;
-    }else if(ivirMainViewObj?.["views"]?.["@defaultView"] == viewName){
-        delete ivirMainViewObj["views"]["@defaultView"];
-    }
-
     SaveSmartviewJsonToDb("set", JSON.stringify(ivirMainViewObj), uname, viewName);
 
 }
@@ -8100,33 +7928,19 @@ function getViewName() {
     var username = eval(callParent("mainUserName"));
 
     htmlToShow = ' <div class="form-group">';
-    htmlToShow += '<label for="grpName" class="form-label col-form-label pb-1 fw-boldest required">Name</label>';
+    htmlToShow += '<label for="grpName" class="form-label col-form-label required">Name</label>';
     htmlToShow += '<input required id="viewName" type="text" class="d-none form-control fldNme dialogInptFld" maxlength="20" value="' + ("vw" + (new Date().getTime())) + '" />';
     htmlToShow += '<input required id="viewCaption" type="text" class="form-control fldNme dialogInptFld" maxlength="20" />';
     htmlToShow += '</div>';
     htmlToShow += '<div class="form-group">';
-    htmlToShow += '<label for="grpColName" class="form-label col-form-label pb-1 fw-boldest required"> Apply To </label>';
+    htmlToShow += '<label for="grpColName" class="form-label col-form-label required"> Apply To </label>';
     htmlToShow += '<select class="form-select stepperSelect dialogSlctFld" id="viewAplyTo">';
     htmlToShow += '<option value="' + username + '">' + username + '</option>';
     htmlToShow += '<option value="ALL">ALL</option>'
     htmlToShow += ' </select>';
     htmlToShow += '</div>';
 
-
-    let myModal = new BSModal("getviewname", "Add View Name", htmlToShow, () => {
-        $("select.stepperSelect").select2({
-            allowClear: true,
-            dropdownParent: document.getElementById("getviewname"),
-            minimumResultsForSearch: Infinity,
-            placeholder: appGlobalVarsObject.lcm[441],
-        });
-    }, () => { });
-
-    myModal.changeSize("sm");
-    myModal.okBtn.innerText = appGlobalVarsObject.lcm[399];
-    myModal.okBtn.addEventListener("click", () => {
-        saveViewActionRef("View", "view", "saveInSessionBeforeSaveNew", undefined, false);
-    });
+    var bol = ivirActionDialog('View', 'view', htmlToShow, 'saveInSessionBeforeSaveNew');
 }
 
 /**
@@ -8143,10 +7957,6 @@ function newViewTabClick(jqElem) {
     var viewTabCaption = "";
     if (jqElem.attr("id") == "viewAddTab" || (jqElem.attr("id") == "IvirActions" && jqElem.val() == "saveAs")) {
         newViewTab = true;
-        if(isListView && loadViewName != "main"){
-            oldLoadViewName = loadViewName;
-            $(".lnkViewTab#main").click();
-        }
     } else {
         viewTabName = jqElem.data('name');
         viewTabCaption = jqElem.data('caption');
@@ -8158,9 +7968,7 @@ function newViewTabClick(jqElem) {
         }
     }
 
-    if(!oldLoadViewName){
-        smartStepper(newViewTab, viewTabName, viewTabCaption);
-    }
+    smartStepper(newViewTab, viewTabName, viewTabCaption);
 }
 
 function applyCheckedPillsOnLoad() {
@@ -8169,19 +7977,19 @@ function applyCheckedPillsOnLoad() {
         switch (index) {
             case "filter":
                 $.each(element, function (index, value) {
-                    //if (value.checked == true || (requestJSON && iviewButtonStyle != "old"))
+                    if (value.checked == true || (requestJSON && iviewButtonStyle != "old"))
                         $(".ivirFilterCheckBox[data-type='filter'][data-index=" + index + "]").trigger("click");
                 });
                 break;
             case "highlight":
                 $.each(element, function (index, value) {
-                    //if (value.checked == true || (requestJSON && iviewButtonStyle != "old"))
+                    if (value.checked == true || (requestJSON && iviewButtonStyle != "old"))
                         $(".ivirFilterCheckBox[data-type='highlight'][data-index=" + index + "]").trigger("click");
                 });
                 break;
             case "group":
                 $.each(element, function (index, value) {
-                    //if (value.checked == true || (requestJSON && iviewButtonStyle != "old"))
+                    if (value.checked == true || (requestJSON && iviewButtonStyle != "old"))
                         $(".ivirFilterCheckBox[data-type='group'][data-index=" + index + "]").trigger("click");
                 });
                 break;
@@ -8261,21 +8069,17 @@ function getSavedConditions() {
 function getSavedConditionsNew(view, json = "") {
     SaveSmartviewJsonToDb("get", json, "", view);
     var allCharts = getAllCommonCharts();
-    if (allCharts.length > 0 && requestJSON && view == "charts") {
+    if (allCharts.length > 0 && requestJSON && iviewButtonStyle != "old" && view == "charts") {
         ivirMainObj = {}
         ivirMainObj.key = "charts";
         ivirMainObj.chart = getAllCommonCharts();
     }
 
-    if(view){
-        $('.nav-tabs a[id=' + view + ']')?.tab?.('show');
-    }
-
-    if (view != "main" && (requestJSON && loadViewName != "charts")) {
+    if (view != "main" && (requestJSON && iviewButtonStyle != "old" && loadViewName != "charts")) {
 
         createPillsOnLoad();
         applyCheckedPillsOnLoad();
-        
+        $('.nav-tabs a[id=' + view + ']').tab('show');
         scrollToActiveView(view);
 
         try {
@@ -8303,14 +8107,11 @@ function createViewTabs(jsonObj) {
         }
 
         $.each(jsonObj, function (key, element) {
-            if(key == "@defaultView"){
-                return;
-            }
             var tabHtml = "";
             var dataCaption = element["caption"] || key;
             tabHtml = `
                 <li class="nav-item">
-                    <a data-bs-toggle="tab" id="${key}" class="nav-link fw-boldest shadow-sm fs-6 text-gray-800 p-4 lnkViewTab" data-caption="${tabindex}" href="#${key}">
+                    <a data-bs-toggle="tab" id="${key}" class="nav-link shadow-sm fw-bold fs-6 text-gray-800 p-4 lnkViewTab" data-caption="${tabindex}" href="#${key}">
                         <span>${dataCaption}</span>
                         <span  data-name="${key}" data-caption="${dataCaption}" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-dismiss="click" data-bs-original-title="Edit" class="material-icons material-icons-style material-icons-5 viewtabEdit viewtabDltBtn">edit</span>
                         
@@ -8318,9 +8119,9 @@ function createViewTabs(jsonObj) {
                 </li>
             `;
 
-            if ((key == (currView || "main") && !isListView) || key == "charts") {
+            if ((key == "main" && !isListView) || key == "charts") {
                 $("#viewTabs").prepend($(tabHtml).find(".viewtabRemove, .viewtabEdit").addClass("d-none").parents("li"));
-            } else if (key == (currView || "main") && isListView) {
+            } else if (key == "main" && isListView) {
                 $("#viewTabs").prepend(tabHtml);
             } else {
                 $("#viewTabs").append(tabHtml);
@@ -8329,25 +8130,14 @@ function createViewTabs(jsonObj) {
 
         $("#viewTabs").append(`
         <li class="nav-item">
-            <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-dismiss="click" data-bs-original-title="Add View" id="viewAddTab" class="nav-link fw-boldest shadow-sm fs-6 text-gray-800 px-3 py-4 lnkViewTab lnkViewTabAdd viewAddTab" href="" onclick="newViewTabClick($(this));">
+            <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-dismiss="click" data-bs-original-title="Add View" id="viewAddTab" class="nav-link shadow-sm fw-bold fs-6 text-gray-800 px-3 py-4 lnkViewTab lnkViewTabAdd viewAddTab" href="" onclick="newViewTabClick($(this));">
                 <span class="material-icons material-icons-style material-icons-5">add</span>
             </a>
         </li>
         `);
 
-        if (jsonObj[(currView || "main")]) {
-            $(`.nav-tabs a[id=${(currView || "main")}]`).addClass("active");
-
-            if(currView != ""){
-                try {
-                    $(`.nav-tabs a[id=${currView}]`).parent("li.nav-item").after($(`.nav-tabs a[id=${"main"}]`).parent("li.nav-item"));
-                } catch (ex) {}
-
-                if(isListView && currView){
-                    $(`.nav-tabs a[id=${("main")}]`).addClass("d-none");
-                }
-            }
-
+        if (jsonObj["main"]) {
+            $('.nav-tabs a[id=main]').addClass("active");
             if ($.isEmptyObject(jsonObj["main"])) {
                 delete jsonObj["main"];
             }
@@ -8471,6 +8261,7 @@ function saveJsonToDB(option, json, view) {
                     else
                         showAlertDialog("warning", 3028, "client");
                 } catch (ex) {
+                    // console.log("Failed in getting ivirjson", ex.message);
                 }
                 if (!isJsonCreated && allGrandTotal.length > 0) {
                     createIvirDataTable(undefined, '', '', allGrandTotal);
@@ -8502,7 +8293,7 @@ function SaveSmartviewJsonToDb(option, json, uname, view) {
         if ($("#newViewTabId").is(":visible") || isOpenSmartStepper) {
             switchViewCallBackFunction = function (view) {
                 setTimeout(() => {
-                    var viewName = $(".viewtabEdit").parents("li a.active").find(".viewtabEdit").data("name") || "main";
+                    var viewName = $(".viewtabEdit").parents("li.active").find(".viewtabEdit").data("name") || "main";
                     if (!isListView || viewName != view) {
                         $('#' + view).click();
                     }
@@ -8515,7 +8306,7 @@ function SaveSmartviewJsonToDb(option, json, uname, view) {
         if (jsonSaveObj.views) {
             Object.keys(jsonSaveObj.views).forEach(key => {
                 var thisSaveView = jsonSaveObj.views[key];
-                if (thisSaveView.applyTo != uname && key != "@defaultView") {
+                if (thisSaveView.applyTo != uname) {
                     delete jsonSaveObj.views[key];
                 }
             });
@@ -8536,18 +8327,6 @@ function SaveSmartviewJsonToDb(option, json, uname, view) {
                         } else {
                             showAlertDialog("success", 3030, "client");
                         }
-
-                        loadViewName = view;
-                        if(oldLoadViewName){
-                            oldLoadViewName = "";
-                        }
-
-                        /* Temp alert to reload */
-                        showAlertDialog("info", "Please reload the view to see the changes");
-                        try {
-                            (callParentNew("newViewTabId", "id") || callParentNew("design", "id") || callParentNew("Charts", "id")).dispatchEvent(new CustomEvent("close"));
-                        } catch (error) { }
-
                     }
 
                     let viewToCreate = JSON.parse(json).views;
@@ -8579,7 +8358,6 @@ function SaveSmartviewJsonToDb(option, json, uname, view) {
     }
 
     else if (option == "get") {
-        // json = "";
         var isJsonCreated = false;
         //onsuccess
         try {
@@ -8591,14 +8369,15 @@ function SaveSmartviewJsonToDb(option, json, uname, view) {
                     var jsonObj = JSON.parse(jsonSaved);
 
                     try {
-                        if (jsonObj && ((view == "main" && $.isEmptyObject(ivirMainObj?.visibleColumns)) || !($("#newViewTabId").is(":visible") || isOpenSmartStepper))) {
+                        // if (jsonObj && (!isListView || view == "main" || !$("#newViewTabId").is(":visible")) && (!isListView || (isListView && ivirMainObj && !ivirMainObj.visibleColumns))) {
+                        if (jsonObj && (view == "main" || !($("#newViewTabId").is(":visible") || isOpenSmartStepper))) {
                             isJsonCreated = true;
-                            if (ivirMainObj && (requestJSON && view != "charts"))
+                            // if (ivirMainObj && (view != "main" && (requestJSON && iviewButtonStyle != "old" && view != "charts")))
+                            if (ivirMainObj && (requestJSON && iviewButtonStyle != "old" && view != "charts"))
+                                // ivirMainObj = JSON.parse(JSON.stringify(jsonObj.views[view]));
                                 ivirMainObj = JSON.parse(JSON.stringify(jsonObj?.views?.[view] || {}));
                             else
                                 ivirMainObj = {};
-                            ivirMainViewObj = JSON.parse(JSON.stringify(jsonObj));
-                        }else{
                             ivirMainViewObj = JSON.parse(JSON.stringify(jsonObj));
                         }
                     } catch (ex) { }
@@ -8617,6 +8396,7 @@ function SaveSmartviewJsonToDb(option, json, uname, view) {
                 }
             }
         } catch (ex) {
+            // console.log("Failed in getting ivirjson", ex.message);
         }
         if (!isJsonCreated && allGrandTotal.length > 0) {
             createIvirDataTable(undefined, '', '', allGrandTotal);
@@ -8640,14 +8420,14 @@ function createPillsOnLoad() {
     var chartArray = ivirMainObj.chart;
     if (chartArray) {
         for (var i = 0; i < chartArray.length; i++) {
-            if (requestJSON) {
+            if (requestJSON && iviewButtonStyle != "old") {
                 ivirCreateChart(i, true, false, true);
 
             } else {
                 ivirCreateChart(i, false, false, true);
             }
             createChartPills();
-            if (requestJSON) {
+            if (requestJSON && iviewButtonStyle != "old") {
                 if (ivirMainObj.groupName && ivirMainObj.groupName != "charts") {
                     isChartCreationOnLoad = true;
                     $("#ivirChartPillsList .ivirChartCheckBox:first").change();
@@ -8709,6 +8489,7 @@ function checkForPillDependentFlds(arrayType, arrayIndex, getColumns) {
     var dependentColsLength = dependentCols.length;
     var allColsPresent = true;
     for (var i = 0; i < dependentColsLength; i++) {
+        //var dependentCols[i]
         if ($.inArray(FieldName.indexOf(dependentCols[i]), ivirVisibleColumns) === -1) {
             $("#" + arrayType + "pillCB" + arrayIndex).prop("checked", false);
             allColsPresent = false;
@@ -8725,7 +8506,8 @@ function checkForPillDependentFlds(arrayType, arrayIndex, getColumns) {
 }
 
 
-$(window).resize(delay(function () {
+$(window).resize(function () {
+    //Makes use of jquery.visible.min.js
     if ($(".dataTables_scrollHead table thead tr th:last-child").visible(true)) {
         $(".dataTables_scrollHead").off('keydown');
     } else {
@@ -8738,7 +8520,7 @@ $(window).resize(delay(function () {
         });
     }
 
-}, 100));
+});
 
 //to get filter pill index
 //returns pill index - if exists, -1 - if not
@@ -8752,11 +8534,12 @@ function getFiltersPillIndex() {
 }
 
 function showDataTableLoading() {
+    //$(".dataTables_scrollBody").append("<div class='dt-loading'><i class='fa fa-refresh fa-spin fa-4x'></i></div>")
     ShowDimmer(true);
 }
 
 function hideDataTableLoading() {
-    $("body").removeClass("stay-page-loading");
+    //$(".dataTables_scrollBody .dt-loading").remove();
     ShowDimmer(false);
 }
 
@@ -8772,24 +8555,15 @@ function hideDataTableLoading() {
  * 
  * @return {htmlObj} jQuery html element will be returned with processed data that can be attached anywhere in dom [eg: html : <div>Processed Data</div>]
  */
-var createdCell = createCustomElement = (elem, cellData, rowData, row, col, parseTemplete = true) => {
+var createdCell = createCustomElement = (elem, cellData, rowData, row, col) => {
     if (typeof rowRefreshIndex != "undefined") {
         row = rowRefreshIndex;
     }
     isSpecialRow = false;
-
-    let dtColumnName = dtColumns[col].name;
-
-    if (iName == "inmemdb") {
-        dtColumnName = getColumnName(dtColumnName);        
-    }
-
-    var colID = FieldName[FieldName.indexOf(dtColumnName)];
+    var colID = FieldName[col];
     var rowDataAccess = getPropertyAccess(colID);
     //cellDataProcessing
     cellData = processCellData({ td: elem, cellData, rowData, row, col, colID, rowDataAccess });
-
-    cellData = processMask({ td: elem, cellData, rowData, row, col, colID, rowDataAccess });
 
     if (cellData != "") {
         //generate checkbox column
@@ -8798,7 +8572,7 @@ var createdCell = createCustomElement = (elem, cellData, rowData, row, col, pars
         } else {
 
             let nonCbComponent = true;
-            if(ivHeadRows?.[colID]?.["@ctype"]?.toLowerCase() == "check box"){
+            if(tstFields.filter(fld => fld.name == colID)?.length && tstFields.filter(fld => fld.name == colID)[0]?.component?.toLowerCase() == "check box") {
                 nonCbComponent = false;
                 $(elem).html(generateFieldCheckbox({ td: elem, cellData, rowData, row, col, colID, rowDataAccess }));
             }
@@ -8814,11 +8588,11 @@ var createdCell = createCustomElement = (elem, cellData, rowData, row, col, pars
             if (cellHeaderConf.root_class_index) {
                 $(elem).html(generateExpColTree({ td: elem, cellData, rowData, row, col, colID, rowDataAccess }));
             }
-            if (HeaderText[FieldName.indexOf(dtColumnName)] != "" && HeaderText[FieldName.indexOf(dtColumnName)] != "$nbsp;" && enableCardsUi && !cardTemplatingHTML) {
+            if (HeaderText[col] != "" && HeaderText[col] != "$nbsp;" && enableCardsUi && !cardTemplatingHTML) {
                 $(elem).children().wrap(`<div class="cardLabelContent"></div>`);
-                $(elem).prepend("<label>" + HeaderText[FieldName.indexOf(dtColumnName)] + ":</label>");
+                $(elem).prepend("<label>" + HeaderText[col] + ":</label>");
             }
-            }
+        }
     } else {
         $(elem).html("");
     }
@@ -8836,13 +8610,11 @@ var createdCell = createCustomElement = (elem, cellData, rowData, row, col, pars
             });
         } catch (ex) { }
 
-        columnTemplatingHTML = injectProductColumnTemplate(iName, colID);
-
-        if (columnTemplatingObj && columnTemplatingObj.length && !columnTemplatingHTML) {
+        if (columnTemplatingObj && columnTemplatingObj.length) {
             columnTemplatingHTML = getCaseInSensitiveJsonProperty(columnTemplatingObj[0], "CVALUE")[0];
         }
 
-        if (columnTemplatingHTML && parseTemplete) {
+        if (columnTemplatingHTML) {
             renderColumnTemplete({ hbHTML: columnTemplatingHTML, td: elem, cellData, rowData, row, col, colID, rowDataAccess });
         }
     } catch (ex) { }
@@ -8854,71 +8626,8 @@ var createdCell = createCustomElement = (elem, cellData, rowData, row, col, pars
     return elem;
 }
 
-/**
- * @description : Inject custom column templates for product functioalities
- * @author Prashik
- * @date 2022-10-20
- * @param {*} iName : iview name
- * @param {*} colID : column name
- */
-function injectProductColumnTemplate(iName, colID){
-    if((iName == "ad___acs" || iName == "ad___cfd") && colID == "caption"){
-        return `
-        <div class="col-12">
-            <div class="col-12 d-flex flex-row">
-                {{#is name}}
-                    <div class="fs-5">
-                        {{caption}}({{name}})
-                    </div>
-                {{else}}
-                    <div class="fs-5">
-                        - {{caption}} -
-                    </div>
-                {{/is}}
-            </div>
-        </div>
-        `;
-    } else if ((iName == "ad___acs" || iName == "ad___cfd") && colID == "dmy") {
-        return `
-        <div class="col-12">
-            <div class="col-12 d-flex flex-row">
-                {{#is name}}
-                    <div class="">
-                        {{#is runtimetstruct '==' 'T'}}
-                            <a href="javascript:void(0);" class="btn btn-light-primary fw-boldest btn-sm px-5" onclick="callAxpertConfigStudio('designform','{{name}}','{{caption}}');">
-                                Edit
-                            </a>
-                        {{else}}
-                            <a href="javascript:void(0);" class="btn btn-light-primary fw-boldest btn-sm px-5" onclick="callAxpertConfigStudio('editfield','{{name}}','{{fname}}');">
-                                Edit
-                            </a>
-                            <!--<a href="javascript:void(0);" class="btn btn-light-primary fw-boldest btn-sm px-5" onclick="showAlertDialog('info', 'Popup ' + $(this).text() + ' Page');">
-                                Add Rules
-                            </a>-->
-                        {{/is}}
-                    </div>
-                {{else}}
-                {{/is}}
-            </div>
-        </div>
-        `;
-    } else if (iName == "ad___acr" && colID == "dmy") {
-        return `
-        <div class="col-12">
-            <div class="col-12 d-flex flex-row">                    
-                    <div class="">
-                            <a href="javascript:void(0);" class="btn btn-light-primary fw-boldest btn-sm px-5" onclick="loadAxRuleEngineForm('false','{{axpdef_rulesdefid}}');">
-                                Edit
-                            </a>                        
-                    </div>
-            </div>
-        </div>
-        `;
-    } else {
-        return "";
-    }
-}
 
+//refreshRow(ivirDataTableApi.row(parseInt(ivDatas[0].rowno)-1), ivDatas[0])
 /**
  * @description : Refresh rowData as per action call
  * @author Prashik
@@ -8945,10 +8654,6 @@ function refreshRow(row, newRowData) {
         $(row.node()).html($(newRow.node()).html());
 
         newRow.remove().draw();
-
-        try {
-            KTMenu?.init();
-        } catch (error) { }
     } catch (ex) { }
 }
 
@@ -9042,9 +8747,10 @@ function renderRowTemplete(hbHTML, row, data, dataIndex) {
     * axRenderIName: iview name
     * axRenderThis: td javascript object for rendering cell
  */
+// function renderColumnTemplete(hbHTML, row, data, dataIndex) {
 function renderColumnTemplete({ hbHTML, td, cellData, rowData, row, col, colID, rowDataAccess }) {
 
-    var processedData = FieldName.reduce((o, key, ind) => Object.assign(o, { [key]: (cellVal = createdCell($(`<td></td>`), rowData[getPropertyAccess(key)], rowData, row, ind, false).html(), typeof cellVal != "undefined" ? cellVal : rowData[getPropertyAccess(key)]) }), {});
+    var processedData = { ...rowData };
 
     processedData["axRenderThis"] = $(td).html()
 
@@ -9081,18 +8787,18 @@ function renderColumnTemplete({ hbHTML, td, cellData, rowData, row, col, colID, 
  */
 function constuctDataButton(task) {
     var filterSelectHtml = "";
-    if (requestJSON) {
-        filterSelectHtml += `<div class="btn ${iviewButtonStyle == "old" ? "btn-sm" : "btn-icon"} btn-white btn-color-gray-600 btn-active-primary shadow-sm me-2 js-dropdown ivirActionDrpDwn tb-btn" ${iviewButtonStyle != "old" ? `data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-dismiss="click" data-bs-original-title="${callParentNew('lcm')[405]}"` : ""}>`;
+    if (requestJSON == true && iviewButtonStyle != "old") {
+        filterSelectHtml += '<div class="btn btn-icon btn-white btn-color-gray-500 btn-active-primary shadow-sm me-2 js-dropdown ivirActionDrpDwn tb-btn" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-dismiss="click" data-bs-original-title="' + callParentNew('lcm')[405] + '">';
         filterSelectHtml += '<input type="hidden" name="IvirActions" id="IvirActions" class="js-dropdown__input" value="">';
 
-        filterSelectHtml += ` <div id="ivirActionButton" class="c-button c-button--dropdown js-dropdown__current ${iviewButtonStyle == "old" ? "menu-link text-gray-600 text-hover-white p-0 menu-dropdown" : "pt-2"}" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-flip="top-end">${iviewButtonStyle == "old" ? `<span class="menu-title">${callParentNew('lcm')[406]}</span><span class="menu-arrow"></span>` : `<span class="material-icons material-icons-style">list_alt</span>`}</div>`;
-        
+        filterSelectHtml += ' <div id="ivirActionButton" class="c-button c-button--dropdown js-dropdown__current pt-2" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-flip="top-end"><span class="material-icons material-icons-style">list_alt</span></div>';
+
         var MenuClass = iviewButtonStyle == "modern" ? "w-100 w-sm-350px" : "w-200px";
         var MenuItemClass = iviewButtonStyle == "modern" ? "col-4" : "menu-item px-3";
         var MenuItemLinkClass = iviewButtonStyle == "modern" ? "d-flex flex-column flex-center text-center text-gray-800 text-hover-primary bg-hover-light rounded p-3 mb-3" : "menu-link px-3";
         var MenuItemIconClass = iviewButtonStyle == "modern" ? "" : "me-3";
 
-        filterSelectHtml += '<ul class="dropDownButton__list menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bolder py-3 ' + MenuClass + '" data-popper-placement="bottom-end" data-kt-menu="true">';
+        filterSelectHtml += '<ul class="dropDownButton__list menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold py-3 ' + MenuClass + '" data-popper-placement="bottom-end" data-kt-menu="true">';
 
         if (iviewButtonStyle == "modern") {
             filterSelectHtml += '<div class="card"><div class="card-body py-5"><div class="mh-450px scroll-y me-n5 pe-5"><div class="row g-2">';
@@ -9140,47 +8846,43 @@ function constuctDataButton(task) {
         filterSelectHtml += '<div class="js-dropdown ivirActionDrpDwn">';
         filterSelectHtml += '<input type="hidden" name="IvirActions" id="IvirActions" class="js-dropdown__input" value="">';
 
-        filterSelectHtml += '<a href="javascript:void(0)" title="' + callParentNew('lcm')[406] + '" id="ivirActionButton" class="js-dropdown__current btn btn-white btn-sm btn-color-gray-600 btn-active-primary shadow-sm me-2 menu menu-dropdown menu-link" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-start""><span class="menu-title">' + callParentNew('lcm')[406] + '</span><span class="menu-arrow"></span></a>';
-        filterSelectHtml += '<ul class="dropDownButton__list menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-bold w-200px py-3" data-kt-menu="true" data-popper-placement="top-end">';
+        filterSelectHtml += '<a href="javascript:void(0)" title="' + callParentNew('lcm')[406] + '" id="ivirActionButton" class="js-dropdown__current">' + callParentNew('lcm')[406] + '<span class="icon-arrows-down"></span></a>';
+        filterSelectHtml += '<ul class="dropDownButton__list">';
         if (iName != "inmemdb") {
-            filterSelectHtml += '<li class="dropDownButton__item subHeader menu-item px-3" data-dropdown-value="save" title="' + callParentNew('lcm')[406] + '"><span class="menu-content text-muted pb-2 px-3 fs-7">' + callParentNew('lcm')[406] + '</span></li>';
-            filterSelectHtml += '<li class="dropDownButton__item dropdown-itemz menu-item px-3" data-dropdown-value="save" title="' + callParentNew('lcm')[400] + '"><span class="menu-link px-3"><span class="material-icons material-icons-style material-icons-2 me-3">save</span>' + callParentNew('lcm')[400] + '</span></li>';
+            filterSelectHtml += '<li class="dropDownButton__item subHeader" data-dropdown-value="save" title="' + callParentNew('lcm')[406] + '">' + callParentNew('lcm')[406] + '</li>';
+            filterSelectHtml += '<li class="dropDownButton__item dropdown-item" data-dropdown-value="save" title="' + callParentNew('lcm')[400] + '"><span class="material-icons me-3">save</span>' + callParentNew('lcm')[400] + '</li>';
 
             if (!enableCardsUi) {
-                filterSelectHtml += '<li class="dropDownButton__item dropdown-itemz menu-item px-3" data-dropdown-value="SHcolumns" title="' + callParentNew('lcm')[401] + '"><span class="menu-link px-3"><span class="material-icons material-icons-style material-icons-2 me-3">view_week</span>' + callParentNew('lcm')[401] + '</span></li>';
+                filterSelectHtml += '<li class="dropDownButton__item dropdown-item" data-dropdown-value="SHcolumns" title="' + callParentNew('lcm')[401] + '"><span class="material-icons me-3">view_week</span>' + callParentNew('lcm')[401] + '</li>';
             }
 
             var chartClass = "";
             if (task == 'group' || task == 'groupApply')
                 chartClass = "subHeader"
-            filterSelectHtml += '<li id="chartActionLi" class="dropDownButton__item menu-item px-3 ' + chartClass + '" data-dropdown-value="chart" title="' + callParentNew('lcm')[402] + '"><span class="menu-link px-3"><span class="material-icons material-icons-style material-icons-2 me-3">add_chart</span>' + callParentNew('lcm')[402] + '</span></li>';
+            filterSelectHtml += '<li id="chartActionLi" class="dropDownButton__item ' + chartClass + '" data-dropdown-value="chart" title="' + callParentNew('lcm')[402] + '"><span class="material-icons me-3">add_chart</span>' + callParentNew('lcm')[402] + '</li>';
         }
 
-        filterSelectHtml += '<li class="dropDownButton__item dropdown-itemz menu-item px-3" data-dropdown-value="moreFilters" title="' + callParentNew('lcm')[409] + '"><span class="menu-link px-3"><span class="material-icons material-icons-style material-icons-2 me-3">filter_list</span>' + callParentNew('lcm')[409] + '</span></li>';
-        filterSelectHtml += '<li class="dropDownButton__item dropdown-itemz menu-item px-3" data-dropdown-value="clearFilters" title="' + callParentNew('lcm')[443] + '"><span class="menu-link px-3"><span class="material-icons material-icons-style material-icons-2 me-3">filter_list_off</span>' + callParentNew('lcm')[443] + '</span></li>';
+        filterSelectHtml += '<li class="dropDownButton__item dropdown-item" data-dropdown-value="moreFilters" title="' + callParentNew('lcm')[409] + '"><span class="material-icons me-3">filter_list</span>' + callParentNew('lcm')[409] + '</li>';
+        filterSelectHtml += '<li class="dropDownButton__item dropdown-item" data-dropdown-value="clearFilters" title="' + callParentNew('lcm')[443] + '">filter_list_off<span class="material-icons me-3"></i>' + callParentNew('lcm')[443] + '</li>';
         if (iName != "inmemdb") {
-            filterSelectHtml += '<li class="dropDownButton__item dropdown-itemz subHeader menu-item px-3" data-dropdown-value="data" title="' + callParentNew('lcm')[405] + '"><span class="menu-content text-muted pb-2 px-3 fs-7">' + callParentNew('lcm')[405] + '</span></li>';
-            filterSelectHtml += '<li class="dropDownButton__item dropdown-itemz menu-item px-3" data-dropdown-value="sort" title="' + callParentNew('lcm')[403] + '"><span class="menu-link px-3"><span class="material-icons material-icons-style material-icons-2 me-3">sort</span>' + callParentNew('lcm')[403] + '</span></li>';
-            filterSelectHtml += '<li class="dropDownButton__item dropdown-itemz subHeader menu-item px-3" data-dropdown-value="save" id="Format_header" title="' + callParentNew('lcm')[423] + '"><span class="menu-content text-muted pb-2 px-3 fs-7">' + callParentNew('lcm')[423] + '</span></li>';
+            filterSelectHtml += '<li class="dropDownButton__item dropdown-item subHeader" data-dropdown-value="data" title="' + callParentNew('lcm')[405] + '">' + callParentNew('lcm')[405] + '</li>';
+            filterSelectHtml += '<li class="dropDownButton__item dropdown-item" data-dropdown-value="sort" title="' + callParentNew('lcm')[403] + '"><span class="material-icons me-3">sort</span>' + callParentNew('lcm')[403] + '</li>';
+            filterSelectHtml += '<li class="dropDownButton__item dropdown-item subHeader" data-dropdown-value="save" id="Format_header" title="' + callParentNew('lcm')[423] + '">' + callParentNew('lcm')[423] + '</li>';
             if (!enableCardsUi) {
-                filterSelectHtml += '<li class="dropDownButton__item dropdown-itemz menu-item px-3" data-dropdown-value="rowGrouping" title="' + callParentNew('lcm')[404] + '"><span class="menu-link px-3"><span class="material-icons material-icons-style material-icons-2 me-3">table_rows</span>' + callParentNew('lcm')[404] + '</span></li>';
+                filterSelectHtml += '<li class="dropDownButton__item dropdown-item" data-dropdown-value="rowGrouping" title="' + callParentNew('lcm')[404] + '"><span class="material-icons me-3">table_rows</span>' + callParentNew('lcm')[404] + '</li>';
             }
-            filterSelectHtml += '<li class="dropDownButton__item dropdown-itemz menu-item px-3" data-dropdown-value="highlighting" title="' + callParentNew('lcm')[396] + '"><span class="menu-link px-3"><span class="material-icons material-icons-style material-icons-2 me-3">highlight</span>' + callParentNew('lcm')[396] + '</span></li>';
+            filterSelectHtml += '<li class="dropDownButton__item dropdown-item" data-dropdown-value="highlighting" title="' + callParentNew('lcm')[396] + '"><span class="material-icons me-3">highlight</span>' + callParentNew('lcm')[396] + '</li>';
         }
         filterSelectHtml += '</ul>';
         filterSelectHtml += '</div>';
 
-        $("#filterWrapper").html(filterSelectHtml);        
+        $("#filterWrapper").html(filterSelectHtml);
     }
 
     if (requestJSON && appGlobalVarsObject._CONSTANTS.compressedMode) {
         $(".toolbarRightMenu").find(".tb-btn").addClass("btn-sm");
         $(".toolbarRightMenu").find(".tb-btn .material-icons.material-icons-style").addClass("material-icons-2");
     }
-
-    try {
-        KTMenu?.init();
-    } catch (error) {}
 }
 
 function deleteViewtab(tabName) {
@@ -9188,7 +8890,7 @@ function deleteViewtab(tabName) {
         showAlertDialog("warning", callParentNew('lcm')[484]);
         return false;
     }
-    var isActive = $("a#" + tabName).hasClass('active');
+    var isActive = $("a#" + tabName).closest('li').hasClass('active');
     if (isActive) {
         clearExistingPills();
     }
@@ -9269,7 +8971,7 @@ function pinItemToTaskbar(item) {
     temp.find('a > i').remove();//remove pin icon
     if (temp.hasClass("dropdown-submenu")) {
         temp.removeClass("dropdown-submenu");
-        temp.children('a').append('<span class="menu-arrow"></span>');//add down arrow to dropdown item
+        temp.children('a').append('<span class="icon-arrows-down"></span>');//add down arrow to dropdown item
 
         if (temp.attr('id') != "filterWrapper" && (iviewButtonStyle == "modern" || temp.attr('id') != "ivirCButtonsWrapper")) {
             temp.addClass("dropdown");
@@ -9457,7 +9159,7 @@ function forceColumnWidth() {
     $(".dataTables_scrollHead table.gridData thead tr:last th").toArray().forEach((th, ind) => {
         let columnName = $(th).data("headerName");
 
-        let applyWidth = (parseInt(ivirMainObj?.design?.filter(dsign => dsign.name == columnName)?.[0]?.width || ivHeadRows[columnName]["@width"] || (isListView && columnName == "rowno" ? listViewCheckBoxSize : minCellWidth)) || 0) + widthIncrement;
+        let applyWidth = (parseInt(ivirMainObj?.design?.filter(dsign => dsign.name == columnName)?.[0]?.width /* || (isListView && tstFields && lvWidth)*/ || ivHeadRows[columnName]["@width"] || (isListView && columnName == "rowno" ? listViewCheckBoxSize : minCellWidth)) || 0) + widthIncrement;
 
         visibleTableWidth += applyWidth;
 
@@ -9740,12 +9442,7 @@ function smartStepper(newViewTab, viewTabName, viewTabCaption) {
     var stepper;
     var showValueOption;
     var svOptionsObj = Object.keys(newBtnGroup).map(key => newBtnGroup[key]).filter(obj => obj.visible);
-
-    if (viewTabName == "main" && viewTabCaption == "main" && isListView) {
-        svOptionsObj = svOptionsObj.filter(opt => opt.name == "design");
-    }
-    
-    var saveView = `saveViewActionRef("${(newViewTab ? "Add View" : "Edit View")}", "view", "saveInSessionBeforeSaveNew", ${showValueOption}, ${!newViewTab ? true : false})`;
+    var saveView = `saveViewActionRef("${(newViewTab ? "Add View" : "Edit View")}", "view", "saveInSessionBeforeSaveNew", ${newViewTab ? showValueOption : JSON.stringify(["view", 1])}, ${!newViewTab ? true : false})`;
 
     /* Section :: HTML */
     var smartViewStepperHTML = `<div class="stepper stepper-pills card bg-transparent border-0 h-100">        
@@ -9796,22 +9493,11 @@ function smartStepper(newViewTab, viewTabName, viewTabCaption) {
     </label>
     
     <label class="input-group gap-5 ${!hasBuildAccess ? `d-none` : ``}">                    
-        <label class="form-label col-form-label pb-1 fw-boldest text-gray-500 fst-italic">for</label>
+        <label class="form-label col-form-label text-gray-500 fst-italic">for</label>
         <select class="form-select form-select-white border-bottom dialogSlctFld" id="viewAplyTo" placeholder="Apply To">
-            <option value=${callParentNew("mainUserName")}>${callParentNew("mainUserName")}</option>
-            <option value="ALL">ALL</option>
+            <option value="admin">Admin User</option>
+            <option value="ALL">ALL Users</option>
         </select>
-    </label>
-
-    <label class="input-group gap-5 w-600px ${!isListView ? `d-none` : ``}">
-        <!--<div class="vr h-25px bg-dark my-3"></div>-->   
-        <label class="form-label col-form-label pb-1 fw-boldest text-gray-500 fst-italic">set as</label>
-        <div class="form-check form-switch form-check-custom form-check-solid--- px-1">
-            <label for="asDefaultView" class="form-check-label form-label col-form-label pb-1 fw-boldest opacity-100 noempty nopurpose col-form-label-sm fs-6">
-                Default View
-            </label>
-            <input type="checkbox" id="asDefaultView" title="" style="" name="asDefaultView" class="form-check-input opacity-100 tem custInpChk w-50px h-25px ms-2" ${ivirMainObj?.groupName === currView && currView != "" && !newViewTab ? ` checked="checked" ` : ``} />
-        </div>
     </label>
     `;
 
@@ -9829,13 +9515,13 @@ function smartStepper(newViewTab, viewTabName, viewTabCaption) {
     </span>
     `;
 
-    var buttonApplyHTML = `<button type="button" class="btn btn-light-primary btn-active-primary shadow-sm sv-btn-apply">
+    var buttonApplyHTML = `<button type="button" class="btn btn-light btn-active-light-primary shadow-sm sv-btn-apply">
         ${appGlobalVarsObject.lcm[442]}
     </button>
     `;
 
     /* Section :: Modal */
-    let myModal = new BSModal("newViewTabId", "", smartViewStepperHTML, (shown) => {
+    let myModal = new BSModal("newViewTabId", "", smartViewStepperHTML, () => {
 
         /* Onload CallBacks */
         svOptionsObj.map((element, index) => {
@@ -9872,41 +9558,26 @@ function smartStepper(newViewTab, viewTabName, viewTabCaption) {
             /* Init :: all Smartview options */
             $("select.stepperSelect").select2({
                 allowClear: true,
-                dropdownParent: document.getElementById("newViewTabId"),
                 placeholder: appGlobalVarsObject.lcm[441],
-                tags: true,
-                tokenSeparators: ['`']
             });
 
             /* Init :: apply to in header only */
             $("select#viewAplyTo").select2({
                 allowClear: true,
-                minimumResultsForSearch: Infinity,
                 placeholder: appGlobalVarsObject.lcm[441],
                 width: 'resolve'
             });
 
-            if(!newViewTab){
-                let {applyTo} = ivirMainViewObj.views[viewTabName];
-
-                if(applyTo){
-                    $("select#viewAplyTo").val(applyTo).trigger("change");
-                }
-
-                $("select#viewAplyTo").prop('disabled', true).next(".select2").find(".select2-selection").addClass("bg-white");
-            }
-
             KTApp?.initBootstrapTooltips();
 
-            // hasBuildAccess = false;
-            // if (!hasBuildAccess) {
-            //     $('#viewAplyTo').append(new Option(callParentNew("mainUserName"), callParentNew("mainUserName"), true, true)).trigger("change");
-            // }
+            if (!hasBuildAccess) {
+                $('#viewAplyTo').append(new Option(callParentNew("mainUserName"), callParentNew("mainUserName"), true, true)).trigger("change");
+            }
 
             $(document).off("click", ".sv-btn-apply").on("click", ".sv-btn-apply", () => {
                 let svTask = newBtnGroup[stepper.steps[stepper.currentStepIndex - 1].dataset.svname]?.task;
 
-                saveViewActionRef(`${(newViewTab ? "Add View" : "Edit View")}`, `${svTask}`, newBtnGroup[stepper.steps[stepper.currentStepIndex - 1].dataset.svname]?.apply, (newViewTab ? showValueOption : [svTask, 0]), (!newViewTab ? true : false));
+                saveViewActionRef(`${(newViewTab ? "Add View" : "Edit View")}`, `${svTask}`, newBtnGroup[stepper.steps[stepper.currentStepIndex - 1].dataset.svname]?.apply, (newViewTab ? showValueOption : JSON.stringify([svTask, 1])), (!newViewTab ? true : false));
                 showAlertDialog(`info`, `${newBtnGroup[stepper.steps[stepper.currentStepIndex - 1].dataset.svname]?.caption} applied. Please ${appGlobalVarsObject.lcm[400]} to see the changes.`);
 
             }).off("click", ".sv-btn-reset").on("click", ".sv-btn-reset", () => {
@@ -9920,19 +9591,10 @@ function smartStepper(newViewTab, viewTabName, viewTabCaption) {
             ShowDimmer(false);
         }, 0);
 
-    }, (hide) => {
-        {
-            if(oldLoadViewName){
-                $(`.lnkViewTab#${oldLoadViewName}`).click();
-            }
-        }
-
-        oldLoadViewName = "";
+    }, () => {
         /* Unload CallBacks */
-        setTimeout(() => {
-            onCloseRef(newBtnGroup[stepper.steps[stepper.currentStepIndex - 1].dataset.svname]?.task);
-            stepper = undefined;
-        }, 0);
+        onCloseRef(newBtnGroup[stepper.steps[stepper.currentStepIndex - 1].dataset.svname]?.task);
+        stepper = undefined;
     });
 
     /* Section :: myModal methods */
@@ -9941,7 +9603,6 @@ function smartStepper(newViewTab, viewTabName, viewTabCaption) {
 
     myModal.okBtn.innerText = appGlobalVarsObject.lcm[400];
     myModal.okBtn.setAttribute(`onclick`, `${saveView}`);
-    myModal.okBtn.removeAttribute("data-bs-dismiss");
 
     myModal.cancelBtn.classList.add("d-none");
 
@@ -9987,24 +9648,20 @@ function smartCharts(chartParam = true, showValueOption = undefined, isEditPill 
 
         $("select.chartSelect").select2({
             allowClear: true,
-            dropdownParent: document.getElementById(appGlobalVarsObject.lcm[410]),
             placeholder: appGlobalVarsObject.lcm[441],
         });
 
         onContentReadyRef("chart", showValueOption, isEditPill);
 
         KTApp?.initBootstrapTooltips();
-    }, () => {
-        onCloseRef("chart");
-    });
+    }, () => { });
 
     myModal.changeSize("fullscreen");
     myModal.scrollableDialog();
 
     myModal.okBtn.innerText = appGlobalVarsObject.lcm[399];
-    myModal.okBtn.removeAttribute("data-bs-dismiss");
     myModal.okBtn.addEventListener("click", () => {
-        saveViewActionRef("Charts", "chart", newBtnGroup.charts.apply, showValueOption, isEditPill);
+        saveViewActionRef("Charts", "chart", newBtnGroup.charts.apply, showValueOption == undefined ? showValueOption : JSON.stringify(showValueOption), isEditPill);
     });
 
 }
@@ -10014,7 +9671,7 @@ function getRowGroupingCondtionHtml() {
     var htmlToShow = `
     <div class="col-md-4 col-sm-12">
         <div class="form-group">
-            <label for="totalAggrFunction" class="form-label col-form-label pb-1 fw-boldest">Function</label>
+            <label for="totalAggrFunction" class="form-label col-form-label">Function</label>
             <select class="form-select stepperSelect totalAggrFunction">
                 <option value="">${appGlobalVarsObject.lcm[441]}</option>
                 <option value="sum">Sum</option>
@@ -10027,7 +9684,7 @@ function getRowGroupingCondtionHtml() {
     </div>
     <div class="col-md-4 col-sm-12">
         <div class="form-group">
-            <label for="totalSource" class="form-label col-form-label pb-1 fw-boldest">Source</label>
+            <label for="totalSource" class="form-label col-form-label">Source</label>
             <a href="javascript:void(0);" class="ms-2 align-middle icon-arrows-question" tabindex="-1"
                 data-bs-toggle="tooltip" data-bs-placement="right" data-bs-dismiss="click"
                 data-bs-original-title="Please select the column, which will be used by the function for computation.">
@@ -10039,7 +9696,7 @@ function getRowGroupingCondtionHtml() {
         </div>
     </div>
     <div class="d-flex flex-row-auto flex-center gap-3 col-md-4 firstRow grpaddDltBtnWrapper">
-        <label class="form-label col-form-label pb-1 fw-boldest labelP">Grand Total</label>
+        <label class="form-label col-form-label labelP">Grand Total</label>'
         <div class="checkbox grndTotalWrapper">
             <label class="form-check form-check-sm form-check-custom form-check-solid grndTtlCB">
                 <input disabled type="checkbox" value="" class="form-check-input">
@@ -10053,145 +9710,4 @@ function getRowGroupingCondtionHtml() {
     `;
 
     return htmlToShow;
-}
-
-/* Listview Design Modal */
-function smartDesign(lvDesignHTML) {
-
-    let applyToHTML = `<label class="input-group border-bottom required d-none"> 
-    <input required id="viewName" type="text" class="d-none form-control" maxlength="20" tabindex="-1" value=""} />
-
-    <input required id="viewCaption" type="text" class="form-control form-control-transparent ps-12" maxlength="20" tabindex="-1" placeholder="Enter View Name..." title="Enter View Name..." value="main"} /> 
-
-    <span class="material-icons material-icons-style material-icons-2 material-icons-lg-3 cursor-default position-absolute top-50 translate-middle-y ms-4 z-index-3">
-        edit
-    </span>
-</label>
-
-<label class="input-group gap-5 ${!hasBuildAccess ? `d-none` : ``}">                    
-    <label class="form-label col-form-label pb-1 fw-boldest text-gray-500 fst-italic">Design for</label>
-    <select class="form-select form-select-white border-bottom dialogSlctFld" id="viewAplyTo" placeholder="Apply To">
-        <option value=${callParentNew("mainUserName")}>${callParentNew("mainUserName")}</option>
-        <option value="ALL">ALL</option>
-    </select>
-</label>`;
-
-    let myModal = new BSModal("design", "", lvDesignHTML, () => {
-        onContentReadyRef("design", undefined, false);
-
-        $("select#viewAplyTo").select2({
-            allowClear: true,
-            dropdownParent: document.getElementById("design"),
-            minimumResultsForSearch: Infinity,
-            placeholder: appGlobalVarsObject.lcm[441],
-            width: 'resolve'
-        });
-    }, () => {
-        onCloseRef("design");
-    });
-
-    myModal.changeSize("fullscreen");
-    myModal.scrollableDialog();
-    myModal.cancelBtn.classList.add("d-none");
-
-    myModal.okBtn.innerText = appGlobalVarsObject.lcm[399];
-    myModal.okBtn.removeAttribute("data-bs-dismiss");
-    myModal.okBtn.addEventListener("click", () => {
-        saveViewActionRef("Design", "design", newBtnGroup.design.apply, undefined, false);
-    });
-
-    var headerExtras = document.createElement("div");
-    headerExtras.classList.add(..."d-flex col-6 gap-5".split(" "));
-    myModal.modalHeader.prepend(headerExtras);
-    myModal.headerExtras = headerExtras;
-    myModal.headerExtras.innerHTML = applyToHTML;
-
-}
-
-function loadAxRuleEngineForm(isOpen,paramVal='') {
-    if (isOpen == 'true') {
-        createAxRulesPopup('tstruct.aspx?act=open&transid=axrlr&AxPop=true');
-    } else {
-        createAxRulesPopup('tstruct.aspx?act=load&transid=axrlr&axpdef_rulesdefid=' + paramVal +'&AxPop=true');
-    }
-}
-
-function createAxRulesPopup(modalBodyLink, delayLoad = false) {
-
-    try {
-        var modalId = "loadPopUpPage";
-
-        var iFrameModalBody = `<iframe id="${modalId}" name="${modalId}" class="col-12 flex-column-fluid w-100 h-100 p-0 my-n1" src="${delayLoad ? "" : modalBodyLink}" frameborder="0" allowtransparency="True"></iframe>`;
-
-        let myModal = new BSModal(modalId, "", iFrameModalBody,
-            (opening) => {
-                if (delayLoad) {
-                    try {
-                        myModal.modalBody.querySelector(`#${modalId}`).contentWindow.location.href = modalBodyLink;
-                    } catch (ex) { }
-                }
-            },
-            (closing) => {
-                var isAxPop = modalBodyLink.indexOf("AxPop=true") > -1;
-                if (isAxPop && (window.document.title == "Iview" || window.document.title == "Listview")) {
-                    window.location.href = window.location.href;
-                }
-            }
-        );
-
-        myModal.changeSize("fullscreen");
-        myModal.hideHeader();
-        myModal.hideFooter();
-        myModal.showFloatingClose();
-        myModal.modalBody.classList.add("p-0", "overflow-hidden");
-    } catch (error) {
-        showAlertDialog("error", error.message);
-    }
-}
-
-/**
- * @description: process masking information for report
- * @author Prashik
- * @date 06/01/2023
- * @param {*} { td, cellData, rowData, row, col, colID, rowDataAccess }
- * @return {*}  
- */
-function processMask({ td, cellData, rowData, row, col, colID, rowDataAccess }){
-    let returnData = cellData;
-    let maskObj;
-    if((maskObj = ivHeadRows[colID]["@mask"]) && maskObj.maskchar){
-        // maskObj.maskchar = "@";
-        if (maskObj.masking == "Mask all characters" && (maskObj.maskroles ? ((AxRole?.split(",") || []).some(val=>(maskObj.maskroles?.split(",") || []).indexOf(val) > -1)) : false)){
-            returnData = maskObj.maskchar.repeat(returnData.toString().length);
-        }
-        else if(maskObj.masking == "Show few characters"){
-            let prefixVisibleMaskCount = +maskObj.firstcharmask;
-            let postfixVisibleMaskCount = +maskObj.lastcharmask;
-            
-            if(prefixVisibleMaskCount){
-                if(returnData.toString().length < prefixVisibleMaskCount){
-                    prefixVisibleMaskCount = returnData.toString().length;
-                }
-
-                // let regex = new RegExp(`^.{${prefixVisibleMaskCount}}`, "gm");
-
-                // returnData = returnData.replace(regex, maskObj.maskchar.repeat(prefixVisibleMaskCount));
-
-                returnData = RevMaskCharacter(returnData.toString(), maskObj.maskchar, prefixVisibleMaskCount);
-            }
-
-            if(postfixVisibleMaskCount){
-                if(returnData.toString().length < postfixVisibleMaskCount){
-                    postfixVisibleMaskCount = returnData.toString().length;
-                }
-
-                // let regex = new RegExp(`.{${postfixVisibleMaskCount}}$`, "gm");
-
-                // returnData = returnData.replace(regex, maskObj.maskchar.repeat(postfixVisibleMaskCount));
-
-                returnData = MaskCharacter(returnData.toString(), maskObj.maskchar, returnData.toString().length - postfixVisibleMaskCount);
-            }
-        }
-    }
-    return returnData;
 }

@@ -148,11 +148,11 @@
     <script src="../Js/thirdparty/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
     <script src="../Js/gen.min.js?v=14" type="text/javascript"></script>
     <script src="../Js/noConflict.min.js?v=1" type="text/javascript"></script>
-    <script src="../Js/alerts.min.js?v=30" type="text/javascript"></script>
+    <script src="../Js/alerts.min.js?v=28" type="text/javascript"></script>
     <script src="../ThirdParty/jquery-confirm-master/jquery-confirm.min.js?v=2" type="text/javascript"></script>
     <script src="../Js/thirdparty/jquery-ui/1.12.1/jquery-ui.min.js" type="text/javascript"></script>
     <script src="../ThirdParty/materialize/js/materialize.min.js?v=10"></script>
-    <script src="../Js/common.min.js?v=118" type="text/javascript"></script>
+    <script src="../Js/common.min.js?v=98" type="text/javascript"></script>
     <script src="../ThirdParty/Highcharts/highcharts.js"></script>
     <script src="../ThirdParty/Highcharts/highcharts-3d.js"></script>
     <script src="../ThirdParty/Highcharts/highcharts-more.js"></script>

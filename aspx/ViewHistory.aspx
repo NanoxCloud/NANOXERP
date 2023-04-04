@@ -31,7 +31,7 @@
     <script type="text/javascript">
         var IsViewHist = true
     </script>
-    <script src="../Js/common.min.js?v=118" type="text/javascript"></script>
+    <script src="../Js/common.min.js?v=98" type="text/javascript"></script>
 </head>
 <body>
     <form id="form1" runat="server" dir="<%=direction%>">

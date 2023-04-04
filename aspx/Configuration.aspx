@@ -43,7 +43,7 @@
     <asp:PlaceHolder runat="server">
         <%:Scripts.Render("~/UI/axpertUI/bundleJs") %>
     </asp:PlaceHolder>
-    <%-- <script src="../Js/thirdparty/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
+   <%-- <script src="../Js/thirdparty/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
     <script src="../Js/thirdparty/jquery-ui/1.12.1/jquery-ui.min.js" type="text/javascript"></script>
     <script src="../Js/thirdparty/bootstrap/3.3.6/bootstrap.min.js"></script>--%>
     <script src="../Js/noConflict.min.js?v=1" type="text/javascript"></script>
@@ -52,7 +52,7 @@
     <%--<link href="../Css/thirdparty/jquery-ui/1.12.1/jquery-ui.min.css" rel="stylesheet" />--%>
     <%--custom alerts start--%>
     <%--<link href="../Css/animate.min.css" rel="stylesheet" />--%>
-    <script src="../Js/alerts.min.js?v=30" type="text/javascript"></script>
+    <script src="../Js/alerts.min.js?v=28" type="text/javascript"></script>
     <%--custom alerts end--%>
 
     <%--<link href="../Css/msgBoxLight.min.css?v=4" rel="stylesheet" type="text/css" />
@@ -61,7 +61,7 @@
     <script>
         var AxApiUrl = '<%=apiUrl%>';
     </script>
-    <script src="../Js/Configuration.min.js?v=88"></script>
+    <script src="../Js/Configuration.min.js?v=84"></script>
     <%--<link href="../ThirdParty/jquery-confirm-master/jquery-confirm.min.css?v=1" rel="stylesheet" />
     <script src="../ThirdParty/jquery-confirm-master/jquery-confirm.min.js?v=2"></script>--%>
     <%--<link href="../Css/listIview.min.css?v=8" rel="stylesheet" />
@@ -71,7 +71,7 @@
 
     <%--<link id="themecss" type="text/css" href="" rel="stylesheet" />--%>
     <script src="../Js/AppSettings.min.js?v=12" type="text/javascript"></script>
-    <script src="../Js/common.min.js?v=118" type="text/javascript"></script>
+    <script src="../Js/common.min.js?v=98" type="text/javascript"></script>
     <%--<link href="../ThirdParty/Linearicons/Font/library/linearIcons.css" rel="stylesheet" />--%>
     <script>
         var attchmentLimit = '<%=Session["AxAttachmentSize"]%>' == '' ? '1' : '<%=Session["AxAttachmentSize"]%>'
@@ -96,40 +96,40 @@
         <div class="maincontainer">
             <!--tab navigation starts from here -->
             <ul class="cursor-pointer nav nav-tabs mb-n2 d-none">
-                <li class="nav-item" id="liApplication2">
-                    <a class="nav-link fw-boldest shadow-sm fs-6 text-gray-800 p-4 active" runat="server" data-menu-id="menu1Header" data-div-id="home" id="tabApplication2" href="#home" aria-controls="home" aria-selected="true">Application</a>
-                </li>
-                <li class="nav-item" id="liForms2">
-                    <a class="nav-link fw-boldest shadow-sm fs-6 text-gray-800 p-4" runat="server" id="tabForms2" data-toggle="tab" data-div-id="menu1" data-menu-id="menu2Header" href="#menu1" aria-controls="menu1" aria-selected="false">Forms</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link fw-boldest shadow-sm fs-6 text-gray-800 p-4" runat="server" id="liReports2" data-toggle="tab" data-div-id="menu2" data-menu-id="menu3Header" href="#menu2" aria-controls="menu2" aria-selected="false">Reports</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link fw-boldest shadow-sm fs-6 text-gray-800 p-4" runat="server" id="liGlobe2" data-toggle="tab" data-menu-id="menu5Header" data-div-id="menu4" href="#menu4" aria-controls="menu4" aria-selected="false">Globalization</a>
-                </li>
-                <!-- <li class="nav-item">
-										  <a class="nav-link fw-boldest shadow-sm fs-6 text-gray-800 p-4 disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+										<li class="nav-item" id="liApplication2">
+										  <a class="nav-link shadow-sm fw-bold fs-6 text-gray-800 p-4 active" runat="server" data-menu-id="menu1Header" data-div-id="home" id="tabApplication2"  href="#home" aria-controls="home" aria-selected="true">Application</a>
+										</li>
+										<li class="nav-item" id="liForms2">
+										  <a class="nav-link shadow-sm fw-bold fs-6 text-gray-800 p-4" runat="server" id="tabForms2"  data-toggle="tab"  data-div-id="menu1" data-menu-id="menu2Header" href="#menu1" aria-controls="menu1" aria-selected="false">Forms</a>
+										</li>
+										<li class="nav-item">
+										  <a class="nav-link shadow-sm fw-bold fs-6 text-gray-800 p-4"  runat="server" id="liReports2"   data-toggle="tab" data-div-id="menu2" data-menu-id="menu3Header" href="#menu2" aria-controls="menu2" aria-selected="false">Reports</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link shadow-sm fw-bold fs-6 text-gray-800 p-4"  runat="server" id="liGlobe2"  data-toggle="tab" data-menu-id="menu5Header"  data-div-id="menu4" href="#menu4" aria-controls="menu4" aria-selected="false">Globalization</a>
+										</li>
+										<!-- <li class="nav-item">
+										  <a class="nav-link shadow-sm fw-bold fs-6 text-gray-800 p-4 disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
 										</li> -->
-            </ul>
-            <nav class="">
-                <div class=" nav rounded-pill flex-center bg-white overflow-auto flex-nowrap p-2 my-2 confignav" id="nav-tab" role="tablist">
-                    <button class="flex-equal nav-link fw-boldest btn btn-active-light btn-color-gray-500 btn-active-color-gray-700 py-2 px-4 fs-6 fw-bold active" runat="server" data-menu-id="menu1Header" data-div-id="home" id="liApplication" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Application</button>
-                    <asp:Label ID="lbltabapp" class="d-none" runat="server" meta:resourcekey="lbltabapp">Application</asp:Label>
-                    <button class="flex-equal nav-link fw-boldest btn btn-active-light btn-color-gray-500 btn-active-color-gray-700 py-2 px-4 fs-6 fw-bold" runat="server" id="liForms" data-div-id="menu1" data-menu-id="menu2Header" data-bs-toggle="tab" data-bs-target="#menu1" type="button" role="tab" aria-controls="menu1" aria-selected="false">Forms</button>
-                    <asp:Label ID="lblforms" class="d-none" runat="server" meta:resourcekey="lblforms">Forms</asp:Label>
-                    <button class="flex-equal nav-link fw-boldest btn btn-active-light btn-color-gray-500 btn-active-color-gray-700 py-2 px-4 fs-6 fw-bold" runat="server" id="liReports" data-div-id="menu2" data-menu-id="menu3Header" data-bs-toggle="tab" data-bs-target="#menu2" type="button" role="tab" aria-controls="menu2" aria-selected="false">Reports</button>
-                    <asp:Label ID="lblreport" class="d-none" runat="server" meta:resourcekey="lblreport">Reports</asp:Label>
-                    <button class="flex-equal nav-link fw-boldest btn btn-active-light btn-color-gray-500 btn-active-color-gray-700 py-2 px-4 fs-6 fw-bold d-none" runat="server" data-menu-id="menu4Header" data-div-id="menu3" id="liDeveloper" data-bs-toggle="tab" data-bs-target="#menu3" type="button" role="tab" aria-controls="menu3" aria-selected="false">Page Builder</button>
-                    <asp:Label ID="lbldeveloper" class="d-none" runat="server" meta:resourcekey="lbldeveloper">Page Builder</asp:Label>
-                    <button class="flex-equal nav-link fw-boldest btn btn-active-light btn-color-gray-500 btn-active-color-gray-700 py-2 px-4 fs-6 fw-bold" runat="server" id="liGlobe" data-menu-id="menu5Header" data-div-id="menu4" data-bs-toggle="tab" data-bs-target="#menu4" type="button" role="tab" aria-controls="menu4" aria-selected="false">Globalization</button>
-                    <asp:Label ID="lblGlobe" class="d-none" runat="server" meta:resourcekey="lblGlobe">Globalization</asp:Label>
-                    <button class="flex-equal nav-link fw-boldest btn btn-active-light btn-color-gray-500 btn-active-color-gray-700 py-2 px-4 fs-6 fw-bold" runat="server" id="liUserSettings" data-menu-id="menu6Header" data-div-id="menu5" data-bs-toggle="tab" data-bs-target="#menu5" type="button" role="tab" aria-controls="menu5" aria-selected="false" style="display: none">User</button>
-                    <asp:Label ID="lbluserset" class="d-none" runat="server" meta:resourcekey="lbluserset">User</asp:Label>
-                    <button class="d-none flex-equal nav-link fw-boldest btn btn-active-light btn-color-gray-500 btn-active-color-gray-700 py-2 px-4 fs-6 fw-bold" id="liMenuSet" data-menu-id="menu7Header" runat="server" data-div-id="menu7" data-bs-toggle="tab" data-bs-target="#menu7" type="button" role="tab" aria-controls="menu7" aria-selected="false">Menu</button>
-                    <asp:Label ID="Label1" class="d-none" runat="server" meta:resourcekey="lblmenuSet">Menu</asp:Label>
-                </div>
-            </nav>
+									</ul>
+            <nav class ="">
+  <div class=" nav rounded-pill flex-center bg-white overflow-auto flex-nowrap p-2 my-2 confignav" id="nav-tab" role="tablist">
+    <button class="flex-equal nav-link btn btn-active-light btn-color-gray-500 btn-active-color-gray-700 py-2 px-4 fs-6 fw-bold active" runat="server" data-menu-id="menu1Header" data-div-id="home" id="liApplication" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Application</button>
+      <asp:Label ID="lbltabapp" class="d-none" runat="server" meta:resourcekey="lbltabapp">Application</asp:Label>
+    <button class="flex-equal nav-link btn btn-active-light btn-color-gray-500 btn-active-color-gray-700 py-2 px-4 fs-6 fw-bold" runat="server" id="liForms"  data-div-id="menu1" data-menu-id="menu2Header" data-bs-toggle="tab" data-bs-target="#menu1" type="button" role="tab" aria-controls="menu1" aria-selected="false">Forms</button>
+      <asp:Label ID="lblforms" class="d-none" runat="server" meta:resourcekey="lblforms">Forms</asp:Label>
+    <button class="flex-equal nav-link btn btn-active-light btn-color-gray-500 btn-active-color-gray-700 py-2 px-4 fs-6 fw-bold" runat="server" id="liReports"  data-div-id="menu2" data-menu-id="menu3Header" data-bs-toggle="tab" data-bs-target="#menu2" type="button" role="tab" aria-controls="menu2" aria-selected="false">Reports</button>
+      <asp:Label ID="lblreport" class="d-none" runat="server" meta:resourcekey="lblreport">Reports</asp:Label>
+      <button class="flex-equal nav-link btn btn-active-light btn-color-gray-500 btn-active-color-gray-700 py-2 px-4 fs-6 fw-bold d-none"  runat="server" data-menu-id="menu4Header"  data-div-id="menu3" id="liDeveloper" data-bs-toggle="tab" data-bs-target="#menu3" type="button" role="tab" aria-controls="menu3" aria-selected="false">Page Builder</button>
+      <asp:Label ID="lbldeveloper" class="d-none" runat="server" meta:resourcekey="lbldeveloper">Page Builder</asp:Label>
+      <button class="flex-equal nav-link btn btn-active-light btn-color-gray-500 btn-active-color-gray-700 py-2 px-4 fs-6 fw-bold" runat="server" id="liGlobe" data-menu-id="menu5Header"  data-div-id="menu4" data-bs-toggle="tab" data-bs-target="#menu4" type="button" role="tab" aria-controls="menu4" aria-selected="false">Globalization</button>
+      <asp:Label ID="lblGlobe" class="d-none" runat="server" meta:resourcekey="lblGlobe">Globalization</asp:Label>
+      <button class="flex-equal nav-link btn btn-active-light btn-color-gray-500 btn-active-color-gray-700 py-2 px-4 fs-6 fw-bold" runat="server" id="liUserSettings" data-menu-id="menu6Header" data-div-id="menu5" data-bs-toggle="tab" data-bs-target="#menu5" type="button" role="tab" aria-controls="menu5" aria-selected="false" style="display: none">User</button>
+      <asp:Label ID="lbluserset" class="d-none" runat="server" meta:resourcekey="lbluserset">User</asp:Label>
+      <button class="d-none flex-equal nav-link btn btn-active-light btn-color-gray-500 btn-active-color-gray-700 py-2 px-4 fs-6 fw-bold" id="liMenuSet" data-menu-id="menu7Header" runat="server" data-div-id="menu7" data-bs-toggle="tab" data-bs-target="#menu7" type="button" role="tab" aria-controls="menu7" aria-selected="false">Menu</button>
+      <asp:Label ID="Label1"  class="d-none" runat="server" meta:resourcekey="lblmenuSet">Menu</asp:Label>
+  </div>
+</nav>
             <ul class="cursor-pointer nav nav-tabs mb-n2 confignav d-none">
                 <li class="active" id="liApplication1" data-menu-id="menu1Header" data-div-id="home"><a data-toggle="tab" href="#home" id="tabApplication" runat="server">
                     <asp:Label ID="lbltabapp1" runat="server" meta:resourcekey="lbltabapp">Application</asp:Label></a></li>
@@ -148,25 +148,25 @@
             </ul>
             <div class="tab-content scrolldiv" id="nav-tabContent">
                 <%--<div class ="card card-xl-stretch mb-1 mb-xl-2 shadow-sm">--%>
-                <div id="home" runat="server" class="tab-pane fade show active configheight" role="tabpanel" aria-labelledby="nav-home-tab">
+                <div id="home" runat="server" class="tab-pane fade show active configheight"  role="tabpanel" aria-labelledby="nav-home-tab">
                     <!--wrapper content is toggele space -->
                     <div class="">
                         <div class="" id="accordion" role="tablist" aria-multiselectable="true">
                             <div class="panel panel-default configpanel card shadow-sm">
                                 <div class=" card-header align-items-center panel-heading active configheading" role="tab" id="headingOne">
-                                    <div class="card-title">
-                                        <h4 class="panel-title">
-                                            <%--<button class="btn btn-icon btn-white btn-color-gray-600 btn-active-primary shadow-sm " id="menu1Header" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" data-parent="#accordion" aria-controls="collapseOne"> 
+                                    <div class ="card-title">
+                                    <h4 class="panel-title">
+                                        <%--<button class="btn btn-icon btn-white btn-color-gray-500 btn-active-primary shadow-sm " id="menu1Header" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" data-parent="#accordion" aria-controls="collapseOne"> 
                                                         <span class="material-icons">expand_more</span>
                                                             </button>--%>
-                                            <%--<a role="button" class="btn btn-icon btn-white btn-color-gray-600 btn-active-primary shadow-sm " id="menu1Header" data-toggle="collapse" data-parent="#accordion"  data-bs-target="#collapseOne"  aria-expanded="true" aria-controls="collapseOne" title="Hide"></a>--%>
-                                            <%--href="#collapseOne"--%>
-                                            <asp:Label ID="lblapplication" runat="server" meta:resourcekey="lblapplication">Application</asp:Label>
+                                       <%--<a role="button" class="btn btn-icon btn-white btn-color-gray-500 btn-active-primary shadow-sm " id="menu1Header" data-toggle="collapse" data-parent="#accordion"  data-bs-target="#collapseOne"  aria-expanded="true" aria-controls="collapseOne" title="Hide"></a>--%>
+                                        <%--href="#collapseOne"--%>
+                                        <asp:Label ID="lblapplication" runat="server" meta:resourcekey="lblapplication">Application</asp:Label>
 
-                                        </h4>
-                                    </div>
+                                    </h4>
+                                        </div>
                                 </div>
-                                <%--  <div class ="card-body">--%>
+                              <%--  <div class ="card-body">--%>
                                 <div id="collapseOne" class="card-body" role="tabpanel" aria-labelledby="headingOne">
                                     <div class="panel-body">
                                         <!--Form control starts here-->
@@ -200,15 +200,14 @@
                                                         <asp:HiddenField ID="hdnMenu" runat="server" />
                                                     </div>
                                                 </div>
-
+                                                
                                                 <div class="form-group form-switch form-check form-check-custom form-check-solid col-md-6">
                                                     <span class="setTitle">
-                                                        <asp:Label ID="lblenablebreadcrumb" CssClass="form-check-label form-label col-form-label pb-1 fw-boldest ms-0" runat="server" meta:resourcekey="lblenablebreadcrumb">Enable Breadcrumb</asp:Label>
+                                                        <asp:Label ID="lblenablebreadcrumb" CssClass="form-check-label form-label col-form-label ms-0" runat="server" meta:resourcekey="lblenablebreadcrumb">Enable Breadcrumb</asp:Label>
                                                     </span>
                                                     <a href="javascript:void(0)" class="swtchDummyAnchr form-check form-switch  form-check-solid ms-auto m-0 ps-0 py-4">
                                                         <input class="form-check-input ms-3 w-40px h-25px" name="optOptBcrum" id="optBcrum" type="checkbox" />
-                                                        <label class="" for="optBcrum" id="lblOptBcrum"></label>
-                                                        <%--tgl-btn togglecustom toggle_btn--%>
+                                                        <label class="" for="optBcrum" id="lblOptBcrum"></label><%--tgl-btn togglecustom toggle_btn--%>
                                                     </a>
                                                     <asp:HiddenField ID="hdnBreadcrumb" runat="server" />
                                                 </div>
@@ -228,7 +227,7 @@
 
                                                 <div class="form-group form-switch form-check form-check-custom form-check-solid  col-md-6">
                                                     <span class="setTitle">
-                                                        <asp:Label ID="lblenableCards" CssClass="form-check-label form-label col-form-label pb-1 fw-boldest ms-0" runat="server" meta:resourcekey="lblenableCards" for="enable">Enable Homepage as Cards</asp:Label></span>
+                                                        <asp:Label ID="lblenableCards" CssClass="form-check-label form-label col-form-label ms-0" runat="server" meta:resourcekey="lblenableCards" for="enable">Enable Homepage as Cards</asp:Label></span>
                                                     <a href="javascript:void(0)" class="swtchDummyAnchr form-check form-switch  form-check-solid ms-auto m-0 ps-0 py-4">
                                                         <input class="form-check-input ms-3 w-40px h-25px" name="optCards" id="enableCardsText" type="checkbox" />
                                                         <label class="" for="enableCardsText" id="lblenablCardsText"></label>
@@ -250,7 +249,7 @@
                                                 </div>--%>
                                                 <div class="form-group" id="divtally" runat="server" style="display: none">
                                                     <span class="setTitle">
-                                                        <asp:Label ID="lbltally" CssClass="form-label fs-6 fw-boldest text-dark" runat="server" meta:resourcekey="lbltally" for="enable">Enable Export to Tally</asp:Label></span>
+                                                        <asp:Label ID="lbltally" CssClass="form-label fs-6 fw-bolder text-dark" runat="server" meta:resourcekey="lbltally" for="enable">Enable Export to Tally</asp:Label></span>
                                                     <a href="javascript:void(0)" class="swtchDummyAnchr form-check form-switch  form-check-solid ms-auto m-0 ps-0 py-4">
                                                         <input class="m-wrap placeholder-no-fix form-check-input h-25px w-40px" name="optTally" id="enabletallyText" type="checkbox" />
                                                         <label class="" for="enabletallyText" id="lblenabletallyText"></label>
@@ -272,7 +271,7 @@
 
                                                 <div class="form-group form-switch form-check form-check-custom form-check-solid col-md-6">
                                                     <span class="setTitle">
-                                                        <asp:Label ID="lblcpwd" class="form-check-label form-label col-form-label pb-1 fw-boldest ms-0" runat="server" meta:resourcekey="lblcpwd" for="enable">Allow Change Password on first time login</asp:Label></span>
+                                                        <asp:Label ID="lblcpwd" class="form-check-label form-label col-form-label ms-0" runat="server" meta:resourcekey="lblcpwd" for="enable">Allow Change Password on first time login</asp:Label></span>
                                                     <a href="javascript:void(0)" class="swtchDummyAnchr form-check form-switch  form-check-solid ms-auto m-0 ps-0 py-4">
                                                         <input class="form-check-input ms-3 w-40px h-25px" name="optCPWD" id="enablelblcpwdText" type="checkbox" />
                                                         <label class="" for="enablelblcpwdText" id="lblenablelblcpwdText"></label>
@@ -303,23 +302,13 @@
 
                                                 <div class="form-group form-switch form-check form-check-custom form-check-solid col-md-6">
                                                     <span class="setTitle">
-                                                        <asp:Label ID="lblsess" CssClass="form-check-label form-label col-form-label pb-1 fw-boldest ms-0" runat="server" meta:resourcekey="lblsess" for="enable">Session Auto Extend</asp:Label></span>
+                                                        <asp:Label ID="lblsess"  CssClass="form-check-label form-label col-form-label ms-0" runat="server" meta:resourcekey="lblsess" for="enable">Session Auto Extend</asp:Label></span>
                                                     <a href="javascript:void(0)" class="swtchDummyAnchr form-check form-switch  form-check-solid ms-auto m-0 ps-0 py-4">
                                                         <input class="form-check-input ms-3 w-40px h-25px" name="optSessExt" id="enablelblsessText" type="checkbox" />
                                                         <label class="" for="enablelblsessText" id="lblenablelblsessText"></label>
                                                     </a>
                                                     <asp:HiddenField ID="hdnSessExt" runat="server" />
                                                 </div>
-                                                <div class="form-group form-switch form-check form-check-custom form-check-solid col-md-6">
-                                                    <span class="setTitle">
-                                                        <asp:Label ID="lbltimezone" CssClass="form-check-label form-label col-form-label pb-1 fw-boldest ms-0" runat="server" meta:resourcekey="lbltimezone" for="enable">Allow Timezone Variation</asp:Label></span>
-                                                    <a href="javascript:void(0)" class="swtchDummyAnchr form-check form-switch  form-check-solid ms-auto m-0 ps-0 py-4">
-                                                        <input class="form-check-input ms-3 w-40px h-25px" name="allowTimezone" id="allowTimezone" type="checkbox" />
-                                                        <label class="" for="allowTimezone" id="lblallowTimezone"></label>
-                                                    </a>
-                                                    <asp:HiddenField ID="hdnAllowTimeZone" runat="server" />
-                                                </div>
-
                                                 <div class="form-group" style="display: none;">
                                                     <span class="setTitle">
                                                         <asp:Label ID="lblDisableSplit" runat="server" meta:resourcekey="lblDisableSplit" for="enable">Disable Split</asp:Label></span>
@@ -331,7 +320,7 @@
                                                 </div>
                                                 <div class="form-group col-md-6 my-2">
                                                     <span class="setTitle">
-                                                        <asp:Label ID="lblGlobalSrchTxt" class="form-check-label form-label col-form-label pb-1 fw-boldest" runat="server" meta:resourcekey="lblGlobalSrchTxt" for="lblGlobalSrchTxt">Global Search Fetch Limit</asp:Label>
+                                                        <asp:Label ID="lblGlobalSrchTxt" class="form-check-label form-label col-form-label" runat="server" meta:resourcekey="lblGlobalSrchTxt" for="lblGlobalSrchTxt">Global Search Fetch Limit</asp:Label>
                                                     </span>
                                                     <input type="number" maxlength="6" class="m-wrap my-4 placeholder-no-fix form-control " id="txtGlobalSrchLimit" runat="server" />
                                                 </div>
@@ -362,13 +351,13 @@
 
                                                 <div class="form-group col-md-6">
                                                     <span class="setTitle">
-                                                        <asp:Label ID="lblAlertTimeout" class="form-check-label form-label col-form-label pb-1 fw-boldest" runat="server" meta:resourcekey="lblAlertTimeout" for="txtAlertTimeout">Alerts Timeout</asp:Label></span>
-                                                    <input type="number" class="m-wrap my-4 placeholder-no-fix form-control" id="txtAlertTimeout" runat="server" />
+                                                        <asp:Label ID="lblAlertTimeout" class="form-check-label form-label col-form-label" runat="server" meta:resourcekey="lblAlertTimeout" for="txtAlertTimeout">Alerts Timeout</asp:Label></span>
+                                                    <input type="number" maxlength="2" min="1" max="10" class="m-wrap my-4 placeholder-no-fix form-control" id="txtAlertTimeout" runat="server" />
                                                 </div>
 
                                                 <div class="form-group col-md-6">
                                                     <span class="setTitle">
-                                                        <asp:Label ID="lblSessionExpiryDays" class="form-check-label form-label col-form-label pb-1 fw-boldest" runat="server" meta:resourcekey="lblSessionExpiryDays" for="txtSessionExpiryDays">Application Session Expiry in Days</asp:Label></span>
+                                                        <asp:Label ID="lblSessionExpiryDays"  class="form-check-label form-label col-form-label" runat="server" meta:resourcekey="lblSessionExpiryDays" for="txtSessionExpiryDays">Application Session Expiry in Days</asp:Label></span>
                                                     <input type="number" maxlength="2" min="1" max="10" class="m-wrap my-4 placeholder-no-fix form-control" id="txtSessionExpiryDays" runat="server" />
                                                 </div>
 
@@ -388,10 +377,10 @@
                                                 <div class="form-group col-md-6">
                                                     <div class="form-inline">
                                                         <div class="form-group">
-                                                            <asp:Label ID="lblWizardType" Class="form-check-label form-label col-form-label pb-1 fw-boldest" runat="server" meta:resourcekey="lblWizardType" for="usr">Wizard Type</asp:Label>
+                                                            <asp:Label ID="lblWizardType" Class="form-check-label form-label col-form-label" runat="server" meta:resourcekey="lblWizardType" for="usr">Wizard Type</asp:Label>
                                                         </div>
                                                         <div class="form-group my-3">
-
+                                                            
                                                             <select id="ddlWizardType" class="form-select" data-control="select2" runat="server" data-placeholder="Select Wizard Type">
                                                                 <option value="classic">Classic</option>
                                                                 <option value="modern">Modern</option>
@@ -464,28 +453,28 @@
                                         </div>
                                         <!--ends here -->
                                     </div>
-                                    <%--</div>--%>
-                                </div>
+                                <%--</div>--%>
+                                    </div>
                             </div>
 
                             <div class="card panel panel-default configpanel my-4 ">
                                 <div class="card-header align-items-center panel-heading  active configheading" role="tab" id="headingTwo">
-                                    <div class="card-title">
-                                        <h4 class="panel-title">
-                                            <%--<button class="btn btn-icon btn-white btn-color-gray-600 btn-active-primary shadow-sm " type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo"> 
+                                    <div class ="card-title">
+                                    <h4 class="panel-title">
+                                        <%--<button class="btn btn-icon btn-white btn-color-gray-500 btn-active-primary shadow-sm " type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo"> 
                                                         <span class="material-icons">expand_more</span>
                                                             </button>--%>
-                                            <%-- <a class="collapsed" role="button" data-toggle="collapse" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo" title="Hide"></a>--%>
-                                            <asp:Label ID="lblglobal" runat="server" meta:resourcekey="lblglobal">Application Languages</asp:Label>
+                                       <%-- <a class="collapsed" role="button" data-toggle="collapse" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo" title="Hide"></a>--%>
+                                        <asp:Label ID="lblglobal" runat="server" meta:resourcekey="lblglobal">Application Languages</asp:Label>
 
-                                        </h4>
-                                    </div>
+                                    </h4>
+                                        </div>
                                 </div>
                                 <div id="collapseTwo" class="card-body" role="tabpanel" aria-labelledby="headingTwo">
                                     <div class="panel-body">
-                                        <%--  <div class="form-group form-switch form-check form-check-custom form-check-solid col-md-6">
+                                       <%--  <div class="form-group form-switch form-check form-check-custom form-check-solid col-md-6">
                                                 <span class="setTitle">
-                                                    <asp:Label ID="Label6" class="form-check-label form-label col-form-label pb-1 fw-boldest ms-0" runat="server" meta:resourcekey="lblDevInstance" for="usr">Development Instance</asp:Label></span>
+                                                    <asp:Label ID="Label6" class="form-check-label form-label col-form-label ms-0" runat="server" meta:resourcekey="lblDevInstance" for="usr">Development Instance</asp:Label></span>
                                                 <a href="javascript:void(0)" class="swtchDummyAnchr form-check form-switch  form-check-solid ms-auto m-0 ps-0 py-4">
                                                     <input class="form-check-input ms-3 w-40px h-25px" id="enableDevInstance" type="checkbox" />
                                                     <label class="tgl-btn togglecustom" for="enableDevInstance" id="lblenableDevInstance"></label>
@@ -494,31 +483,22 @@
                                             </div>--%>
                                         <div class="form-group">
                                             <span class="setTitle">
-                                                <asp:Label ID="lbllanguage" runat="server" meta:resourcekey="lbllanguage" for="sel1" Visible="false">Application Languages</asp:Label>
-
-                                            </span>
-                                            <div id="dvUserLeveLangs">
-                                                <div class="form-group form-switch form-check form-check-custom form-check-solid col-md-6">
-                                                    <span class="form-check-label form-label col-form-label ms-0">Apply user level language</span>
-                                                    <a href="javascript:void(0);" class="form-check form-switch form-check-solid ms-auto m-0 ps-0 py-4">
-                                                        <input type="checkbox" class="form-check-input ms-3 w-40px h-25px" name="optUserLang" id="optUserLang" />
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <asp:HiddenField ID="hdnUserLevelLang" runat="server" />
+                                            <asp:Label ID="lbllanguage" runat="server" meta:resourcekey="lbllanguage" for="sel1" Visible="false">Application Languages</asp:Label>
+                                            
+                                                </span>
                                             <div id="dvLangs">
-                                                <div class="form-group form-switch form-check form-check-custom form-check-solid col-md-6">
-                                                    <span class="form-check-label form-label col-form-label pb-1 fw-boldest ms-0">English</span>
+                                               <div class="form-group form-switch form-check form-check-custom form-check-solid col-md-6">
+                                                    <span class="form-check-label form-label col-form-label ms-0">English</span>
                                                     <a href="javascript:void(0);" class="form-check form-switch form-check-solid ms-auto m-0 ps-0 py-4">
                                                         <input type="checkbox" class="form-check-input ms-3 w-40px h-25px" name="optLang" value="english" />
                                                     </a>
                                                 </div>
-                                                <%--  <div class="checkbox rdopadding form-check form-switch form-check-solid ms-auto m-0 ps-0 py-4">
+                                          <%--  <div class="checkbox rdopadding form-check form-switch form-check-solid ms-auto m-0 ps-0 py-4">
                                                 <a>
-                                                    <span class="form-check-label form-label col-form-label pb-1 fw-boldest ms-0">English</span>
+                                                    <span class="form-check-label form-label col-form-label ms-0">English</span>
                                                     <input type="checkbox"  class="form-check-input ms-3 w-40px h-25px" name="optLang" value="english">
-                                              <%--<span class="form-check-label form-label col-form-label pb-1 fw-boldest ">English</span>--%>
-                                                <%--</a>
+                                              <%--<span class="form-check-label form-label col-form-label ">English</span>--%>
+                                                    <%--</a>
                                                 </div>--%>
                                             </div>
                                             <asp:HiddenField ID="hdnLanguage" runat="server" />
@@ -544,8 +524,8 @@
 
                     </div>
 
-                    <%--</div>--%>
-                </div>
+                <%--</div>--%>
+                    </div>
 
                 <div id="menu1" runat="server" class="tab-pane fade configheight">
 
@@ -554,7 +534,7 @@
                         <div class="panel panel-default configpanel card shadow-sm">
                             <div class="card-header align-items-center panel-heading active configheading" role="tab" id="headingTwo">
                                 <h4 class="panel-title m-4">
-                                    <%--<button class="btn btn-icon btn-white btn-color-gray-600 btn-active-primary shadow-sm " id="menu2Header" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree"> 
+                                    <%--<button class="btn btn-icon btn-white btn-color-gray-500 btn-active-primary shadow-sm " id="menu2Header" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree"> 
                                                         <span class="material-icons">expand_more</span>
                                                             </button>--%>
                                     <%--<a class="collapsed" id="menu2Header" role="button" data-toggle="collapse" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree" title="Hide"></a>--%>
@@ -570,7 +550,7 @@
 
                                             <div class="form-group form-switch form-check form-check-custom form-check-solid col-md-6">
                                                 <span class="setTitle">
-                                                    <asp:Label ID="lblDevInstance" class="form-check-label form-label col-form-label pb-1 fw-boldest ms-0" runat="server" meta:resourcekey="lblDevInstance" for="usr">Development Instance</asp:Label></span>
+                                                    <asp:Label ID="lblDevInstance" class="form-check-label form-label col-form-label ms-0" runat="server" meta:resourcekey="lblDevInstance" for="usr">Development Instance</asp:Label></span>
                                                 <a href="javascript:void(0)" class="swtchDummyAnchr form-check form-switch  form-check-solid ms-auto m-0 ps-0 py-4">
                                                     <input class="form-check-input ms-3 w-40px h-25px" id="enableDevInstance" type="checkbox" />
                                                     <label class="tgl-btn togglecustom" for="enableDevInstance" id="lblenableDevInstance"></label>
@@ -605,7 +585,7 @@
                                                 </a>
                                                 <asp:HiddenField ID="hdnIsPerfCode" runat="server" />
                                             </div>
-                                            <div class="form-group">
+                                                    <div class="form-group">
                                                 <div class="form-inline" style="display: none">
                                                     <div class="form-group">
                                                         <asp:Label ID="lblInlineGridEditTitle" runat="server" meta:resourcekey="lblInlineGridEdit" for="usr">Grid Data Edit</asp:Label>
@@ -645,30 +625,30 @@
                                                 <asp:HiddenField ID="hdnDcGridOnSave" runat="server" />
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <asp:Label ID="lblAttachmentSize" class="form-check-label form-label col-form-label pb-1 fw-boldest" runat="server" meta:resourcekey="lblAttachmentSize"> Attachment Size in MB</asp:Label>
+                                                <asp:Label ID="lblAttachmentSize" class="form-check-label form-label col-form-label" runat="server" meta:resourcekey="lblAttachmentSize"> Attachment Size in MB</asp:Label>
                                                 <%--<table>
                                                     <tr>
                                                         <td style="width: 53px;">--%>
-                                                <select id="ddlAttachmentSize" class="form-select my-2" data-control="select2" runat="server" data-placeholder="Select Attachment Size">
-                                                    <%--<select class="form-control " id="ddlAttachmentSize" runat="server">--%>
-                                                    <option value="1" selected="selected">1</option>
-                                                    <option value="2">2</option>
-                                                    <option value="3">3</option>
-                                                    <option value="4">4</option>
-                                                    <option value="5">5</option>
-                                                    <option value="6">6</option>
-                                                    <option value="7">7</option>
-                                                    <option value="8">8</option>
-                                                    <option value="9">9</option>
-                                                    <option value="10">10</option>
-                                                    <option value="20">20</option>
-                                                    <option value="40">40</option>
-                                                    <option value="50">50</option>
-                                                    <option value="70">70</option>
-                                                    <option value="250">250</option>
-                                                    <option value="500">500</option>
-                                                </select>
-                                                <%--</td>
+                                                            <select id="ddlAttachmentSize" class="form-select my-2" data-control="select2" runat="server" data-placeholder="Select Attachment Size">
+                                                            <%--<select class="form-control " id="ddlAttachmentSize" runat="server">--%>
+                                                                <option value="1" selected="selected">1</option>
+                                                                <option value="2">2</option>
+                                                                <option value="3">3</option>
+                                                                <option value="4">4</option>
+                                                                <option value="5">5</option>
+                                                                <option value="6">6</option>
+                                                                <option value="7">7</option>
+                                                                <option value="8">8</option>
+                                                                <option value="9">9</option>
+                                                                <option value="10">10</option>
+                                                                <option value="20">20</option>
+                                                                <option value="40">40</option>
+                                                                <option value="50">50</option>
+                                                                <option value="70">70</option>
+                                                                <option value="250">250</option>
+                                                                <option value="500">500</option>
+                                                            </select>
+                                                        <%--</td>
                                                         <td>&nbsp;MB
                                                         </td>
                                                     </tr>
@@ -806,16 +786,16 @@
 
                         <div class="panel panel-default configpanel card shadow-sm">
                             <div class="card-header align-items-center panel-heading  active configheading" role="tab" id="headingfive">
-                                <div class="card-title">
-                                    <h4 class="panel-title">
-                                        <%--<button class="btn btn-icon btn-white btn-color-gray-600 btn-active-primary shadow-sm " id="menu3Header" type="button" data-bs-toggle="collapse" data-bs-target="#collapsefive" aria-expanded="true" aria-controls="collapsefive"> 
+                                <div class ="card-title">
+                                <h4 class="panel-title">
+                                    <%--<button class="btn btn-icon btn-white btn-color-gray-500 btn-active-primary shadow-sm " id="menu3Header" type="button" data-bs-toggle="collapse" data-bs-target="#collapsefive" aria-expanded="true" aria-controls="collapsefive"> 
                                                         <span class="material-icons">expand_more</span>
                                                             </button>--%>
-                                        <%--<a class="collapsed" id="menu3Header" role="button" data-toggle="collapse" href="#collapsefive" aria-expanded="true" aria-controls="collapsefive" title="Hide"></a>--%>
-                                        <asp:Label ID="lblgeneralc5" runat="server" meta:resourcekey="lblgeneralc5">General</asp:Label>
+                                    <%--<a class="collapsed" id="menu3Header" role="button" data-toggle="collapse" href="#collapsefive" aria-expanded="true" aria-controls="collapsefive" title="Hide"></a>--%>
+                                    <asp:Label ID="lblgeneralc5" runat="server" meta:resourcekey="lblgeneralc5">General</asp:Label>
 
-                                    </h4>
-                                </div>
+                                </h4>
+                                    </div>
                             </div>
                             <div id="collapsefive" class="card-body" role="tabpanel" aria-labelledby="headingfive">
                                 <div class="panel-body">
@@ -911,22 +891,12 @@
 
                                             <div class="form-group form-switch form-check form-check-custom form-check-solid col-md-6">
                                                 <span class="setTitle">
-                                                    <asp:Label ID="lbltitledwn" class="form-check-label form-label col-form-label pb-1 fw-boldest ms-0" runat="server" meta:resourcekey="lbltitledwn" for="usr">Show App Title in downloads</asp:Label></span>
+                                                    <asp:Label ID="lbltitledwn" class ="form-check-label form-label col-form-label ms-0" runat="server" meta:resourcekey="lbltitledwn" for="usr">Show App Title in downloads</asp:Label></span>
                                                 <a href="javascript:void(0)" class="swtchDummyAnchr form-check form-switch  form-check-solid ms-auto m-0 ps-0 py-4">
                                                     <input class="form-check-input ms-3 w-40px h-25px" name="optTitlePrint" id="enabletitledwn" type="checkbox" />
                                                     <label class="" for="enabletitledwn" id="lblenabletitledwn"></label>
                                                 </a>
                                                 <asp:HiddenField ID="hdnShowAppTitle" runat="server" />
-                                            </div>
-
-                                            <div class="form-group form-switch form-check form-check-custom form-check-solid col-md-6">
-                                                <span class="setTitle">
-                                                    <asp:Label ID="lblstripedreport" class="form-check-label form-label col-form-label pb-1 fw-boldest ms-0" runat="server" meta:resourcekey="lblstripedreport" for="usr">Enable Striped Report</asp:Label></span>
-                                                <a href="javascript:void(0)" class="swtchDummyAnchr form-check form-switch  form-check-solid ms-auto m-0 ps-0 py-4">
-                                                    <input class="form-check-input ms-3 w-40px h-25px" name="optstripedreport" id="enablestripedreport" type="checkbox" />
-                                                    <label class="" for="enabletitledwn" id="lblenablestripedreport"></label>
-                                                </a>
-                                                <asp:HiddenField ID="hdnShowstripedreport" runat="server" />
                                             </div>
 
                                         </div>
@@ -943,16 +913,16 @@
 
                         <div class="panel panel-default configpanel card shadow-sm">
                             <div class="card-header align-items-center panel-heading  active configheading" role="tab" id="headingsix">
-                                <div class="card-title">
-                                    <h4 class="panel-title">
-                                        <%--<button class="btn btn-icon btn-white btn-color-gray-600 btn-active-primary shadow-sm " id="menu4Header" type="button" data-bs-toggle="collapse" data-bs-target="#collapsesix" aria-expanded="true" aria-controls="collapsesix"> 
+                                <div class ="card-title">
+                                <h4 class="panel-title">
+                                    <%--<button class="btn btn-icon btn-white btn-color-gray-500 btn-active-primary shadow-sm " id="menu4Header" type="button" data-bs-toggle="collapse" data-bs-target="#collapsesix" aria-expanded="true" aria-controls="collapsesix"> 
                                                         <span class="material-icons">expand_more</span>
                                                             </button>--%>
-                                        <%--<a class="collapsed" id="menu4Header" role="button" data-toggle="collapse" href="#collapsesix" aria-expanded="true" aria-controls="collapsesix" title="Hide"></a>--%>
-                                        <asp:Label ID="lblgeneralc6" runat="server" meta:resourcekey="lblgeneralc6">General </asp:Label>
+                                    <%--<a class="collapsed" id="menu4Header" role="button" data-toggle="collapse" href="#collapsesix" aria-expanded="true" aria-controls="collapsesix" title="Hide"></a>--%>
+                                    <asp:Label ID="lblgeneralc6" runat="server" meta:resourcekey="lblgeneralc6">General </asp:Label>
 
-                                    </h4>
-                                </div>
+                                </h4>
+                                    </div>
                             </div>
                             <div id="collapsesix" class="card-body" role="tabpanel" aria-labelledby="headingsix">
                                 <div class="panel-body">
@@ -983,43 +953,43 @@
                     <div>
                         <div class="panel panel-default configpanel card shadow-sm">
                             <div class="card-header align-items-center panel-heading  active configheading" role="tab" id="heading8">
-                                <div class="card-title">
-                                    <h4 class="panel-title">
-                                        <%--<button class="btn btn-icon btn-white btn-color-gray-600 btn-active-primary shadow-sm " id="menu5Header" type="button" data-bs-toggle="collapse" data-bs-target="#collapse8" aria-expanded="true" aria-controls="collapse8"> 
+                                <div class ="card-title">
+                                <h4 class="panel-title">
+                                    <%--<button class="btn btn-icon btn-white btn-color-gray-500 btn-active-primary shadow-sm " id="menu5Header" type="button" data-bs-toggle="collapse" data-bs-target="#collapse8" aria-expanded="true" aria-controls="collapse8"> 
                                                         <span class="material-icons">expand_more</span>
                                                             </button>--%>
-                                        <%--<a class="collapsed" id="menu5Header" role="button" data-toggle="collapse" href="#collapse8" aria-expanded="true" aria-controls="collapse8" title="Hide"></a>--%>
-                                        <asp:Label ID="lblGlobalization" runat="server" meta:resourcekey="lblGlobalization">Globalization </asp:Label>
+                                    <%--<a class="collapsed" id="menu5Header" role="button" data-toggle="collapse" href="#collapse8" aria-expanded="true" aria-controls="collapse8" title="Hide"></a>--%>
+                                    <asp:Label ID="lblGlobalization" runat="server" meta:resourcekey="lblGlobalization">Globalization </asp:Label>
 
-                                    </h4>
-                                </div>
+                                </h4>
+                                    </div>
                             </div>
                             <div id="collapse8" class="card-body" role="tabpanel" aria-labelledby="heading8">
                                 <div class="panel-body">
                                     <div class="row configformone">
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <asp:Label ID="lblLangSelect" class="form-check-label form-label col-form-label pb-1 fw-boldest" runat="server" meta:resourcekey="lblLangSelect"> Application Language </asp:Label>
-                                                <select id="langSelect" class="form-select my-4" data-control="select2" runat="server" data-placeholder="Select Language">
-                                                    <%--<select class="form-control" id="langSelect" runat="server">--%>
+                                                <asp:Label ID="lblLangSelect" class="form-check-label form-label col-form-label" runat="server" meta:resourcekey="lblLangSelect"> Application Language </asp:Label>
+                                                 <select id="langSelect" class="form-select my-4" data-control="select2" runat="server" data-placeholder="Select Language">
+                                                <%--<select class="form-control" id="langSelect" runat="server">--%>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <asp:Label ID="lblapptitle" class="form-check-label form-label col-form-label pb-1 fw-boldest" runat="server" meta:resourcekey="lblapptitle">App Title</asp:Label>
+                                                <asp:Label ID="lblapptitle" class="form-check-label form-label col-form-label" runat="server" meta:resourcekey="lblapptitle">App Title</asp:Label>
                                                 <input type="text" runat="server" class="m-wrap my-4 placeholder-no-fix form-control " id="txtAppTitle" maxlength="100" />
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <asp:Label ID="lblcopyright" class="form-check-label form-label col-form-label pb-1 fw-boldest" for="txtCopyRightText" runat="server" meta:resourcekey="lblcopyright">App Copyright Text</asp:Label>
+                                                <asp:Label ID="lblcopyright" class="form-check-label form-label col-form-label" for="txtCopyRightText" runat="server" meta:resourcekey="lblcopyright">App Copyright Text</asp:Label>
                                                 <input type="text" runat="server" class="m-wrap my-4 placeholder-no-fix form-control " id="txtCopyRightText" maxlength="255" />
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <asp:Label ID="lbltitle" class="form-check-label form-label col-form-label pb-1 fw-boldest" runat="server" meta:resourcekey="lbltitle" for="usr">Form Print Title</asp:Label>
+                                                <asp:Label ID="lbltitle" class="form-check-label form-label col-form-label" runat="server" meta:resourcekey="lbltitle" for="usr">Form Print Title</asp:Label>
                                                 <input type="text" class="m-wrap my-4 placeholder-no-fix form-control " id="txtPrintTitle" runat="server" maxlength="255" />
                                             </div>
                                         </div>
@@ -1034,13 +1004,13 @@
                     </div>
                     <div id="menu6" runat="server" class="tab-pane configheight">
                         <div class="panel-heading  active configheading" role="tab" id="headingeigth">
-                            <div class="card-title">
-                                <h4 class="panel-title">
-                                    <a class="collapsed" id="menu7Header" role="button" data-toggle="collapse" href="#collapseeight" aria-expanded="true" aria-controls="collapseeight" title="Hide"></a>
-                                    <asp:Label ID="lblin" Class="d-none" runat="server" meta:resourcekey="lblin">Translation String</asp:Label>
+                            <div class ="card-title">
+                            <h4 class="panel-title">
+                                <a class="collapsed" id="menu7Header" role="button" data-toggle="collapse" href="#collapseeight" aria-expanded="true" aria-controls="collapseeight" title="Hide"></a>
+                                <asp:Label ID="lblin" Class="d-none" runat="server" meta:resourcekey="lblin">Translation String</asp:Label>
 
-                                </h4>
-                            </div>
+                            </h4>
+                                </div>
                         </div>
                         <div id="collapseeight" class="" role="tabpanel" aria-labelledby="headingseven">
                             <div class="panel-body">
@@ -1104,16 +1074,16 @@
 
                 <div id="menu7" runat="server" class="tab-pane fade configheight d-none">
                     <div class="card-header align-items-center panel-heading active configheading" role="tab">
-                        <div class="card-title">
-                            <h4 class="panel-title">
-                                <%--<button class="btn btn-icon btn-white btn-color-gray-600 btn-active-primary shadow-sm " type="button" data-bs-toggle="collapse" data-bs-target="#menuGenralItems" aria-expanded="true" aria-controls="collapseThree"> 
+                        <div class ="card-title">
+                        <h4 class="panel-title">
+                             <%--<button class="btn btn-icon btn-white btn-color-gray-500 btn-active-primary shadow-sm " type="button" data-bs-toggle="collapse" data-bs-target="#menuGenralItems" aria-expanded="true" aria-controls="collapseThree"> 
                                                         <span class="material-icons">expand_more</span>
                                                             </button>--%>
-                                <%--<a class="collapsed" role="button" data-toggle="collapse" href="#menuGenralItems" aria-expanded="true" aria-controls="collapseThree" title="Hide"></a>--%>
-                                <asp:Label ID="Label2" runat="server" meta:resourcekey="lblgeneral">General</asp:Label>
+                            <%--<a class="collapsed" role="button" data-toggle="collapse" href="#menuGenralItems" aria-expanded="true" aria-controls="collapseThree" title="Hide"></a>--%>
+                            <asp:Label ID="Label2" runat="server" meta:resourcekey="lblgeneral">General</asp:Label>
 
-                            </h4>
-                        </div>
+                        </h4>
+                            </div>
                     </div>
                     <div id="menuGenralItems" class="" role="tabpanel" aria-labelledby="headingseven">
                         <div class="panel-body">
@@ -1255,15 +1225,15 @@
                 <input type="hidden" name="hdnRoleLandingPage" runat="server" id="hdnRoleName" />
                 <input id="hdnLandingPages" type="hidden" name="hdnLandingPages" runat="server" />
             </div>
-        </div>
-        <asp:HiddenField ID="hdnUserSettings" runat="server" />
+            </div>
+            <asp:HiddenField ID="hdnUserSettings" runat="server" />
     </form>
     <script src="../Js/jquery.multi-select.min.js" type="text/javascript"></script>
 
     <script>
         $("#designerResp").multiSelect();
         $("#homeBuildResp").multiSelect();
-
+       
     </script>
 
 

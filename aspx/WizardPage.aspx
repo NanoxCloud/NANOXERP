@@ -47,10 +47,10 @@
     <script src="../Js/Jquery-2.2.2.min.js" type="text/javascript"></script>
     <script src="../AssetsNew/js/bootstrap.min.js"></script>
     <script src="../Js/wizard.min.js?v=10"></script>
-    <script src="../Js/common.min.js?v=118"></script>
+    <script src="../Js/common.min.js?v=98"></script>
     <script src="../Js/wizardComp.min.js?v=10" type="text/javascript"></script>
-    <script src="../Js/helper.min.js?v=141" type="text/javascript"></script>
-    <script src="../Js/alerts.min.js?v=30"></script>
+    <script src="../Js/helper.min.js?v=123" type="text/javascript"></script>
+    <script src="../Js/alerts.min.js?v=28"></script>
     <script src="../ThirdParty/jquery-confirm-master/jquery-confirm.min.js?v=2"></script>
     <link href="../newPopups/Remodal/remodal-default-theme.min.css?v=2" rel="stylesheet" />
     <link href="../newPopups/Remodal/remodal.min.css?v=3" rel="stylesheet" />

@@ -44,11 +44,11 @@
     <%--custom alerts start--%>
     <link href="../ThirdParty/jquery-confirm-master/jquery-confirm.min.css?v=1" rel="stylesheet" />
     <script src="../ThirdParty/jquery-confirm-master/jquery-confirm.min.js?v=2" type="text/javascript"></script>
-    <script src="../Js/alerts.min.js?v=30" type="text/javascript"></script>
+    <script src="../Js/alerts.min.js?v=28" type="text/javascript"></script>
     <%--custom alerts end--%>
    
-    <script src="../Js/err.min.js?=4" type="text/javascript"></script>
-    <script src="../Js/common.min.js?v=118" type="text/javascript"></script>  
+    <script src="../Js/err.min.js?=3" type="text/javascript"></script>
+    <script src="../Js/common.min.js?v=98" type="text/javascript"></script>  
     <script type="text/javascript">
         var serverprocesstime = '<%=serverprocesstime%>';
         var requestProcess_logtime = '<%=requestProcess_logtime%>';
@@ -67,7 +67,7 @@
         <div class="d-flex justify-content-center align-items-center p-10 vh-100">
             <asp:ScriptManager ID="ScriptManager1" runat="server">
                 <Scripts>
-                    <asp:ScriptReference Path="../Js/helper.min.js?v=141" />
+                    <asp:ScriptReference Path="../Js/helper.min.js?v=123" />
                 </Scripts>
                 <Services>
                     <asp:ServiceReference Path="../WebService.asmx" />
@@ -93,7 +93,7 @@
             </h1>
             <div class="inline-block align-middle ps-3 py-2 border-danger border-start">
                 <% If errMsg <> String.Empty Then%>
-                    <script type="text/javascript"> callParentNew("closeFrame()", "function"); </script>
+                    <script type="text/javascript"> parent.window.closeFrame(); </script>
                     <asp:Label ID="lblerror1" runat="server" meta:resourcekey="lblerror1" CssClass="d-flex h4">Error occured due to the following reason:&nbsp;</asp:Label>
                     <h2 class="my-0 font-weight-normal lead" id="desc"><%=errMsg%></h2>
                 <%Else%>

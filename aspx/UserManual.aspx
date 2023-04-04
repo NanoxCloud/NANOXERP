@@ -35,7 +35,7 @@
             }
         }
     </script>
-    <script src="../Js/common.min.js?v=118"></script>
+    <script src="../Js/common.min.js?v=98"></script>
     <link href="../Css/aboutus.min.css?v=3" rel="stylesheet" />
     <script>
         $(document).ready(function () {

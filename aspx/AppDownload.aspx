@@ -33,14 +33,14 @@
     <script type="text/javascript" src="../Js/Jquery-2.2.2.min.js"></script>
     <script src="../Js/noConflict.min.js?v=1" type="text/javascript"></script>
     <link href="../Css/animate.min.css" rel="stylesheet" />
-    <script src="../Js/alerts.min.js?v=30" type="text/javascript"></script>
+    <script src="../Js/alerts.min.js?v=28" type="text/javascript"></script>
     <link href="../ThirdParty/jquery-confirm-master/jquery-confirm.min.css?v=1" rel="stylesheet" />
     <link href="../Css/AppDownload.min.css" rel="stylesheet" />
     <script src="../Js/thirdparty/bootstrap/3.3.6/bootstrap.min.js" type="text/javascript"></script>
     <script src="../ThirdParty/jquery-confirm-master/jquery-confirm.min.js?v=2" type="text/javascript"></script>
 
     <script src="../Js/AppDownload.min.js?v=2" type="text/javascript"></script>
-    <script src="../Js/common.min.js?v=118" type="text/javascript"></script>
+    <script src="../Js/common.min.js?v=98" type="text/javascript"></script>
 </head>
 <body dir="<%=direction%>">
     <form id="form1" runat="server">

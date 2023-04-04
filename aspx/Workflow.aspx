@@ -21,7 +21,7 @@
     <%--custom alerts start--%>
     <link href="../Css/animate.min.css" rel="stylesheet" />
     <link href="../Css/alerts.min.css" rel="stylesheet" />
-    <script src="../Js/alerts.min.js?v=30" type="text/javascript"></script>
+    <script src="../Js/alerts.min.js?v=28" type="text/javascript"></script>
     <link href="../ThirdParty/jquery-confirm-master/jquery-confirm.min.css?v=1" rel="stylesheet" />
     <script src="../ThirdParty/jquery-confirm-master/jquery-confirm.min.js?v=2" type="text/javascript"></script>
     <%--custom alerts end--%>
@@ -29,7 +29,7 @@
 
     <script src="../Js/WF.min.js?v=5" type="text/javascript"></script>
 
-    <script src="../Js/helper.min.js?v=141" type="text/javascript"></script>
+    <script src="../Js/helper.min.js?v=123" type="text/javascript"></script>
 
     <script src="../Js/dimmingdiv.min.js?v=2" type="text/javascript"></script>
 
@@ -51,7 +51,7 @@
     </script>
 
 
-    <script src="../Js/common.min.js?v=118" type="text/javascript"></script>
+    <script src="../Js/common.min.js?v=98" type="text/javascript"></script>
     <style type="text/css">
         .style3 {
             width: 395px;

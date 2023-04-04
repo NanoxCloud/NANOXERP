@@ -52,9 +52,9 @@
     <script src="../Js/Jquery-2.2.2.min.js" type="text/javascript"></script>
     <script src="../Js/noConflict.min.js?v=1" type="text/javascript"></script>
     <script src="../AssetsNew/js/bootstrap.min.js"></script>
-    <script src="../Js/common.min.js?v=118"></script>
+    <script src="../Js/common.min.js?v=98"></script>
     <script src="../ThirdParty/jquery-confirm-master/jquery-confirm.min.js?v=2"></script>
-    <script src="../Js/alerts.min.js?v=30" type="text/javascript"></script>
+    <script src="../Js/alerts.min.js?v=28" type="text/javascript"></script>
     <script src="../ThirdParty/DataTables-1.10.13/media/js/jquery.dataTables.min.js"></script>
     <script src="../Js/Resposibilities.min.js?v=22" type="text/javascript"></script>
     <script>

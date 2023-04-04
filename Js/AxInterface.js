@@ -573,8 +573,8 @@ function AxAsyncGetApiData(apiNames = "", apiType = "axpert", cacheInfo = [], su
  * @references
  *      Following files are required to be referred in custom html along with AxInterface.js:
             <script src="../../Js/Jquery-2.2.2.min.js" type="text/javascript"></script>
-            <script src="../../Js/common.min.js?v=118" type="text/javascript"></script>
-            <script src="../../Js/AxInterface.min.js?v=10" type="text/javascript"></script>
+            <script src="../../Js/common.min.js?v=98" type="text/javascript"></script>
+            <script src="../../Js/AxInterface.min.js?v=6" type="text/javascript"></script>
             <script src="../../ThirdParty/Highcharts/highcharts.js"></script>
             <script src="../../ThirdParty/Highcharts/highcharts-3d.js"></script>
             <script src="../../ThirdParty/Highcharts/highcharts-more.js"></script>
@@ -673,7 +673,7 @@ function parseHyperLink(metaData, data) {
                 if (targetType === "i") {
                     linkStr = "ivtoivload.aspx?ivname=" + targetId + params;
                 } else if (targetType === "t") {
-                    linkStr = "tstruct.aspx?transid=" + targetId + params + `&openerIV=${targetId}&isIV=false`;
+                    linkStr = "tstruct.aspx?transid=" + targetId + params;
                 }
                 presParseObj.url = linkStr;
                 parsedData["col" + column] = presParseObj;
@@ -738,7 +738,7 @@ function customizeData(plotName) {
  * @Files
  *  Following files are required to be referred in custom html along with AxInterface.js:
  *      <script src="../../Js/Jquery-2.2.2.min.js" type="text/javascript"></script>
- *      <script src="../../Js/common.min.js?v=118" type="text/javascript"></script>
+ *      <script src="../../Js/common.min.js?v=98" type="text/javascript"></script>
  * 
  */
 function AxLoadUrl(url) {
@@ -763,7 +763,7 @@ function AxLoadUrl(url) {
  *  Following files are required to be referred in custom html along with AxInterface.js:
  *      <script src="../../ThirdParty/lodash.min.js" type="text/javascript"></script>
  *      <script src="../../ThirdParty/deepdash.min.js" type="text/javascript"></script>
- *      <script src="../../Js/common.min.js?v=118" type="text/javascript"></script>
+ *      <script src="../../Js/common.min.js?v=98" type="text/javascript"></script>
  * 
  */
  function AxGetMenus(pages) {

@@ -40,12 +40,12 @@
     <script src="../ThirdParty/jquery-confirm-master/jquery-confirm.min.js"></script>
 
     <script src="../Js/noConflict.min.js?v=1" type="text/javascript"></script>
-    <script src="../Js/alerts.min.js?v=30" type="text/javascript"></script>
+    <script src="../Js/alerts.min.js?v=28" type="text/javascript"></script>
     <script type="text/javascript" src="../Js/iFrameHandler.min.js"></script>
     <script src="../Js/ImageUpload.min.js?v=13" type="text/javascript"></script>
-    <script src="../Js/common.min.js?v=118" type="text/javascript"></script>
-    <script src="../Js/alerts.min.js?v=30" type="text/javascript"></script>
-    <script type="text/javascript" src="../Js/lang/content-<%=langType%>.js?v=59"></script>
+    <script src="../Js/common.min.js?v=98" type="text/javascript"></script>
+    <script src="../Js/alerts.min.js?v=28" type="text/javascript"></script>
+    <script type="text/javascript" src="../Js/lang/content-<%=langType%>.js?v=51"></script>
 
 </head>
 <body dir='<%=direction%>' class="btextDir-<%=direction%>">

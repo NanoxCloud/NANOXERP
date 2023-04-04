@@ -63,11 +63,11 @@
 		</div>
     <script type="text/javascript" src="../Js/thirdparty/jquery/3.1.1/jquery.min.js"></script>
     <script src="../Js/noConflict.min.js?v=1"></script>
-    <script type="text/javascript" src="../Js/common.min.js?v=118"></script>
+    <script type="text/javascript" src="../Js/common.min.js?v=98"></script>
     <script type="text/javascript" src="../Js/Complaint.min.js?v=1"></script>
     <script src="../ThirdParty/jquery-confirm-master/jquery-confirm.min.js"></script>
     <script src="../Js/thirdparty/bootstrap/3.3.6/bootstrap.min.js"></script>
-    <script src="../Js/alerts.min.js?v=30"></script>
+    <script src="../Js/alerts.min.js?v=28"></script>
     <script src="../ThirdParty/DataTables-1.10.13/extensions/Extras/moment.min.js"></script>
     <script src="../ThirdParty/DataTables-1.10.13/media/js/jquery.dataTables.min.js"></script>
     <script src="../ThirdParty/DataTables-1.10.13/extensions/Extras/datetime-moment.js"></script>

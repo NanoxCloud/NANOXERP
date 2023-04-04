@@ -31,22 +31,6 @@ var forceRowedit = false;
 var isGridFileUploadOnLoad = false;
 var wizardHidenDcNos = [];
 var gridRowEditOnLoad = false;
-var AxRulesDefValidation = "false";
-var AxRulesDefFilter = "false";
-var AxRuesDefFormcontrol = "false";
-var AxRulesDefComputescript = "false";
-var AxRulesDefAllowdup = "false";
-var AxRulesDefAllowEmpty = "false";
-var AxRulesDefIsAppli = "false";
-
-var AxRulesDefScriptOnLoad = "false";
-var AxRulesDefOnSubmit = "false";
-var AxRuesDefScriptFormcontrol = "false";
-var AxRuesDefScriptFCP = "false";
-
-var AxpDcstateVal = "";
-var AxAllowEmptyFlds = new Array;
-var isScriptFormLoad = "false";
 var dynamicMobileResolution = function () {
     if ($(".grid-stack").hasClass("dynamicRunMode")) {
         if ((window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth) <=
@@ -75,7 +59,14 @@ $j(document).ready(function () {
     typeof commonReadyTasks == 'function' ? commonReadyTasks() : "";
     if (typeof isTstPostBackVal != "undefined" && isTstPostBackVal != "") {
         var resval = isTstPostBackVal.split("*$*");
+        //isTstPostBackVal = "";
         var wBdrHtml = resval[0];
+        //if (typeof isWizardTstruct != "undefined" && isWizardTstruct) {
+        // $("#dvlayout").prepend($("#breadcrumb-panel").detach());
+        // $("#heightframe").append($("#formContainer").detach());
+        // $("#heightframe").append($("#toolBarBtns").detach());
+        // $("#heightframe").append($(".rightToolbarMain").detach());
+        //}
         $("#wBdr").html("");
         $("#wBdr").prepend(wBdrHtml);
         var toolBarHtml = resval[1];
@@ -93,14 +84,10 @@ $j(document).ready(function () {
                 if (btnfooteropenlist.indexOf('<li>') > -1)
                     btnfooteropenlist = '';
             }
-        }       
-    }
-    if (typeof AxpTstButtonStyle != "undefined" && AxpTstButtonStyle == "old") {
-        $("#breadcrumb-panel").removeClass("justify-content-center");
-        $("#breadcrumb-panel").parent().removeClass("flex-stack").addClass("flex-column");
-        $("#breadcrumb-panel").next().removeClass("align-items-center");
-        $("#searchBar").addClass("vw-100 overflow-scroll");
-        $("#searchBar").find("ul").addClass("px-0 my-0");
+        }
+        //if (typeof isWizardTstruct != "undefined" && isWizardTstruct) {
+        // $("#breadcrumb-panel").after($(".rightToolbarMain").detach());
+        //}
     }
     $("#btnSaveTst").prop({
         'value': callParentNew('lcm')[392],
@@ -147,23 +134,6 @@ $j(document).ready(function () {
         $('[data-toggle=popover]').each(function () {
             $(this).data('placement', 'left');
         });
-    }
-
-
-    if (typeof AxRulesEngine != "undefined" && AxRulesEngine != "") {
-        let axruleList = AxRulesEngine.split('~');
-        //AxRulesDefValidation = axruleList[0];
-        //AxRulesDefFilter = axruleList[1];
-        //AxRuesDefFormcontrol = axruleList[2];
-        //AxRulesDefComputescript = axruleList[3];
-        //AxRulesDefAllowdup = axruleList[4];
-        //AxRulesDefAllowEmpty = axruleList[5];
-        //AxRulesDefIsAppli = axruleList[6];
-
-        AxRulesDefScriptOnLoad = axruleList[0];
-        AxRulesDefOnSubmit = axruleList[1];
-        AxRuesDefScriptFormcontrol = axruleList[2];
-        AxRuesDefScriptFCP = axruleList[3];
     }
 
 
@@ -235,7 +205,7 @@ $j(document).ready(function () {
         if (transid == "axpwf")
             tstwfcomments();
         AxAfterTstLoad();
-    } catch (ex) { }
+    } catch (ex) {}
     //DisplaySearchDlg();
     if (AxIsTstructLocked) {
         LockTstruct();
@@ -306,14 +276,12 @@ $j(document).ready(function () {
                 // $("#" + val).css({"display":"block"});
             }
         });
-        //if (recordid != "0")
-        //    $("#ftbtn_iSave").removeAttr("class").addClass("btn btn-white btn-color-gray-700 btn-active-primary d-inline-flex align-items-center shadow-sm me-2 dwbIvBtnbtm");
+        if (recordid != "0")
+            $("#ftbtn_iSave").removeAttr("class").addClass("btn btn-white btn-color-gray-700 btn-active-primary d-inline-flex align-items-center shadow-sm me-2 dwbIvBtnbtm");
     }
 
-    if (typeof dvRefreshFromLoadModern != "undefined" && dvRefreshFromLoadModern == "true") {
-        $("#dvRefreshFromLoadModern").removeClass("d-none");
-        /* $("#dvRefreshFromLoadModern").show();*/
-    }
+    if (typeof dvRefreshFromLoadModern != "undefined" && dvRefreshFromLoadModern == "true")
+        $("#dvRefreshFromLoadModern").show();
     //due to this code isbund getting effect
     //$(".fldAutocomplete").each(function () {
     //    var fldId = $(this).attr("id");
@@ -370,10 +338,8 @@ $j(document).ready(function () {
         if (isOriginalEvent && isSingleSelect) {
             if (select2EventType == "open") {
                 select2EventType = "";
-                if (select2IsFocused == true && select2IsOpened)
-                    $(this).siblings('select.fldFromSelect').select2('close');
-                select2IsOpened = false;               
-                select2IsFocused = false;                       
+                select2IsOpened = false;
+                select2IsFocused = false;
             } else {
                 if (select2IsOpened)
                     select2EventType = "click";
@@ -388,13 +354,11 @@ $j(document).ready(function () {
     });
 
     /** * @description Focus next/Prev non-grid fields on Tab/Shift+Tab along with "tabStop" field property */
-    $j("input:not([id=searstr],[class=AxAddRows],[class=AxSearchField]),select:not([id=selectbox],.fldFromSelect),textarea:not(#txtCommentWF):not(.labelInp),input[type=checkbox],li.dropdown-chose").bind("keydown", function (e) {
+    $j("input:not([id=searstr],[class=AxAddRows],[class=AxSearchField]),select:not([id=selectbox]),textarea:not(#txtCommentWF):not(.labelInp),input[type=checkbox],li.dropdown-chose").bind("keydown", function (e) {
         var keyCode = e.keyCode || e.which;
         var tabFldId = $(this);
-        if ($(this).hasClass("select2-search__field")) {
-            isSelectedValFocus = false;
+        if ($(this).hasClass("fldFromSelect"))
             return;
-        }
         if (keyCode == 9 && !e.shiftKey) {
             var curFldTabOrder = $(this).closest("[class*=fldindex]").data("dataindex");
             let TabFldDc;
@@ -498,9 +462,9 @@ $j(document).ready(function () {
             var mainDiv = $('#dvlayout').outerHeight(true);
             var footer = $('.tstructMainBottomFooter').outerHeight(true);
             if (transid == 'axglo') {
-                // $('#heightframe').css({
-                //     height: `calc(100vh - 95px)`
-                // });
+                $('#heightframe').css({
+                    height: `calc(100vh - 95px)`
+                });
             } else {
                 //$('#heightframe').css({ height: `calc(100vh - ${(mainDiv - (heighFrame - footer))}px)` });
                 if ($("body").hasClass("formLayoutWidth")) {
@@ -572,8 +536,6 @@ $j(document).ready(function () {
             if (item != "")
                 brcList += "<li class=\"breadcrumb-item text-muted\">" + item + "</li>";
         });
-        if ($("#breadcrumb-panel ul.breadcrumb").length > 0)
-            $("#breadcrumb-panel ul.breadcrumb").remove();
         $("#breadcrumb-panel").append(`<ul class="breadcrumb fw-bold fs-base my-1">` + brcList + `<li class="breadcrumb-item text-dark">` + $("#breadcrumb-panel h1").text() + `</li></ul>`);
     }
 
@@ -601,46 +563,39 @@ $j(document).ready(function () {
         draftSetTimeoutObj = setInterval(SaveAsDraft, parseInt(AutosaveDraftTime));
     }
 
-    //gridScrollBar developer option withdran as per UI.
-    //if (typeof gridScrollBar != "undefined" && gridScrollBar == "true") {
-    //    // $('#heightframe').css({
-    //    //     'overflow-x': 'scroll'
-    //    // });
-    //    $(".griddivColumn").css({
-    //        "padding-left": "0",
-    //        "width": "100%",
-    //        "overflow": "inherit"
-    //    });
-        
-    //    $('.griddivColumn .customSetupTableMN').each((ind, elm) =>{
-    //        var gridMainWidth = $(elm).width() + ($($(elm)).parents(".card-body").outerWidth() - $($(elm)).parents(".card-body").width());
-            
-    //        $($(elm)).parents(".dvdcframe").css({
-    //            "width": gridMainWidth
-    //        });
-    //    });
-
-    //    $('.griddivColumn').parents().find('.dcTitle').css({
-    //        'display': 'block'
-    //    });
-    //    if ($('body').hasClass('btextDir-rtl')) {
-    //        $('.griddivColumn').parents().find('.newgridbtn').css({
-    //            'float': 'right'
-    //        });
-    //    } else {
-    //        $('.griddivColumn').parents().find('.newgridbtn').css({
-    //            'float': 'left'
-    //        });
-    //    }
-    //}
-
-    $('.griddivColumn ').addClass('gridFixedHeader').css({ "overflow": "auto" });
-    if (typeof gridFixedHeader == "undefined" || gridFixedHeader == "true") {
-        //$('.griddivColumn ').addClass('gridFixedHeader').css({ "overflow": "auto", "max-height": "calc(100vh - 130px)" });
-        $('.griddivColumn ').addClass('gridFixedHeader').css({ "max-height": "calc(100vh - 130px)" });
-        $(".gridFixedHeader table thead tr th").css({ "background": "#fff", "position": "sticky", "top": "0" });        
+    if (typeof gridScrollBar != "undefined" && gridScrollBar == "true") {
+        $('#heightframe').css({
+            'overflow-x': 'scroll'
+        });
+        $(".griddivColumn").css({
+            "padding-left": "0",
+            "width": "100%",
+            "overflow": "inherit"
+        });
+        var gridMainWidth = $('.griddivColumn .customSetupTableMN').width() + ($('.griddivColumn .customSetupTableMN').parents(".dvdcframe").outerWidth() - $('.griddivColumn .customSetupTableMN').parents(".dvdcframe").width());
+        $('.griddivColumn .customSetupTableMN').parents(".dvdcframe").css({
+            "width": gridMainWidth
+        });
+        $('.griddivColumn').parents().find('.dcTitle').css({
+            'display': 'block'
+        });
+        if ($('body').hasClass('btextDir-rtl')) {
+            $('.griddivColumn').parents().find('.newgridbtn').css({
+                'float': 'right'
+            });
+        } else {
+            $('.griddivColumn').parents().find('.newgridbtn').css({
+                'float': 'left'
+            });
+        }
     }
 
+
+    if (typeof gridFixedHeader != "undefined" && gridFixedHeader == "true") {
+        //   $('.griddivColumn ').css({'padding-left': '0','width': '100%','overflow': 'auto','height': 'calc(100vh - 130px)'});
+        $('.griddivColumn ').addClass('gridFixedHeader');
+        // $('.editDeleteAct ').css({'position': 'sticky','top': '0','z-index': '1'});
+    }
     hideacoptions();
     $("input.fldFromSelect").off('click');
     $("input.fldFromSelect").on('click', function () {
@@ -655,15 +610,7 @@ $j(document).ready(function () {
         appGlobalVarsObject.methods.toggleCompressModeUI($('body'));
     }
 
-    $(".toolbarRightMenu .menu").find('.menu-sub').addClass("mh-300px scroll-y");
-
-    $(".nav.nav-tabs").each((ind, tab)=>{
-        $(tab).find(".nav-item a.nav-link").length == 1 && $(tab).find(".nav-item a.nav-link").removeClass("active").addClass("bg-white");
-    }); 
-
-    setTimeout(function () {
-        swicthCompressMode();
-    }, 0);
+    swicthCompressMode();
 
     // if (callParentNew("isDWB")) {
     //     $("#breadcrumb-panel, #design").hide();
@@ -728,6 +675,9 @@ $j(document).ready(function () {
 
     }
 
+    /* Image Upload */
+    $(".imageFileUpload").parents().find(".flex-root").parent().addClass("d-flex flex-column");
+
     GetProcessTime();
     GetTotalElapsTime();
     $(".modernButtonOptions #iconsUl > li.dropdown-submenu").on('click', function (e) {
@@ -752,20 +702,18 @@ function swicthCompressMode(dvId) {
     if (appGlobalVarsObject._CONSTANTS.compressedMode) {
         if (typeof dvId != "undefined" && dvId != "") {
             $(".compressedModeUI .inline-edit").each(function (index, el) {
-                $(el).find(".form-check-label").addClass("col-form-label-sm fw-boldest");
+                $(el).find(".form-check-label").addClass("col-form-label-sm");
                 $(el).find(".form-check-input").removeClass("h-40px w-40px");
                 $(el).find(".selection .select2-selection").addClass("form-select-sm");
                 $(el).find(".select2-hidden-accessible").addClass("form-select-sm");
                 $(el).find(".edit-mode-content").addClass("input-group-sm");
                 $(el).find(".edit-mode-content .input-group").addClass("input-group-sm");
-                $(el).find(".edit-mode-content .fldmultiSelect").addClass("py-0");
-                $(el).find(".edit-mode-content .select2-selection__choice").addClass("py-1 my-0");
             });
 
             // $(".compressedModeUI textarea").addClass("py-0 min-h-25px h-25px");
-            $(".compressedModeUI table.customSetupTableMN tr textarea:not([data-txt-area]),.compressedModeUI  table.customSetupTableMN tr label").addClass("py-0 min-h-25px h-25px");
-            $(".compressedModeUI table.customSetupTableMN tr textarea[data-txt-area]").addClass("min-h-25px h-30px");
-            $(".compressedModeUI table.customSetupTableMN").addClass("table-sm");
+            $(".compressedModeUI table.customSetupTableMN tr textarea,.compressedModeUI  table.customSetupTableMN tr label").addClass("py-0 min-h-25px h-25px");
+
+            $(".compressedModeUI table.customSetupTableMN").removeClass("mt-6").addClass("table-sm");
 
             $(".compressedModeUI .dvdcframe .gridIconBtns a").addClass("btn-sm");
 
@@ -776,48 +724,31 @@ function swicthCompressMode(dvId) {
 
             $(".compressedModeUI .input-group").each(function (index, el) {
                 $(el).addClass("input-group-sm");
-                $(el).find(".form-check-label").addClass("col-form-label-sm fw-boldest");
+                $(el).find(".form-check-label").addClass("col-form-label-sm");
                 $(el).find(".form-check-input").removeClass("h-40px w-40px");
                 $(el).find(".selection .select2-selection").addClass("form-select-sm");
                 $(el).find(".select2-hidden-accessible").addClass("form-select-sm");
                 $(el).find(".form-check-input").parents(".agform").addClass("d-flex");
-                if (typeof dcLayoutType == "undefined" || dcLayoutType == "" || dcLayoutType == "default")
-                    $(el).find(".radiohori,.radiovert").parents(".agform").addClass("flex-column");
                 if (!staticRunMode)
                     $(el).find(".form-check-input").parents(".grid-stack-item").addClass("d-flex");
             });
 
             $(".compressedModeUI .inline-edit").each(function (index, el) {
-                $(el).find(".form-check-label").addClass("col-form-label-sm fw-boldest");
+                $(el).find(".form-check-label").addClass("col-form-label-sm");
                 $(el).find(".form-check-input").removeClass("h-40px w-40px");
                 $(el).find(".selection .select2-selection").addClass("form-select-sm");
                 $(el).find(".select2-hidden-accessible").addClass("form-select-sm");
             });
 
-            $(".compressedModeUI table.customSetupTableMN tr textarea:not([data-txt-area]),.compressedModeUI  table.customSetupTableMN tr label").addClass("py-0 min-h-25px h-25px");
+            $(".compressedModeUI table.customSetupTableMN tr textarea,.compressedModeUI  table.customSetupTableMN tr label").addClass("py-0 min-h-25px h-25px");
 
-            $(".compressedModeUI table.customSetupTableMN tr textarea[data-txt-area]").addClass("min-h-25px h-30px");
+            $(".compressedModeUI .labelcol").removeClass("row");
 
-            if (typeof dcLayoutType == "undefined" || dcLayoutType == "" || dcLayoutType == "default")
-                $(".compressedModeUI .labelcol").removeClass("row");
-            else {
-                let fcwidth = parseInt(designObj[0].fieldCaptionWidth);
-                fcwidth = fcwidth / 10;
-                fcwidth = 12 - fcwidth;
-                if(!$(".compressedModeUI .input-group").parent().hasClass("layoutAdded")){
-                    $(".compressedModeUI .input-group").wrap(`<div class='col-sm-${fcwidth} layoutAdded'></div>`);
-                }
-                $(".upload-button").addClass('mt-4');
-                $(".fldImageCamera").removeClass('mt-n4').addClass('mt-0');
-                if (!staticRunMode)
-                    $(".colFldGridStackWidth").addClass('mb-3');
-            }
-
-            $(".compressedModeUI .fld-wrap3 label").addClass("col-form-label-sm fw-boldest m-0 p-0");
+            $(".compressedModeUI .fld-wrap3 label").addClass("col-form-label-sm m-0 p-0");
 
             $(".compressedModeUI .agform").addClass("px-1");
 
-            $(".compressedModeUI table.customSetupTableMN").addClass("table-sm");
+            $(".compressedModeUI table.customSetupTableMN").removeClass("mt-6").addClass("table-sm");
 
             $(".compressedModeUI .toolbarRightMenu a,.compressedModeUI .toolbarRightMenu button").addClass("btn-sm");
             $(".compressedModeUI .toolbarRightMenu a span,.compressedModeUI .toolbarRightMenu button span").addClass("material-icons-2");
@@ -826,63 +757,22 @@ function swicthCompressMode(dvId) {
             $(".compressedModeUI .BottomToolbarBar a span").addClass("material-icons-style material-icons-2");
             $(".compressedModeUI .tstructBottomLeftButton a span").addClass("material-icons-style material-icons-2");
             $(".compressedModeUI .tstructBottomLeftButton div.btn").addClass("btn-sm");
-
-            $("select.multiFldChk,select.multiFldChklist,select.fldmultiSelect").parents('.agform').addClass('d-flex flex-column');
-            $("select.multiFldChk,select.multiFldChklist,select.fldmultiSelect").parent().addClass('flex-root overflow-auto');
-            $(".compressedModeUI textarea.CodeMirrorApplied").parent().addClass("overflow-auto");
         }
-    } else
-    {
-        $(".content table.customSetupTableMN tr:not(.inline-edit) textarea:not([data-txt-area]),.content  table.customSetupTableMN tr:not(.inline-edit) label").addClass("py-2 min-h-30px h-30px");
-        $(".content table.customSetupTableMN tr textarea[data-txt-area]").addClass("min-h-25px h-30px");
-        $(".content table.customSetupTableMN").removeClass("table-sm");
+    } else {
+        $(".content table.customSetupTableMN tr:not(.inline-edit) textarea,.content  table.customSetupTableMN tr:not(.inline-edit) label").addClass("py-2 min-h-35px h-35px");
 
-        // $(".content .dvdcframe .gridIconBtns a").removeClass("btn-sm");
-        $(".content .dvdcframe .gridIconBtns a").addClass("btn-sm");
+        $(".content table.customSetupTableMN").removeClass("table-sm").addClass("mt-6");
 
-        $(".btn.btn-icon").addClass("btn-sm").find(".material-icons").addClass("material-icons-style material-icons-2");
-        
+        $(".content .dvdcframe .gridIconBtns a").removeClass("btn-sm");
+
         $(".content table.customSetupTableMN .form-check").addClass("py-2");
 
-        $(".content .dropzone").parent(".form-control").removeClass("p-0").addClass("p-1 rounded-1");
-        $(".content [id^=DivFrame] .form-switch .form-check-input").removeClass("w-40px").addClass("w-50px");
-        $(".content .form-check-input").parents(".agform").addClass("d-flex");
-        
-        $("textarea.memofam.gridstackCalc").parent().addClass('flex-root overflow-auto').parents('.agform').addClass('d-flex flex-column');
+        $(".content .dropzone").parent(".form-control").removeClass("p-0").addClass("p-1");
 
-        $("select.multiFldChk,select.multiFldChklist,select.fldmultiSelect").parents('.agform').addClass('d-flex flex-column');
-        $("select.multiFldChk,select.multiFldChklist,select.fldmultiSelect").parent().addClass('flex-root overflow-auto');
-        $(".content textarea.CodeMirrorApplied").parent().addClass("overflow-auto");
-        if (typeof dcLayoutType == "undefined" || dcLayoutType == "" || dcLayoutType == "default")
-            $(".content .radiohori,.content .radiovert").parents(".agform").addClass("flex-column");
+        $(".content .form-check-input").parents(".agform").addClass("d-flex");
         if (!staticRunMode)
             $(".content .form-check-input").parents(".grid-stack-item").addClass("d-flex");
-
-        if (typeof dcLayoutType != "undefined" && (dcLayoutType == "single" || dcLayoutType == "double" || dcLayoutType == "triple")) {
-            let fcwidth = parseInt(designObj[0].fieldCaptionWidth);
-            fcwidth = fcwidth / 10;
-            fcwidth = 12 - fcwidth;
-            if(!$(".content .input-group").parent().hasClass("layoutAdded")){
-                $(".content .input-group").wrap(`<div class='col-sm-${fcwidth} layoutAdded'></div>`);
-            }
-            $(".upload-button").addClass('mt-4');
-            $(".fldImageCamera").removeClass('mt-n4').addClass('mt-0');
-            if (!staticRunMode)
-                $(".colFldGridStackWidth").addClass('mb-3');
-        }
-        $("textarea.select2-search__field").addClass("cursor-pointer");
     }
-
-    if(staticRunMode){
-        $(".fld-wrap3").addClass("text-truncate");
-    }
-
-    /* Image Upload */
-    if (typeof dcLayoutType == "undefined" || dcLayoutType == "" || dcLayoutType == "default")
-        $(".imageFileUpload").parents().find(".flex-root").parent().addClass("d-flex flex-column");
-    else
-        $(".imageFileUpload").parents().find(".flex-root").parent().addClass("d-flex");
-    rtfCkeditorAlignment();
 }
 
 function getlatlongitude() {
@@ -897,7 +787,7 @@ function getlatlongitude() {
             MainBlur($j("#" + latLongId));
             $j("#" + latLongId).blur();
         }
-    } catch (ex) { }
+    } catch (ex) {}
 }
 
 function pinItemToTaskbar(item) {
@@ -913,9 +803,9 @@ function pinItemToTaskbar(item) {
             if (temp.find('a#tasks'))
                 temp.find('li').addClass('liTaskItems');
         } else
-            if (temp.find('ul').hasClass('dropdown-menu')) {
-                temp.find('ul').removeClass('dropdown-menu');
-            }
+        if (temp.find('ul').hasClass('dropdown-menu')) {
+            temp.find('ul').removeClass('dropdown-menu');
+        }
         if (temp.attr('id') == "ivirCButtonsWrapper") {
             var active = temp.find('ul  a:not(.active):eq(0)');
             $(active).find('.customIcon').removeClass('customIcon');
@@ -1018,12 +908,10 @@ function showPosition(position) {
         if ($("#" + fldlatitude).val() == "") {
             $("#" + fldlatitude).val(position.coords.latitude); //.trigger("blur");
             UpdateFieldArray(fldlatitude, "000", $("#" + fldlatitude).val(), "parent");
-            UpdateAllFieldValues(fldlatitude, $("#" + fldlatitude).val());
         }
         if ($("#" + fldlongitude).val() == "") {
             $("#" + fldlongitude).val(position.coords.longitude); //.trigger("blur");
             UpdateFieldArray(fldlongitude, "000", $("#" + fldlongitude).val(), "parent");
-            UpdateAllFieldValues(fldlongitude, $("#" + fldlongitude).val());
         }
 
         var googleMapsApiKeyVal = callParentNew("googleMapsApiKey");
@@ -1054,16 +942,13 @@ function showPosition(position) {
                                     latLongMapField.val(results[0].formatted_address).trigger("blur");
                                     if (latLongMapField.is("textarea")) {
                                         var map = new google.maps.Map(latLongMapField.hide().before(`<div class="${latLongMapField.attr("class")} style="${latLongMapField.attr("style")}"></div>`).prev()[0], {
-                                            zoom: 11,
+                                            zoom: 8,
                                             center
                                         });
 
                                         var infowindow = new google.maps.InfoWindow;
 
-                                        if (googleMapsZoom) {
-                                            map.setZoom(+googleMapsZoom);
-                                        }
-
+                                        map.setZoom(11);
                                         var marker = new google.maps.Marker({
                                             position,
                                             map
@@ -1138,7 +1023,7 @@ function GetFldSetCarryValue() {
                 }
             });
         }
-    } catch (ex) { }
+    } catch (ex) {}
 }
 
 function OnMobileNewTst() {
@@ -1286,7 +1171,7 @@ function CheckCustomTStSave() {
                     }
                     //tstruct~transid*paramname1=value1^paramname2=value2
                     else if (tstRedirect.indexOf("tstruct") > -1) {
-                        axCustomTstAction = "tstruct.aspx?transid=" + tstParams[0] + `&openerIV=${typeof isListView != "undefined" ? iName : tstParams[0]}&isIV=${typeof isListView != "undefined" ? !isListView : "false"}`;
+                        axCustomTstAction = "tstruct.aspx?transid=" + tstParams[0];
                         if (tstParams[1] != undefined && tstParams[1] != "") {
                             axCustomTstAction += "&" + tstParams[1];
                         }
@@ -1317,31 +1202,18 @@ function GetPopUpVal(custActFldVal) {
 //NOTE:Any modification in the below function should be checked with the AssignJQueryEvents function in tstruct.js
 function LoadEvents(dvId) {
     $('[data-toggle="tooltip"]').tooltip();
-    CKEDITOR.on('instanceReady', function (event) {
-        event.editor.on('change', function () {
-            currentCK = this.name;
-        });
-        isReadyCK = true;
-    });
     WizardKtInit();
     createEditors();
-
-    createFormSelect(".fldFromSelect,.multiFldChk");
-    createFormMultiSelect(".fldmultiSelect");
 
     var autoDiv = dvId == undefined ? "#divDc1" : dvId;
 
     DropzoneInit(dvId);
-    DropzoneGridInit(dvId);
     HeaderAttachFiles();
     KTApp.initBootstrapPopovers();
-    try {
-        KTApp?.initBootstrapTooltips();
-    } catch (error) { }
     createCheckListTokens(dvId);
 
     //function call for focus event of textarea, textbox, checkbox, checklist & radiogroup.
-    $j("input:not([id=searstr],[class=AxAddRows],[class=AxSearchField],.flatpickr-input,.gridRowChk,.gridHdrChk),select:not([id=selectbox]),textarea:not(#txtCommentWF):not(.labelInp)").focus(function () {
+    $j("input:not([id=searstr],[class=AxAddRows],[class=AxSearchField],.flatpickr-input,.gridRowChk),select:not([id=selectbox]),textarea:not(#txtCommentWF):not(.labelInp)").focus(function () {
         MainFocus($j(this));
     });
 
@@ -1356,53 +1228,43 @@ function LoadEvents(dvId) {
     if (glCulture == "en-us")
         dtFormat = "m/d/Y";
 
-    $(".flatpickr-input:not(.tstOnlyTime,.tstOnlyTime24hours)").parent(".input-group").flatpickr({
+    $(".flatpickr-input").parent(".input-group").flatpickr({
         dateFormat: dtFormat,
         disableMobile: "true",
-        allowInput: true,
         wrap: true,
-        onOpen: function (selectedDates, dateStr, instance) {
-            MainFocus($(instance.element).find("input"));
-        },
         onChange: function (selectedDates, dateStr, instance) {
-            //if ($(".flatpickr-calendar:visible").length == 0 && $(instance.element).find("input").val() != AxOldValue) {
-            //    MainBlur($(instance.element).find("input"));
-            //}
+            //   debugger;
+            MainBlur($(instance.element).find("input"));
         }
     });
-
     $(".tstOnlyTime").parent(".input-group").flatpickr({
         enableTime: true,
         noCalendar: true,
-        dateFormat: "h:i K",
+        dateFormat: "H:i K",
         disableMobile: "true",
         wrap: true,
-        onOpen: function (selectedDates, dateStr, instance) {
-            MainFocus($(instance.element).find("input"));
-        },
         onChange: function (selectedDates, dateStr, instance) {
-            if ($(instance.element).find("input").val() != AxOldValue) {
-                MainBlur($(instance.element).find("input"));
-            }
+            MainBlur($(instance.element).find("input"));
         }
     });
 
-    $(".tstOnlyTime24hours").parent(".input-group").flatpickr({
-        enableTime: true,
-        noCalendar: true,
-        dateFormat: "H:i",
-        time_24hr: true,
-        disableMobile: "true",
-        wrap: true,
-        onOpen: function (selectedDates, dateStr, instance) {
-            MainFocus($(instance.element).find("input"));
-        },
-        onChange: function (selectedDates, dateStr, instance) {
-            if ($(instance.element).find("input").val() != AxOldValue) {
-                MainBlur($(instance.element).find("input"));
-            }
-        }
-    });
+    //$j(".date").datepicker({
+    //    isRTL: dtpkrRTL,
+    //    dateFormat: dtFormat,
+    //    changeMonth: true,
+    //    changeYear: true,
+    //    yearRange: "-100:+100",
+    //    beforeShow: function (textbox, instance) {
+    //        //$('#ui-datepicker-div').css({
+    //        //    position: 'absolute',
+    //        //    top: -20,
+    //        //    left: 5
+    //        //});
+    //        //$('#pagebdy .dvheightframe').append($('#ui-datepicker-div'));
+    //        //$('#ui-datepicker-div').hide();
+    //    }
+    //});
+
 
     $(document).off("mousedown.designer").on("mousedown.designer", ".tstructDesignMode .grid-stack-item, .tstructDesignMode .ui-resizable", function () {
         setSelectedDesignElement(this);
@@ -1429,24 +1291,15 @@ function LoadEvents(dvId) {
         gsiHeight = {
             "height": (isMobile ? gsiPX + 10 : gsiPX).toString() + "px"
         };
-        if (typeof CKEDITOR.instances[$(ui).find("textarea").attr("id")] != "undefined") {
-            //var ckHeight = CKEDITOR.instances[$(currentElm).attr("id")].resize( '100%', gsiHeight.height, true );
-            try {
-                var _this = CKEDITOR.instances[$(ui).find("textarea").attr("id")];
-                if (!staticRunMode) {
-                    _this.resize('100%', gsiPX);
-                } else {
-                    _this.resize('100%', ($(_this.ui.contentsElement.$).parents(".grid-stack-item-content").height() - $(_this.ui.contentsElement.$).parents(".grid-stack-item-content").children(".fld-wrap3").outerHeight(true) - 2) - $(_this.ui.contentsElement.$).siblings().toArray().reduce((total, elm) => {
-                        return total = total + $(elm).outerHeight(true);
-                    }, 0), true);
-                }
-            } catch (error) { }
-        }
+        // if (typeof CKEDITOR.instances[$(ui).find("textarea").attr("id")] != "undefined") {
+        //     //var ckHeight = CKEDITOR.instances[$(currentElm).attr("id")].resize( '100%', gsiHeight.height, true );
+        //     CKEDITOR.instances[$(ui).find("textarea").attr("id")].resize('100%', gsiPX);
+        // }
     });
 
     //TimePickerEvent(dvId, dtpkrRTL);
     //function call on blur event of textarea, textbox.
-    $j("textarea:not(#comment):not(.labelInp,.select2-search__field),[id]:text:not([id=searstr],[class=AxAddRows],[class=AxSearchField],.gridHdrChk,.tstOnlyTime,.tstOnlyTime24hours,.gridHeaderSwitch),[id][type=number]:not([id=searstr],[class=AxAddRows],[class=AxSearchField]),:password").blur(function (event) {
+    $j("textarea:not(#comment):not(.labelInp,.select2-search__field),[id]:text:not([id=searstr],[class=AxAddRows],[class=AxSearchField],.flatpickr-input,.gridHdrChk),[id][type=number]:not([id=searstr],[class=AxAddRows],[class=AxSearchField]),:password").blur(function (event) {
         if (theMode != "design")
             MainBlur($j(this));
     });
@@ -1462,7 +1315,7 @@ function LoadEvents(dvId) {
     });
 
     //function call on change event of dropdown.
-    $j("select:not(#ddlSearch,#selectbox,.fldFromSelect,.fldmultiSelect,.multiFldChk):not(#designLayoutSelector)").change(function () {
+    $j("select:not(#ddlSearch,#selectbox,.fldFromSelect):not(#designLayoutSelector)").change(function () {
         if ($j(this).find(':selected').text().indexOf("+ Add") == -1) {
             MainBlur($j(this));
             $j(this).blur();
@@ -1477,7 +1330,7 @@ function LoadEvents(dvId) {
     });
 
     //function call on blur event of checkbox, checklist & radiogroup.
-    $j(":checkbox:not([class=chkAllList],.gridHdrChk,.gridRowChk,.gridHeaderSwitch):not(.tokenSelectAll):not(#ckbCompressedMode):not(#ckbStaticRunMode):not(#ckbWizardDC):not('[id^=ckbGridStretch]'),:radio").not(".chkShwSel").change(function () {
+    $j(":checkbox:not([class=chkAllList],.gridHdrChk,.gridRowChk):not(.tokenSelectAll):not(#ckbCompressedMode):not(#ckbStaticRunMode):not(#ckbWizardDC):not('[id^=ckbGridStretch]'),:radio").not(".chkShwSel").change(function () {
         MainBlur($j(this));
     });
 
@@ -1516,12 +1369,9 @@ function LoadEvents(dvId) {
     });
 
     //function on click of signature field
-    $j(".signaturePad").click(function (e) {
-        if ($(e.target).attr("onclick") == "ClearImageSrc(this);") {
-            return;
-        }
-        if (tstructCancelled != "Cancelled") {            
-            var imgFld = $j(this).find(".signatureInput");
+    $j(".signaturePad").click(function () {
+        if (tstructCancelled != "Cancelled") {
+            var imgFld = $j(this);
             var fldName = imgFld[0].id;
             var onclickevent = document.getElementById(fldName).onclick;
             if (onclickevent == null)
@@ -1660,37 +1510,6 @@ function LoadEvents(dvId) {
         $j("#tgPurpose").css("display", "none");
     }
 
-    //function call on focusin event for masked field value to actual value.
-    $j("input.form-control,textarea.memofam").on('focusin', function (e) {
-        try {
-            var fldId = $j(this).attr("id");
-            if (typeof fldId != "undefined" && fldId != "") {
-                var fName = GetFieldsName(fldId);
-                var fldIndex = $j.inArray(fName, FNames);
-                if (fldIndex != undefined && fldIndex > -1) {
-                    if (typeof FldMaskType != "undefined" || typeof ScriptMaskFields != "undefined") {
-                        let maskType = "";
-                        if (ScriptMaskFields.length > 0) {
-                            var idx = $j.inArray(fName, ScriptMaskFields);
-                            if (idx != -1)
-                                maskType = ScriptMaskFields[idx];
-                            else
-                                maskType = FldMaskType[fldIndex];
-                        } else
-                            maskType = FldMaskType[fldIndex];
-                        if (maskType != "") {
-                            let newFldMaskValue = GetFieldValue(fldId);
-                            if (newFldMaskValue != "" && newFldMaskValue != '0.00' && newFldMaskValue != '0') {
-                                $j(this).val(newFldMaskValue);
-                                $j(this).attr("value", newFldMaskValue);
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (ex) { }
-    });
-
     $j("input.number").on('input', function () {
         var fldVal = $j(this).val();
         var fldId = $j(this).attr("id");
@@ -1699,26 +1518,18 @@ function LoadEvents(dvId) {
             var fldIndex = $j.inArray(fName, FNames);
             if (fldIndex != undefined && fldIndex > -1) {
                 var maxFldLength = FMaxLength[fldIndex];
-                var decimalLength = 0;
-                if (FCustDecimal[fldIndex] == "True" && typeof gloAxDecimal != "undefined" && gloAxDecimal > -1)
-                    decimalLength = gloAxDecimal;
-                else
-                    decimalLength = FDecimal[fldIndex];
+                var decimalLength = FDecimal[fldIndex];
                 var fldType = FDataType[fldIndex];
                 if (fldType == "Numeric" && decimalLength != undefined && decimalLength > 0) {
                     var intPartMaxLimit = maxFldLength - decimalLength - 1; //Integer Part Max Limit.
                     if (fldVal.indexOf('.') == -1) {
-                        if (fldVal.length > intPartMaxLimit) {
-                            $j(this).val(fldVal.slice(0, intPartMaxLimit));
-                            UpdateAllFieldValues($j(this).attr("id"), fldVal.slice(0, intPartMaxLimit));
-                        }
+                        if (fldVal.length > intPartMaxLimit) $j(this).val(fldVal.slice(0, intPartMaxLimit));
                     } else if (fldVal.indexOf('.') != -1) {
                         var intPart = fldVal.substring(0, fldVal.indexOf('.'));
                         var decPart = fldVal.substring(fldVal.indexOf('.') + 1, fldVal.length);
                         if (intPart.length > intPartMaxLimit) intPart = intPart.slice(0, intPartMaxLimit);
                         if (decPart.length > decimalLength) decPart = decPart.slice(0, decimalLength);
                         $j(this).val(intPart + "." + decPart);
-                        UpdateAllFieldValues($j(this).attr("id"), intPart + "." + decPart);
                     }
                 }
             }
@@ -1746,7 +1557,7 @@ function LoadEvents(dvId) {
                 ShowDimmer(true);
                 ASB.WebService.NotifyHybridForWeightScale(callParentNew("hybridGUID"),
                     (success) => {
-                        if (success == "success") {
+                        if(success == "success") {
                             getHybridWeightScaleInfo($(this).parent(".weightScale").parent().children("input").attr("id"));
                         } else {
                             ShowDimmer(false);
@@ -1763,17 +1574,13 @@ function LoadEvents(dvId) {
                 showAlertDialog("error", "Exception occurred while fetching weight.");
             }
         }
-        else {
+        else{
             showAlertDialog("error", "Please close the application and login again.");
         }
     });
 
     $(document).off("change", '.tstfldImage').on("change", '.tstfldImage', function (e) {
         TstFldImageUpload(e.target);
-    });
-
-    $(document).off("click", ".imageFileUpload,img.profile-pic").on("click", ".imageFileUpload,img.profile-pic", function (e) {
-        $(this).siblings("label.upload-button").find(".tstfldImage").click()
     });
 
     $j(".fldImageCamera").click(function () {
@@ -1784,10 +1591,6 @@ function LoadEvents(dvId) {
     if (typeof AxpCameraOption == "undefined" || (typeof AxpCameraOption != "undefined" && (AxpCameraOption == "" || AxpCameraOption != "true"))) {
         $(".fldImageCamera").removeClass("d-none");
     }
-
-    $("#wBdr").on("mouseenter mouseleave", ".customSetupTableMN textarea", function(e){
-        $(this).attr('title', $(this).val());
-    });
 }
 
 function WizardKtInit() {
@@ -1898,85 +1701,32 @@ function createCheckListTokens(dvId) {
                 var acFrNo = GetFieldsDcNo(fldNamesf);
                 var rowNum = GetDbRowNo(GetFieldsRowNo(fldNamesf), acFrNo);
                 UpdateFieldArray(fldNamesf, rowNum, fldAcValue, "parent", "AutoComplete");
-                UpdateAllFieldValues(fldNamesf, fldAcValue);
-            }).on('select2:open', (selectEv) => {
-                var curDropdown = $(selectEv.currentTarget).data("select2")?.$dropdown;
-                var selectedOptionCount = 0;
-                if (result.length != 0) {
-                    if (curDropdown.find(".select2-results").find(".msSelectAllOption").length == 0) {
-                        var selectAllHTML = `<div class="msSelectAllOption form-check form-check-custom align-self-end px-5">
-                    <input type="checkbox" class="form-check-input msSelectAll" onchange="checkAllCheckBoxTokens(this, '${$(selectEv.currentTarget).attr("id")}')"/>
-                    <label for="SelectAll" class="ps-2 form-check-label form-label col-form-label pb-1 fw-boldest">
-                        Select All
-                    </label>
-                </div>`;
-                        curDropdown.find(".select2-results").append(selectAllHTML);
-                    }
-
-                    curDropdown.find(".select2-results").find(".select2-results__options li:not(.select2-results__option--disabled.loading-results)").each((ind, elm) => {
-                        if ($(elm).hasClass("select2-results__option--selected")) {
-                            selectedOptionCount++;
-                        }
-                    });
-
-                    if (curDropdown.find(".select2-results").find(".select2-results__options li:not(.select2-results__option--disabled.loading-results)").length == selectedOptionCount && selectedOptionCount > 0) {
-                        curDropdown.find(".select2-results").find(".msSelectAllOption > .msSelectAll").prop("checked", true);
-                    }
-                    else if (curDropdown.find(".select2-results").find(".select2-results__options li:not(.select2-results__option--disabled.loading-results)").length != selectedOptionCount && curDropdown.find(".select2-results").find(".msSelectAllOption > .msSelectAll").is(":checked")) {
-                        curDropdown.find(".select2-results").find(".msSelectAllOption > .msSelectAll").prop("checked", false);
-                    }
-                }
             });
         }
     });
 }
 
-function checkAllCheckBoxTokens(elem, elemId) {
-    if ($(`#${elemId}`).hasClass('multiFldChk')) {
-        if ($(elem).is(":checked")) {
-            $(`#${elemId}`).find('option').remove();
-            $(".select2-results ul li").each(function () {
-                $(`#${elemId}`).append('<option value="' + $(this).text() + '" selected="selected">' + $(this).text() + '</option>');
-            });
+function checkAllCheckBoxTokens(elem) {
+    var hiddenAutoComp = $("#" + $(elem).parents("ul").data("hiddenAutoComp"));
+    //console.log(hiddenAutoComp);
+    var inputField = $(elem).parents(".input-group").find(".tokenfield input.multiFldChk");
+    if (hiddenAutoComp == inputField)
+        var input = inputField;
+    else
+        input = hiddenAutoComp;
 
-            let fldAcValue = $(`#${elemId}`).val();
-            if (typeof $(`#${elemId}`).data("separator") != "undefined" && fldAcValue.length > 1) {
-                let separator = $(`#${elemId}`).data("separator");
-                fldAcValue = fldAcValue.join(separator);
-            }
-            isGrdEditDirty = true;
-            var acFrNo = GetFieldsDcNo(elemId);
-            var rowNum = GetDbRowNo(GetFieldsRowNo(elemId), acFrNo);
-            var fldRowNo = GetFieldsRowNo(elemId);
-            if (IsDcGrid(acFrNo) && isGrdEditDirty)
-                UpdateFieldArray(axpIsRowValid + acFrNo + fldRowNo + "F" + acFrNo, GetDbRowNo(fldRowNo, acFrNo), "", "parent", "AddRow");
-            UpdateFieldArray(elemId, rowNum, fldAcValue, "parent", "AutoComplete");
-            UpdateAllFieldValues(elemId, fldAcValue);
-            setTimeout(function () {
-                MainBlur($j("#" + elemId));
-            }, 0);
-        } else {
-            $(`#${elemId}`).find('option').remove();
-            $(`#${elemId}`).val('');
-            var acFrNo = GetFieldsDcNo(elemId);
-            var rowNum = GetDbRowNo(GetFieldsRowNo(elemId), acFrNo);
-            UpdateFieldArray(elemId, rowNum, "", "parent", "AutoComplete");
-            UpdateAllFieldValues(elemId, "");
-            AxOldValue = " ";
-            setTimeout(function () {
-                MainBlur($j("#" + elemId));
-            }, 0);
-        }
-        $(`#${elemId}`).trigger("change").select2("close");
+
+    if ($(elem).is(":checked")) {
+        var thisValueList = input.data("valuelist");
+        input.tokenfield('setTokens', typeof thisValueList == "string" ? thisValueList.split(input.data("separator")) : thisValueList);
     } else {
-        if ($(elem).is(":checked")) {
-            $(`#${elemId} > option`).prop("selected", "selected");
-            $(`#${elemId}`).trigger("change").select2("close");
-        } else {
-            $(`#${elemId} > option`).prop("selected", "");
-            $(`#${elemId}`).trigger("change").select2("close");
-        }
+        input.val("");
+        input.tokenfield('setTokens', []);
     }
+
+    try {
+        inputField.data('bs.tokenfield').$input.trigger("blur");
+    } catch (ex) {}
 }
 
 function ShowPopUp(imgObj) {
@@ -2014,7 +1764,7 @@ function FocusOnFirstField(dcno) {
             } else if (isMobile && $("#wizardBodyContent").length) {
                 $("#wizardBodyContent").scrollTop(0);
             }
-        } catch (ex) { }
+        } catch (ex) {}
         var focusObj = getFirstFocusElement(objId);
         //if (!focusObj.hasClass("date")) This condition is removed due to the issue : AGI003000
         if (focusObj != undefined && focusObj.length > 0 && !isMobile) {
@@ -2101,8 +1851,6 @@ function EndRequestHandler(sender, args) {
             var gov = $j("#goval");
             if (gov.val() == "go") {
                 FillDiv("Show");
-                if (!$("#grdSearchRes").parent().hasClass('d-inline-flex'))
-                    $("#grdSearchRes").parent().addClass('d-inline-flex w-100 overflow-auto');
                 $j("#searstr").val(DecodeUrlSplChars($j("#hdnSearchStr").val()));
                 gov.val("d");
             }
@@ -2154,6 +1902,89 @@ function Closediv() {
     //adjustwin('100', this.window);
 
 }
+
+
+//function MouseDown(e) {
+//    if (over) {
+//        if (isMozilla) {
+//            objDiv = $j("#" + DivID);
+//            X = e.layerX;
+//            Y = e.layerY;
+//            return false;
+//        }
+//        else {
+//            objDiv = $j("#" + DivID);
+//            objDiv = objDiv.style;
+//            X = event.offsetX;
+//            Y = event.offsetY;
+//        }
+//    }
+//}
+
+
+//function MouseMove(e) {
+//    if (objDiv) {
+//        if (objDiv.length > 0) {
+//            if (isMozilla) {
+//                objDiv.css("top", (e.pageY - Y) + 'px');
+//                objDiv.css("left", (e.pageX - X) + 'px');
+//                return false;
+//            }
+//            else {
+//                if (event.clientX - X + document.body.scrollLeft >= 0 && event.clientX - X + document.body.scrollLeft <= 830)
+//                    objDiv.css("pixelLeft", event.clientX - X + document.body.scrollLeft);
+
+//                if (event.clientY - Y + document.body.scrollTop >= 0 && event.clientY - Y + document.body.scrollTop <= (document.body.scrollHeight - 400))
+//                    objDiv.css("pixelTop", event.clientY - Y + document.body.scrollTop);
+//                return false;
+//            }
+//        }
+//    }
+//}
+
+
+//
+//function MouseUp() {
+//    objDiv = null;
+//}
+
+//
+//function init() {
+//    // check browser
+//    isMozilla = (document.all) ? 0 : 1;
+
+//    if (isMozilla) {
+//        document.captureEvents(Event.MOUSEDOWN | Event.MOUSEMOVE | Event.MOUSEUP);
+//    }
+
+//    document.onmousedown = MouseDown;
+//    document.onmousemove = MouseMove;
+//    document.onmouseup = MouseUp;
+//}
+
+//// call init
+//init();
+
+
+//function displayFloatingDiv(divId, title) {
+
+//    DivID = divId;
+//    document.getElementById('dimmer').style.display = "block";
+//    var addHeader = '<table style="width:300px;" class="Headerbg Popcap"><tr><td ondblclick="void(0);" onmouseover="over=true;" onmouseout="over=false;" style="cursor:move;height:18px">' + title + '</td><td style="width:18px" align="right"><a href="javascript:hiddenFloatingDiv(\'' + divId + '\');void(0);"><img alt="Close" title="Close" src="images/crossimg.PNG" border="0"></a></td></tr></table>';
+//    var columnstxt = '<table style="width:300px;" class="Pagebody"><tr class="Mainbody selectAll"><td><input type="checkbox" onclick="javascript:togglesrchselect();" id="searchall" name="searchall" value="Select All" >Select/Unselect all columns </td></tr>';
+//    for (var i = 0; i < document.getElementById("s1").options.length; i++) {
+//        var selected = "";
+//        if (document.getElementById("s1").selectedIndex == i) selected = "checked";
+//        columnstxt += '<tr><td><input type="checkbox" id="search' + i + '" name="search' + i + '" value="' + document.getElementById("s1").options[i].text + '" ' + selected + '>' + document.getElementById("s1").options[i].text + '</td></tr>';
+//    }
+//    columnstxt += '</table>';
+//    var addFooter = '<table style="width:300px;" class="Headerbg"><tr><td align="right" valign="middle"><a href="javascript:hiddenFloatingDiv(\'' + divId + '\');void(0);"><img alt="Ok" title="Ok" src="images/ok.PNG" border="0"></a></td><td align="left" valign="middle">&nbsp;<a href="javascript:hiddenFloatingDiv(\'' + divId + '\');void(0);"><img alt="Cancel" title="Cancel" src="images/cancel.PNG" border="0"></a></td></tr></table>';
+//    document.getElementById(divId).innerHTML = addHeader + columnstxt + addFooter;
+//    document.getElementById(divId).className = 'dimming Bordercolor';
+//    document.getElementById(divId).style.display = "block";
+//    document.getElementById('dimmer').style.height = document.body.scrollHeight;
+
+//}
 
 function hiddenFloatingDiv(divId) {
 
@@ -2210,7 +2041,6 @@ function valid_submit() {
     var srchFld = $j("#searstr");
     txtVal = CheckUrlSplChars(srchFld.val());
     if (ValidateSrchFlds()) {
-        ShowDimmer(true);
         $j("#hdnSearchStr").val(txtVal);
         $j("#searstr").val("");
         var btn = $j("#btnGo");
@@ -2220,12 +2050,23 @@ function valid_submit() {
             btn.click();
         }
     } else
-        if (txtVal == "" || txtVal == null || txtVal == undefined) {
-            showAlertDialog("warning", 2007, "client");
-        }
+    if (txtVal == "" || txtVal == null || txtVal == undefined) {
+        showAlertDialog("warning", 2007, "client");
+    }
 
     return;
 }
+
+//function CheckUrlSplChars(value) {
+//    value = value.replace(/&amp;/g, "&");
+//    value = value.replace(/%/g, "%25");
+//    value = value.replace(/&/g, "%26");
+//    value = value.replace(/'/g, "%27");
+//    value = value.replace(/"/g, "%22");
+//    value = value.replace(/#/g, "%23");
+//    //value = encodeURIComponent(value);
+//    return value;
+//}
 
 function DecodeUrlSplChars(value) {
     value = value.replace(/&/g, "&amp;");
@@ -2530,7 +2371,7 @@ function HyperlinkToolTip(ttUrl) {
                     pType = "i";
                 }
             } else if (propDetails[0] == 'name') {
-                hlTipUrl = hlTipUrl + propDetails[1] + `&openerIV=${typeof isListView != "undefined" ? iName : propDetails[1]}&isIV=${typeof isListView != "undefined" ? !isListView : "false"}`;
+                hlTipUrl = hlTipUrl + propDetails[1];
                 structName = propDetails[1];
             } else if (propDetails[0] == 'popup') {
                 openWin = propDetails[1];
@@ -2549,7 +2390,7 @@ function HyperlinkToolTip(ttUrl) {
     if (pType == "t" && structName != "" && load.startsWith("t")) {
         try {
             ASB.WebService.GetRecordId(structName, hlTipParamXml, SuccessGetRecId, OnException);
-        } catch (e) { }
+        } catch (e) {}
     } else {
         GetUrl();
     }
@@ -3191,7 +3032,7 @@ function SetPickVal(pickVal) {
         fld.val(pickVal);
         try {
             fld.focus();
-        } catch (ex) { }
+        } catch (ex) {}
 
         AxFromAssociated = true;
     }
@@ -3414,7 +3255,7 @@ function EvaluateFormControl(fName) {
                     if (skip)
                         count = 1;
                     j += 3;
-                } catch (e) { }
+                } catch (e) {}
 
             } else if (fldname == "elseif") {
 
@@ -3596,26 +3437,10 @@ function ProcessFormControl(fld, actionStr, fldValue) {
         if (newFldName.toLowerCase() == "save")
             isFldSaveBtn = true;
 
-        var sfnewFldName = newFldName;
-        if (sfnewFldName.toLowerCase() == "listview")
-            sfnewFldName = "list view";
         $j("#icons").find("a").each(function () {
-            if (typeof $j(this).attr("title") != "undefined" && $j(this).attr("class") == newFldName.toLowerCase() || (typeof btnName !== 'undefined' && $j(this).text() == btnName)) {
+            if ($j(this).attr("class") == newFldName.toLowerCase() || (typeof btnName !== 'undefined' && $j(this).text() == btnName)) {
                 destfld = $j(this);
                 isFieldBtn = true;
-                return false;
-            } else if (typeof $j(this).attr("title") != "undefined" && $j(this).attr("title").toLowerCase() == sfnewFldName.toLowerCase() || (typeof btnName !== 'undefined' && $j(this).text() == btnName)) {
-                destfld = $j(this);
-                isFieldBtn = true;
-                return false;
-            }
-        });
-
-        $j(".toolbarRightMenu").find("a").each(function () {
-            if (typeof $j(this).attr("title") != "undefined" && $j(this).attr("title").toLowerCase() == sfnewFldName.toLowerCase() || (typeof btnName !== 'undefined' && $j(this).text() == btnName)) {
-                destfld = $j(this);
-                isFieldBtn = true;
-                return false;
             }
         });
 
@@ -3623,23 +3448,6 @@ function ProcessFormControl(fld, actionStr, fldValue) {
         if (!isFieldBtn) {
             $j("#nextprevicons").find("a").each(function () {
                 if ($j(this).attr("class") == newFldName.toLowerCase()) {
-                    destfld = $j(this);
-                    isFieldBtn = true;
-                }
-            });
-        }
-        if (!isFieldBtn) {
-            $j(".tstructMainBottomFooter").find("a").each(function () {
-                if ($j(this).attr("id").toLowerCase() == newFldName.toLowerCase()) {
-                    destfld = $j(this);
-                    isFieldBtn = true;
-                }
-            });
-        }
-
-        if (!isFieldBtn) {
-            $(".toolbarRightMenu .menu-item a").each(function () {
-                if (typeof $j(this).attr("id") != "undefined" && ($j(this).attr("id").toLowerCase() == newFldName.toLowerCase()) || (typeof $j(this).attr("title") != "undefined" && $j(this).attr("title").toLowerCase() == sfnewFldName.toLowerCase() || (typeof btnName !== 'undefined' && $j(this).text() == btnName))) {
                     destfld = $j(this);
                     isFieldBtn = true;
                 }
@@ -3733,17 +3541,8 @@ function ProcessFormControl(fld, actionStr, fldValue) {
                         if (destfld.attr("class") == "axpImg") {
                             destfld.attr("onclick", "callnull");
                         }
-                        try {
-                            if (destfld.hasClass('selectTextArea')) {
-                                var _thisdcNo = GetFieldsDcNo(destfld.attr("id"));
-                                if (!IsDcGrid(_thisdcNo))
-                                    destfld.prop("disabled", true);
-                            } else
-                                destfld.prop("disabled", true);
-                        } catch (ex) {
-                            destfld.prop("disabled", true);
-                        }
-                        //destfld.attr("readOnly", "readOnly");
+                        destfld.prop("disabled", true);
+                        destfld.attr("readOnly", "readOnly");
                         SetAutoCompAccess("disabled", destfld);
 
                     }
@@ -3762,7 +3561,7 @@ function ProcessFormControl(fld, actionStr, fldValue) {
                             $("#" + fld).val("");
                             $("#" + fld).data("valuelist", "");
                             $("#" + fld).tokenfield('setTokens', []);
-                        } catch (ex) { }
+                        } catch (ex) {}
                     }
                 } else {
                     CallSetFieldValue(fld, fldValue);
@@ -3782,7 +3581,7 @@ function ProcessFormControl(fld, actionStr, fldValue) {
                     ShowingDc(dcNo, "disable");
                 }
                 break;
-            //Enable
+                //Enable
             case ("6"):
                 if (isFieldBtn) {
                     if (isFldSaveBtn)
@@ -3802,7 +3601,7 @@ function ProcessFormControl(fld, actionStr, fldValue) {
                     destfld[0].children[0].className = "handCur";
                 }
                 break;
-            //Disable
+                //Disable
             case ("7"):
                 if (isFieldBtn) {
                     if (isFldSaveBtn)
@@ -3837,7 +3636,6 @@ function ProcessFormControl(fld, actionStr, fldValue) {
                     if (fldname.startsWith("axptm_") || fldname.startsWith("axpdbtm_") || (fldDType != "" && fldDType.toLowerCase() == "time")) {
                         //$(".ui-datepicker.ui-widget").css("display", "none");
                         $j("#" + destfld.attr("id") + " .tstOnlyTime").removeClass('hasDatepicker');
-                        $j("#" + destfld.attr("id") + " .tstOnlyTime24hours").removeClass('hasDatepicker');
                     }
                 }
                 break;
@@ -3856,7 +3654,6 @@ function ProcessFormControl(fld, actionStr, fldValue) {
                     if (fldname.startsWith("axptm_") || fldname.startsWith("axpdbtm_") || (fldDType != "" && fldDType.toLowerCase() == "time")) {
                         //$(".ui-datepicker.ui-widget").css("display", "block");
                         $j("#" + destfld.attr("id") + " .tstOnlyTime").addClass('hasDatepicker');
-                        $j("#" + destfld.attr("id") + " .tstOnlyTime24hours").addClass('hasDatepicker');
                     }
                 }
                 break;
@@ -3947,13 +3744,6 @@ function HideShowField(fldName, action) {
             $j("#th-" + fldName).show();
         var rowCnt = 0;
         rowCnt = GetDcRowCount(dcNo);
-        try {
-            let _fldIndex = GetFieldIndex(fldName);
-            if (action == "hide") {
-                FFieldHidden[_fldIndex] = "True";
-            } else
-                FFieldHidden[_fldIndex] = "False";
-        } catch (ex) { }
         var eleType = getGridFldType(fldName, dcNo)
         for (var i = 1; i <= rowCnt; i++) {
             fld = $j("#" + fldName + GetClientRowNo(i, dcNo) + "F" + dcNo);
@@ -3971,12 +3761,8 @@ function HideShowField(fldName, action) {
                         $j("#dvGrid" + fldName).hide();
                     if (fld.closest(".gridElement").length)
                         fld.closest(".gridElement").hide();
-                    if (!fld.parent().is('td') && fld.parent().parent().length > 0) {
-                        if (fld.parent().parent().is('td'))
-                            fld.parent().parent().hide();
-                        else if (fld.parent().parent().parent().is('td'))
-                            fld.parent().parent().parent().hide();
-                    }
+                    if (!fld.parent().is('td') && fld.parent().parent().length && fld.parent().parent().is('td'))
+                        fld.parent().parent().hide();
                 } else {
                     //fld.show().attr("data-type", eleType);
                     fld.show();
@@ -3989,12 +3775,8 @@ function HideShowField(fldName, action) {
                         $j("#dvGrid" + fldName).show();
                     if (fld.closest(".gridElement").length)
                         fld.closest(".gridElement").show();
-                    if (!fld.parent().is('td') && fld.parent().parent().length > 0) {
-                        if (fld.parent().parent().is('td'))
-                            fld.parent().parent().show();
-                        else if (fld.parent().parent().parent().is('td'))
-                            fld.parent().parent().parent().show();
-                    }
+                    if (!fld.parent().is('td') && fld.parent().parent().length && fld.parent().parent().is('td'))
+                        fld.parent().parent().show();
                 }
             } else {
                 var idx = $j.inArray(fldName + "~" + action, AxFormContHiddenFlds);
@@ -4005,20 +3787,13 @@ function HideShowField(fldName, action) {
         // SetGridHeaderWidth(dcNo);
     } else {
         fld = $j("#dv" + fldName);
-        try {
-            let _fldIndex = GetFieldIndex(fldName);
-            if (action == "hide") {               
-                FFieldHidden[_fldIndex] = "True";
-            } else
-                FFieldHidden[_fldIndex] = "False";
-        } catch (ex) { }
         if (fld.length > 0) {
             if (action == "hide")
-                fld.addClass("d-none").parents(".grid-stack-item").addClass("d-none");
+                fld.hide().parents(".grid-stack-item").hide();
             else {
-                fld.removeClass("d-none").parents(".grid-stack-item").removeClass("d-none");
+                fld.show().parents(".grid-stack-item").show();
                 var fldInput = fld.find(':input');
-                if (fldInput.css('visibility') == 'hidden') { }
+                if (fldInput.css('visibility') == 'hidden') {}
                 fldInput.css('visibility', '');
             }
         } else {
@@ -4050,8 +3825,8 @@ function getGridFldType(fldName, dcNo) {
 
     } else {
         eleType = inputValue[0].nodeName.toLowerCase();
-        (eleType == "input" && inputValue[0].type == "checkbox") ? eleType = "checkbox" : "";
-        (eleType == "input" && inputValue.hasClass('number')) ? eleType = "numeric" : "";
+        (eleType == "input" && inputValue[0].type == "checkbox") ? eleType = "checkbox": "";
+        (eleType == "input" && inputValue.hasClass('number')) ? eleType = "numeric": "";
     }
     return eleType;
 }
@@ -4302,11 +4077,11 @@ function ShowingDc(a, x, calledFrom) {
         } else if (x == "disable") {
             $j("#DivFrame" + a).find('input,textarea, img, select, a').not('.subGrid,.chkShwSel').attr('disabled', true);
 
-            for (var instanceName in CKEDITOR.instances) {
-                try {
-                    CKEDITOR.instances[instanceName].setReadOnly(true);
-                } catch (ex) { }
-            }
+            // for (var instanceName in CKEDITOR.instances) {
+            //     try {
+            //         CKEDITOR.instances[instanceName].setReadOnly(true);
+            //     } catch (ex) { }
+            // }
 
             $j("#DivFrame" + a).find('a img').removeClass('handCur');
             $j("#DivFrame" + a).find('img').attr('onclick', 'javascript:void(0);');
@@ -4392,24 +4167,24 @@ function createPopDcDialog(a, dvFrame) {
                 dvFrame.hide();
             },
             buttons: [{
-                text: "Save",
-                click: function () {
-                    if (ValidateBeforeSubmit(a)) {
-                        dvFrame.dialog('close');
-                    }
+                    text: "Save",
+                    click: function () {
+                        if (ValidateBeforeSubmit(a)) {
+                            dvFrame.dialog('close');
+                        }
+                    },
+                    'class': "ui-button ui-corner-all ui-widget hotbtn"
                 },
-                'class': "ui-button ui-corner-all ui-widget hotbtn"
-            },
 
-            {
-                text: "Cancel",
-                click: function () {
-                    ClearFieldsInDC(a);
-                    dvFrame.dialog('close');
-                },
-                'class': "coldbtn btn",
-                style: "background: antiquewhite"
-            }
+                {
+                    text: "Cancel",
+                    click: function () {
+                        ClearFieldsInDC(a);
+                        dvFrame.dialog('close');
+                    },
+                    'class': "coldbtn btn",
+                    style: "background: antiquewhite"
+                }
             ]
         });
 
@@ -4481,11 +4256,6 @@ function clearDataGrid(editGridDC) {
                                 ShowDimmer(false);
                                 $("#chkallgridrow" + editGridDC).prop("checked", false);
                                 $("#clearThisDC" + editGridDC).addClass("disabled");
-                                if (AxFormContSetGridCell.length > 0) {
-                                    AxFormContSetGridCell = jQuery.grep(AxFormContSetGridCell, function (value) {
-                                        return value.split("~")[0] != editGridDC;
-                                    });
-                                }
                             }
                         },
                         buttonB: {
@@ -4506,17 +4276,12 @@ function clearDataGrid(editGridDC) {
                 ShowDimmer(false);
                 $("#chkallgridrow" + editGridDC).prop("checked", false);
                 $("#clearThisDC" + editGridDC).addClass("disabled");
-                if (AxFormContSetGridCell.length > 0) {
-                    AxFormContSetGridCell = jQuery.grep(AxFormContSetGridCell, function (value) {
-                        return value.split("~")[0] != editGridDC;
-                    });
-                }
             }
         } else {
             showAlertDialog("info", 2004, "client");
         }
     } else {
-        if ($j("input[name=grdchkItemTd" + editGridDC + "]:checked").length > 0)
+        if ($j("input[name=chkItem" + editGridDC + "]:checked").length > 0)
             DeleteSelectedRows(editGridDC);
     }
 }
@@ -4547,12 +4312,12 @@ function DeleteSelectedRows(editGridDC) {
                     btnClass: 'btn btn-primary',
                     action: function () {
                         try {
-                            let chkdCount = $j("input[name=grdchkItemTd" + editGridDC + "]:checked").length;
+                            let chkdCount = $j("input[name=chkItem" + editGridDC + "]:checked").length;
                             let loopCount = 0;
-                            $j("input[name=grdchkItemTd" + editGridDC + "]:checked").each(function () {
+                            $j("input[name=chkItem" + editGridDC + "]:checked").each(function () {
                                 loopCount++;
                                 let _thisId = $j(this).attr("id");
-                                let rowFrmNo = _thisId.substring(_thisId.lastIndexOf("F"), _thisId.lastIndexOf("F") - 3);// _thisId.substr(7, _thisId.lastIndexOf("F") - 3);
+                                let rowFrmNo = _thisId.substr(7, _thisId.lastIndexOf("F") - 3);
                                 if (axInlineGridEdit)
                                     updateInlineGridRowValues();
                                 if (loopCount == chkdCount)
@@ -4576,12 +4341,12 @@ function DeleteSelectedRows(editGridDC) {
         });
     } else {
         try {
-            let chkdCount = $j("input[name=grdchkItemTd" + editGridDC + "]:checked").length;
+            let chkdCount = $j("input[name=chkItem" + editGridDC + "]:checked").length;
             let loopCount = 0;
-            $j("input[name=grdchkItemTd" + editGridDC + "]:checked").each(function () {
+            $j("input[name=chkItem" + editGridDC + "]:checked").each(function () {
                 loopCount++;
                 let _thisId = $j(this).attr("id");
-                let rowFrmNo = _thisId.substring(_thisId.lastIndexOf("F"), _thisId.lastIndexOf("F") - 3);// _thisId.substr(7, _thisId.lastIndexOf("F") - 3);
+                let rowFrmNo = _thisId.substr(7, _thisId.lastIndexOf("F") - 3);
                 if (axInlineGridEdit)
                     updateInlineGridRowValues();
                 if (loopCount == chkdCount)
@@ -4755,7 +4520,7 @@ function FillGrid(frNo, addGroup, fillGridName, fastFill) {
 
     try {
         AxBeforeFillGrid();
-    } catch (ex) { }
+    } catch (ex) {}
     AxActivefillGridName = fillGridName;
     if ($j("[name=" + fillGridName + "]").attr("class").indexOf("disablefill") != -1)
         return;
@@ -4833,56 +4598,7 @@ function FillGrid(frNo, addGroup, fillGridName, fastFill) {
     } else if (FillCondition[ind] == "AOWE") {
         if ($("#gridHd" + frNo + " tbody tr").length > 0 && !isExitDummy && DCHasDataRows[dcIdx] == "True") {
             IsConfirm = true;
-            //ShowDialog('warning', 5003, "client");
-            var cutMsg = eval(callParent('lcm[519]'));
-            var glType = eval(callParent('gllangType'));
-            var isRTL = false;
-            if (glType == "ar")
-                isRTL = true;
-            else
-                isRTL = false;
-            var FillGridCB = $.confirm({
-                theme: 'modern',
-                closeIcon: false,
-                title: eval(callParent('lcm[155]')),
-                onContentReady: function () {
-                    disableBackDrop('bind');
-                },
-                backgroundDismiss: 'false',
-                rtl: isRTL,
-                escapeKey: 'buttonB',
-                content: cutMsg,
-                buttons: {
-                    buttonA: {
-                        text: eval(callParent('lcm[164]')),
-                        btnClass: 'btn btn-primary',
-                        action: function () {
-                            GetCurrentTime("Tstruct FillGrid button click(ws call)");
-                            FillGridCB.close();
-                            var fDcRowCount = GetDcRowCount(frNo);
-                            DeleteAllRows(frNo, fDcRowCount);
-                            if (gridDummyRowVal.length > 0) {
-                                gridDummyRowVal.map(function (v) {
-                                    if (v.split("~")[0] == fillGridDc)
-                                        gridDummyRowVal.splice($.inArray(v, gridDummyRowVal), 1);
-                                    gridRowEditOnLoad = false;
-                                });
-                            }
-                            FillGridAfterConfirm(fastFill);
-                        }
-                    },
-                    buttonB: {
-                        text: eval(callParent('lcm[192]')),
-                        btnClass: 'btn btn-bg-light btn-color-danger btn-active-light-danger',
-                        action: function () {
-                            disableBackDrop('destroy');
-                            AxWaitCursor(false);
-                            ShowDimmer(false);
-                            return;
-                        }
-                    }
-                }
-            });
+            ShowDialog('warning', 5003, "client");
         }
     }
 
@@ -5025,14 +4741,10 @@ var fgWid = 400;
 
 function SuccessGetFillGridMS(result, eventArgs) {
     if (result != "") {
-        if (result.split("*♠♠*").length > 1) {
-            var serverprocesstime = result.split("*♠♠*")[0];
-            var requestProcess_logtime = result.split("*♠♠*")[1];
-            result = result.split("*♠♠*")[2];
-            WireElapsTime(serverprocesstime, requestProcess_logtime, true);
-        } else {
-            UpdateExceptionMessageInET("Error : " + result);
-        }
+        var serverprocesstime = result.split("*♠♠*")[0];
+        var requestProcess_logtime = result.split("*♠♠*")[1];
+        result = result.split("*♠♠*")[2];
+        WireElapsTime(serverprocesstime, requestProcess_logtime, true);
     }
     if (result.toLowerCase().indexOf("access violation") === -1) {
         if (CheckSessionTimeout(result))
@@ -5040,7 +4752,7 @@ function SuccessGetFillGridMS(result, eventArgs) {
 
         try {
             AxBeforeFillPopUp();
-        } catch (ex) { }
+        } catch (ex) {}
 
         var fillTitle = "";
         if (fillOrAdd == "FILL")
@@ -5061,13 +4773,8 @@ function SuccessGetFillGridMS(result, eventArgs) {
         DeletedDCRows = new Array();
 
         var tablehtml = resSplit[0].toString();
-        if ($j("#dvFillGrid").length > 0)
-            $j("#dvFillGrid").html(tablehtml);
-        else {
-            $("#bootstrapModalWrapP").remove();
-            $("#pagebdy").append("<div id=\"dvFillGrid\" style=\"\"></div>");
-            $j("#dvFillGrid").html(tablehtml);
-        }
+
+        $j("#dvFillGrid").html(tablehtml);
 
         if (resSplit.length > 1 && resSplit[1].toString() != "") {
             var fgSize = resSplit[1].toString();
@@ -5075,7 +4782,7 @@ function SuccessGetFillGridMS(result, eventArgs) {
             try {
                 fgHt = fgsizeSplit[2].toString();
                 fgWid = fgsizeSplit[3].toString();
-            } catch (e) { }
+            } catch (e) {}
             if ((fgHt == "0") || (fgWid == "0")) {
                 fgHt = 400;
                 fgWid = 400;
@@ -5104,12 +4811,14 @@ function SuccessGetFillGridMS(result, eventArgs) {
             }, () => {
                 //hide callback
             });
-            myModal.changeSize("lg");
-            myModal.scrollableDialog();
+            myModal.changeSize("fullscreen");
+            //myModal.hideFooter();
             myModal.okBtn.innerText = eval(callParent('lcm[281]'));
+            // myModal.okBtn.addEventListener("click", () => {
+            //     ProcessFillGrid(fillGridDc, AxActivefillGridName);
+            // });
             myModal.okBtn.setAttribute("onClick", "ProcessFillGrid('" + fillGridDc + "','" + AxActivefillGridName + "')");
             myModal.cancelBtn.innerText = eval(callParent('lcm[192]'));
-            
 
             if (jQuery('table[id^=tblFillGrid]').length) bindUpdownEvents(jQuery('table[id^=tblFillGrid]').attr('id'), 'multiple');
             $("#wrapperForMainNewData", window.parent.document).hide();
@@ -5135,10 +4844,10 @@ function SuccessGetFillGridMS(result, eventArgs) {
                 if (glCulture == "en-us")
                     dtFormat = "MM/DD/YYYY";
                 $.fn.dataTable.moment(dtFormat);
-            } catch (ex) { }
+            } catch (ex) {}
             fillGridDatatbl = $('table[id^=tblFillGrid]').DataTable({
                 fixedHeader: true,
-                "dom": '<"float-start"f><"float-end"l><"d-inline-flex w-100 overflow-auto"t>ip',
+                "dom": '<"pull-left"f><"pull-right"l>tip',
                 'columnDefs': [{
                     'orderable': false,
                     'targets': 0
@@ -5163,12 +4872,12 @@ function SuccessGetFillGridMS(result, eventArgs) {
             });
             $("#dvFillGrid .dataTables_filter input[type=search]").addClass("serachdatatbl form-control");
             $('#dvFillGrid .dataTables_length select').removeClass('form-control input-sm selectPaddingFix').addClass('showentries');
-            //var theadtext = $(".gridData.customSetupTableMN.dataTable thead tr th");
-            //for (var i = 1; i < theadtext.length; i++) {
-            //    var temptext = theadtext[i].innerHTML;
-            //    temptext = temptext.toLowerCase(); // console.log(temptext);
-            //    $(".gridData.customSetupTableMN.dataTable thead tr th")[i].innerHTML = capitalizeFirstLetter(temptext);
-            //}
+            var theadtext = $(".gridData.customSetupTableMN.dataTable thead tr th");
+            for (var i = 1; i < theadtext.length; i++) {
+                var temptext = theadtext[i].innerHTML;
+                temptext = temptext.toLowerCase(); // console.log(temptext);
+                $(".gridData.customSetupTableMN.dataTable thead tr th")[i].innerHTML = capitalizeFirstLetter(temptext);
+            }
         });
 
         AxWaitCursor(false);
@@ -5201,14 +4910,10 @@ function GetDcCaption(dcNo) {
 //Callback function for DoGetFillGridNonMS service.
 function SuccessFillGridNonMS(result, eventArgs) {
     if (result != "") {
-        if (result.split("*♠♠*").length > 1) {
-            var serverprocesstime = result.split("*♠♠*")[0];
-            var requestProcess_logtime = result.split("*♠♠*")[1];
-            result = result.split("*♠♠*")[2];
-            WireElapsTime(serverprocesstime, requestProcess_logtime, true);
-        } else {
-            UpdateExceptionMessageInET("Error : " + result);
-        }
+        var serverprocesstime = result.split("*♠♠*")[0];
+        var requestProcess_logtime = result.split("*♠♠*")[1];
+        result = result.split("*♠♠*")[2];
+        WireElapsTime(serverprocesstime, requestProcess_logtime, true);
     }
     if (result.toLowerCase().indexOf("access violation") === -1) {
         if (gridDummyRowVal.length > 0) {
@@ -5231,8 +4936,6 @@ function SuccessFillGridNonMS(result, eventArgs) {
         if (dcColumnValue != null && dcColumnValue != '' && dcColumnValue != undefined) {
             GetGridDcTable(dcColumnValue, fillGridDc);
         }
-
-        UpdateFldArrayInFillgrid(fillGridDc);
 
         try {
             AxAfterFillGrid();
@@ -5269,7 +4972,7 @@ function SuccessFillGridNonMS(result, eventArgs) {
                 if (typeof designObj != "undefined" && designObj[0] != null && designObj[0].selectedLayout != null && designObj[0].selectedLayout != "" && designObj[0].selectedLayout == "tile") {
                     $(".dcTitle").show().nextAll("hr.hrline").show();
                 }
-            } catch (ex) { }
+            } catch (ex) {}
         }
     } else {
         AxWaitCursor(false);
@@ -5367,7 +5070,6 @@ function UpdateKeyColValues(dcNo, rowNo) {
         var fldValue = GetFieldValue(keyCol + rowNo + "F" + dcNo);
         var dbRowNo = GetDbRowNo(rowNo, dcNo);
         UpdateFieldArray(keyCol + rowNo + "F" + dcNo, dbRowNo, fldValue, "parent");
-        UpdateAllFieldValues(keyCol + rowNo + "F" + dcNo, fldValue);
     }
 }
 
@@ -5534,7 +5236,7 @@ function ProcessFillGrid(dcNo, fillGridName) {
 
     var presentCB = "";
     var isCBchecked;
-    if ($('input[name="grdchkItemTd"]:checked').length == 0)
+    if ($('input[name="chkItem"]:checked').length == 0)
         isCBchecked = false;
     else
         isCBchecked = true;
@@ -5614,14 +5316,10 @@ function ProcessFillGrid(dcNo, fillGridName) {
 //Callback function form the DoGetFillGrid webservice.
 function SuccGetResultValue(result, eventArgs) {
     if (result != "") {
-        if (result.split("*♠♠*").length > 1) {
-            var serverprocesstime = result.split("*♠♠*")[0];
-            var requestProcess_logtime = result.split("*♠♠*")[1];
-            result = result.split("*♠♠*")[2];
-            WireElapsTime(serverprocesstime, requestProcess_logtime, true);
-        } else {
-            UpdateExceptionMessageInET("Error : " + result);
-        }
+        var serverprocesstime = result.split("*♠♠*")[0];
+        var requestProcess_logtime = result.split("*♠♠*")[1];
+        result = result.split("*♠♠*")[2];
+        WireElapsTime(serverprocesstime, requestProcess_logtime, true);
     }
     if (result.toLowerCase().indexOf("access violation") === -1) {
         var stTime = new Date();
@@ -5632,24 +5330,10 @@ function SuccGetResultValue(result, eventArgs) {
         //second parse the html
         ParseServiceResult(result, "FillGrid");
 
-        UpdateFldArrayInFillgrid(fillDcname);
-
-        try {
-            $('.griddivColumn ').addClass('gridFixedHeader').css({ "overflow": "auto" });
-            if (typeof gridFixedHeader == "undefined" || gridFixedHeader == "true") {
-                $('.griddivColumn ').addClass('gridFixedHeader').css({ "max-height": "calc(100vh - 130px)" });
-                $(".gridFixedHeader table thead tr th").css({ "background": "#fff", "position": "sticky", "top": "0" });
-            }
-        } catch (ex) { }
-
-        let isOverridFomrControl = true;
-        if (AxRuesDefFormcontrol == "true") {
-            isOverridFomrControl = AxRulesDefParser("formcontrol", "", "formcontrol");
-        }
-        if (appstatus != "Approved" && appstatus != "Rejected" && theMode != "design" && isOverridFomrControl) {
+        if (appstatus != "Approved" && appstatus != "Rejected" && theMode != "design") {
             DoFormControlOnload();
         }
-        if (appstatus != "Approved" && appstatus != "Rejected" && theMode != "design" && isOverridFomrControl) {
+        if (appstatus != "Approved" && appstatus != "Rejected" && theMode != "design") {
             var rid = $j("#recordid000F0").val();
             if (rid != "" && rid != "0")
                 DoScriptFormControl("", "On Data Load");
@@ -5756,7 +5440,7 @@ function SuccGetResultValue(result, eventArgs) {
                 if (typeof designObj != "undefined" && designObj[0] != null && designObj[0].selectedLayout != null && designObj[0].selectedLayout != "" && designObj[0].selectedLayout == "tile") {
                     $(".dcTitle").show().nextAll("hr.hrline").show();
                 }
-            } catch (ex) { }
+            } catch (ex) {}
         }
     } else {
         AxWaitCursor(false);
@@ -5766,44 +5450,6 @@ function SuccGetResultValue(result, eventArgs) {
     }
     GetProcessTime();
     GetTotalElapsTime();
-}
-
-function UpdateFldArrayInFillgrid(_thisDc) {
-    try {
-        $(".wrapperForGridData" + _thisDc + " table tbody tr").each(function () {
-            $(this).find("td").each(function () {
-                let _thisElId = $(this).find("textarea").attr("id");// $(this).attr("id");
-                if (typeof _thisElId != "undefined" && _thisElId != "" && !_thisElId.startsWith("axp_recid" + _thisDc)) {
-                    _thisElId = _thisElId.replace('EDIT~', '');
-                    let _thiselVal = $(this).find("textarea").val(); //GetFieldValueNew(_thisElId);
-                    UpdateAllFieldValues(_thisElId, _thiselVal);
-                }
-            });
-        });
-    } catch (ex) {
-
-    }
-}
-
-function UpdateFldArrayInDeleteRow(_thisDc, _thisRowNo) {
-    try {
-        let _thisTrId = "sp" + _thisDc + "R" + _thisRowNo + "F" + _thisDc;
-        $(".wrapperForGridData" + _thisDc + " table tbody tr#" + _thisTrId).each(function () {
-            $(this).find("td").each(function () {
-                let _thisElId = $(this).find("textarea").attr("id");
-                if (AllFieldNames.length > 0 && typeof _thisElId != "undefined" && _thisElId != "") {
-                    _thisElId = _thisElId.replace('EDIT~', '');
-                    var idx = $j.inArray(_thisElId, AllFieldNames);
-                    if (idx != -1) {
-                        AllFieldValues.splice(idx, 1);
-                        AllFieldNames.splice(idx, 1);
-                    }
-                }
-            });
-        });
-    } catch (ex) {
-
-    }
 }
 
 function ClearFldArrays() {
@@ -5882,7 +5528,7 @@ function ParseServiceResult(result, CalledFrom) {
     }
     try {
         AfterParseServiceResult(CalledFrom);
-    } catch (ex) { }
+    } catch (ex) {}
     ShowDimmer(false);
     AxWaitCursor(false);
 }
@@ -6000,10 +5646,10 @@ function ChkHdrCheckbox(obj, exprResult) {
     //The exprResult will contain the result of the expression evaluation.
     if (exprResult == "t" || exprResult == "true") {
 
-        if ($j(".fgChk").parents("table.gridData tbody").find(".fgChk:visible").length == $j(".fgChk").parents("table.gridData tbody").find(".fgChk:checked").length)
-            $j(".fgHdrChk").parents("table.gridData thead").find(".fgHdrChk").prop("checked", true);
+        if ($j(".fgChk:visible").length == $j(".fgChk:checked").length)
+            $j(".fgHdrChk").prop("checked", true);
         else
-            $j(".fgHdrChk").parents("table.gridData thead").find(".fgHdrChk").prop("checked", false);
+            $j(".fgHdrChk").prop("checked", false);
     } else {
         obj.checked = false;
 
@@ -6050,6 +5696,55 @@ function DeleteAllRows(dcNo, RowCount) {
         }
     }
 }
+
+//function AddSortingFeature(dcno, calledFrom) {
+//    $j("#tblFillGrid" + dcno).tablesorter();
+//    if (calledFrom != 'Enter')
+//        $j("#searchInput").keyup(function (e) {
+//            if (e.keyCode == 13)
+//                AddSortingFeature(dcno, 'Enter');
+
+//        });
+//    if (calledFrom != 'Direct') {
+//        var tbody = $j("#tblFillGrid" + dcno + " > tbody");
+//        var rows = tbody.find("tr:not(:first-child)");
+//        rows.hide();
+//        if ($j("#searchInput").length > 0) {
+//            var data = $j("#searchInput").val().split(" ");
+//            $j.each(data, function (i, v) {
+
+//                if (v.indexOf('(') > -1)
+//                    return;
+//                $j.each(rows.find('label'), function (j) {
+//                    if ($j(this).text().toString().toLowerCase().indexOf(v.toString().toLowerCase()) != -1) {
+//                        $j(this).parent().parent().show();
+//                    }
+//                });
+//                $j("#searchInput").blur();
+//                tbody.find('tr.activeSearchTr').removeClass('activeSearchTr');
+//                tbody.find('tr:visible:first').addClass('activeSearchTr');
+//            });
+//            if (!$(rows).is(":visible")) {
+//                tbody.find("tr:first-child").hide();
+//                $(tbody).append("<tr id=\"fillNoRec\"><td>No data matching " + $j("#searchInput").val() + "</td></tr>");
+//            } else {
+//                if ($("#fillNoRec").length > 0) {
+//                    tbody.find("tr:first-child").show();
+//                    $("#fillNoRec").remove();
+//                }
+//            }
+//        }
+//    }
+
+//    if ($("#tblFillGrid" + dcno + " .activeSearchTr th input[type=checkbox]").length > 0) {
+//        if ($j(".fgChk:checked").length > 0) {
+//            $j("input[name=chkItem]:checkbox:checked").prop("checked", false);
+//            CheckAll($("#tblFillGrid" + dcno + " .activeSearchTr th input[type=checkbox]")[0], "t");
+//        }
+//    }
+
+//}
+
 
 function ChangeDir(dir) {
     $j("#form1").attr("dir", dir);
@@ -6206,6 +5901,8 @@ function checkTheHeight(idOfTheElement, elemm, direction) {
 function unbindKeyDownEvent() {
     jQuery(document).unbind("keydown.tstrctSrch");
 }
+
+
 
 
 $('body').on('click', function (e) {
@@ -6632,7 +6329,7 @@ function SuccessSubGridCombos(result, eventArgs) {
         AssignLoadValues(result, "PopGridCombos");
         try {
             AxAfterSubGridAddRow();
-        } catch (ex) { }
+        } catch (ex) {}
         $j("#DivFrame" + AxActiveDc).dialog({
             title: popUpTitle,
             height: 400,
@@ -6658,7 +6355,7 @@ function ApplyPopJson(dcNo) {
     UpdateRowInDataObj();
     try {
         AxAfterSubGridAddRow();
-    } catch (ex) { }
+    } catch (ex) {}
 }
 
 //Function returns true if this row is assigned to a dc in the pop rows arrays.
@@ -6685,7 +6382,7 @@ function IsPopParBound(popDcNo, parDcNo, parRowNo) {
         //TODO: the try catch block needs to be removed.
         try {
             parValue = parseFloat(parValue);
-        } catch (ex) { }
+        } catch (ex) {}
         if (parValue.toString() == "") {
             isParBound = false;
             break;
@@ -6837,7 +6534,7 @@ function UpdatePopUpParents(fieldName) {
 
                         var dbRowNo = GetDbRowNo(subGrdRows[j].toString(), popDcNo)
                         UpdateFieldArray(popFldId, dbRowNo, newParValue, "parent");
-                    } catch (ex) { }
+                    } catch (ex) {}
                 }
             }
         }
@@ -7690,7 +7387,7 @@ function customValidationFn(textarea) {
 
         try {
             ASB.WebService.CallRestWS(JSON.stringify(jsonData), webServiceName, SuccessCallbackAction, OnException);
-        } catch (exp) { }
+        } catch (exp) {}
 
 
         function SuccessCallbackAction(result, eventArgs) {
@@ -7709,7 +7406,7 @@ function customValidationFn(textarea) {
                     msg = msg.replace('<error>', '').replace('</error>', '');
                     showAlertDialog("warning", msg);
                 }
-            } catch (ex) { }
+            } catch (ex) {}
         }
 
         function OnException(result) {
@@ -7761,19 +7458,21 @@ function discardLodaData() {
     try {
         var dcldId = $j("#recordid000F0").val();
         GetLoadData(dcldId, "");
-    } catch (exp) { }
+    } catch (exp) {}
 }
 
 function hideDiscardButton() {
     try {
         var dcldId = $j("#recordid000F0").val();
-        if (dcldId != "" && dcldId != "0" && AxpTstButtonStyle!="old")
-            $("#ftbtn_iDiscard").removeClass("d-none");
-        else {
-            if (!$("#ftbtn_iDiscard").hasClass("d-none"))
-                $("#ftbtn_iDiscard").addClass("d-none");
-        }
-    } catch (exp) { }
+        if (dcldId != "" && dcldId != "0")
+            $("#ftbtn_iDiscard").css({
+                "display": "block"
+            });
+        else
+            $("#ftbtn_iDiscard").css({
+                "display": "none"
+            });
+    } catch (exp) {}
 }
 
 function autocompleteMetadataJson(mtJson) {
@@ -7784,7 +7483,7 @@ function autocompleteMetadataJson(mtJson) {
             mtJson.forEach(function (varJson) {
                 sourceAcMetaJsonFlds.push(varJson.name);
             });
-        } catch (ex) { }
+        } catch (ex) {}
     }
 }
 
@@ -7817,11 +7516,9 @@ function DoScriptFormControl(componentName, eventType) {
             var rid = $j("#recordid000F0").val();
             $.each(SFCApply, function (idx, elem) {
                 if (elem == "On Form Load" && rid == "0") {
-                    isScriptFormLoad = "true";
                     var sfcExp = SFormControls[idx];
                     EvaluateScriptFormControl(sfcExp);
                 } else if (elem == "On Data Load" && rid != "0") {
-                    isScriptFormLoad = "true";
                     var sfcExp = SFormControls[idx];
                     EvaluateScriptFormControl(sfcExp);
                 }
@@ -7832,7 +7529,6 @@ function DoScriptFormControl(componentName, eventType) {
                 if (SFCApply[idx] == "On Click" && eventType == "On Field Enter")
                     eventType = "On Click";
                 if (elem == sfcfName && SFCApply[idx] == eventType) {
-                    isScriptFormLoad = "false";
                     var sfcExp = SFormControls[idx];
                     EvaluateScriptFormControl(sfcExp, componentName);
                 }
@@ -7848,23 +7544,13 @@ function EvaluateScriptFormControl(sfcExp, sfcfName = "") {
             flval = GetFieldValue(sfcfName);
         //var strefVal= Evaluate(sfcfName, flval, sfcExp, "vexpr");
         var sfName = sfcfName == "" ? "" : sfcfName;
-        var arrsfcExp = sfcExp.split("♥");
-        AxFormControlList = new Array();
+        var arrsfcExp = sfcExp.split("~");
         var strefVal = EvalExprSet(arrsfcExp);
-        if (AxFormControlList.length > 0)
-            ProcessScriptFormControlOnList(sfName);
-        else if (strefVal != "" && strefVal.split("~").length >= 2)
+        if (strefVal != "" && strefVal.split("~").length >= 2)
             ProcessScriptFormControl(strefVal.split("~")[1], strefVal.split("~")[0], sfName);
-        else if (strefVal != "" && strefVal.split("♠").length > 0)
+        else if (strefVal != "" && strefVal.split("♠").length >0)
             ProcessScriptFormControlEvents(strefVal, sfName);
     }
-}
-
-function ProcessScriptFormControlOnList(sfName) {
-    $.each(AxFormControlList, function (i, val) {
-        if (val != "")
-            ProcessScriptFormControl(val.split("~")[1], val.split("~")[0], sfName);
-    });
 }
 
 function ProcessScriptFormControl(listControls, actionStr, sfName) {
@@ -7877,11 +7563,6 @@ function ProcessScriptFormControl(listControls, actionStr, sfName) {
     }
     listControls.split(',').forEach(function (contName) {
 
-        let setfldCap = "";
-        if (contName.indexOf("^") > 0) {
-            setfldCap = contName.split("^")[1];
-            contName = contName.split("^")[0];
-        }
 
         var fldname = GetExactFieldName(contName);
         contName = fldname;
@@ -7917,7 +7598,7 @@ function ProcessScriptFormControl(listControls, actionStr, sfName) {
         }
 
         isFieldBtn = false;
-        var destfld = $j("#" + contName + ":not(.tstformbutton,.axpBtnCustom,.dwbIvBtnbtm,.dwbBtn,.menu-link)");
+        var destfld = $j("#" + contName + ":not(.tstformbutton,.axpBtnCustom)");
         if (destfld.length == 0) {
             destfld = $j("#DivFrame" + contName.toString().substring(2));
             if (destfld.length == 0) {
@@ -7926,9 +7607,6 @@ function ProcessScriptFormControl(listControls, actionStr, sfName) {
                     destfld = $j("#ank" + dcName);
                 }
             }
-        } else if (destfld.length > 0) {
-            if (destfld.parents(".menu.menu-sub-dropdown").length > 0)
-                isFieldBtn = true;
         }
 
         var fldRowNo = GetFieldsRowNo(contName);
@@ -7986,16 +7664,11 @@ function ProcessScriptFormControl(listControls, actionStr, sfName) {
                 newFldName = "delete";
             else if (newFldName.toLowerCase() == "list view")
                 newFldName = "listview";
-            else if (newFldName.toLowerCase() == "new") {
+            else if (newFldName.toLowerCase() == "new")
                 newFldName = "add";
-                //btnfooteropenlist = btnfooteropenlist.replace("ftbtn_iNew", "");
-            }
 
-            if (newFldName.toLowerCase() == "save" || newFldName.toLowerCase() == "submit") {
+            if (newFldName.toLowerCase() == "save")
                 isFldSaveBtn = true;
-                newFldName = "save";
-                //btnfooteropenlist = btnfooteropenlist.replace("ftbtn_iSave", "");
-            }
 
             var sfnewFldName = newFldName;
             if (sfnewFldName.toLowerCase() == "listview")
@@ -8005,7 +7678,7 @@ function ProcessScriptFormControl(listControls, actionStr, sfName) {
                     destfld = $j(this);
                     isFieldBtn = true;
                     return false;
-                } else if (typeof $j(this).attr("title") != "undefined" && $j(this).attr("title").toLowerCase() == sfnewFldName.toLowerCase() || (typeof btnName !== 'undefined' && $j(this).text() == btnName) || typeof $j(this).attr("id") != "undefined" && $j(this).attr("id").toLowerCase() == sfnewFldName.toLowerCase()) {
+                } else if (typeof $j(this).attr("title") != "undefined" && $j(this).attr("title").toLowerCase() == sfnewFldName.toLowerCase() || (typeof btnName !== 'undefined' && $j(this).text() == btnName)) {
                     destfld = $j(this);
                     isFieldBtn = true;
                     return false;
@@ -8029,23 +7702,7 @@ function ProcessScriptFormControl(listControls, actionStr, sfName) {
                     }
                 });
             }
-            if (!isFieldBtn) {
-                $j(".tstructMainBottomFooter").find("a").each(function () {
-                    if ($j(this).attr("id").toLowerCase() == newFldName.toLowerCase() || (typeof $j(this).attr("title") != "undefined" && $j(this).attr("title").toLowerCase() == sfnewFldName.toLowerCase() || (typeof btnName !== 'undefined' && $j(this).text() == btnName))) {
-                        destfld = $j(this);
-                        isFieldBtn = true;
-                    }
-                });
-            }
 
-            if (!isFieldBtn) {
-                $(".toolbarRightMenu .menu-item a").each(function () {
-                    if (typeof $j(this).attr("id") != "undefined" && ($j(this).attr("id").toLowerCase() == newFldName.toLowerCase()) || (typeof $j(this).attr("title") != "undefined" && $j(this).attr("title").toLowerCase() == sfnewFldName.toLowerCase() || (typeof btnName !== 'undefined' && $j(this).text() == btnName))) {
-                        destfld = $j(this);
-                        isFieldBtn = true;
-                    }
-                });
-            }
 
             if (actTmpBtn != undefined && actTmpBtn.length > 0)
                 destfld = actTmpBtn.parent(0);
@@ -8069,96 +7726,38 @@ function ProcessScriptFormControl(listControls, actionStr, sfName) {
                             else
                                 ShowingDc(dcNo, "enable");
                         } else {
-                            var _thisdcNo = GetDcNo(fldname);
-                            try {
-                                let _fName = GetFieldsName(destfld.attr("id"));
-                                let _fldIndex = $j.inArray(_fName, FNames);
-                                FFieldReadOnly[_fldIndex] = "False";
-                            } catch (ex) { }
-                            if (IsDcGrid(_thisdcNo)) {
-                                var rowCnt = 0;
-                                rowCnt = GetDcRowCount(_thisdcNo);
-                                var eleType = getGridFldType(fldname, _thisdcNo);
-                                for (var i = 1; i <= rowCnt; i++) {
-                                    destfld = $j("#" + fldname + GetClientRowNo(i, _thisdcNo) + "F" + _thisdcNo);
-                                    let _thisEleId = fldname + GetClientRowNo(i, _thisdcNo) + "F" + _thisdcNo;
-                                    if (destfld.length > 0) {
-                                        var idx = $j.inArray(_thisdcNo + "~" + fldname + "~disable", AxFormContSetFldActGrid);
-                                        if (idx == -1) {
-                                            idx = $j.inArray(_thisdcNo + "~" + fldname + "~enable", AxFormContSetFldActGrid);
-                                            if (idx == -1)
-                                                AxFormContSetFldActGrid.push(_thisdcNo + "~" + fldname + "~enable");
-                                            else
-                                                AxFormContSetFldActGrid[idx] = _thisdcNo + "~" + fldname + "~enable";
-                                        } else {
-                                            AxFormContSetFldActGrid[idx] = _thisdcNo + "~" + fldname + "~enable";
-                                        }
+                            if (IsPickListField(destfld.attr("id")) == true) {
+                                var pickFld = document.getElementById("img~" + destfld.attr("id"));
+                                pickFld.disabled = false;
+                                pickFld.className = "input-group-addon handCur pickimg";
+                            }
 
-                                        if (IsPickListField(destfld.attr("id")) == true) {
-                                            var pickFld = document.getElementById("img~" + destfld.attr("id"));
-                                            pickFld.disabled = false;
-                                            pickFld.className = "input-group-addon handCur pickimg";
-                                        }
-                                        if (destfld.val() == 0 && destfld.prop("type") != "select-one")
-                                            destfld.val("");
 
-                                        if (destfld.attr("title") == dateString && destfld.val() == "")
-                                            destfld.val(dateString);
-                                        if (destfld.attr("type") == "checkbox") {
-                                            var checlistid = destfld.attr("id");
+                            if (destfld.val() == 0 && destfld.prop("type") != "select-one")
+                                destfld.val("");
 
-                                            EnableDisableCheckbox(checlistid, false)
-                                        } else {
+                            if (destfld.attr("title") == dateString && destfld.val() == "")
+                                destfld.val(dateString);
+                            if (destfld.attr("type") == "checkbox") {
+                                var checlistid = destfld.attr("id");
 
-                                            // for enabling the Rich Text Box If it is disabled on dataload using form control
-                                            if (destfld.attr("id").startsWith("rtf_") || destfld.attr("id").startsWith("rtfm_") || destfld.attr("id").startsWith("fr_rtf_") || GetDWBFieldType(GetFieldsName(destfld.attr("id"))) == "Rich Text") {
-                                                $j("#cke_" + destfld.attr("id")).prop("disabled", false);
-                                                destfld.css("display", "none");
-                                                $j("#cke_" + destfld.attr("id")).removeAttr("disabled");
-                                            }
-                                            if (destfld.attr("class") == "axpImg") {
-                                                destfld.attr("onclick", null);
-                                            }
-                                            destfld.prop("disabled", false);
-                                            destfld.prop("readOnly", false);
-                                            destfld.removeAttr("readOnly");
-                                            SetAutoCompAccess("enabled", destfld);
-                                        }
-                                    }
-                                }
+                                EnableDisableCheckbox(checlistid, false)
                             } else {
-                                if (IsPickListField(destfld.attr("id")) == true) {
-                                    var pickFld = document.getElementById("img~" + destfld.attr("id"));
-                                    pickFld.disabled = false;
-                                    pickFld.className = "input-group-addon handCur pickimg";
+
+                                // for enabling the Rich Text Box If it is disabled on dataload using form control
+                                if (destfld.attr("id").startsWith("rtf_") || destfld.attr("id").startsWith("rtfm_") || destfld.attr("id").startsWith("fr_rtf_") || GetDWBFieldType(GetFieldsName(destfld.attr("id"))) == "Rich Text") {
+                                    $j("#cke_" + destfld.attr("id")).prop("disabled", false);
+                                    destfld.css("display", "none");
+                                    $j("#cke_" + destfld.attr("id")).removeAttr("disabled");
                                 }
-
-
-                                if (destfld.val() == 0 && destfld.prop("type") != "select-one")
-                                    destfld.val("");
-
-                                if (destfld.attr("title") == dateString && destfld.val() == "")
-                                    destfld.val(dateString);
-                                if (destfld.attr("type") == "checkbox") {
-                                    var checlistid = destfld.attr("id");
-
-                                    EnableDisableCheckbox(checlistid, false)
-                                } else {
-
-                                    // for enabling the Rich Text Box If it is disabled on dataload using form control
-                                    if (destfld.attr("id").startsWith("rtf_") || destfld.attr("id").startsWith("rtfm_") || destfld.attr("id").startsWith("fr_rtf_") || GetDWBFieldType(GetFieldsName(destfld.attr("id"))) == "Rich Text") {
-                                        $j("#cke_" + destfld.attr("id")).prop("disabled", false);
-                                        destfld.css("display", "none");
-                                        $j("#cke_" + destfld.attr("id")).removeAttr("disabled");
-                                    }
-                                    if (destfld.attr("class") == "axpImg") {
-                                        destfld.attr("onclick", null);
-                                    }
-                                    destfld.prop("disabled", false);
-                                    destfld.prop("readOnly", false);
-                                    destfld.removeAttr("readOnly");
-                                    SetAutoCompAccess("enabled", destfld);
+                                if (destfld.attr("class") == "axpImg") {
+                                    destfld.attr("onclick", null);
                                 }
+                                destfld.prop("disabled", false);
+                                destfld.prop("readOnly", false);
+                                destfld.removeAttr("readOnly");
+                                SetAutoCompAccess("enabled", destfld);
+
                             }
                         }
                     }
@@ -8177,83 +7776,34 @@ function ProcessScriptFormControl(listControls, actionStr, sfName) {
                             else
                                 ShowingDc(dcNo, "disable");
                         } else {
-                            var _thisdcNo = GetDcNo(fldname);
-                            try {
-                                let _fName = GetFieldsName(destfld.attr("id"));
-                                let _fldIndex = $j.inArray(_fName, FNames);
-                                FFieldReadOnly[_fldIndex] = "True";
-                            } catch (ex) { }
-                            if (IsDcGrid(_thisdcNo)) {
-                                var rowCnt = 0;
-                                rowCnt = GetDcRowCount(_thisdcNo);
-                                var eleType = getGridFldType(fldname, _thisdcNo);
-                                for (var i = 1; i <= rowCnt; i++) {
-                                    destfld = $j("#" + fldname + GetClientRowNo(i, _thisdcNo) + "F" + _thisdcNo);
-                                    let _thisEleId = fldname + GetClientRowNo(i, _thisdcNo) + "F" + _thisdcNo;
-                                    if (destfld.length > 0) {
-                                        var idx = $j.inArray(_thisdcNo + "~" + fldname + "~enable", AxFormContSetFldActGrid);
-                                        if (idx == -1) {
-                                            idx = $j.inArray(_thisdcNo + "~" + fldname + "~disable", AxFormContSetFldActGrid);
-                                            if (idx == -1)
-                                                AxFormContSetFldActGrid.push(_thisdcNo + "~" + fldname + "~disable");
-                                            else
-                                                AxFormContSetFldActGrid[idx] = _thisdcNo + "~" + fldname + "~disable";
-                                        } else {
-                                            AxFormContSetFldActGrid[idx] = _thisdcNo + "~" + fldname + "~disable";
-                                        }
-                                        if (IsPickListField(destfld.attr("id")) == true) {
-                                            var pickFld = document.getElementById("img~" + destfld.attr("id"));
-                                            pickFld.disabled = true;
-                                            pickFld.className = "pickimg input-group-addon handCur";
-                                        }
-                                        if (destfld.attr("title") == dateString && (destfld.val() == dateString || destfld.val() == "''"))
-                                            destfld.val("");
+                            if (IsPickListField(destfld.attr("id")) == true) {
+                                var pickFld = document.getElementById("img~" + destfld.attr("id"));
+                                pickFld.disabled = true;
+                                pickFld.className = "pickimg input-group-addon handCur";
+                            }
+                            if (destfld.attr("title") == dateString && (destfld.val() == dateString || destfld.val() == "''"))
+                                destfld.val("");
 
-                                        if (destfld.attr("type") == "checkbox") {
-                                            var checlistid = destfld.attr("id");
-                                            EnableDisableCheckbox(checlistid, true)
-                                        } else {
 
-                                            // for disabling the Rich Text Box If it is disabled on dataload using form control
-                                            if (destfld.attr("id").startsWith("rtf_") || destfld.attr("id").startsWith("rtfm_") || destfld.attr("id").startsWith("fr_rtf_") || GetDWBFieldType(GetFieldsName(destfld.attr("id"))) == "Rich Text") {
-                                                $j("#cke_" + destfld.attr("id")).attr('disabled', 'disabled');
-                                                destfld.css("display", "none");
-                                                $j("#cke_" + destfld.attr("id")).prop("readonly", true);
-                                            }
-                                            if (destfld.attr("class") == "axpImg") {
-                                                destfld.attr("onclick", "callnull");
-                                            }
-                                            //destfld.prop("disabled", true);
-                                            SetAutoCompAccess("disabled", destfld);
-                                        }
-                                    }
-                                }
+
+                            if (destfld.attr("type") == "checkbox") {
+                                var checlistid = destfld.attr("id");
+                                EnableDisableCheckbox(checlistid, true)
                             } else {
-                                if (IsPickListField(destfld.attr("id")) == true) {
-                                    var pickFld = document.getElementById("img~" + destfld.attr("id"));
-                                    pickFld.disabled = true;
-                                    pickFld.className = "pickimg input-group-addon handCur";
-                                }
-                                if (destfld.attr("title") == dateString && (destfld.val() == dateString || destfld.val() == "''"))
-                                    destfld.val("");
 
-                                if (destfld.attr("type") == "checkbox") {
-                                    var checlistid = destfld.attr("id");
-                                    EnableDisableCheckbox(checlistid, true)
-                                } else {
-
-                                    // for disabling the Rich Text Box If it is disabled on dataload using form control
-                                    if (destfld.attr("id").startsWith("rtf_") || destfld.attr("id").startsWith("rtfm_") || destfld.attr("id").startsWith("fr_rtf_") || GetDWBFieldType(GetFieldsName(destfld.attr("id"))) == "Rich Text") {
-                                        $j("#cke_" + destfld.attr("id")).attr('disabled', 'disabled');
-                                        destfld.css("display", "none");
-                                        $j("#cke_" + destfld.attr("id")).prop("readonly", true);
-                                    }
-                                    if (destfld.attr("class") == "axpImg") {
-                                        destfld.attr("onclick", "callnull");
-                                    }
-                                    destfld.prop("disabled", true);
-                                    SetAutoCompAccess("disabled", destfld);
+                                // for disabling the Rich Text Box If it is disabled on dataload using form control
+                                if (destfld.attr("id").startsWith("rtf_") || destfld.attr("id").startsWith("rtfm_") || destfld.attr("id").startsWith("fr_rtf_") || GetDWBFieldType(GetFieldsName(destfld.attr("id"))) == "Rich Text") {
+                                    $j("#cke_" + destfld.attr("id")).attr('disabled', 'disabled');
+                                    destfld.css("display", "none");
+                                    $j("#cke_" + destfld.attr("id")).prop("readonly", true);
                                 }
+                                if (destfld.attr("class") == "axpImg") {
+                                    destfld.attr("onclick", "callnull");
+                                }
+                                destfld.prop("disabled", true);
+                                destfld.attr("readOnly", "readOnly");
+                                SetAutoCompAccess("disabled", destfld);
+
                             }
                         }
                     }
@@ -8268,17 +7818,12 @@ function ProcessScriptFormControl(listControls, actionStr, sfName) {
                     } else {
                         if (isFieldBtn) {
                             EnableDisableSFCBtns(destfld, "hide");
-                            if (typeof destfld.attr("id") != "undefined" && destfld.attr("id") == "ftbtn_iSave")
-                                btnfooteropenlist = btnfooteropenlist.replace("ftbtn_iSave", "");
-                            if (typeof destfld.attr("id") != "undefined" && destfld.attr("id") == "ftbtn_iNew")
-                                btnfooteropenlist = btnfooteropenlist.replace("ftbtn_iNew", "");
                         } else {
                             HideShowField(fldname, "hide");
                             var fldInd = GetFieldIndex(fldname);
                             var fldDType = GetDWBFieldType("", fldInd);
                             if (fldname.startsWith("axptm_") || fldname.startsWith("axpdbtm_") || (fldDType != "" && fldDType.toLowerCase() == "time")) {
                                 $j("#" + destfld.attr("id") + " .tstOnlyTime").removeClass('hasDatepicker');
-                                $j("#" + destfld.attr("id") + " .tstOnlyTime24hours").removeClass('hasDatepicker');
                             }
                         }
                     }
@@ -8299,7 +7844,6 @@ function ProcessScriptFormControl(listControls, actionStr, sfName) {
                             var fldDType = GetDWBFieldType("", fldInd);
                             if (fldname.startsWith("axptm_") || fldname.startsWith("axpdbtm_") || (fldDType != "" && fldDType.toLowerCase() == "time")) {
                                 $j("#" + destfld.attr("id") + " .tstOnlyTime").addClass('hasDatepicker');
-                                $j("#" + destfld.attr("id") + " .tstOnlyTime24hours").addClass('hasDatepicker');
                             }
                         }
                     }
@@ -8308,16 +7852,19 @@ function ProcessScriptFormControl(listControls, actionStr, sfName) {
                     axpScriptIsAddrow = false;
                     var dcNo = GetDcNo(fldname);
                     var sffld = "";
+                    sfrowno = sfRno;
                     if (IsDcGrid(dcNo)) {
                         let nrno = "001";
                         var rnolength = sfRno.length;
                         if (rnolength == 2) nrno = "0" + sfRno;
                         else if (rnolength == 1) nrno = "00" + sfRno;
                         else if (rnolength == 3) nrno = sfRno;
-                        let clientRow = GetClientRowNo(sfRno, dcNo);
-                        sffld = fldname + clientRow + "F" + dcNo;
+
+                        sffld = fldname + nrno + "F" + dcNo;
+                        sfrowno = nrno;
                         AxActiveRowNo = GetDbRowNo(nrno, dcNo);
                     } else {
+                        sfrowno = "000";
                         sffld = fldname + "000F" + dcNo;
                     }
                     if ($j("#" + sffld).hasClass("multiFldChk") && sfFldVal.trim() == "") {
@@ -8331,7 +7878,7 @@ function ProcessScriptFormControl(listControls, actionStr, sfName) {
                                 $("#" + sffld).val("");
                                 $("#" + sffld).data("valuelist", "");
                                 $("#" + sffld).tokenfield('setTokens', []);
-                            } catch (ex) { }
+                            } catch (ex) {}
                         }
                     } else {
                         CallSetFieldValue(sffld, sfFldVal);
@@ -8339,10 +7886,20 @@ function ProcessScriptFormControl(listControls, actionStr, sfName) {
                     var fRowNo = GetFieldsRowNo(sffld);
                     var dbRowNo = GetDbRowNo(fRowNo, dcNo);
                     UpdateFieldArray(sffld, dbRowNo, sfFldVal, "parent", "");
-                    if (sfName != "") {
-                        if (sfName.startsWith("barqr_"))
-                            $j($j("#" + sfName)).val('');
+                    $j($j("#" + sfName)).val('');
+                    let isNotFillDep = false;
+                    if (typeof AxpNotFillDepFields != "undefined" && AxpNotFillDepFields != "" && sfName != "") {
+                        let sfFldName = GetFieldsName(sfName);
+                        if (typeof sfFldName != "undefined" && sfFldName != "") {
+                            var AxpNotFillDepField = AxpNotFillDepFields.split(",");
+                            if (AxpNotFillDepField.indexOf(sfFldName) > -1) {
+                                isNotFillDep = true;
+                            }
+                        }
                     }
+                    //if(isNotFillDep)
+                    //    MainBlur($("#"+sffld));
+                    //DoSetDependents(sffld);
                     break;
                 case ("axaddrow"):
                     axpScriptIsAddrow = true;
@@ -8357,246 +7914,6 @@ function ProcessScriptFormControl(listControls, actionStr, sfName) {
                     AxWaitCursor(true);
                     ShowDimmer(true);
                     CallAddRowFromScript(addDcNo, sfName, isExitDummy);
-                    break;
-                case ("setfieldcaption"):
-                    var conFldDcNo = GetFieldsDcNo(contName);
-                    if (conFldDcNo != "0") {
-                        var isGrid = IsDcGrid(conFldDcNo);
-                        if (isGrid) {
-                            let thisFldName = GetFieldsName(contName);
-                            destfld.parents(".customSetupTableMN").find(`thead th#th-${thisFldName} .thhead`).text(setfldCap);
-                        } else {
-                            destfld.parents(".grid-stack-item").find(".fld-wrap3 label").text(setfldCap);
-                        }
-                    }
-                    break;
-                case ("collapse"):
-                    if (fldname.substr(0, 2) == "dc") {
-                        let _thisDicId = parseInt(fldname.substr(2, fldname.length), 10);
-                        if ($("#dcBlean" + _thisDicId).length > 0) {
-                            if ($("#dcBlean" + _thisDicId).is(":checked"))
-                                $("#dcBlean" + _thisDicId).removeAttr("checked");
-                            if ($("#divDc" + _thisDicId + " .gridIconBtns").length > 0) {
-                                $("#divDc" + _thisDicId + " .griddivColumn").addClass("d-none");
-                                $("#divDc" + _thisDicId + " .gridIconBtns").addClass("d-none");
-                            } else
-                                $("#divDc" + _thisDicId).addClass("d-none");
-                            GetDcStateValue(_thisDicId, 'F');
-                        }
-                    }
-                    break;
-                case ("expand"):
-                    if (fldname.substr(0, 2) == "dc") {
-                        let _thisDicId = parseInt(fldname.substr(2, fldname.length), 10);
-                        if ($("#dcBlean" + _thisDicId).length > 0) {
-                            if (!$("#dcBlean" + _thisDicId).is(":checked"))
-                                $("#dcBlean" + _thisDicId).attr("checked", "checked");
-                            if ($("#divDc" + _thisDicId + " .gridIconBtns").length > 0) {
-                                $("#divDc" + _thisDicId + " .griddivColumn").removeClass("d-none");
-                                $("#divDc" + _thisDicId + " .gridIconBtns").removeClass("d-none");
-                            } else
-                                $("#divDc" + _thisDicId).removeClass("d-none");
-                            GetDcStateValue(_thisDicId, 'T');
-                        }
-                    }
-                    break;
-                case ("mask"):
-                    let _fldInd = GetFieldIndex(fldname);
-                    if (_fldInd > -1) {
-                        let _maskChar = sfFldVal;
-                        let _maskApply = sfRno.split('♠');
-
-                        if (isScriptFormLoad == "false") {
-                            if (ScriptMaskFields.length > 0) {
-                                var idx = $j.inArray(fldname, ScriptMaskFields);
-                                if (idx == -1)
-                                    ScriptMaskFields.push(fldname);
-                            } else
-                                ScriptMaskFields.push(fldname);
-                        }
-                        if (_maskApply.length > 1) {
-                            FldMaskType[_fldInd] = "Show few characters";
-                            FldMaskDetails[_fldInd] = _maskApply[0] + "♦" + _maskApply[1] + "♦" + _maskChar + "♦";
-                        } else {
-                            FldMaskType[_fldInd] = "Mask all characters";
-                            FldMaskDetails[_fldInd] = "0♦0♦" + _maskChar + "♦";
-                        }
-                        let _dcNo = GetDcNo(fldname);
-                        if (IsDcGrid(_dcNo)) {                            
-                            let rowCnt = GetDcRowCount(_dcNo);
-                            for (var i = 1; i <= rowCnt; i++) {
-                                let _thisFld = fldname + GetClientRowNo(i, _dcNo) + "F" + _dcNo;
-                                let _fld = $j("#" + _thisFld);
-                                if (_fld.length > 0) {
-                                    let _thisFldVal = GetFieldValue(_thisFld);
-                                    if (_thisFldVal != "") {
-                                        UpdateAllFieldValues(_thisFld, _thisFldVal);
-                                        if (_maskApply[0] == "all") {
-                                            _thisFldVal = MaskCharacter(_thisFldVal.toString(), _maskChar, 0);
-                                        } else {
-                                            _thisFldVal = MaskCharacter(_thisFldVal.toString(), _maskChar, _thisFldVal.length - _maskApply[0]);
-                                            _thisFldVal = RevMaskCharacter(_thisFldVal.toString(), _maskChar, _maskApply[1]);
-                                        }
-                                        $("#" + _thisFld).val(_thisFldVal);
-                                        $("#" + _thisFld).attr("value", _thisFldVal);
-                                    }
-                                }
-                            }
-
-                        } else {
-                            let _thisFld = fldname + "000F" + _dcNo;
-                            let _thisFldVal = GetFieldValue(_thisFld);
-                            if (_thisFldVal != "") {
-                                UpdateAllFieldValues(_thisFld, _thisFldVal);
-                                if (_maskApply[0] == "all") {
-                                    _thisFldVal = MaskCharacter(_thisFldVal.toString(), _maskChar, 0);
-                                } else {
-                                    _thisFldVal = MaskCharacter(_thisFldVal.toString(), _maskChar, _thisFldVal.length - _maskApply[0]);
-                                    _thisFldVal = RevMaskCharacter(_thisFldVal.toString(), _maskChar, _maskApply[1]);
-                                }
-                                $("#" + _thisFld).val(_thisFldVal);
-                                $("#" + _thisFld).attr("value", _thisFldVal);
-                            }
-                        }
-                    }
-                    break;
-                case ("nomask"):
-                    let _fldIndnm = GetFieldIndex(fldname);
-                    if (_fldIndnm > -1) {
-                        if (isScriptFormLoad == "false") {
-                            if (ScriptMaskFields.length > 0) {
-                                var idx = $j.inArray(fldname, ScriptMaskFields);
-                                if (idx > -1)
-                                    ScriptMaskFields.splice(idx, 1);
-                            }
-                        } 
-                        FldMaskType[_fldIndnm] = "";
-                        FldMaskDetails[_fldIndnm] = "";
-                        let _dcNo = GetDcNo(fldname);
-                        if (IsDcGrid(_dcNo)) {
-                            let rowCnt = GetDcRowCount(_dcNo);
-                            for (var i = 1; i <= rowCnt; i++) {
-                                let _thisFld = fldname + GetClientRowNo(i, _dcNo) + "F" + _dcNo;
-                                let _fld = $j("#" + _thisFld);
-                                if (_fld.length > 0) {
-                                    let _thisFldVal = GetFieldValue(_thisFld);
-                                    if (_thisFldVal != "") {
-                                        UpdateAllFieldValues(_thisFld, _thisFldVal);
-                                        $("#" + _thisFld).val(_thisFldVal);
-                                        $("#" + _thisFld).attr("value", _thisFldVal);
-                                    }
-                                }
-                            }
-
-                        } else {
-                            let _thisFld = fldname + "000F" + _dcNo;
-                            let _thisFldVal = GetFieldValue(_thisFld);
-                            if (_thisFldVal != "") {
-                                UpdateAllFieldValues(_thisFld, _thisFldVal);
-                                $("#" + _thisFld).val(_thisFldVal);
-                                $("#" + _thisFld).attr("value", _thisFldVal);
-                            }
-                        }
-                    }
-                    break;
-                case ("gridcelldisable"):
-                    var _thisdcNo = GetDcNo(fldname);
-                    if (IsDcGrid(_thisdcNo)) {
-                        if (sfFldVal != "" && sfFldVal != 0) {
-                            destfld = $j("#" + fldname + GetClientRowNo(sfFldVal, _thisdcNo) + "F" + _thisdcNo);
-                            if (destfld.length > 0) {
-
-                                var idx = $j.inArray(_thisdcNo + "~" + fldname + "~" + GetClientRowNo(sfFldVal, _thisdcNo) + "~enable", AxFormContSetGridCell);
-                                if (idx == -1) {
-                                    idx = $j.inArray(_thisdcNo + "~" + fldname + "~" + GetClientRowNo(sfFldVal, _thisdcNo) + "~disable", AxFormContSetGridCell);
-                                    if (idx == -1)
-                                        AxFormContSetGridCell.push(_thisdcNo + "~" + fldname + "~" + GetClientRowNo(sfFldVal, _thisdcNo) + "~disable");
-                                    else
-                                        AxFormContSetGridCell[idx] = _thisdcNo + "~" + fldname + "~" + GetClientRowNo(sfFldVal, _thisdcNo) + "~disable";
-                                } else {
-                                    AxFormContSetGridCell[idx] = _thisdcNo + "~" + fldname + "~" + GetClientRowNo(sfFldVal, _thisdcNo) + "~disable";
-                                }
-
-                                if (IsPickListField(destfld.attr("id")) == true) {
-                                    var pickFld = document.getElementById("img~" + destfld.attr("id"));
-                                    pickFld.disabled = true;
-                                    pickFld.className = "pickimg input-group-addon handCur";
-                                }
-                                if (destfld.attr("title") == dateString && (destfld.val() == dateString || destfld.val() == "''"))
-                                    destfld.val("");
-
-                                if (destfld.attr("type") == "checkbox") {
-                                    var checlistid = destfld.attr("id");
-                                    EnableDisableCheckbox(checlistid, true)
-                                } else {
-
-                                    // for disabling the Rich Text Box If it is disabled on dataload using form control
-                                    if (destfld.attr("id").startsWith("rtf_") || destfld.attr("id").startsWith("rtfm_") || destfld.attr("id").startsWith("fr_rtf_") || GetDWBFieldType(GetFieldsName(destfld.attr("id"))) == "Rich Text") {
-                                        $j("#cke_" + destfld.attr("id")).attr('disabled', 'disabled');
-                                        destfld.css("display", "none");
-                                        $j("#cke_" + destfld.attr("id")).prop("readonly", true);
-                                    }
-                                    if (destfld.attr("class") == "axpImg") {
-                                        destfld.attr("onclick", "callnull");
-                                    }
-                                    destfld.prop("disabled", true);
-                                    SetAutoCompAccess("disabled", destfld);
-                                }
-                            }
-                        }
-                    }
-                    break;
-                case ("gridcellenable"):
-                    var _thisdcNo = GetDcNo(fldname);
-                    if (IsDcGrid(_thisdcNo)) {
-                        if (sfFldVal != "" && sfFldVal != 0) {
-                            destfld = $j("#" + fldname + GetClientRowNo(sfFldVal, _thisdcNo) + "F" + _thisdcNo);
-                            if (destfld.length > 0) {
-                                //let _dbRowNo = GetDbRowNo(GetClientRowNo(sfFldVal, _thisdcNo), _thisdcNo);
-                                var idx = $j.inArray(_thisdcNo + "~" + fldname + "~" + GetClientRowNo(sfFldVal, _thisdcNo) + "~disable", AxFormContSetGridCell);
-                                if (idx == -1) {
-                                    idx = $j.inArray(_thisdcNo + "~" + fldname + "~" + GetClientRowNo(sfFldVal, _thisdcNo) + "~enable", AxFormContSetGridCell);
-                                    if (idx == -1)
-                                        AxFormContSetGridCell.push(_thisdcNo + "~" + fldname + "~" + GetClientRowNo(sfFldVal, _thisdcNo) + "~enable");
-                                    else
-                                        AxFormContSetGridCell[idx] = _thisdcNo + "~" + fldname + "~" + GetClientRowNo(sfFldVal, _thisdcNo) + "~enable";
-                                } else {
-                                    AxFormContSetGridCell[idx] = _thisdcNo + "~" + fldname + "~" + GetClientRowNo(sfFldVal, _thisdcNo) + "~enable";
-                                }
-
-                                if (IsPickListField(destfld.attr("id")) == true) {
-                                    var pickFld = document.getElementById("img~" + destfld.attr("id"));
-                                    pickFld.disabled = false;
-                                    pickFld.className = "input-group-addon handCur pickimg";
-                                }
-                                if (destfld.val() == 0 && destfld.prop("type") != "select-one")
-                                    destfld.val("");
-
-                                if (destfld.attr("title") == dateString && destfld.val() == "")
-                                    destfld.val(dateString);
-                                if (destfld.attr("type") == "checkbox") {
-                                    var checlistid = destfld.attr("id");
-
-                                    EnableDisableCheckbox(checlistid, false)
-                                } else {
-
-                                    // for enabling the Rich Text Box If it is disabled on dataload using form control
-                                    if (destfld.attr("id").startsWith("rtf_") || destfld.attr("id").startsWith("rtfm_") || destfld.attr("id").startsWith("fr_rtf_") || GetDWBFieldType(GetFieldsName(destfld.attr("id"))) == "Rich Text") {
-                                        $j("#cke_" + destfld.attr("id")).prop("disabled", false);
-                                        destfld.css("display", "none");
-                                        $j("#cke_" + destfld.attr("id")).removeAttr("disabled");
-                                    }
-                                    if (destfld.attr("class") == "axpImg") {
-                                        destfld.attr("onclick", null);
-                                    }
-                                    destfld.prop("disabled", false);
-                                    destfld.prop("readOnly", false);
-                                    destfld.removeAttr("readOnly");
-                                    SetAutoCompAccess("enabled", destfld);
-                                }
-                            }
-                        }
-                    } 
                     break;
                 default:
                     return;
@@ -8616,23 +7933,8 @@ function ProcessScriptFormControlEvents(scriptStr, sfName) {
                 thisParams = thisParams.replace(/♦/g, "&");
                 var thisPageMode = actionStr[3];
                 var thisOnClose = actionStr[4];
-                if (thisPageMode == "" || thisPageMode.toLowerCase() == "d" || thisPageMode.toLowerCase() == "default") {
-                    if (transid == thisTrId) {
-                        var tstQureystr = '';
-                        if (thisParams != "") {
-                            thisParams.split('&').forEach(function (paramType) {
-                                tstQureystr += paramType + "♠";
-                            });
-                            tstQureystr += "act=load";
-                        } else {
-                            tstQureystr = "act=load♠";
-                        }
-                        FormControlSameFormLoad = true;
-                        GetFormLoadData(tstQureystr);
-                    }
-                    else
-                        callParentNew("LoadIframe(tstruct.aspx?transid=" + thisTrId + "&" + thisParams + "&act=load)", "function");
-                }
+                if (thisPageMode == "" || thisPageMode.toLowerCase() == "d" || thisPageMode.toLowerCase() == "default")
+                    callParentNew("LoadIframe(tstruct.aspx?transid=" + thisTrId + "&" + thisParams + "&act=load)", "function");
                 else {
                     tparams = thisParams + "&AxPop=true";
                     tparams += "&axp_refresh=true";
@@ -8646,23 +7948,8 @@ function ProcessScriptFormControlEvents(scriptStr, sfName) {
                 thisParams = thisParams.replace(/♦/g, "&");
                 var thisPageMode = actionStr[3];
                 var thisOnClose = actionStr[4];
-                if (thisPageMode == "" || thisPageMode.toLowerCase() == "d" || thisPageMode.toLowerCase() == "default") {
-                    if (transid == thisTrId) {
-                        var tstQureystr = '';
-                        if (thisParams != "") {
-                            thisParams.split('&').forEach(function (paramType) {
-                                tstQureystr += paramType + "♠";
-                            });
-                            tstQureystr += "act=load";
-                        } else {
-                            tstQureystr = "act=load♠";
-                        }
-                        FormControlSameFormLoad = true;
-                        GetFormLoadData(tstQureystr);
-                    }
-                    else
-                        callParentNew("LoadIframe(tstruct.aspx?transid=" + thisTrId + "&" + thisParams + "&act=load)", "function");
-                }
+                if (thisPageMode == "" || thisPageMode.toLowerCase() == "d" || thisPageMode.toLowerCase() == "default")
+                    callParentNew("LoadIframe(tstruct.aspx?transid=" + thisTrId + "&" + thisParams + "&act=load)", "function");
                 else {
                     tparams = thisParams + "&AxPop=true";
                     tparams += "&axp_refresh=true";
@@ -8690,23 +7977,8 @@ function ProcessScriptFormControlEvents(scriptStr, sfName) {
                 thisParams = thisParams.replace(/♦/g, "&");
                 var thisPageMode = actionStr[3];
                 var thisOnClose = actionStr[4];
-                if (thisPageMode == "" || thisPageMode.toLowerCase() == "d" || thisPageMode.toLowerCase() == "default") {
-                    if (transid == thisTrId) {
-                        var tstQureystr = '';
-                        if (thisParams != "") {
-                            thisParams.split('&').forEach(function (paramType) {
-                                tstQureystr += paramType + "♠";
-                            });
-                            tstQureystr += "act=load";
-                        } else {
-                            tstQureystr = "act=load♠";
-                        }
-                        FormControlSameFormLoad = true;
-                        GetFormLoadData(tstQureystr);
-                    }
-                    else
-                        callParentNew("LoadIframe(tstruct.aspx?transid=" + thisTrId + "&" + thisParams + "&act=load)", "function");
-                }
+                if (thisPageMode == "" || thisPageMode.toLowerCase() == "d" || thisPageMode.toLowerCase() == "default")
+                    callParentNew("LoadIframe(tstruct.aspx?transid=" + thisTrId + "&" + thisParams + "&act=load)", "function");
                 else {
                     tparams = thisParams + "&AxPop=true";
                     tparams += "&axp_refresh=true";
@@ -8720,27 +7992,12 @@ function ProcessScriptFormControlEvents(scriptStr, sfName) {
                 thisParams = thisParams.replace(/♦/g, "&");
                 var thisPageMode = actionStr[3];
                 var thisOnClose = actionStr[4];
-                if (thisPageMode == "" || thisPageMode.toLowerCase() == "d" || thisPageMode.toLowerCase() == "default") {
-                    if (transid == thisTrId) {
-                        var tstQureystr = '';
-                        if (thisParams != "") {
-                            thisParams.split('&').forEach(function (paramType) {
-                                tstQureystr += paramType + "♠";
-                            });
-                            tstQureystr += "act=open";
-                        } else {
-                            tstQureystr = "act=open♠";
-                        }
-                        FormControlSameFormLoad = true;
-                        GetFormLoadData(tstQureystr);
-                    }
-                    else
-                        callParentNew("LoadIframe(tstruct.aspx?transid=" + thisTrId + "&" + thisParams + "&act=open)", "function");
-                }
+                if (thisPageMode == "" || thisPageMode.toLowerCase() == "d" || thisPageMode.toLowerCase() == "default")
+                    callParentNew("LoadIframe(tstruct.aspx?transid=" + thisTrId + "&" + thisParams + "&act=load)", "function");
                 else {
                     tparams = thisParams + "&AxPop=true";
                     tparams += "&axp_refresh=true";
-                    var openpopup = 'tstruct.aspx?act=open&transid=' + thisTrId + "&" + tparams;
+                    var openpopup = 'tstruct.aspx?act=load&transid=' + thisTrId + "&" + tparams;
                     createPopup(openpopup);
                 }
                 break;
@@ -8783,12 +8040,9 @@ function CallAddRowFromScript(addDcNo, sfName, isExitDummy) {
         if (CheckSessionTimeout(result))
             return;
         var isValidRow = true;
-        if (result != "" && (result == "Not a valid row!" || result.startsWith("Notavalidrow♦"))) {
+        if (result != "" && result == "Not a valid value!") {
             isValidRow = false;
-            if (result == "Not a valid row!")
-                showAlertDialog("warning", eval(callParent('lcm[517]')));
-            else
-                showAlertDialog("warning", result.split('♦')[1]);
+            showAlertDialog("warning", eval(callParent('lcm[517]')));
         }
         if (isValidRow) {
             axpScriptaddrowres = passResult;
@@ -8826,13 +8080,7 @@ function EnableDisableSFCBtns(obj, enable) {
     var isObjFound = false;
     if (obj.length > 0) {
         if (enable == "hide") {
-            if ($(obj).hasClass("dwbIvBtnbtm"))
-                $(obj).addClass("d-none");
-            else if ($(obj).hasClass("dwbBtn"))
-                $(obj).addClass("d-none");
-            else if ($(obj).parent(".toolbarRightMenu").length > 0)
-                $(obj).addClass("d-none");
-            else if ($(obj).parent("li").length > 0)
+            if ($(obj).parent("li").length > 0)
                 $(obj).parent("li").hide();
             else if ($(obj).parent("div").length > 0)
                 $(obj).parent("div").hide();
@@ -8841,13 +8089,7 @@ function EnableDisableSFCBtns(obj, enable) {
                 $(obj).parents("table").find("th#th-" + $(obj).attr("id")).hide();
             }
         } else {
-            if ($(obj).hasClass("dwbIvBtnbtm"))
-                $(obj).removeClass("d-none");
-            else if ($(obj).hasClass("dwbBtn"))
-                $(obj).removeClass("d-none");
-            else if ($(obj).parent(".toolbarRightMenu").length > 0)
-                $(obj).removeClass("d-none");
-            else if ($(obj).parent("li").length > 0)
+            if ($(obj).parent("li").length > 0)
                 $(obj).parent("li").show();
             else if ($(obj).parent("div").length > 0)
                 $(obj).parent("div").show();
@@ -8867,7 +8109,7 @@ function AlertNoAction() {
     var smptpPassword = $('#smtppwd000F1').val();
     try {
         ASB.WebService.TestMailSettings(smptpHost, smptpPort, smptpUser, smptpPassword, sucessCallbackMail, OnException);
-    } catch (ex) { }
+    } catch (ex) {}
 }
 
 function sucessCallbackMail(result, eventArgs) {
@@ -8885,7 +8127,7 @@ function sucessCallbackMail(result, eventArgs) {
             showAlertDialog("success", resultcheck);
         else
             showAlertDialog("warning", resultcheck);
-    } catch (ex) { }
+    } catch (ex) {}
 }
 
 function barCodeScannerInit() {
@@ -8893,7 +8135,7 @@ function barCodeScannerInit() {
     if (typeof scanqrfld != "undefined") {
         try {
             onScan.detachFrom(document);
-        } catch (ex) { }
+        } catch (ex) {}
         loadAndCall({
             files: {
                 css: [],
@@ -8948,26 +8190,24 @@ function getHybridWeightScaleInfo(axpWeightFldId) {
                 ShowDimmer(false);
             }
         }, 1000);
-    } catch (ex) { }
+    } catch (ex) {}
 
 }
 
 function closeWeightScalePort() {
     try {
-        ASB.WebService.NotifyCloseWeightScalePort(callParentNew("hybridGUID"), (success) => { }, (error) => { });
-    } catch (error) { }
+        ASB.WebService.NotifyCloseWeightScalePort(callParentNew("hybridGUID"), (success) => {}, (error) => {});
+    } catch (error) {}
 }
 
 function DropzoneInit(dvId) {
     let _thisDiv;
     if (typeof dvId != "undefined") {
-        _thisDiv = $(dvId + " .dropzone:not(.dropzoneGrid)");
+        _thisDiv = $(dvId + " .dropzone");
     } else {
-        _thisDiv = $("[id^='divDc']:not(:has(.editWrapTr)) .dropzone:not(.dropzoneGrid)");// $("#divDc1 .dropzone");
+        _thisDiv = $("#divDc1 .dropzone");
     }
     _thisDiv.each(function () {
-        if ($(this).parents('.editWrapTr').length > 0)
-            return;
         const id = "#" + $(this).attr("id");
         const dropzone = document.querySelector(id);
 
@@ -8982,12 +8222,9 @@ function DropzoneInit(dvId) {
         funame = fuName.substring(0, fuName.lastIndexOf("F") - 3);
         let attachmentSizeMB = callParentNew("axAttachmentSize", "axAttachmentSize") == undefined ? 1 : callParentNew("axAttachmentSize", "axAttachmentSize");
         let maxFilesUpload = AxpFileUploadlmt != "0" ? AxpFileUploadlmt : 100;
-        let UploadFileTypes = "";
-        if (typeof UploadFileTypesVal != "undefined")
-            UploadFileTypes = UploadFileTypesVal;
 
         var myDropzone = new Dropzone(id, { // Make the whole body a dropzone
-            url: url + `TstFileUpload.ashx?thisFld=${$(id).attr("id").substr(9)}&filePath=${$(".axpFilePath_" + $(id).attr("id").substring(("dropzone_axpfile_").length)).val() == undefined ? "" : $(".axpFilePath_" + $(id).attr("id").substring(("dropzone_axpfile_").length)).val()}&dcNo=${GetFieldsDcNo($(id).attr("id"))}&attFldName=${funame}&fileExt=${UploadFileTypes}`,
+            url: url + `TstFileUpload.ashx?thisFld=${$(id).attr("id").substr(9)}&filePath=${$(".axpFilePath_" + $(id).attr("id").substring(("dropzone_axpfile_").length)).val() == undefined ? "" : $(".axpFilePath_" + $(id).attr("id").substring(("dropzone_axpfile_").length)).val()}&dcNo=${GetFieldsDcNo($(id).attr("id"))}&attFldName=${funame}`,
             maxFilesize: attachmentSizeMB, // Max filesize in MB
             previewTemplate: previewTemplate,
             previewsContainer: id + " .dropzone-items", // Define the container to display the previews
@@ -8999,19 +8236,6 @@ function DropzoneInit(dvId) {
         $(dzdefault).addClass("d-none");
 
         myDropzone.on("addedfile", function (file) {
-            var extension = file.name.substring(file.name.lastIndexOf('.') + 1);
-            if (UploadFileTypes != "" && UploadFileTypes.indexOf(extension) == -1) {
-                showAlertDialog("error", eval(callParent('lcm[521]')));
-                return;
-            }
-            if (gridRowEditOnLoad) {
-                let thisFldId = $(id).attr("id").substr(9);
-                var fieldRowNo = GetFieldsRowNo(thisFldId);
-                var fldDcNo = GetFieldsDcNo(thisFldId);
-                UpdateGridRowFlags(thisFldId, fldDcNo, fieldRowNo);
-            }
-
-            this.options.url = url + `TstFileUpload.ashx?thisFld=${$(id).attr("id").substr(9)}&filePath=${$(".axpFilePath_" + $(id).attr("id").substring(("dropzone_axpfile_").length)).val() == undefined ? "" : $(".axpFilePath_" + $(id).attr("id").substring(("dropzone_axpfile_").length)).val()}&dcNo=${GetFieldsDcNo($(id).attr("id"))}&attFldName=${funame}&fileExt=${UploadFileTypes}`;
             // Hookup the start button
             const dropzoneItems = dropzone.querySelectorAll('.dropzone-item');
             dropzoneItems.forEach(dropzoneItem => {
@@ -9025,42 +8249,20 @@ function DropzoneInit(dvId) {
             if (progress.status == 'success') {
                 if (progress.xhr.response == "success" || progress.xhr.response.startsWith("success:")) {
                     let mesg = progress.xhr.response;
-                    let _thisupfile = "";
-                    if (mesg != "")
-                        _thisupfile = mesg.split('♠')[1];                    
                     $(progress.previewElement).parents(".dropzone").find(".fileuploadmore").removeClass("d-none");
                     let fuInpId = $(progress.previewElement).parents(".dropzone").attr("id").substr(9);
                     let fuInpVal = $("#" + fuInpId).val();
-                    if (fuInpVal == "") {
-                        fuInpVal = _thisupfile;// progress.name;
-                        let _thisFldWidth = $("#" + fuInpId).parent().width();
-                        $("#" + fuInpId).parent().width(_thisFldWidth);
-                        let _thisATag = $("a#" + fuInpId).length != 0 ? $("a#" + fuInpId) : $("#" + fuInpId).next().find("a.dropzone-select");
-                        let _thisSpan = _thisATag.find('span')[0];
-                        _thisATag.text(progress.name);
-                        _thisATag.prepend(_thisSpan).attr("title", "Drop files here or click to upload");
-                    }
-                    else {
-                        const dupFileObj = fuInpVal.split(',').filter(file => file == _thisupfile)?.[0];
-                        if (dupFileObj) {
-                            myDropzone.removeFile(progress);
-                            return false;
-                        } else
-                            fuInpVal = fuInpVal + "," + _thisupfile;
-                    }
+                    fuInpVal = fuInpVal == "" ? progress.name : fuInpVal + "," + progress.name;
                     $("#" + fuInpId).val(fuInpVal);
 
                     var hdnScriptsUrlPath = $j("#hdnScriptsUrlpath");
                     let filePath = hdnScriptsUrlPath.val() + "axpert/" + sid + "/";
-                    filePath += _thisupfile;
+                    filePath += progress.name;
 
-                    $(progress.previewElement).find(".dropzone-filename").attr("onclick", "ShowAxpFileuploadLink('" + fuInpId + "','" + _thisupfile + "','" + filePath + "')")
+                    $(progress.previewElement).find(".dropzone-filename").attr("onclick", "ShowAxpFileuploadLink('" + fuInpId + "','" + progress.name + "','" + filePath + "')")
 
-                    var fRowNo = GetFieldsRowNo(fuInpId);
-                    var dcNo = GetFieldsDcNo(fuInpId);
-                    var fldDbRow = GetDbRowNo(fRowNo, dcNo);
-                    UpdateFieldArray(fuInpId, fldDbRow, fuInpVal, "parent", "");
-                    UpdateAllFieldValues(fuInpId, fuInpVal);
+                    UpdateFieldArray(fuInpId, "0", fuInpVal, "parent", "");
+
                     showAlertDialog("success", mesg.split(":")[1]);
                 } else {
                     let mesg = progress.xhr.response;
@@ -9080,58 +8282,18 @@ function DropzoneInit(dvId) {
         myDropzone.on("removedfile", function (file) {
             let fuInpId = $(myDropzone.element).attr("id").substr(9);
             let fuInpVal = $("#" + fuInpId).val();
-            let axpFName = fuInpId.substr(7);
-            var axpPath = "";
-            if (typeof $("textarea[id*=" + axpFName + "]").not(".axpAttach")[0] != "undefined")
-                axpPath = $("textarea[id*=" + axpFName + "]").not(".axpAttach")[0].value;
-            else
-                axpPath = $("input[id*=" + axpFName + "]").not(".axpAttach")[0].value;
             fuInpVal = fuInpVal.replace(file.name + ",", "").replace(file.name, "");
-            try {
-                $("textarea#" + fuInpId).val(fuInpVal);
-                $("textarea#" + fuInpId).attr('value', fuInpVal);
-            } catch (ex) { }
-            $("input#" + fuInpId).val(fuInpVal);
-            $("input#" + fuInpId).attr('value', fuInpVal);
-            var fRowNo = GetFieldsRowNo(fuInpId);
-            var dcNo = GetFieldsDcNo(fuInpId);
-            var fldDbRow = GetDbRowNo(fRowNo, dcNo);
-            UpdateFieldArray(fuInpId, fldDbRow, fuInpVal, "parent", "");
-            UpdateAllFieldValues(fuInpId, fuInpVal);
-            let _thisATag = $("a#" + fuInpId).length != 0 ? $("a#" + fuInpId) : $("#" + fuInpId).next().find("a.dropzone-select");
-            if (fuInpVal == "") {
-                $(myDropzone.element).find(".fileuploadmore").addClass("d-none");
-                let _thisSpan = _thisATag.find('span')[0];
-                _thisATag.text("Drop files here or click to upload");
-                _thisATag.prepend(_thisSpan).attr("title", "");
-            } else {
-                let _thisSpan = _thisATag.find('span')[0];
-                let _thissrFile = fuInpVal.split(',')[0];
-                if (axpPath != "" && axpPath.endsWith("\\*"))
-                    _thissrFile = _thissrFile.substr(20);
-                _thisATag.text(_thissrFile);
-                _thisATag.prepend(_thisSpan).attr("title", "Drop files here or click to upload");
-            }
+            $("#" + fuInpId).val(fuInpVal);
+            UpdateFieldArray(fuInpId, "0", fuInpVal, "parent", "");
         });
 
 
         let fuInpId = $(id).attr("id").substr(9)
         let fuInpVal = $("#" + fuInpId).val();
         if (fuInpVal != "") {
-            let axpFName = fuInpId.substr(7);
-            var axpPath = "";
-            if (typeof $("textarea[id*=" + axpFName + "]").not(".axpAttach")[0] != "undefined")
-                axpPath = $("textarea[id*=" + axpFName + "]").not(".axpAttach")[0].value;
-            else
-                axpPath = $("input[id*=" + axpFName + "]").not(".axpAttach")[0].value;
             $.each(fuInpVal.split(','), function (i, val) {
-                let _fullval = val;
-                if (_fullval == "")
-                    return;
-                if (axpPath != "" && axpPath.endsWith("\\*"))
-                    val = val.substr(20);
                 var file = {
-                    name: _fullval,
+                    name: val,
                     size: "0",
                     status: Dropzone.ADDED,
                     accepted: true
@@ -9142,32 +8304,19 @@ function DropzoneInit(dvId) {
 
                 var hdnScriptsUrlPath = $j("#hdnScriptsUrlpath");
                 let filePath = hdnScriptsUrlPath.val() + "axpert/" + sid + "/";
-                filePath += _fullval;
+                filePath += file.name;
 
-                $(file.previewElement).find(".dropzone-filename span").text(val);
-                $(file.previewElement).find(".dropzone-filename span").attr("data-fullfile", _fullval);
-                $(file.previewElement).find(".dropzone-filename").attr("onclick", "ShowAxpFileuploadLink('" + $(myDropzone.files[0].previewElement).parents(".dropzone").attr("id").substr(9) + "','" + _fullval + "','" + filePath + "')")
+                $(file.previewElement).find(".dropzone-filename").attr("onclick", "ShowAxpFileuploadLink('" + $(myDropzone.files[0].previewElement).parents(".dropzone").attr("id").substr(9) + "','" + file.name + "','" + filePath + "')")
             });
-            if (fuInpVal != "") {
-                let _thisATag = $("a#" + fuInpId).length != 0 ? $("a#" + fuInpId) : $("#" + fuInpId).next().find("a.dropzone-select");
-                let _thisSpan = _thisATag.find('span')[0];
-                let _thissrFile = fuInpVal.split(',')[0];
-                if (axpPath != "" && axpPath.endsWith("\\*"))
-                    _thissrFile = _thissrFile.substr(20);
-                _thisATag.text(_thissrFile);
-                _thisATag.prepend(_thisSpan).attr("title", "Drop files here or click to upload");
-            }
             $(id).find(".fileuploadmore").removeClass("d-none");
         }
     });
 }
 
-$(document).on("mouseover", ".fileuploadmore", function () {
+$(document).on("click", ".fileuploadmore", function () {
     if ($(this).parents(".dropzone").find(".dropzone-items").hasClass("d-none")) {
         let elId = $(this).parents(".dropzone").attr("id");
         var popover_instance = bootstrap.Popover.getInstance(this); //get instance
-        if (popover_instance.tip != null)
-            popover_instance.tip.classList.add('mw-350px');
         popover_instance._config.content = "<div class=\"dropzone dropzone-queue mt-n3\" id=\"" + elId + "\">" + $(this).parents(".dropzone").find(".dropzone-items").html() + "</div>";
         popover_instance.show();
     } else
@@ -9175,10 +8324,9 @@ $(document).on("mouseover", ".fileuploadmore", function () {
 });
 
 
-$j(document).on("mouseover", "body", function (e) {
-    if (!$(e.target).hasClass("fileuploadmore") && !$(e.target).hasClass("grdattch") && !$(e.target).hasClass("gridattach") && !$(e.target).hasClass("fw-boldest") && !$(e.target).hasClass("popover-arrow") && !$(e.target).hasClass("popover-body") && !$(e.target).hasClass("dropzone-delete") && !$(e.target).hasClass("dropzoneItemDelete") && !$(e.target).hasClass("dropzoneGridItemDelete") && !$(e.target).hasClass("dropzone-panel") && !$(e.target).hasClass("dropzone-file") && !$(e.target).hasClass("dropzone") && !$(e.target).hasClass("dropzone-items") && !$(e.target).hasClass("dropzone-item") && !$(e.target).hasClass("dropzone-filename") && !$(e.target).parent().hasClass("dropzone-filename")) {
+$j(document).on("click", "body", function (e) {
+    if (!$(e.target).hasClass("fileuploadmore") && !$(e.target).hasClass("popover-body") && !$(e.target).hasClass("dropzone-item") && !$(e.target).parent().hasClass("dropzone-filename"))
         $("[data-bs-toggle]").popover("hide");
-    }
 });
 
 $j(document).on("click", ".popover-body .dropzoneItemDelete", function (e) {
@@ -9186,12 +8334,10 @@ $j(document).on("click", ".popover-body .dropzoneItemDelete", function (e) {
     const dropzone = document.querySelector("#" + id);
     var myDropzone = Dropzone.forElement(dropzone);
     //myDropzone.removeFile(myDropzone.files[0]);
-    const delFileName = typeof $(e.target).parents(".dropzone-item").find(".dropzone-filename span").data('fullfile') == 'undefined' ? $(e.target).parents(".dropzone-item").find(".dropzone-filename").text() : $(e.target).parents(".dropzone-item").find(".dropzone-filename span").data('fullfile');
+    const delFileName = $(e.target).parents(".dropzone-item").find(".dropzone-filename").text();
     const delFileObj = myDropzone.files.filter(file => file.name == delFileName)?.[0];
-    if (delFileObj) {
-        $("[data-bs-toggle]").popover("hide");
+    if (delFileObj)
         myDropzone.removeFile(delFileObj);
-    }
 });
 
 function TstFldImageUpload(elem) {
@@ -9212,29 +8358,23 @@ function TstFldImageUpload(elem) {
         contentType: false,
         processData: false,
         success(result) {
-            const _thisName = $(elem).attr("id");
             if (result.indexOf("success:") > -1) {
+                const _thisName = $(elem).attr("id");
                 $(elem).parents(".image-input").find(".imageFileUpload").addClass("d-none");
                 $(elem).parents(".image-input").find(".profile-pic").removeClass("d-none");
                 let hdnScriptsUrlPath = $j("#hdnScriptsUrlpath");
                 let imgFldName = GetFieldsName(_thisName);
-                let fldValuePath = "";
-                if (imgFldName.startsWith('nodb_') || isAxpImagePath == "true")
-                    fldValuePath = hdnScriptsUrlPath.val() + "axpert/" + sid + "/" + imgFldName + "/" + files[0].name;
-                else
-                    fldValuePath = hdnScriptsUrlPath.val() + "axpert/" + sid + "/" + files[0].name;
-                $("img#" + _thisName).css({ "background-image": "unset" });
+                let fldValuePath = hdnScriptsUrlPath.val() + "axpert/" + sid + "/" + imgFldName + "/" + files[0].name;
+                $("img#" + _thisName).css({"background-image" : "unset"});
                 $("img#" + _thisName).prop("src", fldValuePath);
                 $("#" + _thisName).parent().find(".delete-button").removeClass("d-none");
 
                 UpdateFieldArray(_thisName, "0", files[0].name, "parent", "");
-                UpdateAllFieldValues(_thisName, files[0].name);
                 showAlertDialog("success", result.replace("success:", ""));
             } else {
-                $("img#" + _thisName).css({ "background-image": "unset" });
                 if (result == "error:sessionexpired")
                     CheckSessionTimeout(result);
-                else if (result.startsWith("error:"))
+                else
                     showAlertDialog("error", result.replace("error:", ""));
             }
         },
@@ -9287,8 +8427,6 @@ function HeaderAttachFiles() {
             if (progress.xhr.response == "success" || progress.xhr.response.startsWith("success:")) {
                 let mesg = progress.xhr.response;
                 $(progress.previewElement).parents(".dropzone").find(".fileuploadmore").removeClass("d-none");
-                $(progress.previewElement).parents(".dropzone").find("#hattachCounter").removeClass("d-none");  
-                $(progress.previewElement).parents(".dropzone").find("span.spanAttCount").text(this.files.length);
                 filenamearray.push(progress.name);
 
                 var rid = 0;
@@ -9320,14 +8458,6 @@ function HeaderAttachFiles() {
         //    rid = $j("#recordid000F0").val();        
         //RemoveFile(file.name, rid);
         RemoveArrVal(file.name, filenamearray);
-        if (this.files.length > 0)
-            //$(file.previewElement).parents(".dropzone").find("span.spanAttCount").text(this.files.length);
-            $(this.element).find("span.spanAttCount").text(this.files.length);
-        else {
-            $(this.element).find(".fileuploadmore").addClass("d-none");
-            $(this.element).find("span.spanAttCount").text(this.files.length);
-            $(this.element).find("#hattachCounter").addClass("d-none");  
-        }
     });
 
     if (fileonloadarray.length > 0) {
@@ -9348,9 +8478,7 @@ function HeaderAttachFiles() {
             let attachstr = CheckUrlSpecialChars(file.name);
             $(file.previewElement).find(".dropzone-filename").attr("onclick", "OpenAttachment('" + attachstr + "','" + rid + "');");
         });
-        $(id).find("span.spanAttCount").text(myhdrDropzone.files.length);
         $(id).find(".fileuploadmore").removeClass("d-none");
-        $(id).find("#hattachCounter").removeClass("d-none");        
     }
 }
 
@@ -9368,397 +8496,16 @@ $j(document).on("click", ".popover-body .dropzoneItemDeleteHeader", function (e)
     }
 });
 
-function rtfCkeditorAlignment() {
-    var A = document.getElementsByTagName("textarea") && document.getElementsByClassName("memofam");
-    for (var B = 0; B < A.length; B++) {
-        if (A[B].id.startsWith("rtf_") || A[B].id.startsWith("rtfm_") || A[B].id.startsWith("fr_rtf_") || GetDWBFieldType(GetFieldsName(A[B].id)) == "Rich Text" || (GetDWBFieldType(GetFieldsName(A[B].id)) == "Large Text" && !A[B].id.startsWith("exp_editor_"))) {
-            A[B].parentElement.classList.add("flex-root");
-            A[B].parentElement.parentElement.classList.add(..."d-flex flex-column".split(" "));
-        } else if (A[B].id.startsWith("exp_editor_")) {
-            A[B].parentElement.classList.add("flex-root");
-            if (staticRunMode)
-                A[B].parentElement.parentElement.classList.add(..."d-flex flex-column".split(" "));
-        }
-    }
-}
-
-function DropzoneGridInit(dvId) {
-    let _thisDiv;
-    if (typeof dvId != "undefined") {
-        _thisDiv = $(dvId + " .dropzoneGrid");
-    } else {
-        _thisDiv = $("[id^='divDc']:not(:has(.editWrapTr)) .dropzoneGrid");// $("#divDc1 .dropzone");
-    }
-    _thisDiv.each(function () {
-        if ($(this).parents('.editWrapTr').length > 0)
-            return;
-        const id = "#" + $(this).attr("id");
-        const dropzone = document.querySelector(id);
-
-        // set the preview element template
-        var previewNode = dropzone.querySelector(".dropzone-item");
-        previewNode.id = "";
-        var previewTemplate = previewNode.parentNode.innerHTML;
-        previewNode.parentNode.removeChild(previewNode);
-
-        var url = location.origin + location.pathname.substr(0, location.pathname.indexOf('aspx'));
-        const fuName = $(id).attr("id").substr(9);
-        funame = fuName.substring(0, fuName.lastIndexOf("F") - 3);
-        let attachmentSizeMB = callParentNew("axAttachmentSize", "axAttachmentSize") == undefined ? 1 : callParentNew("axAttachmentSize", "axAttachmentSize");
-        let maxFilesUpload = AxpFileUploadlmt != "0" ? AxpFileUploadlmt : 100;
-
-        var myDropzone = new Dropzone(id, { // Make the whole body a dropzone
-            url: url + `TstGridFileUpload.ashx?thisFld=${$(id).attr("id").substr(9)}&filePath=${$("#" + funame + "path" + $(id).attr("id").substring($(id).attr("id").lastIndexOf("F") - 3)).val() == undefined ? "" : $("#" + funame + "path" + $(id).attr("id").substring($(id).attr("id").lastIndexOf("F") - 3)).val()}&dcNo=${GetFieldsDcNo($(id).attr("id"))}&attFldName=${funame}&attTransId=${transid}`,
-            maxFilesize: attachmentSizeMB, // Max filesize in MB
-            previewTemplate: previewTemplate,
-            previewsContainer: id + " .dropzone-items", // Define the container to display the previews
-            clickable: id + " .dropzone-select", // Define the element that should be used as click trigger to select files.
-            maxFiles: maxFilesUpload
-        });
-
-        const dzdefault = dropzone.querySelectorAll('.dz-default');
-        $(dzdefault).addClass("d-none");
-
-        myDropzone.on("addedfile", function (file) {
-            if (gridRowEditOnLoad) {
-                let thisFldId = $(id).attr("id").substr(9);
-                var fieldRowNo = GetFieldsRowNo(thisFldId);
-                var fldDcNo = GetFieldsDcNo(thisFldId);
-                UpdateGridRowFlags(thisFldId, fldDcNo, fieldRowNo);
-            }
-
-            this.options.url = url + `TstGridFileUpload.ashx?thisFld=${$(id).attr("id").substr(9)}&filePath=${$("#" + funame + "path" + $(id).attr("id").substring($(id).attr("id").lastIndexOf("F") - 3)).val() == undefined ? "" : $("#" + funame + "path" + $(id).attr("id").substring($(id).attr("id").lastIndexOf("F") - 3)).val()}&dcNo=${GetFieldsDcNo($(id).attr("id"))}&attFldName=${funame}&attTransId=${transid}`;
-            // Hookup the start button
-            const dropzoneItems = dropzone.querySelectorAll('.dropzone-item');
-            dropzoneItems.forEach(dropzoneItem => {
-                dropzoneItem.style.display = '';
-            });
-        });
-
-        // Hide the total progress bar when nothing"s uploading anymore
-        myDropzone.on("complete", function (progress) {
-            const progressBars = dropzone.querySelectorAll('.dz-complete');
-            if (progress.status == 'success') {
-                if (progress.xhr.response == "success" || progress.xhr.response.startsWith("success:")) {
-                    let mesg = progress.xhr.response;
-                    $(progress.previewElement).parents(".dropzone").find(".fileuploadmore").removeClass("d-none");
-                    let fuInpId = $(progress.previewElement).parents(".dropzone").attr("id").substr(9);
-                    let fuInpVal = $("#" + fuInpId).val();
-                    if (fuInpVal == "") {
-                        let _thisFldWidth = $("#" + fuInpId).parent().width();
-                        $("#" + fuInpId).parent().width(_thisFldWidth);
-                        let _thisSpan = $("a#" + fuInpId).find('span')[0];
-                        $("a#" + fuInpId).text(progress.name);
-                        $("a#" + fuInpId).prepend(_thisSpan).attr("title", "Drop files here or click to upload");
-                    }
-                    fuInpVal = fuInpVal == "" ? progress.name : fuInpVal + "," + progress.name;
-                    $("#" + fuInpId).val(fuInpVal);
-
-                    var hdnScriptsUrlPath = $j("#hdnScriptsUrlpath");
-                    let filePath = hdnScriptsUrlPath.val() + "axpert/" + sid + "/";
-                    filePath += progress.name;
-
-                    $(progress.previewElement).find(".dropzone-filename").attr("onclick", "ShowGridAttLink('" + filePath + "')")
-
-                    var fRowNo = GetFieldsRowNo(fuInpId);
-                    var dcNo = GetFieldsDcNo(fuInpId);
-                    var fldDbRow = GetDbRowNo(fRowNo, dcNo);
-                    UpdateFieldArray(fuInpId, fldDbRow, fuInpVal, "parent", "");
-                    UpdateAllFieldValues(fuInpId, fuInpVal);
-                    showAlertDialog("success", mesg.split(":")[1]);
-                } else {
-                    let mesg = progress.xhr.response;
-                    myDropzone.removeFile(progress);
-                    showAlertDialog("error", mesg.split(":")[1]);
-                }
-            } else {
-                if (progress.status == 'error')
-                    showAlertDialog("warning", $(progress.previewTemplate).find(".dropzone-error").text());
-            }
-        });
-
-        myDropzone.on("error", function (file) {
-            myDropzone.removeFile(file);
-        });
-
-        myDropzone.on("removedfile", function (file) {
-            let fuInpId = $(myDropzone.element).attr("id").substr(9);
-            let fuInpVal = $("#" + fuInpId).val();
-            fuInpVal = fuInpVal.replace(file.name + ",", "").replace(file.name, "");
-            if (fuInpVal[fuInpVal.length - 1] == ",")
-                fuInpVal = fuInpVal.substring(0, fuInpVal.length - 1);
-            $("#" + fuInpId).val(fuInpVal);
-            var fRowNo = GetFieldsRowNo(fuInpId);
-            var dcNo = GetFieldsDcNo(fuInpId);
-            var fldDbRow = GetDbRowNo(fRowNo, dcNo);
-            UpdateFieldArray(fuInpId, fldDbRow, fuInpVal, "parent", "");
-            UpdateAllFieldValues(fuInpId, fuInpVal);
-            if (fuInpVal == "") {
-                $(myDropzone.element).find(".fileuploadmore").addClass("d-none");
-                let _thisSpan = $("a#" + fuInpId).find('span')[0];
-                $("a#" + fuInpId).text("Drop files here or click to upload");
-                $("a#" + fuInpId).prepend(_thisSpan).attr("title", "");
-            } else {
-                let _thisSpan = $("a#" + fuInpId).find('span')[0];
-                $("a#" + fuInpId).text(fuInpVal.split(',')[0]);
-                $("a#" + fuInpId).prepend(_thisSpan).attr("title", "Drop files here or click to upload");
-            }
-        });
-
-
-        let fuInpId = $(id).attr("id").substr(9)
-        let fuInpVal = $("#" + fuInpId).val();
-        if (fuInpVal != "") {
-            $.each(fuInpVal.split(','), function (i, val) {
-                var file = {
-                    name: val,
-                    size: "0",
-                    status: Dropzone.ADDED,
-                    accepted: true
-                };
-                myDropzone.emit("addedfile", file);
-                myDropzone.emit("complete", file);
-                myDropzone.files.push(file);
-
-                var hdnScriptsUrlPath = $j("#hdnScriptsUrlpath");
-                let filePath = hdnScriptsUrlPath.val() + "axpert/" + sid + "/";
-                filePath += file.name;
-
-                $(file.previewElement).find(".dropzone-filename").attr("onclick", "ShowGridAttLink('" + filePath + "')")
-            });
-            if (fuInpVal != "") {
-                let _thisSpan = $("a#" + fuInpId).find('span')[0];
-                $("a#" + fuInpId).text(fuInpVal.split(',')[0]);
-                $("a#" + fuInpId).prepend(_thisSpan).attr("title", "Drop files here or click to upload");
-            }
-            $(id).find(".fileuploadmore").removeClass("d-none");
-        }
-    });
-}
-
-$j(document).on("click", ".popover-body .dropzoneGridItemDelete", function (e) {
-    const id = $(e.target).parents(".dropzone").attr("id");
-    const dropzone = document.querySelector("#" + id);
-    var myDropzone = Dropzone.forElement(dropzone);
-    //myDropzone.removeFile(myDropzone.files[0]);
-    const delFileName = $(e.target).parents(".dropzone-item").find(".dropzone-filename").text();
-    const delFileObj = myDropzone.files.filter(file => file.name == delFileName)?.[0];
-    if (delFileObj) {
-        $("[data-bs-toggle]").popover("hide");
-        myDropzone.removeFile(delFileObj);
-    }
-});
-
-$j(document).off("click", ".gridHeaderSwitch").on("click", ".gridHeaderSwitch", function (e) {
-    let _thisDicId = $(this).attr("id");
-    _thisDicId = _thisDicId.substr(7);
-    if ($(this).is(":checked")) {
-        if ($("#divDc" + _thisDicId + " .gridIconBtns").length > 0) {
-            $("#divDc" + _thisDicId + " .griddivColumn").removeClass("d-none");
-            $("#divDc" + _thisDicId + " .gridIconBtns").removeClass("d-none");
-        } else
-            $("#divDc" + _thisDicId).removeClass("d-none");
-        GetDcStateValue(_thisDicId, 'T');
-    } else {
-        var isRecLoad = false;
-        var rid = $j("#recordid000F0").val();
-        if (rid != "0")
-            isRecLoad = true;
-        //if (rid != "0") {
-        //    if ($("#divDc" + _thisDicId + " .gridIconBtns").length > 0) {
-        //        $("#divDc" + _thisDicId + " .griddivColumn").addClass("d-none");
-        //        $("#divDc" + _thisDicId + " .gridIconBtns").addClass("d-none");
-        //    } else
-        //        $("#divDc" + _thisDicId).addClass("d-none");
-        //    GetDcStateValue(_thisDicId, 'F');
-        //} else {
-            var isExitDummy = false;
-            if (gridDummyRowVal.length > 0) {
-                gridDummyRowVal.map(function (v) {
-                    if (v.split("~")[0] == _thisDicId) isExitDummy = true;
-                });
-            }
-            if (!isExitDummy && $(".wrapperForGridData" + _thisDicId + " table tbody tr").length > 0) {
-                var cutMsg = eval(callParent('lcm[520]'));
-                cutMsg = cutMsg.replace('{0}', GetDcCaption(_thisDicId));
-                var glType = eval(callParent('gllangType'));
-                var isRTL = false;
-                if (glType == "ar")
-                    isRTL = true;
-                else
-                    isRTL = false;
-                var clearThisDCGrid = $.confirm({
-                    theme: 'modern',
-                    closeIcon: false,
-                    rtl: isRTL,
-                    title: eval(callParent('lcm[155]')),
-                    onContentReady: function () {
-                        disableBackDrop('bind');
-                    },
-                    backgroundDismiss: 'false',
-                    escapeKey: 'buttonB',
-                    content: cutMsg,
-                    buttons: {
-                        buttonA: {
-                            text: eval(callParent('lcm[164]')),
-                            btnClass: 'btn btn-primary',
-                            action: function () {
-                                clearThisDCGrid.close();
-                                var fDcRowCount = GetDcRowCount(_thisDicId);
-                                DeleteAllRows(_thisDicId, fDcRowCount);
-                                ShowDimmer(false);
-                                $("#chkallgridrow" + _thisDicId).prop("checked", false);
-                                $("#divDc" + _thisDicId + " .griddivColumn").addClass("d-none");
-                                $("#divDc" + _thisDicId + " .gridIconBtns").addClass("d-none");
-
-                                GetDcStateValue(_thisDicId, 'F');
-                            }
-                        },
-                        buttonB: {
-                            text: eval(callParent('lcm[192]')),
-                            btnClass: 'btn btn-bg-light btn-color-danger btn-active-light-danger',
-                            action: function () {
-                                //$("#divDc" + _thisDicId + " .griddivColumn").addClass("d-none");
-                                //$("#divDc" + _thisDicId + " .gridIconBtns").addClass("d-none");
-
-                                $("#divDc" + _thisDicId + " .griddivColumn").removeClass("d-none");
-                                $("#divDc" + _thisDicId + " .gridIconBtns").removeClass("d-none");
-                                $("#dcBlean" + _thisDicId).prop("checked", true);
-                                disableBackDrop('destroy');
-                                return;
-                            }
-                        },
-                    }
-                });
-            } else {
-                if ($("#divDc" + _thisDicId + " .gridIconBtns").length > 0) {
-                    $("#divDc" + _thisDicId + " .griddivColumn").addClass("d-none");
-                    $("#divDc" + _thisDicId + " .gridIconBtns").addClass("d-none");
-                } else {
-                    if (IsFormDirty || isRecLoad) {
-                        var cutMsg = eval(callParent('lcm[520]'));
-                        cutMsg = cutMsg.replace('{0}', GetDcCaption(_thisDicId));
-                        var glType = eval(callParent('gllangType'));
-                        var isRTL = false;
-                        if (glType == "ar")
-                            isRTL = true;
-                        else
-                            isRTL = false;
-                        var clearThisDCGrid = $.confirm({
-                            theme: 'modern',
-                            closeIcon: false,
-                            rtl: isRTL,
-                            title: eval(callParent('lcm[155]')),
-                            onContentReady: function () {
-                                disableBackDrop('bind');
-                            },
-                            backgroundDismiss: 'false',
-                            escapeKey: 'buttonB',
-                            content: cutMsg,
-                            buttons: {
-                                buttonA: {
-                                    text: eval(callParent('lcm[164]')),
-                                    btnClass: 'btn btn-primary',
-                                    action: function () {
-                                        clearThisDCGrid.close();
-                                        var _thisFlds = GetGridFields(_thisDicId);
-                                        _thisFlds.forEach(function (_thifld) {
-                                            if (_thifld != "axp_recid" + _thisDicId) {
-                                                let _thisfldId = _thifld + "000F" + _thisDicId;
-                                                SetFieldValue(_thisfldId, "");
-                                                UpdateFieldArray(_thisfldId, 0, "", "parent", "");
-                                            }
-                                        });
-                                        ShowDimmer(false);
-                                        $("#divDc" + _thisDicId).addClass("d-none");
-
-                                        GetDcStateValue(_thisDicId, 'F');
-                                    }
-                                },
-                                buttonB: {
-                                    text: eval(callParent('lcm[192]')),
-                                    btnClass: 'btn btn-bg-light btn-color-danger btn-active-light-danger',
-                                    action: function () {
-                                        //$("#divDc" + _thisDicId).addClass("d-none");
-                                        $("#divDc" + _thisDicId).removeClass("d-none");
-                                        $("#dcBlean" + _thisDicId).prop("checked", true);
-                                        disableBackDrop('destroy');
-                                        return;
-                                    }
-                                },
-                            }
-                        });
-                    } else
-                        $("#divDc" + _thisDicId).addClass("d-none");
-                }
-            }
-            /*GetDcStateValue(_thisDicId, 'F');*/
-       // }
-    }
-});
-
-function GetDcStateValue(dcsId, expandDc) {
+function callAxpertConfigStudio(configType,sourceTransId,sourceCaption) {
     try {
-        if ($("#axp_dcstate000F1").length > 0) {
-            let _thisIsFormDirty = IsFormDirty;
-            if (dcsId == "") {
-                AxpDcstateVal = $("#axp_dcstate000F1").val();
-                if ($("[id^=dcBlean]").length > 0) {
-                    let _axpdcval = "";// $("#axp_dcstate000F1").val();
-                    if (_axpdcval == "") {
-                        DCName.forEach(function () {
-                            _axpdcval += "T";
-                        })
-                    }
-                    var _arrAxpDc = Array.from(_axpdcval);
-                    $("[id^=dcBlean]").each(function () {
-                        if ($(this).hasClass('gridHeaderSwitch')) {
-                            let _thisId = $(this).attr("id");
-                            _thisId = parseInt(_thisId.substring(7));
-                            if ($("#dcBlean" + _thisId).is(":checked"))
-                                _arrAxpDc[_thisId - 1] = "T";
-                            else
-                                _arrAxpDc[_thisId - 1] = "F";
-                        }
-                    });
-                    let _thidSwithVal = _arrAxpDc.join('');
-                    let _thidFldId = $("#axp_dcstate000F1").attr("id");                    
-                    SetFieldValue(_thidFldId, _thidSwithVal);
-                    UpdateFieldArray(_thidFldId, "000", _thidSwithVal, "parent");
-                    MainBlur($("#axp_dcstate000F1"));
-                }
-                AxExecFormControl = false;
-            } else {
-                let _dcSVal = $("#axp_dcstate000F1").val();
-                var _arrAxpDc = Array.from(_dcSVal);
-                _arrAxpDc[parseInt(dcsId) - 1] = expandDc;
-                let _thidSwithVal = _arrAxpDc.join('');
-                let _thidFldId = $("#axp_dcstate000F1").attr("id");
-                SetFieldValue(_thidFldId, _thidSwithVal);
-                UpdateFieldArray(_thidFldId, "000", _thidSwithVal, "parent");
-                MainBlur($("#axp_dcstate000F1"));
-            }
-            if (!_thisIsFormDirty)
-                IsFormDirty = false;
-        }
-    } catch (ex) { }
+        configType=configType+"~"+sourceTransId+"~"+sourceCaption;
+        ASB.WebService.GetAxpertCunfigInfo(configType, SuccessAxpertConfigStudio, OnException);
+    } catch (ex) {}
 }
 
-function GetDcStateOnLodaData() {
-    let _thisRid = $j("#recordid000F0").val();
-    if (_thisRid != "0") {
-        if ($("#axp_dcstate000F1").length > 0 && $("#axp_dcstate000F1").val() != "" && AxpDcstateVal != "") {
-            var _arrAxpDc = Array.from(AxpDcstateVal);
-            _arrAxpDc.forEach(function (val, ind) {
-                if (ind == 0)
-                    return true;
-                if (val == "T")
-                    AxFormControlList.push("expand~" + DCName[ind]);
-                else
-                    AxFormControlList.push("collapse~" + DCName[ind]);
-            });
-            if (AxFormControlList.length > 0)
-                ProcessScriptFormControlOnList('axp_dcstate');
-        }
+
+function SuccessAxpertConfigStudio(result, eventArgs) {
+    if (result != "") {
+        callParentNew(`showWorkBench(` + result + `)`, `function`);
     }
 }

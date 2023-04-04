@@ -37,7 +37,7 @@
     <%--custom alerts start--%>
     <link href="../Css/animate.min.css" rel="stylesheet" />
     <link href="../ThirdParty/jquery-confirm-master/jquery-confirm.min.css?v=1" rel="stylesheet" />
-    <script src="../Js/alerts.min.js?v=30" type="text/javascript"></script>
+    <script src="../Js/alerts.min.js?v=28" type="text/javascript"></script>
     <%--custom alerts end--%>
     <script src="../Js/thirdparty/jquery-ui/1.12.1/jquery-ui.min.js" type="text/javascript"></script>
     <script src="../ThirdParty/jquery-confirm-master/jquery-confirm.min.js?v=2" type="text/javascript"></script>
@@ -46,13 +46,13 @@
 
     <script src="../Js/gen.min.js?v=14" type="text/javascript"></script>
 
-    <script src="../Js/user.min.js?v=18" type="text/javascript"></script>
+    <script src="../Js/user.min.js?v=15" type="text/javascript"></script>
 
     <link href="../Css/generic.min.css?v=10" rel="stylesheet" type="text/css" id="generic" />
     <link id="themecss" type="text/css" rel="Stylesheet" href="" />
     <script src="../Js/Resetpassword.min.js?v=3" type="text/javascript"></script>
 
-    <script src="../Js/common.min.js?v=118" type="text/javascript"></script>
+    <script src="../Js/common.min.js?v=98" type="text/javascript"></script>
     <title>Reset Password</title>
 </head>
 <body class="dc" dir="<%=direction%>">

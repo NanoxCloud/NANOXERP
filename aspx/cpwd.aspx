@@ -26,7 +26,7 @@
     
     <%--custom alerts start--%>
    <%-- <link href="../Css/animate.min.css" rel="stylesheet" />--%>
-    <script src="../Js/alerts.min.js?v=30" type="text/javascript"></script>
+    <script src="../Js/alerts.min.js?v=28" type="text/javascript"></script>
     <%--<link href="../ThirdParty/jquery-confirm-master/jquery-confirm.min.css?v=1" rel="stylesheet" />--%>
     <%--<script src="../ThirdParty/jquery-confirm-master/jquery-confirm.min.js?v=2" type="text/javascript"></script>--%>
     <%--custom alerts end--%>
@@ -34,15 +34,15 @@
         <%:Scripts.Render("~/UI/axpertUI/bundleJs") %>
     </asp:PlaceHolder>
     <script src="../Js/md5.min.js" type="text/javascript"></script>
-    <script src="../Js/user.min.js?v=18" type="text/javascript"></script>
+    <script src="../Js/user.min.js?v=15" type="text/javascript"></script>
     <%--<script src="../Js/adjustwindow.min.js?v=1" type="text/javascript"></script>
     <script src="../newPopups/axpertPopup.min.js?v=45"></script>--%>
     <script src="../Js/gen.min.js?v=14" type="text/javascript"></script>
-    <script src="../Js/helper.min.js?v=141" type="text/javascript"></script>
+    <script src="../Js/helper.min.js?v=123" type="text/javascript"></script>
    <%-- <script src="../Js/messagebox.min.js?v=1" type="text/javascript"></script>--%>
     <script src="../Js/cpwd.min.js?v=16" type="text/javascript"></script>
-    <script src="../Js/common.min.js?v=118" type="text/javascript"></script>
-    <script type="text/javascript" src="../Js/lang/content-<%=langType%>.js?v=59"></script>
+    <script src="../Js/common.min.js?v=98" type="text/javascript"></script>
+    <script type="text/javascript" src="../Js/lang/content-<%=langType%>.js?v=51"></script>
     <%--<link href="../Css/messagebox.min.css" rel="stylesheet" type="text/css" />--%>
 
     <%--<link href="../Css/thirdparty/bootstrap/3.3.6/bootstrap.min.css" rel="stylesheet" />--%>
@@ -150,7 +150,7 @@
                                     <asp:ScriptManager ID="ScriptManager1" runat="server">
                                         <Scripts>
                                             <asp:ScriptReference Path="../Js/gen.min.js?v=14" />
-                                            <asp:ScriptReference Path="../Js/tstruct.min.js?v=489" />
+                                            <asp:ScriptReference Path="../Js/tstruct.min.js?v=431" />
                                         </Scripts>
                                         <Services>
                                             <asp:ServiceReference Path="../WebService.asmx" />
@@ -186,7 +186,7 @@
                                                 <div class="form-title">
                                                     <div class="text-center mb-8">
                                                      <img class="mb-2" src="../images/loginlogo.png" loading="lazy" />
-                                    <div><asp:Label ID="spnCpwdHeading" class="form-label fs-1 fw-boldest text-dark" runat="server">Sign In</asp:Label>
+                                    <div><asp:Label ID="spnCpwdHeading" class="form-label fs-1 fw-bolder text-dark" runat="server">Sign In</asp:Label>
                                         </div>
                                                     </div>
                                                     <%--<img src="../images/loginlogo.png">
@@ -221,11 +221,11 @@
                             <%--<div class="input-icon left">--%>
                                  <%If remark <> "chpwd" %>
                                                                 <div class="field-placeholder">
-                                                                        <asp:Label ID="Label1"  class="form-label fs-6 fw-boldest text-dark" runat="server" meta:resourcekey="lblexistingpwd" for="email">
+                                                                        <asp:Label ID="Label1"  class="form-label fs-6 fw-bolder text-dark" runat="server" meta:resourcekey="lblexistingpwd" for="email">
                             Existing Password</asp:Label>                
                                                                        <%End If %>  
                                  <%If (remark = "chpwd") Then %>
-                                <asp:Label ID="lblexistingpwd"  class="form-label fs-6 fw-boldest text-dark" runat="server" meta:resourcekey="lblexistingpwd" for="email">
+                                <asp:Label ID="lblexistingpwd"  class="form-label fs-6 fw-bolder text-dark" runat="server" meta:resourcekey="lblexistingpwd" for="email">
                             Existing Password</asp:Label>
                                  <%End If %>
                                   
@@ -246,10 +246,10 @@
                             <div class="input-icon left">
                                  <%If (remark <> "chpwd") %>
                                                                       <div class="field-placeholder">
-                                                            <asp:Label ID="Label2" runat="server" meta:resourcekey="lblnewpwd" class="form-label fs-6 fw-boldest text-dark" for="email">New Password</asp:Label>
+                                                            <asp:Label ID="Label2" runat="server" meta:resourcekey="lblnewpwd" class="form-label fs-6 fw-bolder text-dark" for="email">New Password</asp:Label>
                                                             <%End If %>
                                                             <%If (remark = "chpwd") Then %>
-                                                            <asp:Label ID="lblnewpwd" runat="server" meta:resourcekey="lblnewpwd" class="form-label fs-6 fw-boldest text-dark" for="email">New Password</asp:Label>
+                                                            <asp:Label ID="lblnewpwd" runat="server" meta:resourcekey="lblnewpwd" class="form-label fs-6 fw-bolder text-dark" for="email">New Password</asp:Label>
                                                             <%End If %>
                                                             <div class="<%If Not (remark = "chpwd") %> controls field-wrapper <%Else %> col-lg-7 <%End If %>">
                                                                 <%If remark <> "chpwd" %>
@@ -264,7 +264,7 @@
                                                                     <input runat="server" type="hidden" id="sw000F0" name="sw000F0" value="" />
                                                                  <%--  <%If (remark = "chpwd") %>
                                                                       <div class="field-placeholder">
-                                                            <asp:Label ID="Label2" runat="server" meta:resourcekey="lblnewpwd" class="form-label fs-6 fw-boldest text-dark" for="email">New Password<span class="allowempty">* </span></asp:Label>
+                                                            <asp:Label ID="Label2" runat="server" meta:resourcekey="lblnewpwd" class="form-label fs-6 fw-bolder text-dark" for="email">New Password<span class="allowempty">* </span></asp:Label>
                                                             <%End If %>--%>
                                                                     <%If remark <> "chpwd" %>
                                                                 </div></div>
@@ -276,10 +276,10 @@
                                                         <div class="control-group" id="Region">
                                                              <%If remark <> "chpwd" %>
                                                                 <div class="field-placeholder">
-                                                                    <asp:Label ID="Label3" runat="server" meta:resourcekey="lblconfirmpwd" class="form-label fs-6 fw-boldest text-dark" for="email">Confirm Password<span class="allowempty">* </span></asp:Label>
+                                                                    <asp:Label ID="Label3" runat="server" meta:resourcekey="lblconfirmpwd" class="form-label fs-6 fw-bolder text-dark" for="email">Confirm Password<span class="allowempty">* </span></asp:Label>
                                                                     <%End If %>
                                                             <%If (remark = "chpwd") Then %>
-                                                            <asp:Label ID="lblconfirmpwd" runat="server" meta:resourcekey="lblconfirmpwd" class="form-label fs-6 fw-boldest text-dark" for="email">Confirm Password<span class="allowempty">* </span></asp:Label>
+                                                            <asp:Label ID="lblconfirmpwd" runat="server" meta:resourcekey="lblconfirmpwd" class="form-label fs-6 fw-bolder text-dark" for="email">Confirm Password<span class="allowempty">* </span></asp:Label>
                                                             <%End If %>
                                                             <div class="<%If Not (remark = "chpwd") %> controls field-wrapper <%Else %> col-lg-7 <%End If %>">
                                                                 <%If remark <> "chpwd" %>
@@ -292,11 +292,9 @@
                                                                         class="m-wrap my-4  placeholder-no-fix form-control form-control-lg form-control-solid <%If Not (remark = "chpwd") %> border-left <%End If %>" autocomplete="off">
                                                                     <input runat="server" type="hidden" name="swc000F0" id="swc000F0" value="" />
                                                                     <input runat="server" type="hidden" name="npwdHidden" id="npwdHidden" value="" />
-                                                                    <input runat="server" type="hidden" name="checkMsg" id="hdncheckMsg" value="" />
-                                                                    <input runat="server" type="hidden" name="npwdHiddenMd5" id="npwdHiddenMd5" value="" />
                                                                    <%-- <%If remark <> "chpwd" %>
                                                                 <div class="field-placeholder">
-                                                                    <asp:Label ID="Label3" runat="server" meta:resourcekey="lblconfirmpwd" class="form-label fs-6 fw-boldest text-dark" for="email">Confirm Password<span class="allowempty">* </span></asp:Label>
+                                                                    <asp:Label ID="Label3" runat="server" meta:resourcekey="lblconfirmpwd" class="form-label fs-6 fw-bolder text-dark" for="email">Confirm Password<span class="allowempty">* </span></asp:Label>
                                                                     <%End If %>--%>
                                                                     <%If remark <> "chpwd" %>
                                                                 </div></div>

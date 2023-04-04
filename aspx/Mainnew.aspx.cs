@@ -184,7 +184,7 @@ public partial class aspx_Mainnew : System.Web.UI.Page
             if (!(filcustom.Exists))
             {
                 langType = "en";
-                direction = "ltr";
+                direction = "ltr-en";
             }
         }
     }
@@ -210,15 +210,6 @@ public partial class aspx_Mainnew : System.Web.UI.Page
             string browserElapsTime = Request.Form["hdnbrowserElapsTime"] != null ? Request.Form["hdnbrowserElapsTime"] : "0";
             hdnSSTime = Request.Form["hdnSSTime"] != null ? Request.Form["hdnSSTime"] : Session["etServerTime"].ToString();
             requestProcess_logtime += ObjExecTr.WireElapsTime(browserElapsTime, hdnSSTime);
-        }
-
-        try
-        {
-            AntiforgeryChecker.Check(this, _antiforgery);
-        }
-        catch (Exception ex)
-        {
-            Response.Redirect("~/CusError/AxCustomError.aspx");
         }
 
         try
@@ -295,7 +286,6 @@ public partial class aspx_Mainnew : System.Web.UI.Page
                     Session["userDetails"] = userDetails;
                     Session["rnd_key"] = rnd_key = loginHelper.rnd_key;
                     Session["isSSOLogin"] = loginHelper.isSSO;
-                    Session["SSOLoginType"] = loginHelper.SSOType;
                     Session["staySignedId"] = loginHelper.staySignedId;
                     Session["Svrlic_redis"] = loginHelper.lic_redis;
                     lastOpenPage = loginHelper.lastOpenPage;
@@ -410,8 +400,6 @@ public partial class aspx_Mainnew : System.Web.UI.Page
                     { }
                 }
 
-                util.ClearUserIviewData();
-
                 GetGlobalVariables();
                 createTopLinks();
                 SetPrintInterval();
@@ -457,8 +445,6 @@ public partial class aspx_Mainnew : System.Web.UI.Page
             }
 
             GetMenuAndCardsData();
-
-            DeletePrevExecKeys();
             if (Session["project"] != null)
             {
                 SetnotifyTimeout();
@@ -507,8 +493,7 @@ public partial class aspx_Mainnew : System.Web.UI.Page
                                 url = "../aspx/ParamsTstruct.aspx?transid=" + paramTransid + "";
                             }
                             Navigationpage = url;
-                            //hdHomeUrl.Value = Navigationpage;
-                            Page.ClientScript.RegisterStartupScript(this.GetType(), "GlobalParams", "BootstrapDialogAppParamsShow('" + Navigationpage + "');", true);
+                            // hdHomeUrl.Value = "../aspx/Page.aspx";
                         }
                     }
                     else
@@ -674,12 +659,12 @@ public partial class aspx_Mainnew : System.Web.UI.Page
             {
                 if (ssologinAcc[i] == "office365")
                 {
-                    if (ssoclientKey != null && ssoclientKey[i] != null)
+                    if (ssoclientKey[i] != null)
                         office365clientKey = ssoclientKey[i];
                 }
                 else if (ssologinAcc[i] == "okta")
                 {
-                    if (ssoclientKey != null && ssoclientKey[i] != null)
+                    if (ssoclientKey[i] != null)
                         oktaclientKey = ssoclientKey[i];
                 }
             }
@@ -698,7 +683,6 @@ public partial class aspx_Mainnew : System.Web.UI.Page
             if (fObj == null)
                 fObj = new FDR();
             axUserOptions = fObj.StringFromRedis(util.GetRedisServerkey(KeyData, "axUserOptions", Session["username"].ToString()), schemaName);
-            // btnSetParams.Click()
         }
         catch (Exception) { }
         if (axUserOptions == string.Empty && (Session["axUserOptions"] != null && Session["axUserOptions"].ToString() != "cached"))
@@ -806,17 +790,11 @@ public partial class aspx_Mainnew : System.Web.UI.Page
             UserOptions.Add("uiSelector", "\"title\":\"Modern UI\"");
             UserOptions.Add("modernUiValue", "\"onclick\":\"updateCompressedmode\"");
             if (Convert.ToString(Session["Build"]) == "F")
-            {
                 UserOptions.Add("developerworkbench", "\"display\":\"none\"♠\"onclick\":\"showWorkBench()\"♠\"title\":\"Axpert Developer\"");
-                UserOptions.Add("configurationStudio", "\"display\":\"none\"♠\"onclick\":\"showWorkBench()\"♠\"title\":\"Axpert Developer\"");
-            }
             else
             {
                 if (Session["MobileView"] != null && Session["MobileView"].ToString() == "True")
-                {
                     UserOptions.Add("developerworkbench", "\"display\":\"none\"♠\"onclick\":\"showWorkBench()\"♠\"title\":\"Axpert Developer\"");
-                    UserOptions.Add("configurationStudio", "\"display\":\"none\"♠\"onclick\":\"showWorkBench()\"♠\"title\":\"Axpert Developer\"");
-                }
                 else
                 {
                     string axpertdeveloperUrl = string.Empty;
@@ -827,17 +805,13 @@ public partial class aspx_Mainnew : System.Web.UI.Page
                         adDetails += "♦" + Session["pwd"].ToString();
                         adDetails += "♦" + Session["language"].ToString();
                         adDetails += "♦" + hybridGUID;
-                        if (Session["AxAppTitle"] == null)
-                            adDetails += "♦" + Session["projTitle"].ToString();
-                        else
-                            adDetails += "♦" + Session["AxAppTitle"].ToString();  //Session["axApps"].ToString();
+                        adDetails += "♦" + Session["AxAppTitle"].ToString();  //Session["axApps"].ToString();
                         adDetails += "♦" + userDetails;
                         axpertdeveloperUrl = ConfigurationManager.AppSettings["axpertdeveloper"].ToString();
                         adDetails = util.encrtptDecryptAES(adDetails);
                         axpertdeveloperUrl += "aspx/dwbsignin.aspx?adInfo=" + adDetails;
                     }
                     UserOptions.Add("developerworkbench", "\"display\":\"block\"♠\"onclick\":\"showWorkBench('" + axpertdeveloperUrl + "')\"♠\"title\":\"Axpert Developer\"");
-                    UserOptions.Add("configurationStudio", "\"display\":\"block\"♠\"onclick\":\"OpenConfigurationStudio();/*callRuntimeStudio('configStudio~~')*/\"♠\"title\":\"Configuration\"");
                 }
             }
 
@@ -1090,24 +1064,9 @@ public partial class aspx_Mainnew : System.Web.UI.Page
                 Session["utl"] = Utl;
             }
         }
-        //if (ConfigurationManager.AppSettings["redisIP"] != null && ConfigurationManager.AppSettings["redisIP"].ToString() != String.Empty && ConfigurationManager.AppSettings["redisPass"] != null)
-        //{
-        //    redisUtl = ConfigurationManager.AppSettings["redisIP"].ToString() + "," + ConfigurationManager.AppSettings["redisPass"].ToString() + "^~)";
-
-        //    if (ConfigurationManager.AppSettings["EncryptionKey"] != null && ConfigurationManager.AppSettings["EncryptionIV"] != null && ConfigurationManager.AppSettings["EncryptionKey"] != string.Empty && ConfigurationManager.AppSettings["EncryptionIV"] != string.Empty)
-        //    {
-        //        string[] keyStr = ConfigurationManager.AppSettings["EncryptionKey"].ToString().Split(',');
-        //        byte[] keyBytes = keyStr.Select(Byte.Parse).ToArray();
-        //        string[] ivStr = ConfigurationManager.AppSettings["EncryptionIV"].ToString().Split(',');
-        //        byte[] ivBytes = ivStr.Select(Byte.Parse).ToArray();
-        //        byte[] encryptedUtl = util.EncryptStringToBytes_Aes(redisUtl, keyBytes, ivBytes);
-        //        redisUtl = BitConverter.ToString(encryptedUtl).Replace("-", string.Empty);
-        //    }
-        //}
-
-        if (HttpContext.Current.Session["RedisCacheIP"] != null && HttpContext.Current.Session["RedisCacheIP"].ToString() != String.Empty)
+        if (ConfigurationManager.AppSettings["redisIP"] != null && ConfigurationManager.AppSettings["redisIP"].ToString() != String.Empty && ConfigurationManager.AppSettings["redisPass"] != null)
         {
-            redisUtl = HttpContext.Current.Session["RedisCacheIP"].ToString() + "," + HttpContext.Current.Session["RedisCachePwd"].ToString() + "^~)";
+            redisUtl = ConfigurationManager.AppSettings["redisIP"].ToString() + "," + ConfigurationManager.AppSettings["redisPass"].ToString() + "^~)";
 
             if (ConfigurationManager.AppSettings["EncryptionKey"] != null && ConfigurationManager.AppSettings["EncryptionIV"] != null && ConfigurationManager.AppSettings["EncryptionKey"] != string.Empty && ConfigurationManager.AppSettings["EncryptionIV"] != string.Empty)
             {
@@ -1173,9 +1132,6 @@ public partial class aspx_Mainnew : System.Web.UI.Page
         if (Session["lictype"] != null && Session["lictype"].ToString() == "unlimited")
             localStorUser = "true";
 
-        listviewAsDefault.Value = util.GetAdvConfigs("Listview as Default", "tstruct");
-
-        listviewLoadFromSearch.Value = util.GetAdvConfigs("Listview as default from search", "tstruct");
     }
 
     private void SetnotifyTimeout()
@@ -1345,7 +1301,7 @@ public partial class aspx_Mainnew : System.Web.UI.Page
             string[] landingValue = LandingPage.Split('♦');
             if (landingValue[0].ToLower() == "tstruct")
             {
-                Navigationpage = "../aspx/tstruct.aspx?transid=" + landingValue[1] + "&openerIV=" + landingValue[1] + "&isIV=false";
+                Navigationpage = "../aspx/tstruct.aspx?transid=" + landingValue[1];
                 if (Session["AxCloudDB"] != null)
                 {
                     Page.ClientScript.RegisterStartupScript(GetType(), "", "<script>displayBootstrapModalDialog('Company SetUp', 'lg', '510px', true, '" + Navigationpage + "', true, cloudSetupInit)</script>");
@@ -1363,10 +1319,10 @@ public partial class aspx_Mainnew : System.Web.UI.Page
             }
             else if (landingValue[0].ToLower() == "general")
             {
-                    Navigationpage = "../" + proj + "/aspx/" + landingValue[2];
-                    hdHomeUrl.Value = Navigationpage;
-                }
+                Navigationpage = "../" + proj + "/aspx/" + landingValue[2];
+                hdHomeUrl.Value = Navigationpage;
             }
+        }
 
 
         if (lastOpenPage != string.Empty)
@@ -1497,7 +1453,7 @@ public partial class aspx_Mainnew : System.Web.UI.Page
 
         try
         {
-            alertsTimeout = HttpContext.Current.Session["AxAlertTimeout"] != null ? (Convert.ToInt32(HttpContext.Current.Session["AxAlertTimeout"])) : 3000;
+            alertsTimeout = HttpContext.Current.Session["AxAlertTimeout"] != null ? (Convert.ToInt32(HttpContext.Current.Session["AxAlertTimeout"]) * 1000) : 3000;
         }
         catch (Exception ex)
         {
@@ -1745,7 +1701,6 @@ public partial class aspx_Mainnew : System.Web.UI.Page
             logObj.CreateLog("Timetaken in milliseconds details for keyword-" + keyword + ",Cond=" + cond, HttpContext.Current.Session.SessionID, "GlobalSearch-Time", "new");
             if (HttpContext.Current.Session["user"] != null)
             {
-                string axLanguage = HttpContext.Current.Session["language"].ToString();
                 logObj.CreateLog("Start to search with keyword-" + keyword, HttpContext.Current.Session.SessionID, "GlobalSearch", "new");
                 if (HttpContext.Current.Session["AxGlobalSrchLimit"] != null)
                 {
@@ -1846,11 +1801,7 @@ public partial class aspx_Mainnew : System.Web.UI.Page
                 {
                     DateTime st3 = DateTime.Now;
                     DBContext obj = new DBContext();
-                    string query = "";
-                    if (axLanguage.ToLower() == "english")
-                        query = Constants.GET_SEARCH_DATA.Replace("$KEYWORD$", srchKey.ToLower());
-                    else
-                        query = Constants.GET_SEARCH_DATA_LANG.Replace("$KEYWORD$", srchKey.ToLower()).Replace(":language", "'" + axLanguage + "'");
+                    string query = Constants.GET_SEARCH_DATA.Replace("$KEYWORD$", srchKey.ToLower());
                     logObj.CreateLog("Getting from DB-" + keyword + "-with query =" + query, HttpContext.Current.Session.SessionID, "GlobalSearch", "");
                     dsSearchData = obj.GetSearchData(query, limit);
                     logObj.CreateLog("Getting data from DB-" + st3.Subtract(DateTime.Now).TotalMilliseconds.ToString(), HttpContext.Current.Session.SessionID, "GlobalSearch-Time", "");
@@ -2693,13 +2644,12 @@ public partial class aspx_Mainnew : System.Web.UI.Page
             url = "../aspx/ParamsTstruct.aspx?transid=" + paramTransid + "&recordid=" + AxGloRecId + "";
         else
             url = "../aspx/ParamsTstruct.aspx?transid=" + paramTransid + "";
-        editAxGlo2.Attributes.Add("onclick", "BootstrapDialogAppParamsShow('" + url + "');");
-        // editAxGlo2.Attributes.Add("onclick", "displayBootstrapModalDialog('Application Params', 'lg', 'calc(100vh - 50px)', true,'" + url + "',false,removePageHeaders);");
+        editAxGlo2.Attributes.Add("onclick", "displayBootstrapModalDialog('Application Params', 'lg', 'calc(100vh - 50px)', true,'" + url + "',false,removePageHeaders);");
         var AxGlo = UserOptions.Where(x => x.Key == "GlobalParamsonclick").ToList();
         if (AxGlo.Count > 0)
-            UserOptions["GlobalParamsonclick"] = "\"onclick\":\"BootstrapDialogAppParamsShow('" + url + "');\"";
+            UserOptions["GlobalParamsonclick"] = "\"onclick\":\"displayBootstrapModalDialog('Application Params', 'lg', 'calc(100vh - 50px)', true,'" + url + "',false,removePageHeaders)\"";
         else
-            UserOptions.Add("GlobalParamsonclick", "\"onclick\":\"BootstrapDialogAppParamsShow('" + url + "');\"");
+            UserOptions.Add("GlobalParamsonclick", "\"onclick\":\"displayBootstrapModalDialog('Application Params', 'lg', 'calc(100vh - 50px)', true,'" + url + "',false,removePageHeaders)\"");
         if (globalVarToShow.Length > 100)
         {
             string globalValuesShown = string.Empty;
@@ -2851,14 +2801,12 @@ public partial class aspx_Mainnew : System.Web.UI.Page
                                     fdwObj.SaveInRedisServer(fObj.MakeKeyName(Constants.REDISCARDROLES, cardRoleSplit[0]), cardRoleSplit[1].ToString().Trim(','), "", schemaName);
                                 }
                                 catch (Exception ex)
-                                {
-                                }
+                                { }
                             }
                         }
                     }
                     catch (Exception ex)
-                    {
-                    }
+                    { }
                 }
 
                 if (splittedResult.Length > 2 && splittedResult[2] != "")
@@ -3525,18 +3473,6 @@ public partial class aspx_Mainnew : System.Web.UI.Page
                         axAttachmentpath = "<AXPATTACHMENTPATH>" + axAttachmentpath + "</AXPATTACHMENTPATH>";
                     }
                 }
-                try
-                {
-                    if (Session["AxTimezoneVariation"] != null && Session["AxTimezoneVariation"].ToString() == "false")
-                    {
-                        if (childNode.SelectSingleNode("timediff") != null)
-                        {
-                            childNode.SelectSingleNode("timediff").InnerText = "0";
-                        }
-                    }
-                }
-                catch (Exception ex) { }
-
                 Session["axGlobalVars"] = "<globalvars>" + childNode.InnerXml + axGridAttachPath + axAttachmentpath + "</globalvars>";
                 foreach (XmlNode xmlNode in childNode.ChildNodes)
                 {
@@ -3631,13 +3567,13 @@ public partial class aspx_Mainnew : System.Web.UI.Page
             url = "../aspx/ParamsTstruct.aspx?transid=" + paramTransid + "&recordid=" + AxGloRecId + "";
         else
             url = "../aspx/ParamsTstruct.aspx?transid=" + paramTransid + "";
-        editAxGlo2.Attributes.Add("onclick", "BootstrapDialogAppParamsShow('" + url + "');");
 
+        editAxGlo2.Attributes.Add("onclick", "displayBootstrapModalDialog('Application Params', 'lg', 'calc(100vh - 50px)', true,'" + url + "',false,removePageHeaders);");
         var AxGlo = UserOptions.Where(x => x.Key == "GlobalParamsonclick").ToList();
         if (AxGlo.Count > 0)
-            UserOptions["GlobalParamsonclick"] = "\"onclick\":\"BootstrapDialogAppParamsShow'" + url + "');\"";
+            UserOptions["GlobalParamsonclick"] = "\"onclick\":\"displayBootstrapModalDialog('Application Params', 'lg', 'calc(100vh - 50px)', true,'" + url + "',false,removePageHeaders)\"";
         else
-            UserOptions.Add("GlobalParamsonclick", "\"onclick\":\"BootstrapDialogAppParamsShow('" + url + "');\"");
+            UserOptions.Add("GlobalParamsonclick", "\"onclick\":\"displayBootstrapModalDialog('Application Params', 'lg', 'calc(100vh - 50px)', true,'" + url + "',false,removePageHeaders)\"");
         if (globalVarToShow.Length > 100)
         {
             string globalValuesShown = string.Empty;
@@ -3989,13 +3925,12 @@ public partial class aspx_Mainnew : System.Web.UI.Page
         string url = string.Empty;
         if (hdnAxGloRecId.Value != "")
             url = "../aspx/ParamsTstruct.aspx?transid=" + paramTransid + "&recordid=" + hdnAxGloRecId.Value + "";
-        //if (AxGloRecId != string.Empty)
-        editAxGlo2.Attributes.Add("onclick", "BootstrapDialogAppParamsShow('" + url + "');");
+        editAxGlo2.Attributes.Add("onclick", "displayBootstrapModalDialog('Application Params', 'lg', 'calc(100vh - 50px)', true,'" + url + "',false,removePageHeaders)");
         var AxGlo = UserOptions.Where(x => x.Key == "GlobalParamsonclick").ToList();
         if (AxGlo.Count > 0)
-            UserOptions["GlobalParamsonclick"] = "\"onclick\":\"BootstrapDialogAppParamsShow('" + url + "');\"";
+            UserOptions["GlobalParamsonclick"] = "\"onclick\":\"displayBootstrapModalDialog('Application Params', 'lg', 'calc(100vh - 50px)', true,'" + url + "',false,removePageHeaders)\"";
         else
-            UserOptions.Add("GlobalParamsonclick", "\"onclick\":\"BootstrapDialogAppParamsShow('" + url + "');\"");
+            UserOptions.Add("GlobalParamsonclick", "\"onclick\":\"displayBootstrapModalDialog('Application Params', 'lg', 'calc(100vh - 50px)', true,'" + url + "',false,removePageHeaders)\"");
         string golVarNode = "<globalvars>";
         foreach (string item in globalVariables)
         {
@@ -4154,7 +4089,7 @@ public partial class aspx_Mainnew : System.Web.UI.Page
             if (HttpContext.Current.Session["username"] != null)
                 userName = HttpContext.Current.Session["username"].ToString();
             string sessId = HttpContext.Current.Session.SessionID;
-            string ExecTraceKey = "Executiontrace-" + userName + "-" + sessId;
+            string ExecTraceKey = userName + "-" + sessId + "-Executiontrace";
             string ExecTraceMsg = fdrObj.ReadKey(ExecTraceKey);
             if (ExecTraceMsg != string.Empty)
             {
@@ -4196,53 +4131,11 @@ public partial class aspx_Mainnew : System.Web.UI.Page
             if (HttpContext.Current.Session["username"] != null)
                 userName = HttpContext.Current.Session["username"].ToString();
             string sessId = HttpContext.Current.Session.SessionID;
-            string ExecTraceKey = "Executiontrace-" + userName + "-" + sessId;
+            string ExecTraceKey = userName + "-" + sessId + "-Executiontrace";
             ExecutionLongText = fdrObj.ReadKey(ExecTraceKey);
         }
         catch (Exception ex) { }
         return ExecutionLongText;
-    }
-
-    public static void DeletePrevExecKeys()
-    {
-        try
-        {
-            string schemaName = string.Empty;
-            if (HttpContext.Current.Session["dbuser"] != null)
-                schemaName = HttpContext.Current.Session["dbuser"].ToString();
-            string userName = string.Empty;
-            if (HttpContext.Current.Session["username"] != null)
-                userName = HttpContext.Current.Session["username"].ToString();
-            string sessionId = HttpContext.Current.Session.SessionID;
-            string thisKey = "Executiontrace-" + userName + "-" + sessionId;
-            FDW fdwObj = FDW.Instance;
-            FDR fdrObj = (FDR)HttpContext.Current.Session["FDR"];
-            ArrayList execKeys = fdrObj.GetAllKeys("-Executiontrace-" + userName + "-");
-            if (execKeys.Count > 0)
-            {
-                string prevDelKeys = string.Empty;
-                foreach (string exKey in execKeys)
-                {
-                    if (!exKey.EndsWith(thisKey))
-                    {
-                        string ExecutionLongText = fdrObj.ReadKeyNoSchema(exKey);
-                        string sessId = exKey.Split('-').Last();
-                        prevDelKeys += exKey + "&";
-                        DBContext obj = new DBContext();
-                        obj.SaveExecutionTrace(ExecutionLongText, sessId);
-                    }
-                }
-                if (prevDelKeys != string.Empty)
-                {
-                    fdwObj.DeleteAllKeys(prevDelKeys, schemaName);
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            LogFile.Log logObj = new LogFile.Log();
-            logObj.CreateLog("DeletePrevExecKeys--" + ex.Message, HttpContext.Current.Session.SessionID, "DeletePrevExecKeys", "new", "true");
-        }
     }
 }
 #endregion

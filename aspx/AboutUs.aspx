@@ -35,7 +35,7 @@
             }
         }
     </script>
-    <script src="../Js/common.min.js?v=118"></script>
+    <script src="../Js/common.min.js?v=98"></script>
     <link href="../Css/aboutus.min.css?v=3" rel="stylesheet" />
     <script>
         $(document).ready(function () {
@@ -110,7 +110,7 @@
             <div class="fontclass" id="divBugContent" runat="server" />
         </div>--%>
 
-        <button type="button" id="btnClose" class="btn" onclick="parent.closeModalDialog()" title=""></button>
+        <button type="button" id="btnClose" class="coldbtn btn" onclick="parent.closeModalDialog()" title=""></button>
 
     </div>
 </body>

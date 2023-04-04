@@ -29,10 +29,7 @@ var params = new Array();
 var pos;
 var varlist = new Array();
 var valuelist = new Array();
-var axMemVarList = new Array();
-var axMemVarValue = new Array();
 var funclist = new Array();
-var forceBreak = false;
 funclist.push("abs", "addtodate", "addtomonth", "amtword");
 funclist.push("checkemail", "chkuniqchar", "cmonthyear", "convertmd5", "ctod", "curramtword");
 funclist.push("date", "datediff", "dayofdate", "dayselapsed", "daysinmonth", "decode", "dtoc");
@@ -50,7 +47,7 @@ funclist.push("upper", "uppercase");
 funclist.push("val", "validencodedate");
 funclist.push("yearofdate");
 funclist.push("floor", "ceil", "networkdays", "days360", "axpfloor", "axpceil");
-funclist.push("axhidecontrols", "axunhidecontrols", "axenablecontrols", "axdisablecontrols", "setvalue", "axvalueexits", "axaddrow", "loadform", "loadformanddata", "loadiview", "loadpage", "openpage", "setfieldcaption", "doformdesign", "canceltransaction", "getaxvalue", "stringpos", "axdccollapse", "axdcexpand", "getdcstate", "axallowempty", "axreadonly", "axmask", "axnomask", "axdisablegridcell", "axenablegridcell");
+funclist.push("axhidecontrols", "axunhidecontrols", "axenablecontrols", "axdisablecontrols", "setvalue", "axvalueexits", "axaddrow","loadform","loadformanddata","loadiview","loadpage","openpage");
 
 
 function CallFunction(functionname, params) {
@@ -63,7 +60,7 @@ function CallFunction(functionname, params) {
         result = 'n' + PAbs(params[0]);
     else if (functionname == "iif") {
         let IfFunVal = IfFun(params[0], params[1], params[2]);
-        result = isNaN(parseInt(IfFunVal)) ? 's' + IfFunVal : 'n' + IfFunVal;
+        result = isNaN(IfFunVal) ? 's' + IfFunVal : 'n' + IfFunVal;
     }
     else if (functionname == "findcharpos")
         result = 'n' + FindCharPos(params[0], params[1]);
@@ -244,44 +241,16 @@ function CallFunction(functionname, params) {
         result = 'n' + AxValueExits(params[0], params[1], params[2], params[3]);
     else if (functionname == "axaddrow")
         result = 's' + AxAddRow(params[0]);
-    else if (functionname == "loadform")
-        result = "s" + LoadForm(params[0], params[1], params[2], params[3]);
-    else if (functionname == "loadformanddata")
-        result = "s" + LoadFormAndData(params[0], params[1], params[2], params[3]);
-    else if (functionname == "loadiview")
-        result = "s" + LoadIView(params[0], params[1], params[2], params[3]);
-    else if (functionname == "loadpage")
-        result = "s" + LoadPage(params[0], params[1], params[2], params[3]);
-    else if (functionname == "openpage")
-        result = "s" + OpenPage(params[0], params[1], params[2], params[3]);
-    else if (functionname == "setfieldcaption")
-        result = "s" + SetFieldCaption(params[0], params[1]);
-    else if (functionname == "doformdesign")
-        result = "s" + DoFormDesign(params[0], params[1]);
-    else if (functionname == "canceltransaction")
-        result = "s" + CancelTransaction(params[0], params[1], params[2]);
-    else if (functionname == "getaxvalue")
-        result = "s" + GetAxValue(params[0], params[1], params[2]);
-    else if (functionname == "stringpos")
-        result = "n" + GetStringpos(params[0], params[1], params[2]);
-    else if (functionname == "axdccollapse")
-        result = "s" + AxDcCollapse(params[0]);
-    else if (functionname == "axdcexpand")
-        result = "s" + AxDcExpand(params[0]);
-    else if (functionname == "getdcstate")
-        result = "s" + GetDcState(params[0]);
-    else if (functionname == "axallowempty")
-        result = "s" + AxAllowEmpty(params[0], params[1]);
-    else if (functionname == "axreadonly")
-        result = "s" + AxReadOnly();
-    else if (functionname == "axmask")
-        result = "s" + AxMask(params[0], params[1], params[2]);
-    else if (functionname == "axnomask")
-        result = "s" + AxNoMask(params[0]);
-    else if (functionname == "axdisablegridcell")
-        result = "s" + AxDisableGridCell(params[0], params[1]);
-    else if (functionname == "axenablegridcell")
-        result = "s" + AxEnableGridCell(params[0], params[1]);
+    else if(functionname=="loadform")
+        result="s"+LoadForm(params[0],params[1],params[2],params[3]);
+    else if(functionname=="loadformanddata")
+        result="s"+LoadFormAndData(params[0],params[1],params[2],params[3]);      
+    else if(functionname=="loadiview")
+        result="s"+LoadIView(params[0],params[1],params[2],params[3]); 
+    else if(functionname=="loadpage")   
+        result="s"+LoadPage(params[0],params[1],params[2],params[3]); 
+    else if(functionname=="openpage")   
+        result="s"+OpenPage(params[0],params[1],params[2],params[3]); 
     return result;
 }
 
@@ -450,10 +419,6 @@ function Evaluate(a, b, Expstr, exprtype, fromIview) {
     var tem = '';
     varlist = new Array();
     valuelist = new Array();
-
-    axMemVarList = new Array();
-    axMemVarValue = new Array();
-
     wordlist = new Array();
     var w = 0;
     expFldname = a;
@@ -461,8 +426,6 @@ function Evaluate(a, b, Expstr, exprtype, fromIview) {
     var fIndx = a.lastIndexOf("F");
     if (fIndx != -1)
         rowno = a.substring(fIndx - 3, a.length);
-    else
-        rowno = "";
     var curActiveRowNo = 0;
     if (typeof (AxActiveRowNo) != "undefined")
         curActiveRowNo = parseInt(AxActiveRowNo);//Refer: HEA000101
@@ -485,15 +448,6 @@ function Evaluate(a, b, Expstr, exprtype, fromIview) {
 
     varlist[w] = "activerow";
     valuelist[w] = activerowno;
-
-    if (AxMemParameters.length > 1) {
-        for (var ami = 0; ami < AxMemParameters.length; ami++) {
-            var list = AxMemParameters[ami].toString();
-            list = list.split("~");
-            axMemVarList[ami] = list[0].toString();
-            axMemVarValue[ami] = list[1].toString().replace(/&quot;/g, '"');
-        }
-    }
 
     var tempvar = new Array();
     var tempval = new Array();
@@ -610,22 +564,8 @@ function Evaluate(a, b, Expstr, exprtype, fromIview) {
                             templ = templ;
                         }
                         else {
-                            if (document.title != "Iview" && (typeof fromIview == "undefined" || fromIview != "table")) {
-                                if (wordstring != "" && b == "") {
-                                    try {
-                                        let dcNo = GetDcNo(wordstring);
-                                        if (dcNo != "" && IsDcGrid(dcNo) && AxActiveRowNo.toString() != "" && AxActiveRowNo.toString() != "0") {
-                                            let rNo = GetClientRowNo(AxActiveRowNo, AxActiveDc);
-                                            templ = wordstring + rNo + "F" + AxActiveDc;
-                                        } else
-                                            templ = wordstring + "000F" + AxActiveDc;
-                                    } catch (ex) {
-                                        templ = wordstring + b + "F" + AxActiveDc;
-                                    }
-                                }
-                                else
-                                    templ = wordstring + b + "F" + AxActiveDc;
-                            }
+                            if (document.title != "Iview" && (typeof fromIview == "undefined" || fromIview != "table"))
+                                templ = wordstring + b + "F" + AxActiveDc;
                         }
                     }
                 }
@@ -679,7 +619,7 @@ function Evaluate(a, b, Expstr, exprtype, fromIview) {
                         if (fldDType == "Date/Time") {
                             s = "d" + elevalue;
                         }
-                        else if (fldDType == "Character" || fldDType == "Text") {
+                        else if (fldDType == "Character") {
                             s = "s" + elevalue;
                         }
                         else {
@@ -730,12 +670,11 @@ function Evaluate(a, b, Expstr, exprtype, fromIview) {
                 else {
 
                     templ = wordstring;
+                    for (var k = 0; k < varlist.length; k++) {
 
-                    for (var amk = 0; amk < axMemVarList.length; amk++) {
-
-                        if (templ == axMemVarList[amk].toLowerCase()) {
+                        if (templ == varlist[k].toLowerCase()) {
                             chrstate = true;
-                            elevalue = axMemVarValue[amk];
+                            elevalue = valuelist[k];
                             var dtlenth = elevalue.split('/');
                             if (dtlenth[0].length == 2 && (typeof dtlenth[1] != "undefined" && dtlenth[1].length == 2) && (typeof dtlenth[2] != "undefined" && dtlenth[2].length == 4)) {
                                 s = 'd' + elevalue;
@@ -753,33 +692,6 @@ function Evaluate(a, b, Expstr, exprtype, fromIview) {
                             wordlist[i] = s;
                             i++;
                             break;
-                        }
-                    }
-
-                    if (!chrstate) {
-                        for (var k = 0; k < varlist.length; k++) {
-
-                            if (templ == varlist[k].toLowerCase()) {
-                                chrstate = true;
-                                elevalue = valuelist[k];
-                                var dtlenth = elevalue.split('/');
-                                if (dtlenth[0].length == 2 && (typeof dtlenth[1] != "undefined" && dtlenth[1].length == 2) && (typeof dtlenth[2] != "undefined" && dtlenth[2].length == 4)) {
-                                    s = 'd' + elevalue;
-                                }
-                                else if (isNaN(elevalue)) {
-                                    s = 's' + elevalue;
-                                }
-                                else {
-                                    if (elevalue == "") elevalue = 0;
-                                    elevalue = elevalue;
-                                    s = 'n' + elevalue;
-                                    if (s.length == 1)
-                                        s = 'n' + 0;
-                                }
-                                wordlist[i] = s;
-                                i++;
-                                break;
-                            }
                         }
                     }
                     if (!chrstate && typeof RegVarFldList != "undefined" && RegVarFldList.length > 0) {//regvar function registered values Evaluate in client in case dependency call not there.
@@ -930,7 +842,7 @@ function EvalFun() {
         var strch = ch;
         ch = ch.split('');
         var firstchar = ch[0];
-        var EvalString = ''; var EvalType = ''; var ExtEvalString = ''; var EvalResult = ''; var ParamIndx = 0; var bracketClose = ""; var bracketOpen = "";
+        var EvalString = ''; var EvalType = ''; var ExtEvalString = ''; var EvalResult = ''; var ParamIndx = 0;
         if (firstchar == 'f') {
 
             delete wordlist[i + 1];
@@ -950,15 +862,21 @@ function EvalFun() {
                     value = strch.substr(1, strch.length);
 
                     if (wordlist[j] == 'b(') {
-                        //EvalString += '(';
-                        bracketOpen += '(';
+                        //EvalString = '';
                         EvalType = '';
+                        ExtEvalString += '(';
                     }
                     else if (wordlist[j] == 'b)') {
-                        //ExtEvalString = ExtEvalString + EvalString + ')';
-                        //EvalString = '';
-                        //EvalType = '';
-                        bracketClose += ')';
+                        if (ExtEvalString != '') {
+                            EvalResult = GetEvalResult(EvalString, EvalType);
+                            ExtEvalString = ExtEvalString + EvalResult + ')';
+                        }
+                        else {
+                            EvalString = EvalString + ')';
+                            EvalResult = GetEvalResult(EvalString, EvalType);
+                        }
+                        EvalString = '';
+                        EvalType = '';
                     }
                     else if (wordlist[j] == 'o<' || wordlist[j] == 'o>' || wordlist[j] == 'o=' || wordlist[j] == 'o#') {
                         var op = ch[1];
@@ -978,9 +896,7 @@ function EvalFun() {
                     else if (firstchar == 'o') {
                         var op = ch[1];
                         EvalResult = GetEvalResult(EvalString, EvalType);
-                        ExtEvalString = ExtEvalString + bracketOpen + EvalResult + bracketClose + op + op;
-                        bracketClose = '';
-                        bracketOpen = '';
+                        ExtEvalString = ExtEvalString + EvalResult + op + op;
                         EvalString = '';
                         EvalType = '';
                     }
@@ -988,21 +904,17 @@ function EvalFun() {
                         EvalResult = GetEvalResult(EvalString, EvalType);
                         if (EvalResult != '') {
                             if (EvalType == 'd')
-                                ExtEvalString = ExtEvalString + bracketOpen + '"' + EvalResult + '"' + bracketClose;
-                            else if (EvalType == 's' && EvalResult.toString().substr(0, 1) != '"')
-                                ExtEvalString = ExtEvalString + bracketOpen + '"' + EvalResult + '"' + bracketClose;// ExtEvalString + '"' + EvalResult + '"';
+                                ExtEvalString = ExtEvalString + '"' + EvalResult + '"';
                             else
-                                ExtEvalString = ExtEvalString + bracketOpen + EvalResult + bracketClose;// ExtEvalString + '"' + EvalResult + '"';
+                                ExtEvalString = ExtEvalString + EvalResult;// ExtEvalString + '"' + EvalResult + '"';
                             EvalResult = GetEvalResult(ExtEvalString, EvalType);
                         }
                         else if (EvalResult != null) {
-                            ExtEvalString = ExtEvalString + bracketOpen + EvalResult + bracketClose;
+                            ExtEvalString = ExtEvalString + EvalResult;
                             EvalResult = GetEvalResult(ExtEvalString, EvalType);
                         }
                         params[ParamIndx] = EvalResult;
                         ParamIndx++;
-                        bracketClose = '';
-                        bracketOpen = '';
                         EvalResult = '';
                         EvalType = '';
                         EvalString = '';
@@ -1120,17 +1032,7 @@ function GetEvalResult(EvalString, EvalType) {
     }
     else {
         try {
-            var orgString = "";
-            var EvalStringNew = EvalString;
-            if (typeof EvalStringNew.length != "undefined" && EvalStringNew.length == 1) {
-                orgString = EvalStringNew;
-                EvalStringNew = EvalStringNew.toLowerCase();
-            }
-
-            Result = eval(EvalStringNew);
-
-            if (orgString != "")
-                Result = orgString;
+            Result = eval(EvalString);
         }
         catch (expFldname) {
             Result = EvalString;
@@ -1302,15 +1204,11 @@ function IfFun(val1, val2, val3) {
             result = '"' + val2 + '"';
     }
     else {
-        if (!isNaN(val3))
-            result = val3;
-        else
-            result = '"' + val3 + '"';
-        //result = val3;
-        //if (expressiontype == "vexpr") {
+        result = val3;
+        if (expressiontype == "vexpr") {
 
 
-        //}
+        }
     }
     return result;
 }
@@ -2545,7 +2443,7 @@ function CompareDate(dt1, dt2, operator) {
             else if (operator == ">")
                 return startdt1 > enddt2 ? true : false;
             else if (operator == "=")
-                return startdt1.toDateString() == enddt2.toDateString() ? true : false;
+                return startdt1 == enddt2 ? true : false;
         }
     }
     return "";
@@ -3002,7 +2900,7 @@ function GetGridCellValue(fldname, ActiveRow, isActual) {
     var newFldVal = "";
     if (newrow != "") {
         if (document.getElementById(newFldName)) {
-            newFldVal = GetFieldValue(newFldName);// $j("#" + newFldName).val();
+            newFldVal = $j("#" + newFldName).val();
             if (fldType.toLowerCase() == "numeric")
                 newFldVal = removeCommas(newFldVal);
             else
@@ -3228,27 +3126,22 @@ function RandomNo() {
 }
 
 function AxHideControls(sfcFldNames) {
-    AxFormControlList.push("hide~" + sfcFldNames);
     return "hide~" + sfcFldNames;
 }
 
 function AxUnhideControls(sfcFldNames) {
-    AxFormControlList.push("show~" + sfcFldNames);
     return "show~" + sfcFldNames;
 }
 
 function AxEnableControls(sfcFldNames) {
-    AxFormControlList.push("enable~" + sfcFldNames);
     return "enable~" + sfcFldNames;
 }
 
 function AxDisableControls(sfcFldNames) {
-    AxFormControlList.push("disable~" + sfcFldNames);
     return "disable~" + sfcFldNames;
 }
 
-function AxSetValue(sfcFldNames, sfcRowNo, sfcFldValue) {
-    AxFormControlList.push("setvalue~" + sfcFldNames + "♦" + sfcFldValue + "♦" + sfcRowNo);
+function AxSetValue(sfcFldNames, sfcFldValue, sfcRowNo) {
     return "setvalue~" + sfcFldNames + "♦" + sfcFldValue + "♦" + sfcRowNo;
 }
 
@@ -3263,7 +3156,7 @@ function AxValueExits(sDcNo, sFldName, tDcNo, tFldName) {
             nrno = "001";
         sFulFldName = sFldName + nrno + "F" + sDcNo;
     }
-    let fldVal = GetFieldValueNew(sFulFldName);
+    let fldVal = GetFieldValue(sFulFldName);
     let scanRow = "0";
     if (fldVal != "") {
         $("#gridHd" + tDcNo + " tbody tr").each(function (index, el) {
@@ -3289,12 +3182,10 @@ function AxValueExits(sDcNo, sFldName, tDcNo, tFldName) {
 }
 
 function AxAddRow(sDcNo) {
-    forceBreak = true;
     return "axaddrow~dc" + sDcNo;
 }
 
 function EvalExprSet(exprset) {
-    forceBreak = false;
     var resVal = "";
     var i = 0, p = 0;
     var s, v, cond, cmd, op;
@@ -3411,9 +3302,7 @@ function EvalExprSet(exprset) {
                     }
                     else {
                         resVal = Evaluate("", "", s, "vexpr");
-                        //break;//Loop is not continuing after function execute.
-                        if (forceBreak)//For some of functions loop is breaking and continuing those functions functionality 
-                            break;
+                        break;
                     }
                 }
                 i++;
@@ -3423,37 +3312,37 @@ function EvalExprSet(exprset) {
     return resVal;
 }
 
-function LoadForm(Transid, Params, DisplayMode, RefreshOnClose) {
-    forceBreak = true;
-    Params = ParseParamValues(Params);
-    return "LoadForm♠" + Transid + "♠" + Params + "♠" + DisplayMode + "♠" + RefreshOnClose;
+function LoadForm(Transid, Params, DisplayMode, RefreshOnClose)
+{
+    Params=ParseParamValues(Params);
+    return "LoadForm♠"+Transid+"♠"+Params+"♠"+DisplayMode+"♠"+RefreshOnClose;
 }
 
-function LoadFormAndData(Transid, Params, DisplayMode, RefreshOnClose) {
-    forceBreak = true;
-    Params = ParseParamValues(Params);
-    return "LoadFormAndData♠" + Transid + "♠" + Params + "♠" + DisplayMode + "♠" + RefreshOnClose;
+function LoadFormAndData(Transid, Params, DisplayMode, RefreshOnClose)
+{
+    Params=ParseParamValues(Params);
+    return "LoadFormAndData♠"+Transid+"♠"+Params+"♠"+DisplayMode+"♠"+RefreshOnClose;
 }
 
-function LoadIView(Ivname, Params, DisplayMode, RefreshOnClose) {
-    forceBreak = true;
-    Params = ParseParamValues(Params, "LoadIView");
-    return "LoadIView♠" + Ivname + "♠" + Params + "♠" + DisplayMode + "♠" + RefreshOnClose;
+function LoadIView(Ivname, Params, DisplayMode, RefreshOnClose)
+{
+    Params=ParseParamValues(Params);
+    return "LoadIView♠"+Ivname+"♠"+Params+"♠"+DisplayMode+"♠"+RefreshOnClose;
 }
 
-function LoadPage(PageId, Params, DisplayMode, RefreshOnClose) {
-    forceBreak = true;
-    Params = ParseParamValues(Params);
-    return "LoadPage♠" + PageId + "♠" + Params + "♠" + DisplayMode + "♠" + RefreshOnClose;
+function LoadPage(PageId, Params, DisplayMode, RefreshOnClose)
+{
+    Params=ParseParamValues(Params);
+    return "LoadPage"+PageId+"♠"+Params+"♠"+DisplayMode+"♠"+RefreshOnClose;
 }
 
-function OpenPage(PageId, Params, DisplayMode, RefreshOnClose) {
-    forceBreak = true;
-    Params = ParseParamValues(Params);
-    return "OpenPage♠" + PageId + "♠" + Params + "♠" + DisplayMode + "♠" + RefreshOnClose;
+function OpenPage(PageId, Params, DisplayMode, RefreshOnClose)
+{
+    Params=ParseParamValues(Params);
+    return "OpenPage♠"+PageId+"♠"+Params+"♠"+DisplayMode+"♠"+RefreshOnClose;
 }
 
-function ParseParamValues(Params, calledFrom = "") {
+function ParseParamValues(Params) {
     var ParamValue = Params.replace(/~/g, "♦");
     if (ParamValue != "") {
         if (ParamValue.indexOf(":") > -1) {
@@ -3462,8 +3351,6 @@ function ParseParamValues(Params, calledFrom = "") {
             paramsList.forEach(item => {
                 repParamVal += item.split("=")[0];
                 let srFldName = item.split("=")[1];
-                if (srFldName != "" && srFldName.indexOf(":") > -1)
-                    srFldName = srFldName.trimStart().trimEnd();
                 srFldName = srFldName.substring(1);
                 var fldInd = GetFieldIndex(srFldName);
                 if (fldInd > -1) {
@@ -3473,12 +3360,11 @@ function ParseParamValues(Params, calledFrom = "") {
                         thisFldVal = GetFieldValue(srFldName + "001F" + thisDc);
                     else
                         thisFldVal = GetFieldValue(srFldName + "000F" + thisDc);
-                    repParamVal += "=" + thisFldVal + "&";
+                    repParamVal += "=" + thisFldVal + ",";
                 } else {
                     let glbParamVal = Parameters.filter(word => word.startsWith(srFldName + "~"))[0];
-                    if (typeof glbParamVal != "undefined") {
-                        repParamVal += "=" + glbParamVal.split("~")[1] + "&";
-                    }
+                    if (typeof glbParamVal != "undefined")
+                        repParamVal += "=" + glbParamVal.split("~")[1] + ",";
                 }
             });
             if (repParamVal != "")
@@ -3488,237 +3374,4 @@ function ParseParamValues(Params, calledFrom = "") {
             return ParamValue;
     }
     return "";
-}
-
-function SetFieldCaption(fldName, fldCaption) {
-    AxFormControlList.push("setfieldcaption~" + fldName + "^" + fldCaption);
-    return "setfieldcaption~" + fldName + "^" + fldCaption;
-}
-
-function DoFormDesign(name, caption) {
-    return JSON.stringify([...arguments] || []);
-}
-
-function CancelTransaction(tname, recId, remarks) {
-    return remarks;
-}
-
-function GetAxValue(rule, variable, code) {
-    let configParamsDataObj = {};
-    var isdcFlExist = false;
-    var axCdFlVarList = new Array();
-    var axCdFlVarValue = new Array();
-    if (typeof AxCdParameters != "undefined" && AxCdParameters.length > 0) {
-        for (var cdi = 0; cdi < AxCdParameters.length; cdi++) {
-            let list = AxCdParameters[cdi].toString();
-            list = list.split("♠");
-            axCdFlVarList[cdi] = list[0].toString();
-            axCdFlVarValue[cdi] = list[1].toString();
-        }
-    }
-
-    if (axCdFlVarList.length > 0) {
-        for (var k = 0; k < axCdFlVarList.length; k++) {
-            if (rule.toLowerCase() == axCdFlVarList[k].toLowerCase()) {
-                isdcFlExist = true;
-                let cdvalue = axCdFlVarValue[k];
-                try {
-                    configParamsDataObj[axCdFlVarList[k]] = cdvalue == "" ? "" : JSON.parse(cdvalue.replace(/(?:\r\n|\r|\n|&lt;br&gt;)/g, '').replace(/&quot;/g, '"'));
-                } catch (ex) { }
-                break;
-            }
-        }
-    }
-
-    if (!isdcFlExist) {
-        for (var k = 0; k < axMemVarList.length; k++) {
-            if (rule.toLowerCase() == axMemVarList[k].toLowerCase()) {
-                isdcFlExist = true;
-                let cdvalue = axMemVarValue[k];
-                try {
-                    configParamsDataObj[axMemVarList[k]] = cdvalue == "" ? "" : JSON.parse(cdvalue.replace(/(?:\r\n|\r|\n|&lt;br&gt;)/g, '').replace(/&quot;/g, '"'));
-                } catch (ex) { }
-                break;
-            }
-        }
-    }
-
-    if (!isdcFlExist) {
-        for (var k = 0; k < varlist.length; k++) {
-            if (rule.toLowerCase() == varlist[k].toLowerCase()) {
-                let cdvalue = valuelist[k];
-                try {
-                    configParamsDataObj[varlist[k]] = cdvalue == "" ? "" : JSON.parse(cdvalue.replace(/(?:\r\n|\r|\n|&lt;br&gt;)/g, '').replace(/&quot;/g, '"'));
-                } catch (ex) { }
-                break;
-            }
-        }
-    }
-
-    if (Object.keys(configParamsDataObj).length) {
-        let axVars = configParamsDataObj.vars;
-        if (typeof configParamsDataObj[rule] == "undefined") {
-            return "";
-        }
-
-        var ruleData;
-        if (typeof code != "undefined" && typeof configParamsDataObj[rule][code] != "undefined") {
-            ruleData = configParamsDataObj[rule][code];
-        }
-        else {
-            ruleData = configParamsDataObj[rule];
-        }
-
-        var result;
-        if (typeof ruleData["variations"] != "undefined") {
-            let variationDetails = ruleData["variations"];
-            let vType = variationDetails.split("~")[0];
-            let vName = variationDetails.split("~")[1];
-
-            let variation;
-            let fldName = vName;
-            let fldIdx = GetFieldIndex(fldName);
-            if (fldIdx != -1) {
-
-                let dcNo = GetDcNo(fldName);
-                if (IsDcGrid(dcNo)) {
-                    if (AxActiveRowNo != '') {
-                        let fldId = fldName + GetRowNoHelper(AxActiveRowNo) + "F" + dcNo;
-                        if ($("#" + fldId).length) {
-                            variation = GetFieldValue(fldId);
-                        }
-                    }
-                }
-                else {
-                    let fldId = fldName + "000F" + dcNo;
-                    if ($("#" + fldId).length) {
-                        variation = GetFieldValue(fldId);
-                    }
-                }
-            }
-
-            if (typeof variation == "undefined") {
-                let varIdx = varlist.indexOf(vName)
-                if (varIdx > -1) {
-                    variation = valuelist[varIdx];
-                }
-            }
-
-            if (typeof variation != "undefined" && typeof ruleData[vName][variation] != "undefined") {
-                result = ruleData[vName][variation][variable];
-            }
-        }
-
-        if (typeof result == "undefined") {
-            result = ruleData[variable];
-        }
-
-        if (typeof result == "undefined") {
-            result = configParamsDataObj[rule][variable];
-        }
-
-        if (typeof result != "undefined") {
-            return result;
-        }
-    }
-    return "";
-}
-
-function GetStringpos(str, subStr, separator) {
-    if (typeof separator == "undefined" || separator == "")
-        separator = ",";
-    if (str != "") {
-        var strArray = str.split(separator);
-        var indx = $j.inArray(subStr, strArray);
-        if (indx != -1)
-            return strArray[indx];
-        else
-            return "";
-    } else
-        return "";
-}
-
-function AxDcCollapse(sfcDcNo) {
-    AxFormControlList.push("collapse~" + sfcDcNo);
-    return "collapse~" + sfcDcNo;
-}
-
-function AxDcExpand(sfcDcNo) {
-    AxFormControlList.push("expand~" + sfcDcNo);
-    return "expand~" + sfcDcNo;
-}
-
-function GetDcState(dcName) {
-    var isNotCollaapse = "T";
-    if (dcName != "") {
-        let _thisDicId = parseInt(dcName.substr(2, dcName.length), 10);
-        if ($("#dcBlean" + _thisDicId).length == 0 || $("#dcBlean" + _thisDicId).is(":checked"))
-            isNotCollaapse = "T";
-        else
-            isNotCollaapse = "F";
-    }
-    return isNotCollaapse;
-}
-
-function AxAllowEmpty(fldNames, flagVal) {
-    if (fldNames != "") {
-        let fNames = fldNames.split(',');
-        fNames.forEach(function (val) {
-            let _IndVal = AxAllowEmptyFlds.filter(vals => vals.startsWith(val + "~"));
-            if (_IndVal.length > 0) {
-                let _ind = $.inArray(_IndVal[0], AxAllowEmptyFlds);
-                AxAllowEmptyFlds[_ind] = val + "~" + flagVal;
-            }
-            else
-                AxAllowEmptyFlds.push(val + "~" + flagVal);
-            var isGridDc = IsGridField(val);
-            var dcno = GetDcNo(val);
-            if (isGridDc == false) {
-                let _thisFldId = val + "000F" + dcno;
-                if (flagVal == "F" && !$("#" + _thisFldId).parents(".agform").find(".fld-wrap3").hasClass("required"))
-                    $("#" + _thisFldId).parents(".agform").find(".fld-wrap3").addClass("required");
-                else if (flagVal == "T")
-                    $("#" + _thisFldId).parents(".agform").find(".fld-wrap3").removeClass("required");
-            }
-            else {
-                if (flagVal == "F" && !$("#gridHd" + dcno + " thead th#th-" + val + " .thhead").hasClass("required"))
-                    $("#gridHd" + dcno + " thead th#th-" + val + " .thhead").addClass("required");
-                else if (flagVal == "T")
-                    $("#gridHd" + dcno + " thead th#th-" + val + " .thhead").removeClass("required");
-            }
-
-        });
-    }
-    return fldNames + "~" + flagVal;
-}
-
-function AxReadOnly() {
-    $("[id^=DivFrame]").find('input,textarea, img, select, a').attr('disabled', true);
-    $("[id^=DivFrame]").find('.gridIconBtns a').addClass('disabled');
-    $("[id^=DivFrame]").find('.gridIconBtns a').attr('disabled', true);
-    $("[id^=DivFrame]").find('.gridRowChk,.gridHdrChk').addClass('disabled').attr('disabled', true);
-    $(".dz-hidden-input").prop("disabled", true);
-    $(".fldImageCamera").addClass('disabled');
-    $(".fileuploadmore").prop("disabled", true);
-}
-
-function AxMask(fldNames, maskChar, applyType) {
-    applyType = applyType.replace(/~/g, "♠");
-    AxFormControlList.push("mask~" + fldNames + "♦" + maskChar + "♦" + applyType);
-    return "mask~" + fldNames + "♦" + maskChar + "♦" + applyType;
-}
-
-function AxNoMask(fldNames) {
-    AxFormControlList.push("nomask~" + fldNames);
-    return "nomask~" + fldNames;
-}
-
-function AxDisableGridCell(fldNames, gcRowNo) {
-    AxFormControlList.push("gridcelldisable~" + fldNames + "♦" + gcRowNo);
-    return "gridcelldisable~" + fldNames + "♦" + gcRowNo;
-}
-
-function AxEnableGridCell(fldNames, gcRowNo) {
-    AxFormControlList.push("gridcellenable~" + fldNames + "♦" + gcRowNo);
-    return "gridcellenable~" + fldNames + "♦" + gcRowNo;
 }

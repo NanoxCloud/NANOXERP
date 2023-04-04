@@ -464,42 +464,6 @@ var expression_config = {
         },
         "SQLPost": {
             "selectText": "SQLPost(SQLText,TargetTransid,GroupField,PrimaryField,SQLName:String)"
-        },
-        "SetFieldCaption": {
-            "selectText": "SetFieldCaption(Name, Caption:String)"
-        },
-        "AxDcCollapse": {
-            "selectText": "AxDcCollapse(ElementName(Ex: DCName):String)"
-        },
-        "AxDcExpand": {
-            "selectText": "AxDcExpand(ElementName(Ex: DCName):String)"
-        },
-        "StringPOS": {
-            "selectText": "StringPOS(str,substr:String; separator : String = '')"
-        },
-        "GetDcState": {
-            "selectText": "GetDcState(DCName:String)"
-        },
-        "AxAllowEmpty": {
-            "selectText": "AxAllowEmpty(FieldName,value(Ex.T/F):String)"
-        },
-        "AxReadOnly": {
-            "selectText": "AxReadOnly()"
-        },
-        "ClearCache": {
-            "selectText": "ClearCache(type~name(Ex.t~transid,i~ivname):String)"
-        },
-        "AxMask": {
-            "selectText": "AxMask(FieldName,MaskChar,All/Few Characters:String)"
-        },
-        "SetToRedis": {
-            "selectText": "SetToRedis(ConnectionName,KeyName,KeyValue:String)"
-        },
-        "AxDisableGridCell": {
-            "selectText": "AxDisableGridCell(FieldName,RowNo)"
-        },
-        "AxEnableGridCell": {
-            "selectText": "AxEnableGridCell(FieldName,RowNo)"
         }
     },
     "keyword": ["PrintDocNames", "AllowedUserNames", "DisplayTotal ", "LastTotal ", "Tot<ColumnName>", "Group<ColumnName>"]

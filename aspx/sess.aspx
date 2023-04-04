@@ -36,9 +36,9 @@
         }
     </script>
     <script src="../ThirdParty/jquery-confirm-master/jquery-confirm.min.js?v=2" type="text/javascript"></script>
-    <script src="../Js/common.min.js?v=118"></script>
-    <script type="text/javascript" src="../Js/alerts.min.js?v=30"></script>
-    <script type="text/javascript" src="../Js/lang/content-<%=langType%>.js?v=59"></script>
+    <script src="../Js/common.min.js?v=98"></script>
+    <script type="text/javascript" src="../Js/alerts.min.js?v=28"></script>
+    <script type="text/javascript" src="../Js/lang/content-<%=langType%>.js?v=51"></script>
     <script>
         var isMobile = isMobileDevice();
         //localStorage.clear();

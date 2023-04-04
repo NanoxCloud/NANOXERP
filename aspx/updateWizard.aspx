@@ -26,7 +26,7 @@
     <link href="../Css/thirdparty/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" />
     <script src="../Js/Jquery-2.2.2.min.js" type="text/javascript"></script>
     <script src="../Js/thirdparty/bootstrap/3.3.6/bootstrap.min.js" type="text/javascript"></script>
-    <script src="../Js/common.min.js?v=118" type="text/javascript"></script>
+    <script src="../Js/common.min.js?v=98" type="text/javascript"></script>
 </head>
 <body>
     <form id="form1" runat="server">
