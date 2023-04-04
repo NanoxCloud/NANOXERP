@@ -353,7 +353,6 @@ function setDesignedLayout(setDiv, SaveDesign) {
             }
         }
     });
-    designLayoutProperties();
     if (!isMobile) {
         CompressMode(compressedMode);
     }
@@ -361,7 +360,7 @@ function setDesignedLayout(setDiv, SaveDesign) {
     //toggleWizardDCOption(typeof designObj[0].wizardDC != "undefined" ? designObj[0].wizardDC : false);
 
     changeDesignLayout((typeof designObj != "undefined" && typeof designObj[0] != "undefined" && typeof designObj[0].selectedLayout != "undefined") ? designObj[0].selectedLayout : "default");
-    /*designLayoutProperties();*/
+    designLayoutProperties();
 
     dynamicMobileResolution();
 }
@@ -502,18 +501,17 @@ function clearHiddenGridstack(divId, isTable = false) {
                 var compressNormalMode = compressedMode ? "compressedMode" : "normalMode";
                 if (theMode == "render" && !staticRunMode) {
                     var gsiPX = gsiPixels(elm.height);
-                    if(elm.height>1)
-                        gsiHeight = { "height": gsiPX.toString() + "px" };
-                    //if (typeof designObj != "undefined" && designObj[0] != null && designObj[0].selectedFontSize != null && designObj[0].selectedFontSize != "") {
-                    //    //gsiHeight = {
-                    //    //    "height": (isMobile ? gsiPX + 10 : gsiPX).toString() + "px",
-                    //    //    "font-size": designObj[0].selectedFontSize + "px"
-                    //    //};
-                    //} else {
-                    //    //gsiHeight = {
-                    //    //    "height": (isMobile ? gsiPX + 10 : gsiPX).toString() + "px"
-                    //    //};
-                    //}
+                    // gsiHeight = { "height": gsiPX.toString() + "px" };
+                    if (typeof designObj != "undefined" && designObj[0] != null && designObj[0].selectedFontSize != null && designObj[0].selectedFontSize != "") {
+                        //gsiHeight = {
+                        //    "height": (isMobile ? gsiPX + 10 : gsiPX).toString() + "px",
+                        //    "font-size": designObj[0].selectedFontSize + "px"
+                        //};
+                    } else {
+                        //gsiHeight = {
+                        //    "height": (isMobile ? gsiPX + 10 : gsiPX).toString() + "px"
+                        //};
+                    }
                     fullFieldHeight = {
                         "height": (gsiPX + gsConf[compressNormalMode].labelHeight) + "px"
                     };
@@ -560,7 +558,7 @@ function clearHiddenGridstack(divId, isTable = false) {
                                 //$("#" + divId).data('gridstack').addWidget($("#dvGrid" + elm.fld_id).css("height", gsiHeight).show(), elm.x, elm.y, elm.width, elm.height);
                                 $("#" + divId).data('gridstack').addWidget(dvElem.show(), elm.x, elm.y, elm.width, elm.height);
                                 dvElem.find(".form-control").css(gsiHeight);
-                                applyGridStackCalcHeight(dvElem.find("textarea.gridstackCalc, input[type=button].hotbtn.btn"), elm, gsiHeight, fullFieldHeight);
+                                applyGridStackCalcHeight(dvElem.find("textarea.gridstackCalc, div.divImgBorder, input[type=button].hotbtn.btn"), elm, gsiHeight, fullFieldHeight);
                             }
                             $("#dvGrid" + elm.fld_id + ".grid-stack-item").addClass("designHidden").find(".grid-stack-item-content").css("background-color", "rgba(101, 97, 97, 0.4)");
                         } else {
@@ -570,7 +568,7 @@ function clearHiddenGridstack(divId, isTable = false) {
                                 //$("#" + divId).data('gridstack').addWidget($("#dv" + elm.fld_id).parents("[id^=randomID]").css("height", gsiHeight).show(), elm.x, elm.y, elm.width, elm.height);
                                 $("#" + divId).data('gridstack').addWidget(dvElem.show(), elm.x, elm.y, elm.width, elm.height);
                                 dvElem.find(".form-control").css(gsiHeight);
-                                applyGridStackCalcHeight(dvElem.find("textarea.gridstackCalc, input[type=button].hotbtn.btn"), elm, gsiHeight, fullFieldHeight);
+                                applyGridStackCalcHeight(dvElem.find("textarea.gridstackCalc, div.divImgBorder, input[type=button].hotbtn.btn"), elm, gsiHeight, fullFieldHeight);
                             }
                             $("#dv" + elm.fld_id).parents(".grid-stack-item").addClass("designHidden").find(".grid-stack-item-content").css("background-color", "rgba(101, 97, 97, 0.4)");
                         }
@@ -593,12 +591,12 @@ function clearHiddenGridstack(divId, isTable = false) {
                                 "data-gs-height": elm.height
                             });
                             dvElem.find(".form-control").css(gsiHeight);
-                            applyGridStackCalcHeight(dvElem.find("textarea.gridstackCalc, input[type=button].hotbtn.btn"), elm, gsiHeight, fullFieldHeight);
+                            applyGridStackCalcHeight(dvElem.find("textarea.gridstackCalc, div.divImgBorder, input[type=button].hotbtn.btn"), elm, gsiHeight, fullFieldHeight);
 
                         } else {
-                             if (!$("#" + divId).hasClass("inEditMode") && currentDC.dc_id == thisDC && $("#dv" + elm.fld_id).parents("#divDc" + thisDC).length) {
-                                 $("#" + divId).append($("#dv" + elm.fld_id).parents(".grid-stack-item").detach());
-                             }
+                            // if (!$("#" + divId).hasClass("inEditMode") && currentDC.dc_id == thisDC && $("#dv" + elm.fld_id).parents("#divDc" + thisDC).length) {
+                            //     $("#" + divId).append($("#dv" + elm.fld_id).parents(".grid-stack-item").detach());
+                            // }
                             //$("#dv" + elm.fld_id).parents(".grid-stack-item").css("height", gsiHeight).attr({ "data-gs-x": elm.x, "data-gs-y": elm.y, "data-gs-width": elm.width, "data-gs-height": elm.height });
                             var dvElem = $("#dv" + elm.fld_id).parents(".grid-stack-item");
                             dvElem.attr({
@@ -607,8 +605,8 @@ function clearHiddenGridstack(divId, isTable = false) {
                                 "data-gs-width": elm.width,
                                 "data-gs-height": elm.height
                             });
-                            dvElem.find(".form-control:not(.multiFldRdg),.divImgBorder>.dvImgClear").css(gsiHeight);
-                            applyGridStackCalcHeight(dvElem.find("textarea.gridstackCalc, input[type=button].hotbtn.btn"), elm, gsiHeight, fullFieldHeight);
+                            dvElem.find(".form-control,.divImgBorder>.dvImgClear").css(gsiHeight);
+                            applyGridStackCalcHeight(dvElem.find("textarea.gridstackCalc, div.divImgBorder, input[type=button].hotbtn.btn"), elm, gsiHeight, fullFieldHeight);
                         }
                     } else {
                         if (currentDC.isGrid == "T") {
@@ -617,7 +615,7 @@ function clearHiddenGridstack(divId, isTable = false) {
                             //$("#" + divId).data('gridstack').resize($("#dvGrid" + elm.fld_id).css("height", gsiHeight), elm.width, elm.height);
                             $("#" + divId).data('gridstack').resize(dvElem, elm.width, elm.height);
                             dvElem.find(".form-control").css(gsiHeight);
-                            applyGridStackCalcHeight(dvElem.find("textarea.gridstackCalc, input[type=button].hotbtn.btn"), elm, gsiHeight, fullFieldHeight);
+                            applyGridStackCalcHeight(dvElem.find("textarea.gridstackCalc, div.divImgBorder, input[type=button].hotbtn.btn"), elm, gsiHeight, fullFieldHeight);
 
                         } else {
                             var dvElem = $("#dv" + elm.fld_id).parents(".grid-stack-item");
@@ -625,7 +623,7 @@ function clearHiddenGridstack(divId, isTable = false) {
                             //$("#" + divId).data('gridstack').resize($("#dv" + elm.fld_id).parents(".grid-stack-item").css("height", gsiHeight), elm.width, elm.height);
                             $("#" + divId).data('gridstack').resize(dvElem, elm.width, elm.height);
                             dvElem.find(".form-control").css(gsiHeight);
-                            applyGridStackCalcHeight(dvElem.find("textarea.gridstackCalc, input[type=button].hotbtn.btn"), elm, gsiHeight, fullFieldHeight);
+                            applyGridStackCalcHeight(dvElem.find("textarea.gridstackCalc, div.divImgBorder, input[type=button].hotbtn.btn"), elm, gsiHeight, fullFieldHeight);
                         }
                     }
                 }
@@ -798,19 +796,14 @@ function goToDesignMode() {
 
 function DesignFormDcLayouts() {
     var dvHtml = `<div class="container-fluid designTstruct-layout"><div class="row">`;
-    dvHtml += `<div class="column col-3 ${dcLayoutType == "default" ? "active" : ""}" onclick="setActiveDesignLayout(this);" data-layout="default"><div class="card shadow-sm"><div class="card-body px-8"><span class="material-icons material-icons-style active-icon float-end ${dcLayoutType == "default" ? "text-success" : ""}">check_circle</span><h4 class="layout-title py-1">Default</h4><div class="d-flex flex-column py-3"><span class="layout-info d-flex mb-3"><span class="material-icons material-icons-style layout-info-icon me-2">info</span>Drag&Drop and Resize</span><span class="material-icons material-icons-style layout-icon material-icons-5tx mx-auto">assignment</span></div></div></div></div>`;
-    dvHtml += `<div class="column col-3 ${dcLayoutType == "single" ? "active" : ""}" onclick="setActiveDesignLayout(this);" data-layout="single"><div class="card shadow-sm"><div class="card-body px-8"><span class="material-icons material-icons-style active-icon float-end ${dcLayoutType == "single" ? "text-success" : ""}">check_circle</span><h4 class="layout-title py-1">Single Column</h4><div class="d-flex flex-column py-3"><span class="layout-info d-flex mb-3"><span class="material-icons material-icons-style layout-info-icon me-2">info</span>No Drag&Drop and Resize</span><span class="material-icons material-icons-style layout-icon material-icons-5tx mx-auto">table_rows</span></div></div></div></div>`;
-    dvHtml += `<div class="column col-3 ${dcLayoutType == "double" ? "active" : ""}" onclick="setActiveDesignLayout(this);" data-layout="double"><div class="card shadow-sm"><div class="card-body px-8"><span class="material-icons material-icons-style active-icon float-end ${dcLayoutType == "double" ? "text-success" : ""}">check_circle</span><h4 class="layout-title py-1">Double Column</h4><div class="d-flex flex-column py-3"><span class="layout-info d-flex mb-3"><span class="material-icons material-icons-style layout-info-icon me-2">info</span>No Drag&Drop and Resize</span><span class="material-icons material-icons-style layout-icon material-icons-5tx mx-auto">window</span></div></div></div></div>`;
-    dvHtml += `<div class="column col-3 ${dcLayoutType == "triple" ? "active" : ""}" onclick="setActiveDesignLayout(this);" data-layout="triple"><div class="card shadow-sm"><div class="card-body px-8"><span class="material-icons material-icons-style active-icon float-end ${dcLayoutType == "triple" ? "text-success" : ""}">check_circle</span><h4 class="layout-title py-1">Triple Column</h4><div class="d-flex flex-column py-3"><span class="layout-info d-flex mb-3"><span class="material-icons material-icons-style layout-info-icon me-2">info</span>No Drag&Drop and Resize</span><span class="material-icons material-icons-style layout-icon material-icons-5tx mx-auto">grid_on</span></div></div></div></div>`;
+
+    dvHtml += `<div class="column col-sm-12 col-md-3 col-lg-3 ${dcLayoutType == "default" ? "active" : ""}" onclick="setActiveDesignLayout(this);" data-layout="default"><div class="card "><span class="material-icons active-icon">check_circle</span><h4 class="layout-title">Default</h4><span class="layout-info"><span class="material-icons layout-info-icon">info</span>Drag&Drop and Resize</span><span class="material-icons layout-icon">assignment</span></div></div>`;
+    dvHtml += `<div class="column col-sm-12 col-md-3 col-lg-3 ${dcLayoutType == "single" ? "active" : ""}" onclick="setActiveDesignLayout(this);" data-layout="single"><div class="card "><span class="material-icons active-icon">check_circle</span><h4 class="layout-title">Single Column</h4><span class="layout-info"><span class="material-icons layout-info-icon">info</span>No Drag&Drop and Resize</span><span class="material-icons layout-icon">table_rows</span></div></div>`;
+    dvHtml += `<div class="column col-sm-12 col-md-3 col-lg-3 ${dcLayoutType == "double" ? "active" : ""}" onclick="setActiveDesignLayout(this);" data-layout="double"><div class="card "><span class="material-icons active-icon">check_circle</span><h4 class="layout-title">Double Column</h4><span class="layout-info"><span class="material-icons layout-info-icon">info</span>No Drag&Drop and Resize</span><span class="material-icons layout-icon">window</span></div></div>`;
+    dvHtml += `<div class="column col-sm-12 col-md-3 col-lg-3 ${dcLayoutType == "triple" ? "active" : ""}" onclick="setActiveDesignLayout(this);" data-layout="triple"><div class="card "><span class="material-icons active-icon">check_circle</span><h4 class="layout-title">Triple Column</h4><span class="layout-info"><span class="material-icons layout-info-icon">info</span>No Drag&Drop and Resize</span><span class="material-icons layout-icon">grid_on</span></div></div>`;
     dvHtml += `</div></div>`;
-    /*displayBootstrapModalDialog("DC Layouts", "lg", "200px", "", dvHtml);*/
-    let myModal = new BSModal("modalDCLayouts", "DC Layouts", dvHtml, () => {
-        //shown callbackcard-body px-3
-    }, () => {
-        //hide callback
-    });
-    myModal.changeSize("xl");
-    myModal.hideFooter();
+
+    displayBootstrapModalDialog("DC Layouts", "lg", "200px", "", dvHtml);
 }
 
 function setActiveDesignLayout(elem) {
@@ -1401,17 +1394,9 @@ function applyGridStackCalcHeight(currentElm, elm, gsiHeight, fullFieldHeight) {
         };
         if (typeof CKEDITOR.instances[$(currentElm).attr("id")] != "undefined") {
             //var ckHeight = CKEDITOR.instances[$(currentElm).attr("id")].resize( '100%', gsiHeight.height, true );
-            try {
-                CKEDITOR.instances[$(currentElm).attr("id")].on("instanceReady", function () {
-                    if(!staticRunMode) {
-                        this.resize('100%', gsiPX);
-                    } else {
-                        this.resize('100%', ($(this.ui.contentsElement.$).parents(".grid-stack-item-content").height()-$(this.ui.contentsElement.$).parents(".grid-stack-item-content").children(".fld-wrap3").outerHeight(true)-2) -  $(this.ui.contentsElement.$).siblings().toArray().reduce((total, elm)=>{
-                            return total = total + $(elm).outerHeight(true);            
-                        }, 0), true );
-                    }                
-                });
-            } catch (error) {}            
+            CKEDITOR.instances[$(currentElm).attr("id")].on("instanceReady", function () {
+                this.resize('100%', gsiPX)
+            });
         } else {
             if (typeof designObj != "undefined" && designObj[0] != null && designObj[0].dcLayout != null && designObj[0].dcLayout == "default")
                 currentElm.parent().css(fullFieldHeight);
@@ -1527,7 +1512,7 @@ function getDesignerJSON() {
             }, this);
 
             //this.serialized_data_table = _.map($('#' + dc_id).parents(".grid-icons").next(".griddivColumn").children("table:eq(0)").find("th:visible"), function (el, index) {
-            this.serialized_data_table = _.map($('#' + dc_id).parent().next(".griddivColumn").children("table:eq(0)").find("th:not(.hide)"), function (el, index) {
+            this.serialized_data_table = _.map($('#' + dc_id).parents(".grid-icons").next(".griddivColumn").children("table:eq(0)").find("th:not(.hide)"), function (el, index) {
                 el = $(el);
                 var r__link = el.attr('r_link');
                 //var indexxxx = el.attr('indexx');
@@ -1712,7 +1697,7 @@ function SaveDesignerJSONWeb() {
                         changeStatus("save");
                         showAlertDialog("success", DesigntstructMessages.designSaved);
                     } else {
-                        showAlertDialog("error", "Error while save design, please check the trace file(using show logs) for more details.");
+                        showAlertDialog("error", "Error while save design.");
                     }
                 },
                 error: function (error) {
@@ -2180,7 +2165,7 @@ function OnTstructLoad() {
     var stTime = new Date();
     if (isLoadDataCall == false)
         setListviewButtons();
-    allRtfTextAreas();
+    // allRtfTextAreas();
     AxAllowCancel = true;
 
     SetMRForFromList(AxFromLstFlds);
@@ -2196,7 +2181,7 @@ function OnTstructLoad() {
         jsonText = "";
     }
 
-    let isCopyTransLoad = false;
+
 
     var result = "";
     if ((typeof LoadResult) == "string") {
@@ -2226,47 +2211,22 @@ function OnTstructLoad() {
                     }
                     SetFormDirty(false);
                 });
-            }           
-            try {
-                if (typeof isCopyTrans != "undefined" && isCopyTrans)
-                    isCopyTrans = false;
-                if (typeof TstCopyTransRes != "undefined" && TstCopyTransRes != "") {
-                    isCopyTransLoad = true;
-                    AssignLoadValues(TstCopyTransRes, "LoadData");
-                    TstCopyTransRes = "";
-                    isCopyTrans = false;
-                    $j("#recordid000F0").val("0");
-                    $j("#axp_recid1000F1").val("0");
-                    recordid = "0";
-                }
-            } catch (ex) { }
-            if (!isCopyTransLoad) {
-                if (theMode != "design") {
-                    if (typeof wsPerfFormLoadCall != "undefined" && wsPerfFormLoadCall) {
-                        AssignLoadValues(result, "LoadData");
-                        if (typeof AxMemVarClient != "undefined" && AxMemVarClient == true && recordid == '0')
-                            AssignWsPerfExprValues("LoadData");
-                    } else {
-                        AssignWsPerfExprValues("LoadData");
-                    }
-
-                    if (evalExpOnSaveDraftLoad && typeof wsPerfEvalExpClient != "undefined" && wsPerfEvalExpClient != "") {
-                        evalExpOnSaveDraftLoad = false;
-                        AssignWsPerfExprValues("LoadData");
-                    }
-                    if (!tstReadOnlyPeg)
-                        GridDcAddEmptyRows();
-                } else
-                    AssignLoadValuesDesignMode(result, "LoadData");
             }
-            //if (typeof TstCopyTransRes != "undefined" && TstCopyTransRes != "") {
-            //    AssignLoadValues(TstCopyTransRes, "LoadData");
-            //    TstCopyTransRes = "";
-            //    isCopyTrans = false;
-            //    $j("#recordid000F0").val("0");
-            //    $j("#axp_recid1000F1").val("0");
-            //    recordid = "0";
-            //}
+            if (theMode != "design") {
+                if (typeof wsPerfFormLoadCall != "undefined" && wsPerfFormLoadCall) {
+                    AssignLoadValues(result, "LoadData");
+                } else {
+                    AssignWsPerfExprValues("LoadData");
+                }
+
+                if (evalExpOnSaveDraftLoad && typeof wsPerfEvalExpClient != "undefined" && wsPerfEvalExpClient != "") {
+                    evalExpOnSaveDraftLoad = false;
+                    AssignWsPerfExprValues("LoadData");
+                }
+
+                GridDcAddEmptyRows();
+            } else
+                AssignLoadValuesDesignMode(result, "LoadData");
 
             DisplayImages();
             closeParentFrame();
@@ -2283,7 +2243,7 @@ function OnTstructLoad() {
     //if (IsObjCustomHtml == "False")
     setDesignedLayout("#wBdr");
     //to hide listview button if a TStruct is opened as popup from ListView and IView
-    if (window.opener && (window.opener.document.title == "Listview" || window.opener.document.title == "Iview") && $j(".listview").length > 0) {
+    if (window.opener && (window.opener.document.title == "List IView" || window.opener.document.title == "Iview") && $j(".listview").length > 0) {
         $j(".listview").parent().hide();
 
         if ($j(".backbutton").length > 0)
@@ -2292,29 +2252,15 @@ function OnTstructLoad() {
 
     SetBackForwardButtonProp(enableForwardButton, enableBackButton);
 
-    try {
-        if (typeof isTstPostBackVal != "undefined" && isTstPostBackVal != "") {
-            if ($("#axp_recid1000F1").length > 0 && $("#axp_recid1000F1").val() != "0") {
-                recordid = $("#axp_recid1000F1").val();
-                $j("#recordid000F0").val($("#axp_recid1000F1").val());
-            }
-        }
-    } catch (ex) { }
-
     LoadResult = "";
     result = "";
     //$j("#searchoverrelay").css("display", "none");
     //$j("#dvPDFDocList").css("display", "none");
     //for Approved/Rejected transaction, no need to call the Actions
-    GetDcStateValue("", "");
-    let isOverridFomrControl = true;
-    if (AxRuesDefFormcontrol == "true") {
-        isOverridFomrControl = AxRulesDefParser("formcontrol", "", "formcontrol");
-    }
-    if (appstatus != "Approved" && appstatus != "Rejected" && (!AxExecFormControl) && theMode != "design" && isOverridFomrControl) {
+    if (appstatus != "Approved" && appstatus != "Rejected" && (!AxExecFormControl) && theMode != "design") {
         DoFormControlOnload();
     }
-    if (appstatus != "Approved" && appstatus != "Rejected" && (!AxExecFormControl) && theMode != "design" && isOverridFomrControl) {
+    if (appstatus != "Approved" && appstatus != "Rejected" && (!AxExecFormControl) && theMode != "design") {
         if(FormControlSameFormLoad==false){
             var rid = $j("#recordid000F0").val();
             if (rid != "0")
@@ -2326,22 +2272,6 @@ function OnTstructLoad() {
     }
     AssignGridScript();
     //SetMRForFromList(AxFromLstFlds);
-
-    if (AxRulesDefComputescript == "true") {
-        var rid = $j("#recordid000F0").val();
-        if (rid != "0")
-            AxRulesDefParser("compute script ondataload", "", "computescript");
-        else
-            AxRulesDefParser("compute script onformload", "", "computescript");
-    }
-
-    if (AxRulesDefScriptOnLoad == "true")
-        AxRulesScriptsParser("scriptonload", "");
-
-    if (AxRuesDefScriptFormcontrol == "true")
-        AxRulesScriptsParser("formcontrol", "");
-
-    GetDcStateOnLodaData(isCopyTransLoad);
 
     if (window.parent.enableDraft)
         EnableDraftFeature();
@@ -2471,11 +2401,7 @@ function GridDcAddEmptyRows() {
                         try {
                             AxAfterAddRow(dcID, lastRow);
                         } catch (ex) {}
-                        let tabDcSt=-1;
-                        let tabInd=$.inArray(dcID,TabDCs);
-                        if(tabInd>-1)
-                            tabDcSt=TabDCStatus[tabInd];
-                        if (dcgridCount == 1 && tabDcSt == -1 && (typeof isWizardTstruct == "undefined" || !isWizardTstruct) && $("[id^=dcBlean]").length == 0) {
+                        if (dcgridCount == 1 && (typeof isWizardTstruct == "undefined" || !isWizardTstruct)) {
                             setTimeout(function () {
                                 forceRowedit = true;
                                 gridRowEditOnLoad = true;
@@ -2632,7 +2558,6 @@ function DisplayImages() {
         if (img) {
             img.attr("src", srcStr);
             UpdateFieldArray(imgFldId, "0", filename[filename.length - 1], "parent", "LoadData");
-            UpdateAllFieldValues(imgFldId, filename[filename.length - 1]);
             img.parents(".image-input").find(".delete-button").removeClass("d-none");
             img.parents(".image-input").find(".imageFileUpload").addClass("d-none");
             img.parents(".image-input").find(".profile-pic").removeClass("d-none");
@@ -2656,7 +2581,6 @@ function MainFocus(fldObj) {
     //     $(".dropdown-mul").removeClass("active");
     var fldId = fldObj.attr("id");
     if (fldId != undefined) {
-        AxFocusedFld=fldId;
         var fName = GetFieldsName(fldId);
         var fldIndex = $j.inArray(fName, FNames);
         var fieldDcNo = GetFieldsDcNo(fldId);
@@ -2673,7 +2597,6 @@ function MainFocus(fldObj) {
 
             CheckGrdisplayHead(fieldDcNo, fName, fieldRowNo);
             //HighlightRow(fieldDcNo, fieldRowNo, "focus", fldObj.attr("type"));
-            UpdateGridRowFlags(fldId, fieldDcNo, fieldRowNo);
         }
 
         if (isMobile) {
@@ -2683,7 +2606,7 @@ function MainFocus(fldObj) {
         }
 
         var fldType = GetFieldType(fName, fldIndex);
-        var fldValue = GetFieldValueNew(fldId);
+        var fldValue = GetFieldValue(fldId);
 
         AxActiveField = fName;
         AxActiveFieldIndex = fldIndex;
@@ -2799,8 +2722,15 @@ function BeforeBlurdateAutoGenerator(fldObj) {
 
 //Function which is executed on blur of a field.
 function MainBlur(fldObj) {
-    //if (fldObj.hasClass("multiFldChk") && fldObj.attr("data-separator"))
-    //    return;
+    // if ((isAutoComSelected != undefined && isAutoComSelected == false) || fldObj.hasClass("autoComSelWithTab")) {
+    //     var fldId = fldObj.attr("id");
+    //     $("#" + fldId).val('');
+    //     isAutoComSelWithTab = false;
+    //     isAutoComSelected = true;
+    //     return;
+    // }
+    if (fldObj.hasClass("multiFldChk") && fldObj.attr("data-separator"))
+        return;
 
     if ($(fldObj).data("preventBlur")) {
         $(fldObj).data("preventBlur", false);
@@ -2823,16 +2753,6 @@ function MainBlur(fldObj) {
     var newFldValue = "";
     var fName = GetFieldsName(fldId);
     var fldIndex = $j.inArray(fName, FNames);
-
-    if (fldIndex == -1)
-        return;
-    if (typeof $("#" + fldId).attr('disabled') != "undefined")
-        return;
-    if (FFieldReadOnly[fldIndex] == "True")
-        return;
-    if (FFieldHidden[fldIndex] == "True")
-        return;
-
     var fldType = GetFieldType(fName, fldIndex);
     var fieldID = fldId;
     lastChangedField = fldId;
@@ -2840,37 +2760,24 @@ function MainBlur(fldObj) {
     var fldDcNo = GetFieldsDcNo(fieldID);
     var fldDbRowNo = GetDbRowNo(fieldRowNo, fldDcNo);
 
-    
+    if (IsDcGrid(fldDcNo)) {
+        //HighlightRow(fldDcNo, fieldRowNo, "blur", fldObj.attr("type"));
+    }
+
     if (AxDoBlur == true) {
 
-        newFldValue = GetFieldValueNew(fldId);// GetFieldValue(fldId);
-
+        newFldValue = GetFieldValue(fldId);
+        //  HideTooltip();
         if (fldType == "Numeric") {
-            try {
-                if (typeof FldMaskType != "undefined" || typeof ScriptMaskFields != "undefined") {
-                    let maskType = "";
-                    if (ScriptMaskFields.length > 0) {
-                        var idx = $j.inArray(fName, ScriptMaskFields);
-                        if (idx != -1)
-                            maskType = ScriptMaskFields[idx];
-                        else
-                            maskType = FldMaskType[fldIndex];
-                    } else
-                        maskType = FldMaskType[fldIndex];
-                    if (maskType != "") {
-                        let newFldMaskValue = GetFieldValue(fldId);
-                        if (AxOldValue == newFldValue && newFldMaskValue != "")
-                            newFldValue = newFldMaskValue;
-                    }
-                }
-            } catch (ex) { }
             newFldValue = NumericFldOnBlur(newFldValue, fldIndex);
             SetFieldValue(fldId, newFldValue);
             var oldValue = removeCommas(AxOldValue);
             var newValue = removeCommas(newFldValue);
             if (oldValue == newValue)
                 return;
-        } 
+        } else if (fldType == "Text" && IsDcGrid(fldDcNo)) {
+            //$j("#" + fldId).css("height", "7");
+        }
 
         if (AxOldValue != "" && newFldValue != "") { //do nothing
         } else
@@ -2899,23 +2806,9 @@ function MainBlur(fldObj) {
             else
                 AxOldValue = $("#" + fldId).val();
         }
-        if (AxOldValue == newFldValue && (fldObj.attr("type") != "checkbox" && fldObj.data("type") != "checkbox")) { //&& !fldId.toLowerCase().startsWith("axptm_")
-            if (typeof FldMaskType != "undefined" || typeof ScriptMaskFields != "undefined") {
-                let maskType = "";
-                if (ScriptMaskFields.length > 0) {
-                    var idx = $j.inArray(fName, ScriptMaskFields);
-                    if (idx != -1)
-                        maskType = ScriptMaskFields[idx];
-                    else
-                        maskType = FldMaskType[fldIndex];
-                } else
-                    maskType = FldMaskType[fldIndex];
-                if (maskType != "" && newFldValue != "") {
-                    SetFieldValue(fldId, newFldValue, true);
-                }
-            }
+        if (AxOldValue == newFldValue && (fldObj.attr("type") != "checkbox" && fldObj.data("type") != "checkbox")) //&& !fldId.toLowerCase().startsWith("axptm_")
             return;
-        }
+
         SetFieldValue(fldId, newFldValue, true);
         UpdateGridRowFlags(fldId, fldDcNo, fieldRowNo);
         AxGlobalChange = true;
@@ -2966,23 +2859,7 @@ function MainBlur(fldObj) {
             errorFlag = false;
             return;
         }
-        if (AxRulesDefValidation == "true") {
-            if (!errorFlag) {
-                if (!AxRulesDefParser(fldId, "field", "validate")) {
-                    setTimeout(function () {
-                        fldObj.focus();
-                    }, 0);
-                    errorFlag = true;
-                    errorField = fldId;
-                } else {
-                    errorFlag = false;
-                }
-            }
-            if (errorFlag == true) {
-                errorFlag = false;
-                return;
-            }
-        }
+
 
         if (arrRefreshDcs.length > 0) {
             for (var i = 0; i < arrRefreshDcs.length; i++) {
@@ -3003,10 +2880,6 @@ function MainBlur(fldObj) {
                 isNotFillDep = true;
             }
         }
-
-        if (AxRulesDefComputescript == "true")
-            isOverridExpression = AxRulesDefParser(fieldID, "field", "computescript");
-
         if (isNotFillDep == false)
             DoSetDependents(fieldID);
         else {
@@ -3015,17 +2888,11 @@ function MainBlur(fldObj) {
             var fldValue = GetFieldValue(fieldID);
             UpdateFieldArray(fieldID, fldDbRowNo, fldValue, "parent");
         }
-        //let isOverridFomrControl=true;
-        //if(AxRuesDefFormcontrol=="true")
-        //   isOverridFomrControl= AxRulesDefParser(fldId, "field", "formcontrol");
+
         if (AxExecFormControl && AxFldFormControl == "") {
             DoFormControl(fldId);
             DoScriptFormControl(fldId, "On Field Exit");
         }
-
-        if (AxRuesDefScriptFCP == "true")
-            AxRulesScriptsParser("formcontrol", fName);
-
         if (fldType == "Numeric") {
             var isPositive = GetFieldProp(fldIndex, "onlyPositive");
             if (isPositive.toUpperCase() == "T" && parseInt(newFldValue) < 0) {
@@ -3063,10 +2930,7 @@ function UpdateGridRowFlags(fldId, fldDcNo, fldRowNo) {
             gridDummyRowVal.splice($.inArray(fldDcNo.toString() + "~" + fldRowNo, gridDummyRowVal), 1);
             gridDummyRows = false;
             gridRowEditOnLoad = false;
-            AxActiveDc=fldDcNo;
-            AxActiveRowNo="1";
-            var fields = GetGridFields(fldDcNo);
-            CallEvaluateOnAddPerf(fldDcNo, fldRowNo, fields, "AddRow");
+            UpdateFieldArray(axpIsRowValid + fldDcNo + fldRowNo + "F" + fldDcNo, GetDbRowNo(fldRowNo, fldDcNo), "", "parent", "AddRow");
         }
     }
 }
@@ -3131,9 +2995,9 @@ function ValidateField(fldObj, fldDbRowNo, fldIndex, fldType, fName) {
 function ValidateReservedWord(obj, alertMessage) {
 
     var checkRW = "";
-    var checkObjVal = GetFieldValue(obj.attr("id"));// obj.val();
+    var checkObjVal = obj.val();
 
-    if (obj.prop("disabled") != true && checkObjVal != null) {
+    if (obj.prop("disabled") != true) {
 
         if (checkObjVal.indexOf("~") != -1) { //checkRW = "~";
         } else if (checkObjVal.indexOf("***") != -1) {
@@ -3150,7 +3014,6 @@ function ValidateReservedWord(obj, alertMessage) {
         if (checkRW != "") {
             showAlertDialog("error", 2053, "client", alertMessage + "^♠^" + checkRW);
             obj.val("");
-            UpdateAllFieldValues(obj.attr("id"), "");
             return false;
         }
     }
@@ -3207,26 +3070,6 @@ function ValidateExpression(fldObj, fldno) {
             } else if (firstChar == "*") {
                 showAlertDialog("error", alertMsg);
                 return false;
-            } else if (firstChar == "#") {    
-                let AxErrCode = "";
-                try {
-                    if (AxvalErrorCodes != "") {
-                        var Xmlparser = new DOMParser();
-                        let xmlDoc = Xmlparser.parseFromString(AxvalErrorCodes, "text/xml");
-                        AxErrCode = xmlDoc.getElementsByTagName("E" + alertMsg)[0].childNodes[0].nodeValue;
-                    } else
-                        AxErrCode = fResult;
-                } catch (ex) {
-                    AxErrCode = fResult;
-                }
-                if (confirm(AxErrCode + ". " + cutMsg)) {
-                    SetFieldValue(flname, FldOldValue);
-                    var dRowNo = GetDbRowNo(GetFieldsRowNo(flname), GetFieldsDcNo(flname));
-                    UpdateFieldArray(flname, dRowNo, FldOldValue, "parent", "");
-                    return false;
-                } else {
-                    return true;
-                }
             } else {
                 if (fResult == "MessageSetAxFont") {
                     return true;
@@ -3407,7 +3250,7 @@ function EvaluatePattern(fld, pattrn, fldIndex) {
 
     var value = ""
     if ($j("#" + fld))
-        value = GetFieldValue(fld);// $j("#" + fld).val();
+        value = $j("#" + fld).val();
 
     if (value == undefined || value == null || value == "")
         return true;
@@ -3489,8 +3332,8 @@ function NumericFldOnfocus(fieldObj, fieldValue) {
     fld.select();
 
     AxOldValue = fieldValue;
-    //if (fieldObj.data("attr") != undefined)
-    //    CallSetFieldValue(fieldObj.attr("id"), fieldObj.data("attr"), "fromNumFocus");
+    if (fieldObj.data("attr") != undefined)
+        CallSetFieldValue(fieldObj.attr("id"), fieldObj.data("attr"), "fromNumFocus");
     var fld = document.getElementById(fieldObj.attr("id"));
     fld.select();
     try {
@@ -3515,11 +3358,8 @@ function NumericFldOnfocus(fieldObj, fieldValue) {
 
 //Function which adds comma and decimal point to the value of the numeric field.
 function NumericFldOnBlur(newcurrFldValue, fldIndex) {
-    var numWithDecimals = 0;
-    if (FCustDecimal[fldIndex] == "True" && typeof gloAxDecimal != "undefined" && gloAxDecimal > -1)
-        numWithDecimals = fixit(newcurrFldValue, gloAxDecimal);
-    else
-        numWithDecimals = fixit(newcurrFldValue, FDecimal[fldIndex]);
+
+    var numWithDecimals = fixit(newcurrFldValue, FDecimal[fldIndex]);
     var applyComma = GetFieldProp(fldIndex, "applyComma");
     if (applyComma == "T") {
         if (Math.abs(numWithDecimals) > 999) {
@@ -4158,15 +3998,6 @@ function CheckDependencyPerf(fieldID, calledFrom) {
                 if (callService) {
                     if (calledFrom == "AddRow")
                         return true;
-                    AcceptExpressionFlds = new Array();
-                    for (var aedi = 0; aedi < depArray.length; aedi++) {
-                        var aedField = depArray[aedi].toString();
-                        var aedepFirstChar = aedField.substring(0, 1);
-                        var aedepfName = aedField.substring(1);
-                        var aedfldInd = GetFieldIndex(aedepfName);
-                        if (aedfldInd > -1 && FMoe[aedfldInd].toString().toLowerCase() == "accept" && FldIsSql[aedfldInd].toString().toLowerCase() != "true" && aedepFirstChar == "e")
-                            AcceptExpressionFlds.push(aedepfName);
-                    }
                     isServiceCalled = true;
                     AxExecFormControl = true;
                     AxFldFormControl = fieldID;
@@ -4188,10 +4019,6 @@ function CheckDependencyPerf(fieldID, calledFrom) {
             } else if (depFirstChar == '$') {
                 EvaluateDcCaption(depfName, fieldID);
             } else if (depFirstChar == 'e') {
-                //let isOverridExpression=true;
-                //if(AxRulesDefComputescript=="true")
-                //    isOverridExpression= AxRulesDefParser(depfName, "field", "computescript",fieldID);
-                //if(isOverridExpression)
                 EvaluateAxFunction(depfName, fieldID);
             } else if (depFirstChar == 'r') {
 
@@ -4526,7 +4353,7 @@ function GetDependentsPerf(fieldID, fastDataFlds = "", dfldName = "") {
     try {
         callBackFunDtls = "GetDependents♠" + fieldID;
         GetProcessTime();
-        ASB.WebService.GetDepFldsPerf(ChangedFields, ChangedFieldDbRowNo, ChangedFieldValues, DeletedDCRows, RegVarFldList, ArrActionLog, visDcname, inputXml, transid, tstDataId, fldDcNo, GetRowNoHelper(activeRow), dfldName, fldName, subStr, parStr,AcceptExpressionFlds, SuccChoicesgetDep, OnException);
+        ASB.WebService.GetDepFldsPerf(ChangedFields, ChangedFieldDbRowNo, ChangedFieldValues, DeletedDCRows, RegVarFldList, ArrActionLog, visDcname, inputXml, transid, tstDataId, fldDcNo, GetRowNoHelper(activeRow), dfldName, fldName, subStr, parStr, SuccChoicesgetDep, OnException);
 
     } catch (exp) {
         fldmultiSelectdep = false;
@@ -4603,14 +4430,10 @@ function SuccChoicesFastDatatDep(result, eventArgs) {
 //Callback function from the GetDependents webservice.
 function SuccChoicesgetDep(result, eventArgs) {
     if (result != "") {
-        if (result.split("*♠*").length > 1) {
-            var serverprocesstime = result.split("*♠*")[0];
-            var requestProcess_logtime = result.split("*♠*")[1];
-            result = result.split("*♠*")[2];
-            WireElapsTime(serverprocesstime, requestProcess_logtime, true);
-        } else {
-            UpdateExceptionMessageInET("Error : " + result);
-        }
+        var serverprocesstime = result.split("*♠*")[0];
+        var requestProcess_logtime = result.split("*♠*")[1];
+        result = result.split("*♠*")[2];
+        WireElapsTime(serverprocesstime, requestProcess_logtime, true);
     }
     if (result.toLowerCase().indexOf("access violation") === -1) {
         var stTime = new Date();
@@ -4622,7 +4445,6 @@ function SuccChoicesgetDep(result, eventArgs) {
             ChangedFieldDbRowNo = new Array();
             ChangedFieldValues = new Array();
             DeletedDCRows = new Array();
-            AcceptExpressionFlds= new Array();
         }
         fldmultiSelectdep = false;
 
@@ -4836,8 +4658,8 @@ function CheckGrdisplayHead(tabNo, fieldName, frRowno, status) {
     var dispFldName = new Array();
     var dfld = $j("#" + disField);
     if (dfld && dfld.val() && dfld.val() != "") {
-        let _thisVal = GetFieldValue(disField)
-        var disHeadings = _thisVal.split("~");//dfld.val().split("~");
+
+        var disHeadings = dfld.val().split("~");
         for (var di = 0; di < disHeadings.length; di++) {
             var dcapFld = disHeadings[di].split(":");
             dispCaption.push(dcapFld[0]);
@@ -4939,8 +4761,8 @@ function TstructLabelhyperlink(obj) {
             pValue = pValue.replace(/&/g, "--.--");
             params += "&" + pName + "=" + pValue;
         });
-        if(params=="" && hlParamData.paramNode!="")
-            params = "&"+hlParamData.paramNode;
+
+        params = hlParamData.paramNode;
     }
     if (hlParamData.type == "tstruct") {
         var loadpopup = 'tstruct.aspx?act=' + hlParamData.loadType + '&transid=' + hlParamData.structName + params;
@@ -4952,12 +4774,12 @@ function TstructLabelhyperlink(obj) {
         var popname = "ivewPop" + hlParamData.structName;
         if (hlParamData.ivtstpopup == "true") {
             params = params + "&AxIsPop=true";
-            var loadpopup = 'ivtoivload.aspx?ivname=' + hlParamData.structName + params,
+            var loadpopup = 'ivtoivload.aspx?ivname=' + hlParamData.structName + "&" + params,
                 popname;
             createPopup(loadpopup);
         } else {
             params = params + "&AxIsPop=false";
-            let srcUrl = 'ivtoivload.aspx?ivname=' + hlParamData.structName + params;
+            let srcUrl = 'ivtoivload.aspx?ivname=' + hlParamData.structName + "&" + params;
             window.document.location.href = srcUrl;
         }
     } else {
@@ -5089,12 +4911,6 @@ function GetTabData(tabNo) {
 
     if ($("#myTab li#li" + tabNo).hasClass('active'))
         return false;
-
-    $("#myTab li").removeClass("bg-white");
-    $("#myTab li").find(".form-check").addClass("d-none");
-    $("#myTab li#li" + tabNo).addClass("bg-white");    
-    $("#myTab li#li" + tabNo).find(".form-check").removeClass("d-none");
-
     $("#tabCollapseButton").attr("title", "Hide Dc").removeClass('icon-arrows-down').addClass('icon-arrows-up');
     $("[id^='tabsCont']").show();
     AxTabStartTime = new Date();
@@ -5153,9 +4969,8 @@ function GetTabData(tabNo) {
     if (dvTab.prop("disabled") == true) {
         IsTabDisabled = "true";
     }
-    var isTabHtml = false;
+
     if (status == 0 && $j("#tab-" + tabNo).html() != "") {
-        isTabHtml = true;
         status = 1;
         TabDCStatus[indx] = "1";
         //AssignGrdFreezeHdrScript(tabNo);
@@ -5205,28 +5020,6 @@ function GetTabData(tabNo) {
                     AlignDcElements("divDc" + CurrTabNo);
                 }
             });
-        }        
-
-        if (($("#divDc" + CurrTabNo).find("div[class*=cke_editor_]").length > 0 || $("#divDc" + CurrTabNo).find(".memofam.gridstackCalc").length>0) && isTabHtml) {
-            try {
-                let _thisEls = $("#divDc" + CurrTabNo).find("div[class*=cke_editor_]").length == 0 ? $("#divDc" + CurrTabNo).find(".memofam.gridstackCalc") : $("#divDc" + CurrTabNo).find("div[class*=cke_editor_]");
-                _thisEls.each(function () {
-                    var _thisID = typeof $(this).siblings("textarea").attr("id") != "undefined" ? $(this).siblings("textarea").attr("id") : $(this).attr("id");
-                    if (typeof CKEDITOR.instances[_thisID] != "undefined") {
-                        try {
-                            var _this = CKEDITOR.instances[_thisID];
-                            _this.destroy();
-                        } catch (error) { }
-                    }
-                });
-                allRtfTextAreasTab(CurrTabNo);
-                CKEDITOR.on('instanceReady', function (event) {
-                    event.editor.on('change', function () {
-                        currentCK = this.name;
-                    });
-                });
-                clearHiddenGridstack('divDc' + CurrTabNo, true);
-            } catch (ex) { }
         }
 
         AxWaitCursor(false);
@@ -5246,18 +5039,6 @@ function focusOnFirstInputOnTabClick(tabNo, reffreshEditor) {
         $(inputs).first().focus();
         if (reffreshEditor === true)
             refreshEditor(tabNo);
-
-        let isExitDummy = false;
-        if (gridDummyRowVal.length > 0) {
-            gridDummyRowVal.map(function (v) {
-                if (v.split("~")[0] == tabNo && v.split("~")[1] == "001") isExitDummy = true;
-            });
-        }
-        if(isExitDummy){
-            forceRowedit = true;
-            gridRowEditOnLoad = true;
-            $("#gridHd" + tabNo + " tr#sp" + tabNo + "R001F" + tabNo + " td:eq(2)").click();
-        }
     }, 200)
 }
 
@@ -5410,7 +5191,7 @@ function AssignTabDcHtmlPerf(result) {
         if (isTstPop == "True") {
             TstructTabEventsInPopUP(tabDcNo);
         }
-        allRtfTextAreasTab(tabDcNo);
+        //allRtfTextAreasTab(tabDcNo);
         SetGridBtnAccess();
         var dcColumnValue = $j('#axp_colmerge_' + tabDcNo + '000F1');
         dcColumnValue = dcColumnValue.val();
@@ -5504,7 +5285,7 @@ function CheckShowHideFlds() {
     }
 }
 
-function CheckShowHideFldsGrid(gfDcNo, _thisRowNo = "") {
+function CheckShowHideFldsGrid(gfDcNo) {
     for (var j = 0; j < AxFormContSetCapFldsGrid.length; j++) {
         if (AxFormContSetCapFldsGrid[j] != "") {
             var strFld = AxFormContSetCapFldsGrid[j].split("~");
@@ -5519,30 +5300,6 @@ function CheckShowHideFldsGrid(gfDcNo, _thisRowNo = "") {
     }
 
     SetFormContFldActGrid(gfDcNo);
-
-    SetFormContFldGridCell(gfDcNo, _thisRowNo);
-}
-
-function SetFormContFldGridCell(gfDcNo, _thisRowNo) {
-    if (_thisRowNo != "")
-        _thisRowNo = _thisRowNo.substring(_thisRowNo.lastIndexOf("F"), _thisRowNo.lastIndexOf("F") - 3);
-    else
-        return;
-    for (var j = 0; j < AxFormContSetGridCell.length; j++) {
-        if (AxFormContSetGridCell[j] != "") {
-            var strFld = AxFormContSetGridCell[j].split("~");
-            var dcNo = strFld[0];
-            let _tRowNo = strFld[2];
-
-            if (gfDcNo != "" && dcNo == gfDcNo && _tRowNo == _thisRowNo) {
-                let fieldId = strFld[1] + _tRowNo + "F" + dcNo;
-                if (strFld[3] == "disable")
-                    EnableDisableField(fieldId, "2", "1");
-                else
-                    EnableDisableField(fieldId, "1", "1");
-            }
-        }
-    }
 }
 
 function SetFormContFldActGrid(gfDcNo) {
@@ -5644,11 +5401,11 @@ function CheckFormControlPriv(CurrTabNo) {
 
 //NOTE:Any modification in the below function should be checked with the LoadEvents function in main-tstruct.js
 function AssignJQueryEvents(dcArray) {
-    CKEDITOR.on('instanceReady', function (event) {
-        event.editor.on('change', function () {
-            currentCK = this.name;
-        });
-    });
+    // CKEDITOR.on('instanceReady', function (event) {
+    //     event.editor.on('change', function () {
+    //         currentCK = this.name;
+    //     });
+    // });
 
     // createEditors();
 
@@ -5668,25 +5425,19 @@ function AssignJQueryEvents(dcArray) {
             $j(dvId).find(".fldFromSelect").select2();
             createFormSelect(dvId + " .fldFromSelect");
 
-            setTimeout(function(){
-                $j(dvId).find(".fldmultiSelect").select2();
-                createFormMultiSelect(dvId + " .fldmultiSelect");
-            },0);            
+            $j(dvId).find(".fldmultiSelect").select2();
+            createFormMultiSelect(dvId + " .fldmultiSelect");
 
-            try {
-                DropzoneInit(dvId);
-                DropzoneGridInit(dvId);
-            } catch (ex) { }
+            DropzoneInit(dvId);
 
             KTApp.initBootstrapPopovers();
 
             $j(dvId).find("input,select,textarea:not(#txtCommentWF)").unbind("focus");
-            $j(dvId).find("input:not([class=AxAddRows],[class=AxSearchField],.gridRowChk,.gridHdrChk,.flatpickr-input),select:not(#selectbox),textarea:not(#txtCommentWF):not(.labelInp)").focus(function () {
+            $j(dvId).find("input:not([class=AxAddRows],[class=AxSearchField],.gridRowChk,.flatpickr-input),select:not(#selectbox),textarea:not(#txtCommentWF):not(.labelInp)").focus(function () {
                 MainFocus($j(this));
             });
             $j(dvId + " .date").removeClass('hasDatepicker');
             $j(dvId + " .tstOnlyTime").removeClass('hasDatepicker');
-            $j(dvId + " .tstOnlyTime24hours").removeClass('hasDatepicker');            
             var glType = eval(callParent('gllangType'));
             var dtpkrRTL = false;
             if (glType == "ar")
@@ -5698,61 +5449,26 @@ function AssignJQueryEvents(dcArray) {
             if (glCulture == "en-us")
                 dtFormat = "m/d/Y";
 
-            $j(dvId + " .flatpickr-input:not(.tstOnlyTime,.tstOnlyTime24hours)").flatpickr({
+            $j(dvId + " .flatpickr-input").flatpickr({
                 dateFormat: dtFormat,
                 allowInput: true,
-                onOpen: function (selectedDates, dateStr, instance) {
-                    MainFocus($(instance.element));
-                },
                 onChange: function (selectedDates, dateStr, instance) {
-                    //if ($(".flatpickr-calendar:visible").length == 0 && $(instance.element).val() != AxOldValue) {
-                    //    MainBlur($(instance.element));
-                    //}
-                },
-                onClose: function (selectedDates, dateStr, instance) {
+                    //   debugger;
                     MainBlur($(instance.element));
                 }
             });
             $j(dvId + " .tstOnlyTime").flatpickr({
                 enableTime: true,
                 noCalendar: true,
-                dateFormat: "h:i K",
-                onOpen: function (selectedDates, dateStr, instance) {
-                    MainFocus($(instance.element));
-                },
-                onChange: function (selectedDates, dateStr, instance) {
-                    //if ($(instance.element).val() != AxOldValue) {
-                    //    MainBlur($(instance.element));
-                    //}
-                },
-                onClose: function (selectedDates, dateStr, instance) {
-                    MainBlur($(instance.element));
-                }
+                dateFormat: "H:i K",
             });
-            $j(dvId + " .tstOnlyTime24hours").flatpickr({
-                enableTime: true,
-                noCalendar: true,
-                dateFormat: "H:i",
-                time_24hr: true,
-                onOpen: function (selectedDates, dateStr, instance) {
-                    MainFocus($(instance.element));
-                },
-                onChange: function (selectedDates, dateStr, instance) {
-                    //if ($(instance.element).val() != AxOldValue) {
-                    //    MainBlur($(instance.element));
-                    //}
-                },
-                onClose: function (selectedDates, dateStr, instance) {
-                    MainBlur($(instance.element));
-                }
-            });            
 
             // TimePickerEvent(dvId, dtpkrRTL);
 
             $j(dvId).find("textarea:not(#txtCommentWF),:text,:password").unbind("blur");
 
             //function call on blur event of textarea, textbox.
-            $j(dvId).find("textarea:not(#txtCommentWF):not(.labelInp,.select2-search__field),[id]:text:not([class=AxAddRows],[class=AxSearchField],.gridRowChk,.gridHdrChk,.tstOnlyTime,.tstOnlyTime24hours,.flatpickr-input),:password").blur(function () {
+            $j(dvId).find("textarea:not(#txtCommentWF):not(.labelInp,.select2-search__field),[id]:text:not([class=AxAddRows],[class=AxSearchField],.gridRowChk,.flatpickr-input),:password").blur(function () {
                 MainBlur($j(this));
                 if (axInlineGridEdit) {
                     var fldObj = $j(this);
@@ -5760,7 +5476,7 @@ function AssignJQueryEvents(dcArray) {
                     var fName = GetFieldsName(fldId);
                     var fldIndex = $j.inArray(fName, FNames);
                     var allowEmpty = GetFieldProp(fldIndex, "allowEmpty");
-                    var fldValue = GetFieldValue(fldId);// fldObj.val();
+                    var fldValue = fldObj.val();
                     if (allowEmpty === "F") {
                         var fldType = FDataType[fldIndex];
                         if ((fldType == "Numeric" && parseFloat(fldValue) == 0 || fldValue === "")) {
@@ -5777,7 +5493,7 @@ function AssignJQueryEvents(dcArray) {
 
             $j(dvId).find("select:not(#selectbox),:checkbox,:radio").unbind("change");
             //function call on change event of dropdown.
-            $j(dvId + " select:not(.fldFromSelect)").change(function () {
+            $j(dvId + " select").change(function () {
                 if ($j(this).find(':selected').text().indexOf("+ Add") == -1) {
                     MainBlur($j(this));
                     $j(this).blur();
@@ -5823,14 +5539,10 @@ function AssignJQueryEvents(dcArray) {
                 UploadImg(fldName);
             });
 
-            $j(dvId + " .signaturePad").click(function (e) {
-                if ($(e.target).attr("onclick") == "ClearImageSrc(this);") {
-                    return;
-                } else {
-                    var imgFld = $j(this).find(".signatureInput");
-                    var fldName = imgFld[0].id;
-                    openSignaturePad(fldName);
-                }
+            $j(dvId + " .signaturePad").click(function () {
+                var imgFld = $j(this);
+                var fldName = imgFld[0].id;
+                openSignaturePad(fldName);
             });
 
             $j(dvId + " .divBarQrScan").click(function () {
@@ -5884,37 +5596,6 @@ function AssignJQueryEvents(dcArray) {
                 }
             });
 
-            //function call on focusin event for masked field value to actual value.
-            $j(dvId + " input.form-control,textarea.tem.form-control").on('focusin', function (e) {
-                try {
-                    var fldId = $j(this).attr("id");
-                    if (typeof fldId != "undefined" && fldId != "") {
-                        var fName = GetFieldsName(fldId);
-                        var fldIndex = $j.inArray(fName, FNames);
-                        if (fldIndex != undefined && fldIndex > -1) {
-                            if (typeof FldMaskType != "undefined" || typeof ScriptMaskFields != "undefined") {
-                                let maskType = "";
-                                if (ScriptMaskFields.length > 0) {
-                                    var idx = $j.inArray(fName, ScriptMaskFields);
-                                    if (idx != -1)
-                                        maskType = ScriptMaskFields[idx];
-                                    else
-                                        maskType = FldMaskType[fldIndex];
-                                } else
-                                    maskType = FldMaskType[fldIndex];
-                                if (maskType != "") {
-                                    let newFldMaskValue = GetFieldValue(fldId);
-                                    if (newFldMaskValue != "" && newFldMaskValue != '0.00' && newFldMaskValue != '0') {
-                                        $j(this).val(newFldMaskValue);
-                                        $j(this).attr("value", newFldMaskValue);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } catch (ex) { }
-            });
-
             $j(dvId + " input.number").on('input', function () {
                 var fldVal = $j(this).val();
                 var fldId = $j(this).attr("id");
@@ -5923,26 +5604,18 @@ function AssignJQueryEvents(dcArray) {
                     var fldIndex = $j.inArray(fName, FNames);
                     if (fldIndex != undefined && fldIndex > -1) {
                         var maxFldLength = FMaxLength[fldIndex];
-                        var decimalLength = 0;
-                        if (FCustDecimal[fldIndex] == "True" && typeof gloAxDecimal != "undefined" && gloAxDecimal > -1)
-                            decimalLength = gloAxDecimal;
-                        else
-                            decimalLength = FDecimal[fldIndex];
+                        var decimalLength = FDecimal[fldIndex];
                         var fldType = FDataType[fldIndex];
                         if (fldType == "Numeric" && decimalLength != undefined && decimalLength > 0) {
                             var intPartMaxLimit = maxFldLength - decimalLength - 1; //Integer Part Max Limit.  
                             if (fldVal.indexOf('.') == -1) {
-                                if (fldVal.length > intPartMaxLimit) {
-                                    $j(this).val(fldVal.slice(0, intPartMaxLimit));
-                                    UpdateAllFieldValues($j(this).attr("id"), fldVal.slice(0, intPartMaxLimit));
-                                }
+                                if (fldVal.length > intPartMaxLimit) $j(this).val(fldVal.slice(0, intPartMaxLimit));
                             } else if (fldVal.indexOf('.') != -1) {
                                 var intPart = fldVal.substring(0, fldVal.indexOf('.'));
                                 var decPart = fldVal.substring(fldVal.indexOf('.') + 1, fldVal.length);
                                 if (intPart.length > intPartMaxLimit) intPart = intPart.slice(0, intPartMaxLimit);
                                 if (decPart.length > decimalLength) decPart = decPart.slice(0, decimalLength);
                                 $j(this).val(intPart + "." + decPart);
-                                UpdateAllFieldValues($j(this).attr("id"), intPart + "." + decPart);
                             }
                         }
                     }
@@ -6228,10 +5901,9 @@ function AddInlineRow(dcNo, calledFrom, keyColValue, newCalledFrom) {
 
         // adjustwin("10", window);
     }
-    //Below code should not call for inlinegrid edit becuase this, if the tstruct load in popup getting tab focus to header dc while add new row.
-    //if (isTstPop == "True") {
-    //    TstructTabEventsInPopUP("");
-    //}
+    if (isTstPop == "True") {
+        TstructTabEventsInPopUP("");
+    }
     return false;
 }
 
@@ -6520,14 +6192,10 @@ function CallAddRowPerfWS(dcStr, rowNo) {
 
 function SuccessCalAddData(result, eventArgs) {
     if (result != "") {
-        if (result.split("*♠*").length > 1) {
-            var serverprocesstime = result.split("*♠*")[0];
-            var requestProcess_logtime = result.split("*♠*")[1];
-            result = result.split("*♠*")[2];
-            WireElapsTime(serverprocesstime, requestProcess_logtime, true);
-        } else {
-            UpdateExceptionMessageInET("Error : " + result);
-        }
+        var serverprocesstime = result.split("*♠*")[0];
+        var requestProcess_logtime = result.split("*♠*")[1];
+        result = result.split("*♠*")[2];
+        WireElapsTime(serverprocesstime, requestProcess_logtime, true);
     }
 
     if (CheckSessionTimeout(result))
@@ -6665,9 +6333,7 @@ function CallEvaluateOnAddPerf(dcNo, rowNo, fields, calldepField) {
     var isGrid = false;
     isGrid = IsDcGrid(dcNo);
     var fldAcceptSql = new Array();
-    $j("#chkallgridrow"+dcNo).prop("disabled", false);
-    $j("#grdchkItemTd"+rowNo + "F" + dcNo).prop("disabled", false);
-    
+
     var callService = false;
     for (var i = 0; i < fields.length; i++) {
         var idx = GetFieldIndex(fields[i]);
@@ -6676,32 +6342,35 @@ function CallEvaluateOnAddPerf(dcNo, rowNo, fields, calldepField) {
         var type = $j("#" + fldName).attr("type");
         var oldValue = GetFieldValue(fldName);
 
-        if (calldepField == "newRow" || calldepField == "AddRow") {
-            EvaluateAxFunction(fields[i], fldName, rowNo + "F" + dcNo);
-            EvaluateExpressions(fldName);
-        } else
-            EvaluateAxFunction(fields[i], fldName, rowNo + "F" + dcNo);
-        var newValue = GetFieldValue(fldName);
-        var fldDbRowNo = GetDbRowNo(rowNo, dcNo);
-        UpdateFieldArray(fldName, fldDbRowNo, newValue, "parent", "AddRow");
-        IsService = false;
-        if (oldValue == parseInt(newValue, 10))
-            continue;
-
-        if (oldValue != newValue) {
-            if (CheckDependencyPerf(fldName, "AddRow") == true && callService == false && calldepField != "Delete") {
-                callService = true;
+        var isBound = false;
+        isBound = ISBoundPerf(fields[i], rowNo);
+        depNotBoundFld = "";
+        if (isBound) {
+            if (calldepField == "newRow" || calldepField == "AddRow") {
+                EvaluateAxFunction(fields[i], fldName, rowNo + "F" + dcNo);
+                EvaluateExpressions(fldName);
+            } else
+                EvaluateAxFunction(fields[i], fldName, rowNo + "F" + dcNo);
+            var newValue = GetFieldValue(fldName);
+            var fldDbRowNo = GetDbRowNo(rowNo, dcNo);
+            UpdateFieldArray(fldName, fldDbRowNo, newValue, "parent", "AddRow");
+            IsService = false;
+            if (oldValue == parseInt(newValue, 10))
+                continue;
+            //Refer bugid -Below if condition added due to AGI003562(Malakonda) but later modified isboundperf function due to
+            //HEA000003 so below code is not required. 
+            //if (oldValue == newValue)
+            // continue;
+            if (oldValue != newValue) {
+                if (CheckDependencyPerf(fldName, "AddRow") == true && callService == false && calldepField != "Delete") {
+                    callService = true;
+                }
             }
-        }
 
-        //On grid row add should call addrow service if the any field is Accept+SQL for first row else bind previous row field value. 11/07/2018
-        if (callService == false && (calldepField == "newRow" || calldepField == "AddRow" || calldepField == "ToCheckAddRow")) {
-            var fldIndx = GetFieldIndex(fldIdnName);
-            if (fldIndx != -1 && FMoe[fldIndx].toString().toLowerCase() == "accept" && FldIsSql[fldIndx].toString().toLowerCase() == "true") {
-                var isBound = false;
-                isBound = ISBoundPerf(fields[i], rowNo);
-                depNotBoundFld = ""
-                if (isBound) {
+            //On grid row add should call addrow service if the any field is Accept+SQL for first row else bind previous row field value. 11/07/2018
+            if (callService == false && (calldepField == "newRow" || calldepField == "AddRow" || calldepField == "ToCheckAddRow")) {
+                var fldIndx = GetFieldIndex(fldIdnName);
+                if (fldIndx != -1 && FMoe[fldIndx].toString().toLowerCase() == "accept" && FldIsSql[fldIndx].toString().toLowerCase() == "true") {
                     callService = true;
                     $("#" + fldName).addClass("addServiceCallMade");
                 }
@@ -6717,11 +6386,13 @@ function CallEvaluateOnAddPerf(dcNo, rowNo, fields, calldepField) {
         //Below service call is commented assuming that the row is not ediatble and does not require new values, later if there is any issue the code needs to be uncommented
         CallAddRowPerfWS(dcNo, GetRowNoHelper(parseInt(rowNo, 10)));
     } else {
-        if (calldepField != "FillGrid" && (!isMobile || (isMobile && axInlineGridEdit)))
+        if (calldepField != "FillGrid" && (!isMobile || (isMobile && axInlineGridEdit))) //!axInlineGridEdit
+        //if (calldepField != "FillGrid") //!axInlineGridEdit
         {
             if (!gridRowEditOnLoad)
                 UpdateFieldArray(ConstructFieldName(axpIsRowValid + dcNo, dcNo, parseInt(rowNo, 10)), rowNo, "", "parent", "AddRow");
         }
+        //ShowDimmer(false);
     }
 }
 
@@ -6831,10 +6502,9 @@ function DeleteRow(dcNo, rowFrmNo, elem) {
         if ($(".inline-edit").attr("id") != $(elem).closest("tr").attr("id"))
             updateInlineGridRowValues();
     }
-    if ((axInlineGridEdit && AxpGridForm != "form") || (!isMobile && mobileCardLayout == "none")) {
-        if ($j("#del" + rowFrmNo).attr("class").indexOf("disabledelete") != -1)
-            return;
-    }
+
+    if ($j("#del" + rowFrmNo).attr("class").indexOf("disabledelete") != -1)
+        return;
     var glType = eval(callParent('gllangType'));
     var isRTL = false;
     if (glType == "ar")
@@ -6926,7 +6596,7 @@ function DeleteGridRow(dcNo, rowFrmNo, webService) {
     rowCnt = parseInt(rowCnt, 10);
     var dbRowNo = GetDbRowNo(rowNo, dcNo);
     delDcStr = "dc" + dcNo;
-    var dcIndx = GetFormatGridIndex(dcNo);  
+    var dcIndx = GetFormatGridIndex(dcNo);
 
     var rid = $j("#recordid000F0").val();
     ArrActionLog = "DeleteRow-DcNo-" + dcNo + "-rowno-" + rowFrmNo + "-Recordid-" + rid;
@@ -6953,8 +6623,6 @@ function DeleteGridRow(dcNo, rowFrmNo, webService) {
                 ShowDimmer(false);
                 AxWaitCursor(false);
             }
-            $("#chkallgridrow" + dcNo).prop("checked", false);
-            $("#clearThisDC" + dcNo).addClass("disabled");            
             return;
         }
         //update the subtotal
@@ -6991,8 +6659,6 @@ function DeleteGridRow(dcNo, rowFrmNo, webService) {
         SetSerialNoCnt(dcNo, slNo);
         AddDeletedRowsToArray(dcNo, rowNo)
 
-        UpdateFldArrayInDeleteRow(dcNo, rowNo);//Remove this row field values from ALLField array 
-
         var a = "sp" + dcNo + "R" + rowNo + "F" + dcNo;
         if (!$j("#" + a).hasClass("editWrapTr"))
             $j("#" + a).remove();
@@ -7016,8 +6682,6 @@ function DeleteGridRow(dcNo, rowFrmNo, webService) {
         UpdateDcRowArrays(dcNo, rowNo, "Delete", dcIndx);
 
     } else {
-        UpdateFldArrayInDeleteRow(dcNo, rowNo);//Remove this row field values from ALLField array 
-
         AddDeletedRowsToArray(dcNo, rowNo);
         ClearDeletedFields(dcNo, rowNo);
         var fields = GetGridFields(dcNo);
@@ -7034,8 +6698,6 @@ function DeleteGridRow(dcNo, rowFrmNo, webService) {
         else
             CallDeleteWS(delDcStr);
     }
-    $("#chkallgridrow" + dcNo).prop("checked", false);
-    $("#clearThisDC" + dcNo).addClass("disabled");    
     navValidator = false;
 }
 
@@ -7113,7 +6775,6 @@ function SuccessDelData(result, eventArgs) {
             }
         } catch (ex) {}
     }
-    UpdateFldArrayInFillgrid(AxActiveDc);
     if (IsDcPopGridCleared) {
         IsDcPopGridCleared = false;
         if (!axInlineGridEdit) {
@@ -7394,26 +7055,6 @@ function FormSubmit() {
     if (doSave) {
         ShowDimmer(true);
         AxWaitCursor(true);
-        try {
-            if (AxRulesDefComputescript == "true")
-                AxRulesDefParser("compute script onsave", "", "computescript");
-            if (AxRulesDefValidation == "true") {
-                if (!AxRulesDefParser("validate onsave", "", "validate")) {
-                    ShowDimmer(false);
-                    AxWaitCursor(false);
-                    actionCallbackFlag = actionCallFlag;
-                    $("#icons,#btnSaveTst,.BottomToolbarBar a,.wizardNextPrevWrapper").css({
-                        "pointer-events": "auto"
-                    });
-                    EnableSaveBtn(true);
-                    GetProcessTime();
-                    GetTotalElapsTime();
-                    return;
-                }
-            }
-            if (AxRulesDefAllowdup == "true")
-                AxRulesDefParser("allowduplicate", "", "allowduplicate");
-        } catch (ex) { }
         if (!ValidateBeforeSubmit()) {
             ShowDimmer(false);
             AxWaitCursor(false);
@@ -7444,21 +7085,13 @@ function FormSubmit() {
                 } catch (ex) {
 
                 }
-                if (!sumDisplay && AxRulesDefOnSubmit == "true") {
-                    CallActionExt("axonsubmit_script", "", "", "", true, true);
-                    return;
-                }
                 GetProcessTime();
                 if (recordid != "0" && lastChangedField != "") {
                     focusAfterSaveOnLoad = lastChangedField;
                     lastChangedField = "";
                 }
-                let axrulesFlds = "";
-                if (AxRulesFlds.length > 0) {
-                    axrulesFlds = AxRulesFlds.join("♥");
-                }
                 if (!sumDisplay)
-                    ASB.WebService.SaveDataXML(ChangedFields, ChangedFieldDbRowNo, ChangedFieldValues, DeletedDCRows, DeletedFieldValue, files, rid, delRows, chngRows, tstDataId, axrulesFlds, SucceededCallback, OnException);
+                    ASB.WebService.SaveDataXML(ChangedFields, ChangedFieldDbRowNo, ChangedFieldValues, DeletedDCRows, DeletedFieldValue, files, rid, delRows, chngRows, tstDataId, SucceededCallback, OnException);
             } else {
                 actionCallbackFlag = actionCallFlag;
                 $("#icons,#btnSaveTst,.BottomToolbarBar a,.wizardNextPrevWrapper").css({
@@ -7539,31 +7172,7 @@ function ValidateBeforeSubmit(valDcNo) {
                     getlatlongitude();
             }
         }
-
-        let isRuleEnabled = true;
-        let rlAllow = AxAllowEmptyCheck(FNames[i]);
-        if (rlAllow === 1) {
-            isRuleEnabled = true;
-        } else if (rlAllow === -1) {
-            isRuleEnabled = false;
-        } else {
-            isRuleEnabled = true;
-            return false;
-        }
-
-        if (AxRulesDefAllowEmpty == "true") {
-            let rlAllow = AxRulesDefParser(FNames[i], "field", "allowempty");
-            if (rlAllow === true) {
-                isRuleEnabled = false;
-            } else if (rlAllow === 1) {
-                isRuleEnabled = true;
-            } else {
-                isRuleEnabled = true;
-                return false;
-            }
-        }
-
-        if ((allowEmpty.toLowerCase() == "f" || isPositive.toLowerCase() == "t") && visible.toLowerCase() == "f" && !isRuleEnabled) {
+        if ((allowEmpty.toLowerCase() == "f" || isPositive.toLowerCase() == "t") && visible.toLowerCase() == "f") {
 
             var frmno = 0;
             var isGrid = IsGridField(FNames[i]);
@@ -7707,10 +7316,6 @@ function IsAxFldEmpty(idx, rowNo, dcNo, allowEmpty, isPositive, calledFrom) {
             isFldEmpty = true;
         }
 
-        if ($("#" + FNames[idx] + clRowNo + "F" + dcNo).hasClass('autogen') && $("#" + FNames[idx] + clRowNo + "F" + dcNo).val() == "Auto") {
-            return true;
-        }
-
         if (!isFldEmpty && fldType == "Numeric" && isPositive.toLowerCase() == "t" && parseInt(fldValue) < 0) {
             showAlertDialog("warning", 2052, "client", FCaption[idx]);
             return false;
@@ -7781,7 +7386,7 @@ function createInlineErrorInGrid(fld, rowNo, dcNo, idx) {
 //Function to toggle save button disabling.
 function EnableSaveBtn(enable) {
 
-    var saveObj = $j("#imgSaveTst,#ftbtn_iSave");
+    var saveObj = $j("#imgSaveTst");
     EnableDisableBtns(saveObj, enable);
 
     if (enable)
@@ -7876,14 +7481,10 @@ var recordidax = '';
 //Callback function which returns either successfull or error message on save.
 function SucceededCallback(resultJson, eventArgs) {
     if (resultJson != "") {
-        if (resultJson.split("*♠*").length > 1) {
-            var serverprocesstime = resultJson.split("*♠*")[0];
-            var requestProcess_logtime = resultJson.split("*♠*")[1];
-            resultJson = resultJson.split("*♠*")[2];
-            WireElapsTime(serverprocesstime, requestProcess_logtime, true);
-        } else {
-            UpdateExceptionMessageInET("Error : " + resultJson);
-        }
+        var serverprocesstime = resultJson.split("*♠*")[0];
+        var requestProcess_logtime = resultJson.split("*♠*")[1];
+        resultJson = resultJson.split("*♠*")[2];
+        WireElapsTime(serverprocesstime, requestProcess_logtime, true);
     }
 
     var stTime = new Date();
@@ -7966,12 +7567,12 @@ function SucceededCallback(resultJson, eventArgs) {
                     ChangedFieldDbRowNo = new Array();
                     ChangedFieldValues = new Array();
                     DeletedDCRows = new Array();
-                    DeletedFieldValue = new Array();                    
+                    DeletedFieldValue = new Array();
 
 
                     if (restxt != ErrStr) {
                         window.status = eval(callParent('lcm[76]'));
-                        AxRulesFlds = new Array();
+
                         for (var n = 0; n < filenamearray.length; n++) {
                             fileonloadarray.push(filenamearray[n]);
                             RemoveArrVal(filenamearray[n], filenamearray);
@@ -8011,7 +7612,7 @@ function SucceededCallback(resultJson, eventArgs) {
                                     ReloadMiddleIframe();
                                 }
                                 //Refer Bug: AXP000134
-                                var src = $(eval(callParent("loadPopUpPage"))).attr("src");
+                                var src = $(eval(callParent("popupIframeRemodal"))).attr("src");
                                 if (src != undefined && src.indexOf("AxPop=true") != -1)
                                     eval(callParent('isRefreshParentOnClose') + "= true");
                                 //End AXP000134
@@ -8036,82 +7637,62 @@ function SucceededCallback(resultJson, eventArgs) {
                         }
 
                     } else {
+
                         if (restxt == ErrStr) {
-                            var errFld = "";
-                            var errMsg = result;
-                            var index = errMsg.indexOf("^^dq");
-                            while (index != -1) {
-                                errMsg = errMsg.replace("^^dq", '"');
-                                index = errMsg.indexOf("^^dq");
-                            }
-
-                            if (errMsg != null && errMsg != undefined && errMsg != "") {
-                                try {
-                                    if (errMsg.indexOf("errfld") > -1) {
-                                        let errfldInfo = errMsg.substring(errMsg.lastIndexOf("errfld"));
-                                        errfldInfo = errfldInfo.split(":")[1];
-                                        errFld = errfldInfo.replace("\"", "").trim();
-                                        errMsg = errMsg.substring(0, errMsg.lastIndexOf("errfld") - 2);
-                                        errMsg = errMsg.replace("\",", "").replace("\" ,", "");
-                                    }
-                                    ShowDialog('error', errMsg);
-
-                                    var focusFldId = "";
-                                    if (errFld != "") {
-                                        var fldDetails = errFld.toString().split(",");
-                                        focusFldId = fldDetails[0];
-                                        let focusFldRowNo = fldDetails[1];
-                                        var dcNo = GetDcNo(focusFldId)
-                                        var rowNo = "000";
-                                        if (IsGridField(focusFldId)) {
-                                            if (focusFldRowNo.length == 3)
-                                                rowNo = focusFldRowNo;
-                                            else if (focusFldRowNo.length == 2)
-                                                rowNo = "0" + focusFldRowNo;
-                                            else if (focusFldRowNo.length == 1)
-                                                rowNo = "00" + focusFldRowNo;
-                                            var fldName = focusFldId + rowNo + "F" + dcNo;
-                                            var focusFld = $j("#" + fldName);
-                                            if (focusFld.length > 0) {
-                                                if(IsTabDc(dcNo))
-                                                {
-                                                    if(!$("#ank"+dcNo).hasClass('active'))
-                                                    {
-                                                       let ankId= $("#ank"+dcNo).parents("ul#myTab").find("a.active").attr("id");
-                                                       $("#"+ankId).removeClass("active");
-                                                       let ackTabId=ankId.substr(3);
-                                                       $("#tab-"+ackTabId).removeClass('show active');
-                                                       $("#tab-"+dcNo).addClass('show active');
-                                                       $("#ank"+dcNo).addClass('active');
-                                                    }
-                                                }
-                                                let focusFldIndex = focusFld.parents("td").index();
-                                                if ($("#gridHd" + dcNo + " tbody tr#sp" + dcNo + "R" + rowNo + "F" + dcNo).hasClass('inline-edit'))
-                                                    focusFld.focus();
-                                                else
-                                                    $("#gridHd" + dcNo + " tbody tr#sp" + dcNo + "R" + rowNo + "F" + dcNo + " td:eq(" + focusFldIndex + ")").click();
-                                            }
-                                        } else {
-                                            var fldName = focusFldId + rowNo + "F" + dcNo;
-                                            var focusFld = $j("#" + fldName);
-                                            if (focusFld.length > 0) {
-                                                focusFld.focus();
-                                            }
-                                        }
-                                    }
-                                } catch (ex) { }
-                            } else {
-                                ShowDialog('error', errMsg);
-                            }
 
                             EnableSaveBtn(true);
                             AxWaitCursor(false);
                             ShowDimmer(false);
-
+                            ShowDialog('error', result);
                             try {
                                 AxAfterSaveOnError();
                             } catch (ex) {}
                             return;
+                        }
+
+
+                        var reslen = result.length;
+                        var endpt = reslen - 8;
+                        var finalerr = result.substring(7, endpt);
+
+                        // TODO: AWS provides different error messages, some with the repeated caption and other place caption [field name] caption message
+                        // the problem is with validate expression and other validations. So a workaround is done using tempStr and tempStr1.
+                        // this needs to be fixed at AWS and then the code needs to be removed.
+
+                        // Err Focusing
+                        var stPos = finalerr.indexOf("[");
+                        var endPos = finalerr.indexOf("]");
+
+                        var tempStr = "";
+                        var tempStr1 = "";
+                        var errFld;
+                        if ((stPos < 0) && (endPos < 0)) {
+
+                        } else {
+
+                            tempStr = finalerr.substring(0, stPos);
+                            tempStr1 = finalerr.substring(endPos + 2);
+                            errFld = finalerr.substring(stPos + 1, endPos);
+
+                            if (errFld != "") {
+                                var nerr = finalerr.substring(stPos, endPos + 2);
+                                finalerr = finalerr.replace(nerr, "");
+                            }
+
+                            if (tempStr1.indexOf(tempStr) > -1) {
+                                finalerr = tempStr1;
+                            } else {
+                                finalerr = tempStr + tempStr1;
+                            }
+                        }
+
+                        ShowDialog('error', finalerr);
+                        var errDcNo = GetDcNo(errFld);
+                        errFld = errFld + "000F" + errDcNo;
+
+                        var focusFld = $j("#" + errFld);
+                        if (focusFld.length > 0) {
+                            focusFld.focus();
                         }
                     }
                 }
@@ -8317,14 +7898,10 @@ function GetFormLoadData(tstQureystr, isDraft, forceRefresh = "false") {
                 ShowDimmer(true);
                 var result = data.d;
                 if (result != "") {
-                    if (result.split("*♠♦*").length > 1) {
-                        serverprocesstime = result.split("*♠♦*")[1];
-                        requestProcess_logtime = result.split("*♠♦*")[2];
-                        result = result.split("*♠♦*")[0];
-                        WireElapsTime(serverprocesstime, requestProcess_logtime, true);
-                    } else {
-                        UpdateExceptionMessageInET("Error : " + result);
-                    }
+                    serverprocesstime = result.split("*♠♦*")[1];
+                    requestProcess_logtime = result.split("*♠♦*")[2];
+                    result = result.split("*♠♦*")[0];
+                    WireElapsTime(serverprocesstime, requestProcess_logtime, true);
                 }
                 Closediv();
                 if (result.toLowerCase().indexOf("access violation") === -1) {
@@ -8348,37 +7925,30 @@ function GetFormLoadData(tstQureystr, isDraft, forceRefresh = "false") {
                         if (vals != "")
                             ExprPosArray[ind] = "";
                     });
-                    tstReadOnlyPeg = false;
+
                     navValidator = true;
                     SetFormDirty(false);
                     blurNextPreventId = "";
                     document.title = "Tstruct";
                     recordid = "0";
                     $j("#recordid000F0").val("0");
-                    AxFormControlList = new Array();
                     RegVarFldList = new Array();
                     ChangedFields = new Array();
                     ChangedFieldDbRowNo = new Array();
                     ChangedFieldValues = new Array();
                     DeletedDCRows = new Array();
-                    AllFieldNames = new Array();
-                    AllFieldValues = new Array();
-                    ScriptMaskFields = new Array();
                     AxExecFormControl = false;
                     DisabledDcs = new Array();
                     AxFormContHiddenFlds = new Array();
                     AxFormContSetCapFlds = new Array();
                     AxFormContSetCapFldsGrid = new Array();
                     AxFormContSetFldActGrid = new Array();
-                    AxFormContSetGridCell = new Array();
                     AxFormContFldSetFocus = new Array();
                     multiSelectflds = new Array();
                     multiSelFldParents = new Array();
                     multiSelFldResult = new Array();
                     multiSelectLoadVals = new Array();
-                    FldListParents = new Array();
-                    FldListData = new Array();
-                    AxRulesFlds = new Array();
+
                     imgNames = new Array();
                     imgSrc = new Array();
                     changeFillGridDc = 0;
@@ -8401,10 +7971,10 @@ function GetFormLoadData(tstQureystr, isDraft, forceRefresh = "false") {
                         $j(".downArr").remove();
                         $j(".Selectboxlist").remove();
                         //$("#selectbox").remove();
-                        $j("#workflowoverlay").addClass("d-none");
+                        $j("#workflowoverlay").css("display", "none");
                         $j("#dvMessage").html("");
-                        $j("#dvMessage").removeClass("AXinfo").addClass("success d-none");
-                        $j("#file").addClass("d-none");
+                        $j("#dvMessage").removeClass("AXinfo").addClass("success hide");
+                        $j("#file").css("display", "none").addClass("hide");
                         $j("#attachment-overlay").html("");
                         $j("#attachfname").val("");
                         attachments = "";
@@ -8438,28 +8008,7 @@ function GetFormLoadData(tstQureystr, isDraft, forceRefresh = "false") {
                         $j("#hdnShowAutoGenFldValue").val(displayAutoGenVal);
                         tstructCancelled = resval[8];
                         tstDataId = resval[9];
-
-                        try {
-                            FFieldHidden = new Array();
-                            FFieldReadOnly = new Array();
-
-                            if (resval[11] != "") {
-                                var _thisFFH = resval[11].split(',');
-                                _thisFFH.forEach(function (_val) {
-                                    if (_val != "")
-                                        FFieldHidden.push(_val);
-                                })
-                            }
-                            if (resval[12] != "") {
-                                var _thisFFH = resval[12].split(',');
-                                _thisFFH.forEach(function (_val) {
-                                    if (_val != "")
-                                        FFieldReadOnly.push(_val);
-                                })
-                            }
-                        } catch (ex) { }
-
-                        $j("#hdnDataObjId").val(tstDataId);                      
+                        $j("#hdnDataObjId").val(tstDataId);
                         LoadResult = result;
                         isLoadDataCall = false;
                         ReloadJqueryReference();
@@ -8540,14 +8089,10 @@ function GetLoadData(recid, tstQureystr) {
             success: function (data) {
                 var result = data.d;
                 if (result != "") {
-                    if (result.split("*♠♦*").length > 1) {
-                        serverprocesstime = result.split("*♠♦*")[1];
-                        requestProcess_logtime = result.split("*♠♦*")[2];
-                        result = result.split("*♠♦*")[0];
-                        WireElapsTime(serverprocesstime, requestProcess_logtime, true);
-                    } else {
-                        UpdateExceptionMessageInET("Error : " + result);
-                    }
+                    serverprocesstime = result.split("*♠♦*")[1];
+                    requestProcess_logtime = result.split("*♠♦*")[2];
+                    result = result.split("*♠♦*")[0];
+                    WireElapsTime(serverprocesstime, requestProcess_logtime, true);
                 }
                 Closediv();
                 if (result.toLowerCase().indexOf("access violation") === -1) {
@@ -8571,34 +8116,26 @@ function GetLoadData(recid, tstQureystr) {
                             if (vals != "")
                                 ExprPosArray[ind] = "";
                         });
-                        tstReadOnlyPeg = false;
                         navValidator = true;
                         SetFormDirty(false);
                         blurNextPreventId = "";
-                        AxFormControlList = new Array();
                         RegVarFldList = new Array();
                         ChangedFields = new Array();
                         ChangedFieldDbRowNo = new Array();
                         ChangedFieldValues = new Array();
                         DeletedDCRows = new Array();
-                        AllFieldNames = new Array();
-                        AllFieldValues = new Array();
-                        ScriptMaskFields = new Array();
                         AxExecFormControl = false;
                         DisabledDcs = new Array();
                         AxFormContHiddenFlds = new Array();
                         AxFormContSetCapFlds = new Array();
                         AxFormContSetCapFldsGrid = new Array();
                         AxFormContSetFldActGrid = new Array();
-                        AxFormContSetGridCell = new Array();
                         AxFormContFldSetFocus = new Array();
                         multiSelectflds = new Array();
                         multiSelFldParents = new Array();
                         multiSelFldResult = new Array();
                         multiSelectLoadVals = new Array();
-                        AxRulesFlds = new Array();
-                        FldListParents = new Array();
-                        FldListData = new Array();
+
                         changeFillGridDc = 0;
                         imgNames = new Array();
                         imgSrc = new Array();
@@ -8614,19 +8151,20 @@ function GetLoadData(recid, tstQureystr) {
                             window.location.reload();
                             return;
                         }
-                        //$("#tblWrk").html("");
-                        //$("#collapseOneTable").html("");
+                        $("#tblWrk").html("");
+                        $("#collapseOneTable").html("");
                         $j(".workflow").remove();
-                        $(".wfselectbox").html("<div class=\"menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-bold w-200px py-3\" data-kt-menu=\"true\" data-popper-placement=\"bottom-end\" id=\"selectbox\"></div>");
+                        //$j("#selectbox").empty();
+                        //$j("#selectbox").removeAttr("disabled");
                         $j(".wrkflwinline").remove();
                         $j(".workflowMsg").remove();
                         $j(".downArr").remove();
                         $j(".Selectboxlist").remove();
                         //$("#selectbox").remove();
-                        $j("#workflowoverlay").addClass("d-none");
+                        $j("#workflowoverlay").css("display", "none");
                         $j("#dvMessage").html("");
-                        $j("#dvMessage").removeClass("AXinfo").addClass("success d-none");
-                        $j("#file").addClass("d-none");
+                        $j("#dvMessage").removeClass("AXinfo").addClass("success hide");
+                        $j("#file").css("display", "none").addClass("hide");
                         $j("#attachment-overlay").html("");
                         $j("#attachfname").val("");
                         attachments = "";
@@ -8665,27 +8203,6 @@ function GetLoadData(recid, tstQureystr) {
                         } else
                             AxGridAttNotExistList = "";
                         tstDataId = resval[9];
-
-                        try {
-                            FFieldHidden = new Array();
-                            FFieldReadOnly = new Array();
-
-                            if (resval[12] != "") {
-                                var _thisFFH = resval[12].split(',');
-                                _thisFFH.forEach(function (_val) {
-                                    if (_val != "")
-                                        FFieldHidden.push(_val);
-                                })
-                            }
-                            if (resval[13] != "") {
-                                var _thisFFH = resval[13].split(',');
-                                _thisFFH.forEach(function (_val) {
-                                    if (_val != "")
-                                        FFieldReadOnly.push(_val);
-                                })
-                            }
-                        } catch (ex) { }
-
                         $j("#hdnDataObjId").val(tstDataId);
                         LoadResult = result;
                         Closediv();
@@ -8773,23 +8290,12 @@ function DeleteTstruct() {
         showAlertDialog("warning", 2010, "client");
         return;
     } else {
-        //Mid of workflow record should not be deleted
+        //Mid of workflow record should not be deleted 
         //commented becoz, only after final approval record should not be deleted this is handled in application
         //if ($j("#txtCommentWF").length > 0 && $j("#txtCommentWF").prop("disabled")) {
         //    showAlertDialog("warning", "This transaction cannot be deleted.");
         //    return;
         //}
-
-        try {
-            if (AxRulesDefComputescript == "true")
-                AxRulesDefParser("compute script ondelete", "", "computescript");
-            if (AxRulesDefValidation == "true") {
-                if (!AxRulesDefParser("validate ondelete", "", "validate")) {
-                    return;
-                }
-            }
-        } catch (ex) { }
-
         var cutMsg = eval(callParent('lcm[5]'));
         var glType = eval(callParent('gllangType'));
         var isRTL = false;
@@ -8881,21 +8387,13 @@ function SucceededCallbackDelTst(result, eventArgs) {
                 isLogCalled = true;
             }
             showAlertDialog("success", 2012, "client");
-            {
-                // delete appLinkHistory[curPageIndex];
-                delete callParentNew("appLinkHistory")[callParentNew("curPageIndex")];
-                callParentNew("curPageIndex=", callParentNew("curPageIndex") - 1);
-            }
-            if (window.frameElement && window.frameElement.id && (window.frameElement.id === "loadPopUpPage" || window.frameElement.id === "iFrameCalendarEvents")) {
+            if (window.frameElement && window.frameElement.id && (window.frameElement.id === "popupIframeRemodal" || window.frameElement.id === "iFrameCalendarEvents")) {
                 eval(callParent('isSuccessAlertInPopUp') + "= true");
                 SetFormDirty(false);
                 if (transid == "axcal") {
                     callParentNew("closeModalDialog()", "function");
                 } else {
                     $j("#axpertPopupWrapper .remodal-close", window.parent.document).click();
-                    try {
-                        callParentNew("loadPopUpPage", "id").dispatchEvent(new CustomEvent("close"));
-                    } catch (ex) {}
                 }
             } else {
                 window.location.href = "tstruct.aspx?transid=" + tst;
@@ -9209,11 +8707,7 @@ function CallListView(tid) {
                         window.parent.listViewPage = "0";
                         //window.document.location.href = "./listIview.aspx?tid=" + tid;
                         GetProcessTime();
-                        if(frameElement.name == "axpiframe" && $(frameElement).hasClass("frameSplited")){
-                            callParentNew(`OpenOnPropertyBase(iview.aspx?ivname=${tid}&tstcaption=${tstructCaption})`, 'function');
-                        }else{
-                            window.document.location.href = `./iview.aspx?ivname=${tid}&tstcaption=${tstructCaption}`;
-                        }
+                        window.document.location.href = `./iview.aspx?ivname=${tid}&tstcaption=${tstructCaption}`;
                         SetFormDirty(false);
                         window.parent.isSessionCleared = true;
                     }
@@ -9237,11 +8731,7 @@ function CallListView(tid) {
         ShowDimmer(true);
         //window.document.location.href = "./listIview.aspx?tid=" + tid;
         GetProcessTime();
-        if(frameElement.name == "axpiframe" && $(frameElement).hasClass("frameSplited")){
-            callParentNew(`OpenOnPropertyBase(iview.aspx?ivname=${tid}&tstcaption=${tstructCaption})`, 'function');
-        }else{
-            window.document.location.href = `./iview.aspx?ivname=${tid}&tstcaption=${tstructCaption}`;
-        }
+        window.document.location.href = `./iview.aspx?ivname=${tid}&tstcaption=${tstructCaption}`;
         window.parent.isSessionCleared = true;
     }
     // let middleframe = callParentNew("middle1", "id");
@@ -9470,10 +8960,9 @@ function SearchOpenNew(fldAdvSrcId) {
     } else
         x = "";
     AxActiveRowNo = GetDbRowNo(fldRowNo, fldFrameNo);
-    let _isDropfld = fldPk.hasClass("multiFldChk") ? "true" : (typeof fldPk.attr("data-refresh") == "undefined" ? "" : fldPk.attr("data-refresh"));
 
     var objKey = tstDataId;
-    var na = "./AutoComplete.aspx?search=" + x + "&fldname=" + fname + "&transid=" + tst + "&activeRow=" + AxActiveRowNo + "&frameno=" + fldFrameNo + "&key=" + objKey + "&parStr=" + parStr + "&subStr=" + subStr + "&isFldddl=" + _isDropfld;
+    var na = "./AutoComplete.aspx?search=" + x + "&fldname=" + fname + "&transid=" + tst + "&activeRow=" + AxActiveRowNo + "&frameno=" + fldFrameNo + "&key=" + objKey + "&parStr=" + parStr + "&subStr=" + subStr;
     // createPopup(na, "73vw");
     let myModal = new BSModal("modalIdAddSearch", "", "<iframe class='col-12 h-100' src='" + na + "'></iframe>", () => {
         //shown callback
@@ -9481,7 +8970,6 @@ function SearchOpenNew(fldAdvSrcId) {
         //hide callback
     });
     myModal.changeSize("fullscreen");
-    myModal.modalBody.classList.add('overflow-hidden');
     myModal.hideFooter();
     myModal.hideHeader();
     myModal.showFloatingClose();
@@ -9525,8 +9013,6 @@ function SetSelectedValue(listcontrol, listctrl) {
             parentWinPickfld.val(fname);
 
         UpdateFieldArray(fname, fldDbRowNo, result, "popup");
-        //UpdateAllFieldValues(fname, result);
-        callParentNew("UpdateAllFieldValues(" + fname + "," + result + ")", "function");
         if (window.opener == null) {
             frSearchFld = $j("#pickIdVal_" + fname, parent.window.document);
             if (frSearchFld.length > 0) {
@@ -9561,8 +9047,6 @@ function SetSelectedValue(listcontrol, listctrl) {
                             if (fillfield.type != "radio") {
                                 if (fieldnm[1] == "*") fieldnm[1] = "";
                                 UpdateFieldArray(fillfieldId, fldDbRowNo, fieldnm[1], "popup");
-                                //UpdateAllFieldValues(fillfieldId, fieldnm[1]);
-                                callParentNew("UpdateAllFieldValues(" + fillfieldId + "," + fieldnm[1] + ")", "function");
                                 fillfield.value = fieldnm[1];
                             }
                         }
@@ -9763,7 +9247,7 @@ function SucceededCallbackAction(result, calledFrom) {
                 if (tstType == "loadqs") {
                     window.location.href = window.location.href;
                 } else {
-                    window.document.location.href = "./tstruct.aspx?transid=" + tst + `&openerIV=${typeof isListView != "undefined" ? iName : tst}&isIV=${typeof isListView != "undefined" ? !isListView : "false"}`;
+                    window.document.location.href = "./tstruct.aspx?transid=" + tst;
                 }
             }
         } else {
@@ -9952,21 +9436,20 @@ function AssignHTML(result, calledFrom, source) {
         if (source == "GetTabData" && isWizardTstruct) {
             WizardTabDcHtml(dcNo);
         }
-        //gridScrollBar developer option withdran as per UI.
-        //if (typeof gridScrollBar != "undefined" && gridScrollBar == "true") {
-        //    $('.griddivColumn').parents().find('.dcTitle').css({
-        //        'display': 'block'
-        //    });
-        //    if ($('body').hasClass('btextDir-rtl')) {
-        //        $('.griddivColumn').parents().find('.newgridbtn').css({
-        //            'float': 'right'
-        //        });
-        //    } else {
-        //        $('.griddivColumn').parents().find('.newgridbtn').css({
-        //            'float': 'left'
-        //        });
-        //    }
-        //}
+        if (typeof gridScrollBar != "undefined" && gridScrollBar == "true") {
+            $('.griddivColumn').parents().find('.dcTitle').css({
+                'display': 'block'
+            });
+            if ($('body').hasClass('btextDir-rtl')) {
+                $('.griddivColumn').parents().find('.newgridbtn').css({
+                    'float': 'right'
+                });
+            } else {
+                $('.griddivColumn').parents().find('.newgridbtn').css({
+                    'float': 'left'
+                });
+            }
+        }
     }
     $j(".axpvalid").each(function () {
         DoFormControlPrivilege($j(this).attr("id"), $j(this).val());
@@ -10116,19 +9599,11 @@ function EnableDisableBtns(obj, enable) {
 
         if (enable == false) {
             obj.prop("disabled", true);
-            obj.addClass('disabled');
-            obj.css("pointer-events", 'none');
-            obj.css("cursor", 'default');            
-            if (obj.hasClass('menu-link'))
-                obj.addClass('btn');
+            obj.css("cursor", 'default');
         } else {
             obj.prop("disabled", false);
-            obj.removeClass('disabled');
-            obj.css("pointer-events", 'auto');
             obj.css("cursor", '');
             obj.css("cursor", 'hand');
-            if (obj.hasClass('menu-link'))
-                obj.removeClass('btn');
         }
 
         var isAxpBtn = false;
@@ -10582,7 +10057,6 @@ function ShowdivContentCK(objId, isBlur) {
             objId = objId.attr("name");
         }
         var dvHtml = CKEDITOR.instances[objId].getData();
-        dvHtml = dvHtml.replace(/<img/g, '<gmi');
         $j("#" + objId).val(dvHtml);
         MainBlur($j("#" + objId));
         currentCK = "";
@@ -10610,19 +10084,19 @@ function ShowGridAttachPopUp(obj) {
             return;
         }
     }
-    GetCurrentTime("Tstruct grid file upload button click");
+
     AxGridAttField = obj.id;
     var rFNo = GetFieldsRowFrameNo(AxGridAttField);
     var gridHl = "grdAtt_hlnk_" + rFNo;
     var hlinkidNongrid = obj.id;
-    let attFldId = $("#" + AxGridAttField).parent("div").siblings("input.grdAttach").attr("id");
-    let attFldName =GetFieldsName(attFldId);
-    var fNo = GetFieldsDcNo(AxGridAttField);
+    let attFldId = $("#" + AxGridAttField).parents("div").siblings("input.grdAttach").attr("id");
+    let attFldName = attFldId.substring(0, attFldId.lastIndexOf("F") - 3);
+    var fNo = GetFieldsDcNo(AxGridAttField)
     var atFname = GetFieldValue("axpattach_filename" + fNo + rFNo);
     var src = "";
     if (atFname != "")
         src = "./gridfileupload.aspx?attFld=" + gridHl + "&attTransId=" + transid + "&attFldName=" + attFldName + "&atFname=" + atFname + "&dcNo=" + fNo;
-    else if (IsGridField(attFldName) == false)
+    else if (IsGridField(obj.id) == false)
         src = "./gridfileupload.aspx?attFld=" + hlinkidNongrid + "&attTransId=" + transid + "&attFldName=" + attFldName + "&dcNo=" + fNo;
     else
         src = "./gridfileupload.aspx?attFld=" + gridHl + "&attTransId=" + transid + "&attFldName=" + attFldName + "&dcNo=" + fNo;
@@ -10640,17 +10114,9 @@ function ShowGridAttachPopUp(obj) {
                         showAlertDialog("error", eval(callParent('lcm[515]')));
                     }
                 }
-                UpdateExceptionMessageInET("Final file upload path at client side : "+axGridAttSavedPath);
-                GetTotalElapsTime();
                 axGridAttSavedPath = "";
             }
-            else{
-                UpdateExceptionMessageInET("Final file upload is empty in CallbackFunctionBootstrap");
-                GetTotalElapsTime();
-            }
         } catch (ex) {
-            UpdateExceptionMessageInET("File upload in CallbackFunctionBootstrap: "+ex.message);
-            GetTotalElapsTime();
             axGridAttSavedPath = "";
         }
     }
@@ -10733,15 +10199,8 @@ function ShowAxpFileuploadLink(fldName, pathSrc, src) {
     var axpPath = "";
     if (typeof $("textarea[id*=" + axpFName + "]").not(".axpAttach")[0] != "undefined")
         axpPath = $("textarea[id*=" + axpFName + "]").not(".axpAttach")[0].value;
-    else{
-        if($("input[id*=" + axpFName + "]").hasClass("axpFilePathFld"))
-        {
-            $("input[id*=" + axpFName + "]").each(function(){
-                if ($(this).hasClass("axpFilePathFld"))
-                    axpPath = $(this).val();
-            });
-        }
-    }
+    else
+        axpPath = $("input[id*=" + axpFName + "]").not(".axpAttach")[0].value;
 
     ASB.WebService.LoadAxpFileToScript(axpPath, pathSrc, CallBackOnAxpFile);
 
@@ -10763,45 +10222,35 @@ function SetGridAttValue(fldName, fldValue) {
     var hlObj = $j("#grdAtt_hlnk_" + rowFrmNo);
     fileLinks = "";
     if (fldValue != "") {
+        //createAttachmentsInGrid(fldName, fldValue, rowFrmNo);
         if (fldValue.indexOf("@") != -1) {
+            fileLinks = SetGridRefWithdcImage(fldName, fldValue, false);
+            //If dc_image is used for both referring and attachments , then 
+            // After close brackets, already attached files will be there
+            //So execution continues
             fldValue = fldValue.substr(fldValue.lastIndexOf(")") + 2);
-            $("input#" + fldName).attr("value", fldValue).text(fldValue).val(fldValue);
-            isGridFileUploadOnLoad = true;
-        }else{
-            $("input#" + fldName).attr("value", fldValue).text(fldValue).val(fldValue);
-            isGridFileUploadOnLoad = true;
+            if (fldValue == "") {
+                hlObj[0].outerHTML = fileLinks;
+                return;
+            }
         }
 
+        try {
+            AxBeforeGrdAttDisplay(fldName, fNo, rowFrmNo);
+        } catch (ex) {
 
-        ////createAttachmentsInGrid(fldName, fldValue, rowFrmNo);
-        //if (fldValue.indexOf("@") != -1) {
-        //    fileLinks = SetGridRefWithdcImage(fldName, fldValue, false);
-        //    //If dc_image is used for both referring and attachments , then 
-        //    // After close brackets, already attached files will be there
-        //    //So execution continues
-        //    fldValue = fldValue.substr(fldValue.lastIndexOf(")") + 2);
-        //    if (fldValue == "") {
-        //        hlObj[0].outerHTML = fileLinks;
-        //        return;
-        //    }
-        //}
+        }
+        var hdnScriptsUrlPath = $j("#hdnScriptsUrlpath");
+        if (hdnScriptsUrlPath[0] != undefined) {
 
-        //try {
-        //    AxBeforeGrdAttDisplay(fldName, fNo, rowFrmNo);
-        //} catch (ex) {
-
-        //}
-        //var hdnScriptsUrlPath = $j("#hdnScriptsUrlpath");
-        //if (hdnScriptsUrlPath[0] != undefined) {
-
-        //    var tmpVal = GetFieldValue("axpattach_filename" + fNo + rowFrmNo);
-        //    if (tmpVal != "") {
-        //        fldValue = tmpVal + fldValue.substring(fldValue.indexOf("."));
-        //    }
-        //    //fileLinks = ConstructGridAttachHTML(fldName, fNo, fldValue, hdnScriptsUrlPath, rowFrmNo);
-        //    //if (hlObj[0] != undefined)
-        //    //    hlObj[0].outerHTML = fileLinks;
-        //}
+            var tmpVal = GetFieldValue("axpattach_filename" + fNo + rowFrmNo);
+            if (tmpVal != "") {
+                fldValue = tmpVal + fldValue.substring(fldValue.indexOf("."));
+            }
+            //fileLinks = ConstructGridAttachHTML(fldName, fNo, fldValue, hdnScriptsUrlPath, rowFrmNo);
+            //if (hlObj[0] != undefined)
+            //    hlObj[0].outerHTML = fileLinks;
+        }
     }
 }
 
@@ -10882,126 +10331,126 @@ function ConstructAttachHTML(fldValue, fldName, calledfrom) {
     filePath = hdnScriptsUrlPath.val() + "axpert/" + sid + "/";
     $("input#" + fldName).attr("value", fldValue).text(fldValue).val(fldValue);
 
-    //if (rowNo == "000") {
-    //    ParentDiv += "<span id=\"nonGrdAtt_" + fldName + "\" class=\"fa fa-paperclip upload-icon nongridAttachIcon inlinediv\" style=\"\" onclick=\"ShowGridAttachPopUp(this);\" title=\"nongrid attachment\"></span>";
-    //}
-    //ParentDiv += "<div id='grdAtt_hlnk_" + rowFrmNo + "attach' class='attach-files'></div>"
+    if (rowNo == "000") {
+        ParentDiv += "<span id=\"nonGrdAtt_" + fldName + "\" class=\"fa fa-paperclip upload-icon nongridAttachIcon inlinediv\" style=\"\" onclick=\"ShowGridAttachPopUp(this);\" title=\"nongrid attachment\"></span>";
+    }
+    ParentDiv += "<div id='grdAtt_hlnk_" + rowFrmNo + "attach' class='attach-files'></div>"
 
-    //if (rowNo == "000") {
-    //    $("#" + fldName).siblings(".divnonattach").html(ParentDiv);
-    //} else if (calledfrom == "FillGrid") {
-    //    if ($j("#GridAttach" + rowFrmNo, doParentOpInIframe("document", "rtn", "#GridAttach" + rowFrmNo)).find(".attach-files").length != 0) {
-    //        $j("#GridAttach" + rowFrmNo, doParentOpInIframe("document", "rtn", "#GridAttach" + rowFrmNo)).find(".attach-files").remove();
-    //        $j("#GridAttach" + rowFrmNo, doParentOpInIframe("document", "rtn", "#GridAttach" + rowFrmNo)).append(ParentDiv);
-    //    } else {
-    //        $j("#GridAttach" + rowFrmNo, doParentOpInIframe("document", "rtn", "#GridAttach" + rowFrmNo)).append(ParentDiv);
-    //    }
-    //} else {
-    //    $j("#GridAttach" + rowFrmNo, doParentOpInIframe("document", "rtn", "#GridAttach" + rowFrmNo)).append(ParentDiv);
-    //}
+    if (rowNo == "000") {
+        $("#" + fldName).siblings(".divnonattach").html(ParentDiv);
+    } else if (calledfrom == "FillGrid") {
+        if ($j("#GridAttach" + rowFrmNo, doParentOpInIframe("document", "rtn", "#GridAttach" + rowFrmNo)).find(".attach-files").length != 0) {
+            $j("#GridAttach" + rowFrmNo, doParentOpInIframe("document", "rtn", "#GridAttach" + rowFrmNo)).find(".attach-files").remove();
+            $j("#GridAttach" + rowFrmNo, doParentOpInIframe("document", "rtn", "#GridAttach" + rowFrmNo)).append(ParentDiv);
+        } else {
+            $j("#GridAttach" + rowFrmNo, doParentOpInIframe("document", "rtn", "#GridAttach" + rowFrmNo)).append(ParentDiv);
+        }
+    } else {
+        $j("#GridAttach" + rowFrmNo, doParentOpInIframe("document", "rtn", "#GridAttach" + rowFrmNo)).append(ParentDiv);
+    }
 
 
-    //for (var i = 0; i < arrFileNames.length; i++) {
+    for (var i = 0; i < arrFileNames.length; i++) {
 
-    //    var finalFileName = arrFileNames[i].replace(/\s/g, '♠').replace(/\(/g, '♦').replace(/\)/g, '♣');
+        var finalFileName = arrFileNames[i].replace(/\s/g, '♠').replace(/\(/g, '♦').replace(/\)/g, '♣');
 
-    //    let fileOpenLink = arrFileNames[i];
-    //    fileOpenLink = fileOpenLink.replace(/'/g, '♠');
-    //    FileLink += "<div id=\"Link_" + rowFrmNo + "_" + finalFileName + "\" class=\"inlinediv\"><a onclick=\"DeleteFileFromRow('" + fldName + "','" + rowFrmNo + "','" + fileOpenLink + "')\"><i class=\"glyphicon glyphicon-remove close icon-arrows-remove attachmentcrossicon\"></i></a><a href=\"javascript:void(0)\"  tabindex=\"-1\" class='grdAttach handCur' onclick='ShowGridAttLink(\"" + filePath + fileOpenLink + "\")'>" + arrFileNames[i] + "</a></div>";
+        let fileOpenLink = arrFileNames[i];
+        fileOpenLink = fileOpenLink.replace(/'/g, '♠');
+        FileLink += "<div id=\"Link_" + rowFrmNo + "_" + finalFileName + "\" class=\"inlinediv\"><a onclick=\"DeleteFileFromRow('" + fldName + "','" + rowFrmNo + "','" + fileOpenLink + "')\"><i class=\"glyphicon glyphicon-remove close icon-arrows-remove attachmentcrossicon\"></i></a><a href=\"javascript:void(0)\"  tabindex=\"-1\" class='grdAttach handCur' onclick='ShowGridAttLink(\"" + filePath + fileOpenLink + "\")'>" + arrFileNames[i] + "</a></div>";
 
-    //    if (calledfrom == undefined) {
-    //        if (rowNo == "000" && fldValue != "") {
-    //            $("#" + fldName).siblings(".divnonattach").find(".attach-files").html(FileLink);
-    //            if ($("#" + fldName).siblings(".divnonattach").find(".attach-files").height() > 22) {
-    //                let fileName = $("#" + fldName).siblings(".divnonattach").attr("data-morefiles");
-    //                if (typeof fileName != "undefined" && fileName != "")
-    //                    fileName += ',' + $("#" + fldName).siblings(".divnonattach").find(".attach-files").children().last().attr("id");
-    //                else
-    //                    fileName = $("#" + fldName).siblings(".divnonattach").find(".attach-files").children().last().attr("id");
-    //                $("#" + fldName).siblings(".divnonattach").attr("data-morefiles", fileName);
+        if (calledfrom == undefined) {
+            if (rowNo == "000" && fldValue != "") {
+                $("#" + fldName).siblings(".divnonattach").find(".attach-files").html(FileLink);
+                if ($("#" + fldName).siblings(".divnonattach").find(".attach-files").height() > 22) {
+                    let fileName = $("#" + fldName).siblings(".divnonattach").attr("data-morefiles");
+                    if (typeof fileName != "undefined" && fileName != "")
+                        fileName += ',' + $("#" + fldName).siblings(".divnonattach").find(".attach-files").children().last().attr("id");
+                    else
+                        fileName = $("#" + fldName).siblings(".divnonattach").find(".attach-files").children().last().attr("id");
+                    $("#" + fldName).siblings(".divnonattach").attr("data-morefiles", fileName);
 
-    //                let popList = fileName.split(",");
-    //                $("#" + fldName).siblings(".divnonattach").find(".attach-files").children().each(function (ind, fid) {
-    //                    let cId = $(fid).attr("id");
-    //                    if ($j.inArray(cId, popList) > -1)
-    //                        $("#" + fldName).siblings(".divnonattach").find(".attach-files").find("[id^=" + cId.split('.')[0] + "]").addClass("revrseInlinediv");
-    //                });
+                    let popList = fileName.split(",");
+                    $("#" + fldName).siblings(".divnonattach").find(".attach-files").children().each(function (ind, fid) {
+                        let cId = $(fid).attr("id");
+                        if ($j.inArray(cId, popList) > -1)
+                            $("#" + fldName).siblings(".divnonattach").find(".attach-files").find("[id^=" + cId.split('.')[0] + "]").addClass("revrseInlinediv");
+                    });
 
-    //                if ($("#" + fldName).siblings(".divnonattach").find('a.attachment-count').length == 0) {
-    //                    $("#" + fldName).siblings(".divnonattach").append("<a class='pull-" + (callParentNew("gllangType", "gllangType") === "ar" ? "left" : "right") + " attachment-count' href='javascript:void(0)' class=''><span data-target='grdAtt_hlnk_" + rowFrmNo + "attach' class=' attach-popover' data-container='.dvheightframe' data-placement='bottom'>" + fileName.split(",").length + "+</span></a>");
-    //                } else {
-    //                    $("#" + fldName).siblings(".divnonattach").find(".attachment-count span").text(fileName.split(",").length + "+");
-    //                }
+                    if ($("#" + fldName).siblings(".divnonattach").find('a.attachment-count').length == 0) {
+                        $("#" + fldName).siblings(".divnonattach").append("<a class='pull-" + (callParentNew("gllangType", "gllangType") === "ar" ? "left" : "right") + " attachment-count' href='javascript:void(0)' class=''><span data-target='grdAtt_hlnk_" + rowFrmNo + "attach' class=' attach-popover' data-container='.dvheightframe' data-placement='bottom'>" + fileName.split(",").length + "+</span></a>");
+                    } else {
+                        $("#" + fldName).siblings(".divnonattach").find(".attachment-count span").text(fileName.split(",").length + "+");
+                    }
 
-    //            } else {
-    //                $("#" + fldName).siblings(".divnonattach").find(".attach-files").children().last().removeClass("hide");
-    //                //$("grdAtt_hlnk_" + rowFrmNo + "attach", "id");
-    //            }
-    //        } else if (fldValue != "") {
+                } else {
+                    $("#" + fldName).siblings(".divnonattach").find(".attach-files").children().last().removeClass("hide");
+                    //$("grdAtt_hlnk_" + rowFrmNo + "attach", "id");
+                }
+            } else if (fldValue != "") {
 
-    //            $(".attach-files").parent("#GridAttach" + rowFrmNo).find(".attach-files").html(FileLink);
-    //            let ftsize = $(".attach-files").parent("#GridAttach" + rowFrmNo).find(".attach-files").css('font-size');
-    //            let minHght = GetAttachControlHeight(ftsize);
-    //            if ($(".attach-files").parent("#GridAttach" + rowFrmNo).find(".attach-files")[0].offsetHeight > minHght) {
+                $(".attach-files").parent("#GridAttach" + rowFrmNo).find(".attach-files").html(FileLink);
+                let ftsize = $(".attach-files").parent("#GridAttach" + rowFrmNo).find(".attach-files").css('font-size');
+                let minHght = GetAttachControlHeight(ftsize);
+                if ($(".attach-files").parent("#GridAttach" + rowFrmNo).find(".attach-files")[0].offsetHeight > minHght) {
 
-    //                let fileNames = $j("#GridAttach" + rowFrmNo, doParentOpInIframe("document", "rtn", "#GridAttach" + rowFrmNo)).attr("data-morefiles");
-    //                if (typeof fileNames != "undefined" && fileNames != "")
-    //                    fileNames += ',' + $(".attach-files").parent("#GridAttach" + rowFrmNo).find(".attach-files").children().last().attr("id");
-    //                else
-    //                    fileNames = $(".attach-files").parent("#GridAttach" + rowFrmNo).find(".attach-files").children().last().attr("id");
-    //                $j("#GridAttach" + rowFrmNo, doParentOpInIframe("document", "rtn", "#GridAttach" + rowFrmNo)).attr("data-morefiles", fileNames);
+                    let fileNames = $j("#GridAttach" + rowFrmNo, doParentOpInIframe("document", "rtn", "#GridAttach" + rowFrmNo)).attr("data-morefiles");
+                    if (typeof fileNames != "undefined" && fileNames != "")
+                        fileNames += ',' + $(".attach-files").parent("#GridAttach" + rowFrmNo).find(".attach-files").children().last().attr("id");
+                    else
+                        fileNames = $(".attach-files").parent("#GridAttach" + rowFrmNo).find(".attach-files").children().last().attr("id");
+                    $j("#GridAttach" + rowFrmNo, doParentOpInIframe("document", "rtn", "#GridAttach" + rowFrmNo)).attr("data-morefiles", fileNames);
 
-    //                fileNames.split(",").forEach(function (fid) {
-    //                    $(callParentNew(fid, "id")).addClass("revrseInlinediv");
-    //                });
-    //                if ($j("#GridAttach" + rowFrmNo, doParentOpInIframe("document", "rtn", "#GridAttach" + rowFrmNo)).find('a.attachment-count').length == 0) {
-    //                    $j("#GridAttach" + rowFrmNo, doParentOpInIframe("document", "rtn", "#GridAttach" + rowFrmNo)).append("<a class='pull-" + (callParentNew("gllangType", "gllangType") === "ar" ? "left" : "right") + " attachment-count' href='javascript:void(0)' class=''><span data-target='grdAtt_hlnk_" + rowFrmNo + "attach' class=' attach-popover' data-container='.dvheightframe' data-placement='bottom'>" + fileNames.split(',').length + "+</span></a>");
-    //                } else {
-    //                    $j("#GridAttach" + rowFrmNo, doParentOpInIframe("document", "rtn", "#GridAttach" + rowFrmNo)).find(".attachment-count span").text(fileNames.split(',').length + "+");
-    //                }
-    //            } else {
-    //                $(callParentNew("wrapperForEditFields" + dcNo, "id")).children("#sp" + dcNo + "R" + rowFrmNo).css("height", "90px");
-    //                $(".attach-files").parent("#GridAttach" + rowFrmNo).find(".attach-files").children().last().removeClass("hide");
-    //                //$("grdAtt_hlnk_" + rowFrmNo + "attach", "id");
-    //            }
+                    fileNames.split(",").forEach(function (fid) {
+                        $(callParentNew(fid, "id")).addClass("revrseInlinediv");
+                    });
+                    if ($j("#GridAttach" + rowFrmNo, doParentOpInIframe("document", "rtn", "#GridAttach" + rowFrmNo)).find('a.attachment-count').length == 0) {
+                        $j("#GridAttach" + rowFrmNo, doParentOpInIframe("document", "rtn", "#GridAttach" + rowFrmNo)).append("<a class='pull-" + (callParentNew("gllangType", "gllangType") === "ar" ? "left" : "right") + " attachment-count' href='javascript:void(0)' class=''><span data-target='grdAtt_hlnk_" + rowFrmNo + "attach' class=' attach-popover' data-container='.dvheightframe' data-placement='bottom'>" + fileNames.split(',').length + "+</span></a>");
+                    } else {
+                        $j("#GridAttach" + rowFrmNo, doParentOpInIframe("document", "rtn", "#GridAttach" + rowFrmNo)).find(".attachment-count span").text(fileNames.split(',').length + "+");
+                    }
+                } else {
+                    $(callParentNew("wrapperForEditFields" + dcNo, "id")).children("#sp" + dcNo + "R" + rowFrmNo).css("height", "90px");
+                    $(".attach-files").parent("#GridAttach" + rowFrmNo).find(".attach-files").children().last().removeClass("hide");
+                    //$("grdAtt_hlnk_" + rowFrmNo + "attach", "id");
+                }
 
-    //        }
+            }
 
-    //    } else if (calledfrom != undefined && calledfrom == "FillGrid") {
+        } else if (calledfrom != undefined && calledfrom == "FillGrid") {
 
-    //        $("#gridHd" + dcNo + " tbody td .attach-files").parent("#GridAttach" + rowFrmNo).find(".attach-files").html(FileLink);
-    //        let ftsize = $("#gridHd" + dcNo + " tbody td .attach-files").parent("#GridAttach" + rowFrmNo).find(".attach-files").css('font-size');
-    //        let minHght = GetAttachControlHeight(ftsize);
-    //        if ($("#gridHd" + dcNo + " tbody td .attach-files").parent("#GridAttach" + rowFrmNo).find(".attach-files")[0].offsetHeight > minHght) {
+            $("#gridHd" + dcNo + " tbody td .attach-files").parent("#GridAttach" + rowFrmNo).find(".attach-files").html(FileLink);
+            let ftsize = $("#gridHd" + dcNo + " tbody td .attach-files").parent("#GridAttach" + rowFrmNo).find(".attach-files").css('font-size');
+            let minHght = GetAttachControlHeight(ftsize);
+            if ($("#gridHd" + dcNo + " tbody td .attach-files").parent("#GridAttach" + rowFrmNo).find(".attach-files")[0].offsetHeight > minHght) {
 
-    //            let fileNames = $("#gridHd" + dcNo + " tbody td .attach-files").parent("#GridAttach" + rowFrmNo).attr("data-morefiles");
-    //            if (typeof fileNames != "undefined" && fileNames != "")
-    //                fileNames += ',' + $("#gridHd" + dcNo + " tbody td .attach-files").parent("#GridAttach" + rowFrmNo).find(".attach-files").children().last().attr("id");
-    //            else
-    //                fileNames = $("#gridHd" + dcNo + " tbody td .attach-files").parent("#GridAttach" + rowFrmNo).find(".attach-files").children().last().attr("id");
-    //            $("#gridHd" + dcNo + " tbody td .attach-files").parent("#GridAttach" + rowFrmNo).attr("data-morefiles", fileNames);
+                let fileNames = $("#gridHd" + dcNo + " tbody td .attach-files").parent("#GridAttach" + rowFrmNo).attr("data-morefiles");
+                if (typeof fileNames != "undefined" && fileNames != "")
+                    fileNames += ',' + $("#gridHd" + dcNo + " tbody td .attach-files").parent("#GridAttach" + rowFrmNo).find(".attach-files").children().last().attr("id");
+                else
+                    fileNames = $("#gridHd" + dcNo + " tbody td .attach-files").parent("#GridAttach" + rowFrmNo).find(".attach-files").children().last().attr("id");
+                $("#gridHd" + dcNo + " tbody td .attach-files").parent("#GridAttach" + rowFrmNo).attr("data-morefiles", fileNames);
 
-    //            let popList = fileNames.split(",");
-    //            $("#gridHd" + dcNo + " tbody td .attach-files").parent("#GridAttach" + rowFrmNo).find(".attach-files").children().each(function (ind, fid) {
-    //                let cId = $(fid).attr("id");
-    //                if ($j.inArray(cId, popList) > -1)
-    //                    $("#gridHd" + dcNo + " tbody td .attach-files").parent("#GridAttach" + rowFrmNo).find(".attach-files").find("[id^=" + cId.split('.')[0] + "]").addClass("revrseInlinediv");
-    //            });
+                let popList = fileNames.split(",");
+                $("#gridHd" + dcNo + " tbody td .attach-files").parent("#GridAttach" + rowFrmNo).find(".attach-files").children().each(function (ind, fid) {
+                    let cId = $(fid).attr("id");
+                    if ($j.inArray(cId, popList) > -1)
+                        $("#gridHd" + dcNo + " tbody td .attach-files").parent("#GridAttach" + rowFrmNo).find(".attach-files").find("[id^=" + cId.split('.')[0] + "]").addClass("revrseInlinediv");
+                });
 
-    //            if ($("#gridHd" + dcNo + " tbody td .attach-files").parent("#GridAttach" + rowFrmNo).find('a.attachment-count').length == 0) {
-    //                $("#gridHd" + dcNo + " tbody td .attach-files").parent("#GridAttach" + rowFrmNo).append("<a class='pull-" + (callParentNew("gllangType", "gllangType") === "ar" ? "left" : "right") + " attachment-count' href='javascript:void(0)' class=''><span data-target='grdAtt_hlnk_" + rowFrmNo + "attach' class=' attach-popover' data-container='.dvheightframe' data-placement='bottom'>" + fileNames.split(',').length + "+</span></a>");
-    //            } else {
-    //                $("#gridHd" + dcNo + " tbody td .attach-files").parent("#GridAttach" + rowFrmNo).find(".attachment-count span").text(fileNames.split(',').length + "+");
-    //            }
-    //        } else {
-    //            $(callParentNew("wrapperForEditFields" + dcNo, "id")).children("#sp" + dcNo + "R" + rowFrmNo).css("height", "90px");
-    //            $("#gridHd" + dcNo + " tbody td .attach-files").parent("#GridAttach" + rowFrmNo).find(".attach-files").children().last().removeClass("hide");
-    //            //$("grdAtt_hlnk_" + rowFrmNo + "attach", "id");
-    //        }
+                if ($("#gridHd" + dcNo + " tbody td .attach-files").parent("#GridAttach" + rowFrmNo).find('a.attachment-count').length == 0) {
+                    $("#gridHd" + dcNo + " tbody td .attach-files").parent("#GridAttach" + rowFrmNo).append("<a class='pull-" + (callParentNew("gllangType", "gllangType") === "ar" ? "left" : "right") + " attachment-count' href='javascript:void(0)' class=''><span data-target='grdAtt_hlnk_" + rowFrmNo + "attach' class=' attach-popover' data-container='.dvheightframe' data-placement='bottom'>" + fileNames.split(',').length + "+</span></a>");
+                } else {
+                    $("#gridHd" + dcNo + " tbody td .attach-files").parent("#GridAttach" + rowFrmNo).find(".attachment-count span").text(fileNames.split(',').length + "+");
+                }
+            } else {
+                $(callParentNew("wrapperForEditFields" + dcNo, "id")).children("#sp" + dcNo + "R" + rowFrmNo).css("height", "90px");
+                $("#gridHd" + dcNo + " tbody td .attach-files").parent("#GridAttach" + rowFrmNo).find(".attach-files").children().last().removeClass("hide");
+                //$("grdAtt_hlnk_" + rowFrmNo + "attach", "id");
+            }
 
-    //    }
+        }
 
-    //}
+    }
 }
 
 //Constructing Html for Attachments (fieldname starts with "axpfile_")
@@ -11216,7 +10665,6 @@ function DeleteFileFromRow(fldName, fNo, fldValue) {
                     fldValue = unescape(fldValue);
                     currentRowValue = DeleteAttachFiles(currentRowValue, hasFolderReference, hasReferImages, referFieldValue, fldValue)
                     UpdateFieldArray(fldName, rowNo, currentRowValue, "gridattachment", "parent");
-                    UpdateAllFieldValues(fldName, currentRowValue);
                     var FullfileName = fldValue.replace(/\s/g, '♠').replace(/\(/g, '♦').replace(/\)/g, '♣');
                     if (rowNo == "000")
                         if (fldName.toLowerCase().startsWith("axpfile_"))
@@ -11874,14 +11322,13 @@ function FormSaveSend(details) {
         if ($j(fName).length > 0) {
             $j(fName).val(value);
             UpdateFieldArray(fName.substring(1), "0", value, "parent");
-            UpdateAllFieldValues(fName.substring(1), value);
+
         }
     }
     if (!FormSubmit()) {
         if ($j(fName).length > 0) {
             $j(fName).val(value);
             UpdateFieldArray(fName.substring(1), "0", value, "parent");
-            UpdateAllFieldValues(fName.substring(1), value);
         }
     }
 }
@@ -13332,16 +12779,8 @@ function CompressMode(isCompress) {
     if (isCompress === "true" || isCompress === true) {
         $("#wBdr").find(".grid-stack").each(function (ind, gsElem) {
             if ($(gsElem).data('gridstack')) {
-                if (typeof dcLayoutType == "undefined" || dcLayoutType == "" || dcLayoutType == "default") {
-                    $(gsElem).data('gridstack').cellHeight(gsConf.compressedMode.cellHeight, false);
-                    $(gsElem).data('gridstack').verticalMargin(gsConf.compressedMode.verticalMargin, false);
-                } else {
-                    $(gsElem).data('gridstack').cellHeight(gsConf.compressedMode.cellHeight - gsConf.compressedMode.labelHeight, false);
-                    $(gsElem).data('gridstack').verticalMargin(gsConf.compressedMode.verticalMargin + 10, false);
-                }
-            }
-            else{
-                injectGridStackDynamicMargin(`.grid-stack-item{margin-bottom: ${gsConf.compressedMode.verticalMargin}px !important;}`);
+                $(gsElem).data('gridstack').cellHeight(gsConf.compressedMode.cellHeight, false);
+                $(gsElem).data('gridstack').verticalMargin(gsConf.compressedMode.verticalMargin, false);
             }
         });
 
@@ -13351,34 +12790,13 @@ function CompressMode(isCompress) {
     } else {
         $("#wBdr").find(".grid-stack").each(function (ind, gsElem) {
             if ($(gsElem).data('gridstack')) {
-                if (typeof dcLayoutType == "undefined" || dcLayoutType == "" || dcLayoutType == "default") {
-                    $(gsElem).data('gridstack').cellHeight(gsConf.normalMode.cellHeight, false);
-                    $(gsElem).data('gridstack').verticalMargin(gsConf.normalMode.verticalMargin, false);
-                }
-                else {
-                    $(gsElem).data('gridstack').cellHeight(gsConf.normalMode.cellHeight - gsConf.normalMode.labelHeight, false);
-                    $(gsElem).data('gridstack').verticalMargin(gsConf.normalMode.verticalMargin + 10, false);
-                }
-            }
-            else{
-                injectGridStackDynamicMargin(`.grid-stack-item{margin-bottom: ${gsConf.normalMode.verticalMargin}px !important;}`);
+                $(gsElem).data('gridstack').cellHeight(gsConf.normalMode.cellHeight, false);
+                $(gsElem).data('gridstack').verticalMargin(gsConf.normalMode.verticalMargin, false);
             }
         });
         if (theMode == "design") {
             $("#ckbCompressedMode").prop('checked', false);
         }
-    }
-
-    function injectGridStackDynamicMargin(css){
-        var style = document.createElement("style");
-
-        var head = document.head || document.querySelectorAll("head")[0] || document.documentElement;
-
-        // style.innerText = "body{background:red!important;}";
-        style.innerText = css;
-
-        // head.insertBefore( style, head.firstChild );
-        head.appendChild(style);
     }
 }
 
@@ -13788,12 +13206,10 @@ function MultiGroupSelectClk(event, el) {
                 "width": $("#" + fldNameMSId).parents("td").outerWidth(),
                 "left": $("#" + fldNameMSId).parents("td").offset().left - 22
             });
-            
-            if ($("#" + fldNameMSId).parents(".gridFixedHeader").scrollTop() > 0){
+            if ($("#" + fldNameMSId).parents(".gridFixedHeader").scrollTop() > 0)
                 $("#" + fldNameMSId).parents(".edit-mode-content").css({
                     "position": "static"
                 });
-            }
         }
         var selectedList = $("#" + fldNameMSId).attr("data-selected");;
         var selSep = $("#" + fldNameMSId).attr("data-sep");
@@ -13885,8 +13301,7 @@ function MultiGroupSelectChoice(el) {
     if (IsDcGrid(acFrNo) && isGrdEditDirty)
         UpdateFieldArray(axpIsRowValid + acFrNo + fldRowNo + "F" + acFrNo, GetDbRowNo(fldRowNo, acFrNo), "", "parent", "AddRow");
     UpdateFieldArray(fldNameMs, rowNum, fldMsValue, "parent", "AutoComplete");
-    UpdateAllFieldValues(fldNameMs, fldMsValue);
-    MainBlur($("#" + fldNameMs));
+    CallSetFieldValue(fldNameMs, fldMsValue);
 }
 
 function AxGetFieldData(ParentFieldId) {
@@ -13932,34 +13347,24 @@ function FieldTypeTable(event, el) {
     var tableHeader = GetFieldCaption(thisFldId).length != -1 ? GetFieldCaption(thisFldId) : "Table";
     // displayBootstrapModalDialog(tableHeader, "", "330px", true, src, "", "", CallbackFunctionBootstrap);
 
-    let myModal = new BSModal("modalIdTableField", tableHeader, "<iframe class='w-100 h-100' src='" + src + "'></iframe>", () => {
+    let myModal = new BSModal("modalIdTableField", tableHeader, "<iframe class='col-12 h-100' src='" + src + "'></iframe>", () => {
         // CallbackFunctionBootstrap();
     }, () => {
         //hide callback
     });
-    myModal.scrollableDialog();
-    myModal.modalBody.classList.add('overflow-hidden');
     myModal.changeSize("fullscreen");
-    myModal.okBtn.innerText = "Ok";
-    myModal.okBtn.addEventListener("click", (e) => {
-        document.getElementById('modalIdTableField').querySelector("iframe").contentWindow.AddTableData();
-    });
-    myModal.cancelBtn.innerText = "Clear";
-    myModal.cancelBtn.addEventListener("click", (e) => {
-        document.getElementById('modalIdTableField').querySelector("iframe").contentWindow.ClearTableData('fldTable');
-    });
-    myModal.cancelBtn.removeAttribute("data-bs-dismiss");
-    myModal.okBtn.removeAttribute("data-bs-dismiss");
-}
+    myModal.hideFooter();
+    myModal.hideHeader();
+    myModal.showFloatingClose();
 
-function CallbackFunctionBootstrap(thisFldId) {
-    ChangedTblFields = new Array();
-    ChangedTblFieldVals = new Array();
-    MainBlur($j($("#" + thisFldId)));
-    $("#" + thisFldId).blur();
-    $("#" + thisFldId).focus();
+    function CallbackFunctionBootstrap() {
+        ChangedTblFields = new Array();
+        ChangedTblFieldVals = new Array();
+        MainBlur($j($("#" + thisFldId)));
+        $("#" + thisFldId).blur();
+        $("#" + thisFldId).focus();
+    }
 }
-
 
 function AxpFilePathChange(fieldID) {
     var afFldName = fieldID.substr(("axpfilepath_").length);
@@ -14085,17 +13490,17 @@ function exportGridToExcel(exportDcNo) {
 
             var editDeleteIndex = $("#gridToExport thead th").index($("#gridToExport thead th[id=uniqueEditDeleteAct" + exportDcNo + "]"));
             if (editDeleteIndex > -1) {
-                $("#gridToExport thead th[id=uniqueEditDeleteAct" + exportDcNo + "]").addClass("d-none");
+                $("#gridToExport thead th[id=uniqueEditDeleteAct" + exportDcNo + "]").addClass("hide");
                 $("#gridToExport tbody tr").each((ind, elm) => {
-                    $(elm).find("td:eq(" + editDeleteIndex + ")").addClass("d-none");
+                    $(elm).find("td:eq(" + editDeleteIndex + ")").addClass("hide");
                 });
             }
 
             var rowNumber = $("#gridToExport thead th").index($("#gridToExport thead th[id=uniqueThHead" + exportDcNo + "]"));
             if (rowNumber > -1) {
-                $("#gridToExport thead th[id=uniqueThHead" + exportDcNo + "]").addClass("d-none");
+                $("#gridToExport thead th[id=uniqueThHead" + exportDcNo + "]").addClass("hide");
                 $("#gridToExport tbody tr").each((ind, elm) => {
-                    $(elm).find("td:eq(" + rowNumber + ")").addClass("d-none");
+                    $(elm).find("td:eq(" + rowNumber + ")").addClass("hide");
                 });
             }
 
@@ -14120,7 +13525,7 @@ function exportGridToExcel(exportDcNo) {
                     raw: true
                 });
                 if (workbook) {
-                    let idS = _this.header.find("th:not(.d-none):not(.none)").toArray().map(th => $(th).attr("id").substring(3));
+                    let idS = _this.header.find("th:not(.hide):not(.none)").toArray().map(th => $(th).attr("id").substring(3));
 
                     let objectMaxWidth = [];
 
@@ -14158,11 +13563,7 @@ function exportGridToExcel(exportDcNo) {
 
                         var fieldApplyComma = FProps[fieldIndex][0] != "F";
 
-                        var fieldDecimal = 0;
-                        if (FCustDecimal[fieldIndex] == "True" && typeof gloAxDecimal != "undefined" && gloAxDecimal > -1)
-                            fieldDecimal = gloAxDecimal;
-                        else
-                            fieldDecimal = FDecimal[fieldIndex];
+                        var fieldDecimal = FDecimal[fieldIndex];
 
                         let decimals = "";
 
@@ -14296,41 +13697,41 @@ function importExceltoGrid(importDcNo) {
 function openSignaturePad(signFld) {
 
     let signCanvas = `
-    <div id="modal_${signFld}" class="signature-pad h-400px">
-        <div class="signature-pad--body cursor-pointer">
+    <div id="${signFld}" class="signature-pad">
+        <div class="signature-pad--body">
             <canvas></canvas>
         </div>
         <div class="signature-pad--footer">
-            <div class="description d-none">Sign Above</div>
+            <div class="description hide">Sign Above</div>
             <div class="signature-pad--actions">
-                <div class="signatureImage d-none">
+                <div class="signatureImage hide">
                     <button type="button" class="button save" data-action="save-png" title="Download PNG">PNG</button>
                     <button type="button" class="button save" data-action="save-jpg" title="Download JPG">JPG</button>
                     <button type="button" class="button save" data-action="save-svg" title="Download SVG">SVG</button>                    
                 </div>
-                <div class="signatureFooterButton d-flex gap-3 ms-auto">  
-                    <input class="color-picker" class="d-none" value="black" />              
-                    <button type="button" class="btn btn-icon btn-light-primary" data-action="change-color" title="Change Color">
-                        <span class="material-icons material-icons-style">palette</span>
+                <div class="signatureFooterButton">  
+                    <input class="color-picker" class="hide" value="black" />              
+                    <button type="button" class="button" data-action="change-color" title="Change Color">
+                        <span class="material-icons">palette</span>
                     </button>                    
-                    <button type="button" class="btn btn-icon btn-light-primary clear" data-action="clear" title="Clear">
-                    <span class="material-icons material-icons-style">clear_all</span>
+                    <button type="button" class="button clear" data-action="clear" title="Clear">
+                    <span class="material-icons">clear_all</span>
                     </button>
-                    <button type="button" class="btn btn-icon btn-light-primary" data-action="undo" title="Undo">
-                        <span class="material-icons material-icons-style">undo</span>
+                    <button type="button" class="button" data-action="undo" title="Undo">
+                        <span class="material-icons">undo</span>
                     </button>
-                    <button type="button" class="btn btn-icon btn-light-primary save" data-action="save-sign" title="Save Signature">
-                        <span class="material-icons material-icons-style">done</span>
+                    <button type="button" class="button save" data-action="save-sign" title="Save Signature">
+                        <span class="material-icons">done</span>
                     </button>
-                    <button type="button" class="btn btn-icon btn-light-primary" data-action="close-sign" title="Close">
-                        <span class="material-icons material-icons-style">close</span>
+                    <button type="button" class="button" data-action="close-sign" title="Close">
+                        <span class="material-icons">close</span>
                     </button>                    
                 </div>
             </div>
         </div>
     </div>`;
 
-    // var modalHeight = isMobile ? "calc(100vh - 138px)" : "350px";
+    var modalHeight = isMobile ? "calc(100vh - 138px)" : "350px";
 
     loadAndCall({
         files: {
@@ -14343,16 +13744,9 @@ function openSignaturePad(signFld) {
             ]
         },
         callBack() {
-
-            let myModal = new BSModal(`sp_${signFld}`, "Signature Pad", signCanvas, () => {
-                signatuePadCallBack(signFld);
-            }, () => {
+            displayBootstrapModalDialog("Signature Pad", "", modalHeight, false, signCanvas, "", function () {
+                signatuePadCallBack(signFld)
             });
-            myModal.changeSize("lg");
-            myModal.scrollableDialog();
-            myModal.verticallyCentered();
-            myModal.hideHeader();
-            myModal.hideFooter();
         }
     });
 
@@ -14361,7 +13755,7 @@ function openSignaturePad(signFld) {
 function openBarQrScanner(scanEle) {
     let scanReaderId = "reader_" + scanEle;
     let scannerTemplate = `<div id="${scanReaderId}"></div>`;
-    // var modalHeight = isMobile ? "calc(100vh - 138px)" : "475px";
+    var modalHeight = isMobile ? "calc(100vh - 138px)" : "475px";
     loadAndCall({
         files: {
             css: ["/ThirdParty/html5-qrcode-master/dist/highlight.min.css"],
@@ -14370,14 +13764,9 @@ function openBarQrScanner(scanEle) {
             ]
         },
         callBack() {
-            let myModal = new BSModal(`modal_${scanEle}`, "Scanner", scannerTemplate, () => {
-                callBackBarQrScanner(scanReaderId);
-            }, () => {
+            displayBootstrapModalDialog("Scanner", "lg", modalHeight, false, scannerTemplate, "", function () {
+                callBackBarQrScanner(scanReaderId)
             });
-            myModal.changeSize("lg");
-            myModal.scrollableDialog();
-            myModal.verticallyCentered();
-            myModal.hideFooter();
         }
     });
 }
@@ -14411,7 +13800,7 @@ function callBackBarQrScanner(scanReaderId) {
 
                     html5QrcodeScanner.clear();
                     html5QrcodeScanner.render("stop");
-                    callParentNew(`modal_${eleId}`, "id").dispatchEvent(new CustomEvent("close"));
+                    $("#btnModalClose").trigger("click");
                     MainBlur($("#" + eleId));
                 } else {
                     var isBrExist = false;
@@ -14433,7 +13822,7 @@ function callBackBarQrScanner(scanReaderId) {
                     if (isBrExist) {
                         html5QrcodeScanner.clear();
                         html5QrcodeScanner.render("stop");
-                        callParentNew(`modal_${eleId}`, "id").dispatchEvent(new CustomEvent("close"));
+                        $("#btnModalClose").trigger("click");
                         $.confirm({
                             theme: 'modern',
                             closeIcon: false,
@@ -14464,7 +13853,7 @@ function callBackBarQrScanner(scanReaderId) {
 
                                         html5QrcodeScanner.clear();
                                         html5QrcodeScanner.render("stop");
-                                        callParentNew(`modal_${eleId}`, "id").dispatchEvent(new CustomEvent("close"));
+                                        $("#btnModalClose").trigger("click");
                                         MainBlur($("#" + eleId));
                                     },
                                 }
@@ -14477,7 +13866,7 @@ function callBackBarQrScanner(scanReaderId) {
 
                         html5QrcodeScanner.clear();
                         html5QrcodeScanner.render("stop");
-                        callParentNew(`modal_${eleId}`, "id").dispatchEvent(new CustomEvent("close"));
+                        $("#btnModalClose").trigger("click");
                         MainBlur($("#" + eleId));
                     }
                 }
@@ -14535,21 +13924,19 @@ function ViewColumnsPopup(vcValues)
         lstValue=vcValues.replace(/\r\n/g,"~").split("~");
     var tblData = "<table id=\"SVCTable\" class=\"table table-bordered table-sm\">";
     tblData += "<thead>";
-    tblData += "<tr><th><input type=\"checkbox\" name=\"chkHdrItem\" class=\"form-check-input fgHdrChk\" onclick=\"javascript:ChecksvcAll(this);\"></div></th><th class=\"d-none\">Fields</th><th>Fields</th>";
+    tblData += "<tr><th><input type=\"checkbox\" name=\"chkHdrItem\" class=\"form-check-input fgHdrChk\" onclick=\"javascript:ChecksvcAll(this);\"></div></th><th>Fields</th>";
     tblData += "</thead>";
     tblData += "<tbody>";
     $.each(FNames,function(ind,val){
         let ftype=FFieldType[ind];
-        let fhidden=FFieldHidden[ind];
         let excludeTypes=['Rich Text','Large Text','Image','Table'];
-        if(ftype!="" && excludeTypes.indexOf(ftype)==-1 && fhidden.toLowerCase() =="false")
+        if(ftype!="" && excludeTypes.indexOf(ftype)==-1)
         {
           if(lstValue.indexOf(val)==-1)
               tblData += "<tr><td><input type=\"checkbox\" name=\"chkItem\" class=\"form-check-input fgChk\" onclick=\"javascript:ChkHdrsvcCheckbox(this);\"></td>";
           else
               tblData += "<tr><td><input type=\"checkbox\" name=\"chkItem\" class=\"form-check-input fgChk\" onclick=\"javascript:ChkHdrsvcCheckbox(this);\" checked></td>";
-          tblData += "<td class=\"d-none\">"+val+"</td>";
-          tblData += "<td>"+FCaption[ind]+"</td></tr>";
+          tblData += "<td>"+val+"</td></tr>";
         }
     });
     tblData += "</tbody>";
@@ -14611,769 +13998,4 @@ function SaveViewColumns()
 }
 
 
-function AxRulesDefParser(thisEleName,thisEleType,thisEvent,thisExpDep="")
-{
-    var flname="";
-    if(FNames.indexOf(thisEleName)>-1)
-        flname=thisEleName;
-    else
-        flname=GetFieldsName(thisEleName);
-    if(flname=="")
-        flname = thisEleName;
-    var loopInd;
-    if (flname != "") {
-        loopInd = AxRDCompName.reduce(function (a, e, i) {
-            if (e === flname || e.indexOf(flname + ",") > -1 || e.indexOf("," + flname) > -1) {
-                let flg = false;
-                $.each(e.split(","), function (index, el) {
-                    if (el === flname) {
-                        flg = true;
-                        return false;
-                    }
-                })
-                if (flg)
-                    a.push(i);
-            }
-            return a;
-        }, []);
-    }
 
-    if (loopInd.length > 0 || thisEleName == 'validate onsave' || thisEleName == 'validate ondelete' || thisEleName == 'validate oncancel' || thisEleName == 'compute script onsave' || thisEleName == 'compute script ondelete' || thisEleName == 'compute script oncancel' || thisEleName == 'allowduplicate' || thisEleName == "formcontrol" || thisEleName == "compute script ondataload" || thisEleName == "compute script onformload") {
-        switch (thisEvent) {
-            case 'validate':
-                var loopInd = AxRDCompName.reduce(function (a, e, i) {
-                    if (e === flname)
-                        a.push(i);
-                    return a;
-                }, []);
-                if (loopInd.length == 0 && (thisEleName == 'validate onsave' || thisEleName == 'validate ondelete' || thisEleName == 'validate oncancel')) {
-                    loopInd = AxRDRuleType.reduce(function (a, e, i) {
-                        if (e.toLowerCase() === thisEleName)
-                            a.push(i);
-                        return a;
-                    }, []);
-                }
-                var thisRes = true;
-                $.each(loopInd, function (ind, thisInd) {
-                    var flval = "";
-                    if (flname != "")
-                        flval = GetFieldValue(thisEleName);
-                    let vexpr = AxRDValidation[thisInd];
-                    if (vexpr != "" && AxRuleIsApplicable(flname, thisInd)) {
-                        if ((AxRDRuleType[thisInd].toLowerCase() == 'validate onsave' || AxRDRuleType[thisInd].toLowerCase() == 'validate ondelete' || AxRDRuleType[thisInd].toLowerCase() == 'validate oncancel') && thisEleName != 'validate onsave' && thisEleName != 'validate ondelete' && thisEleName != 'validate oncancel')
-                            return;
-                        AxRulesFldsArray('validate', thisEleName, vexpr, AxRDCompName[thisInd]);
-                        var fResult = Evaluate(flname, flval, vexpr, "vexpr");
-                        if (fResult != 'T' && fResult != 't' && fResult != true) {
-                            var cutMsg = eval(callParent('lcm[52]'));
-                            var firstChar = fResult.substring(0, 1);
-                            var alertMsg = fResult.substring(1);
-                            if (firstChar == "_") {
-                                showAlertDialog("error", alertMsg);
-                            } else if (firstChar == "?") {
-                                showAlertDialog("error", alertMsg);
-                                if (flname != "" && flname != "validate onsave" && flname != "validate ondelete" && flname != "validate oncancel") {
-                                    fldVal = GetFieldValueFromArray(thisEleName);
-                                    SetFieldValue(thisEleName, fldVal);
-                                    UpdateFieldArray(thisEleName, dRowNo, fldVal, "parent", "");
-                                }
-                                thisRes = false;
-                            } else if (firstChar == "*") {
-                                showAlertDialog("error", alertMsg);
-                                thisRes = false;
-                            } else {
-                                if (fResult == "MessageSetAxFont") {
-                                    thisRes = true;
-                                } else if (confirm(fResult + ". " + cutMsg)) {
-                                    if (flname != "" && flname != "validate onsave" && flname != "validate ondelete" && flname != "validate oncancel") {
-                                        SetFieldValue(thisEleName, FldOldValue);
-                                        var dRowNo = GetDbRowNo(GetFieldsRowNo(thisEleName), GetFieldsDcNo(thisEleName));
-                                        UpdateFieldArray(thisEleName, dRowNo, FldOldValue, "parent", "");
-                                    }
-                                    thisRes = false;
-                                } else {
-                                    thisRes = true;
-                                }
-                            }
-                        } else
-                            thisRes = true;
-                    }
-                    else
-                        thisRes = true;
-                    if (!thisRes)
-                        return false;
-                });
-                if (thisRes)
-                    return true;
-                else
-                    return false;
-                break;
-            case 'filter':
-                var loopInd = AxRDCompName.reduce(function (a, e, i) {
-                    if (e === flname)
-                        a.push(i);
-                    return a;
-                }, []);
-                var axrFulFilter = "";
-                $.each(loopInd, function (ind, thisInd) {
-                    let axrFilter = AxRDFilter[thisInd];
-                    if (axrFilter != "" && AxRuleIsApplicable(flname, thisInd))
-                        axrFulFilter += axrFilter + "♠";
-                });
-                if (axrFulFilter != "") {
-                    axrFulFilter = axrFulFilter.slice(0, -1);
-                    return axrFulFilter;
-                }
-                else
-                    return "";
-                break;
-            case 'formcontrol':
-                var axrfc = true;
-                flname = "";
-                $.each(AxRDFormControl, function (ind, thisInd) {
-                    if (thisInd != "" && AxRuleIsApplicable(flname, ind)) {
-                        EvaluateScriptFormControl(thisInd, flname);
-                        axrfc = false;
-                    }
-                });
-                if (axrfc)
-                    return true;
-                else
-                    return false;
-                break;
-            case 'computescript':
-                var loopInd = AxRDCompName.reduce(function (a, e, i) {
-                    if (e === flname || e.indexOf(flname + ",") > -1 || e.indexOf("," + flname) > -1) {
-                        let flg = false;
-                        $.each(e.split(","), function (index, el) {
-                            if (el === flname) {
-                                flg = true;
-                                return false;
-                            }
-                        })
-                        if (flg)
-                            a.push(i);
-                    }
-                    return a;
-                }, []);
-                if (loopInd.length == 0 && (thisEleName == 'compute script onsave' || thisEleName == 'compute script ondelete' || thisEleName == 'compute script oncancel' || thisEleName == 'compute script ondataload' || thisEleName == 'compute script onformload')) {
-                    loopInd = AxRDRuleType.reduce(function (a, e, i) {
-                        if (e.toLowerCase() === thisEleName)
-                            a.push(i);
-                        return a;
-                    }, []);
-                }
-                var axrsc = true;
-                var axisBound = true;
-                $.each(loopInd, function (ind, thisInd) {
-                    let axrExp = AxRDComputeScript[thisInd];
-                    if ((AxRDRuleType[thisInd].toLowerCase() == 'compute script onsave' || AxRDRuleType[thisInd].toLowerCase() == 'compute script ondelete' || AxRDRuleType[thisInd].toLowerCase() == 'compute script oncancel') && thisEleName != 'compute script onsave' && thisEleName != 'compute script ondelete' && thisEleName != 'compute script oncancel')
-                        return;
-                    if ((AxRDRuleType[thisInd].toLowerCase() == 'compute script ondataload' || AxRDRuleType[thisInd].toLowerCase() == 'compute script onformload') && (thisEleName == 'compute script ondataload' || thisEleName == 'compute script onformload'))
-                        axisBound = true;
-                    else {
-                        let axfldList = AxRDCompName[thisInd];
-                        axfldList = axfldList.split(',');
-                        $.each(axfldList, function (inz, fld) {
-                            let thisDcNo = GetDcNo(fld);
-                            if (IsGridField(fld)) {
-                                let thisEleRowNo = thisEleName.substring(thisEleName.lastIndexOf("F"), thisEleName.lastIndexOf("F") - 3);
-                                let fldobj = fld + thisEleRowNo + "F" + thisDcNo;
-                                let isValBound = CheckEmptyValuePerf(fldobj);
-                                if (!isValBound) {
-                                    axisBound = false;
-                                    return;
-                                }
-                            } else {
-                                let fldobj = fld + "000F" + thisDcNo;
-                                let isValBound = CheckEmptyValuePerf(fldobj);
-                                if (!isValBound) {
-                                    axisBound = false;
-                                    return;
-                                }
-                            }
-                        });
-                    }
-                    if (axrExp != "" && AxRuleIsApplicable(flname, thisInd) && axisBound) {
-                        var arrsfcExp = axrExp.split("♥");
-                        //var strefVal = EvalExprSet(arrsfcExp);
-                        //if (strefVal != "" && strefVal.split("~").length >= 2)
-                        //    ProcessScriptFormControl(strefVal.split("~")[1], strefVal.split("~")[0], flname);
-
-                        AxFormControlList = new Array();
-                        var strefVal = EvalExprSet(arrsfcExp);
-                        if (AxFormControlList.length > 0)
-                            ProcessScriptFormControlOnList(flname);
-                        else if (strefVal != "" && strefVal.split("~").length >= 2)
-                            ProcessScriptFormControl(strefVal.split("~")[1], strefVal.split("~")[0], flname);
-
-                        axrsc = false;
-                    }
-                });
-                if (axrsc)
-                    return true;
-                else
-                    return false;
-                break;
-            case 'allowduplicate':
-                $.each(AxRDAllowDuplicate, function (ind, thisInd) {
-                    if (thisInd != "") {
-                        let axfldList = AxRDCompName[ind];
-                        axfldList = axfldList.split(',');
-                        $.each(axfldList, function (inz, fld) {
-                            if (AxRuleIsApplicable(fld, ind))
-                                AxRulesFldsArray('allowduplicate', fld, thisInd);
-                        });
-                    }
-                });
-                return true;
-                break;
-            case 'allowempty':
-                var loopInd = AxRDCompName.reduce(function (a, e, i) {
-                    if (e === flname || e.indexOf(flname + ",") > -1 || e.indexOf("," + flname) > -1) {
-                        let flg = false;
-                        $.each(e.split(","), function (index, el) {
-                            if (el === flname) {
-                                flg = true;
-                                return false;
-                            }
-                        })
-                        if (flg)
-                            a.push(i);
-                    }
-                    return a;
-                }, []);
-                var axraw = 1;
-                $.each(loopInd, function (ind, thisInd) {
-                    let axralEmpty = AxRDAllowEmpty[thisInd];
-                    if (axralEmpty != "")
-                        AxRulesFldsArray('allowempty', thisEleName, axralEmpty);
-                    if (axralEmpty != "" && axralEmpty.toLowerCase() == "f" && AxRuleIsApplicable(flname, thisInd)) {
-                        let idx = FNames.indexOf(flname);
-                        let thisDcNo = GetDcNo(flname);
-                        var fldType = FDataType[idx];
-                        if (IsGridField(flname)) {
-
-                            var rCount = 0;
-                            rCount = GetDcRowCount(thisDcNo);
-
-                            if (!axInlineGridEdit && rCount == 1 && $("#gridHd" + thisDcNo + " tbody tr").length == 0) {
-                                var dcCaption = GetDcCaption(thisDcNo);
-                                showAlertDialog("warning", 2054, "client", dcCaption);
-                                axraw = 0;
-                            }
-
-                            if (gridDummyRowVal.length > 0) {
-                                var isExitDummy = false;
-                                gridDummyRowVal.map(function (v) {
-                                    if (v.split("~")[0] == thisDcNo && v.split("~")[1] == '001')
-                                        isExitDummy = true;
-                                });
-                                if (isExitDummy)
-                                    axraw = 1;
-                            }
-
-                            for (var k = 1; k < (axInlineGridEdit ? rCount + 1 : rCount); k++) {
-                                var clRowNo = GetClientRowNo(k, thisDcNo);
-                                var fldValue = GetFieldValue(flname + clRowNo + "F" + thisDcNo);
-                                if ((fldType == "Numeric" && parseFloat(fldValue) == 0) || fldValue == "") {
-                                    showAlertDialog("warning", 2055, "client", FCaption[idx]);
-                                    axraw = 0;
-                                }
-                                else
-                                    axraw = 1;
-                            }
-                        } else {
-                            var fldValue = GetFieldValue(flname + "000F" + thisDcNo);
-                            if ((fldType == "Numeric" && parseFloat(fldValue) == 0) || fldValue == "") {
-                                showAlertDialog("warning", 2055, "client", FCaption[idx]);
-                                axraw = 0;
-                            } else
-                                axraw = 1;
-                        }
-                    }
-                    if (!axraw)
-                        return 0;
-                });
-                if (axraw)
-                    return 1;
-                else
-                    return 0;
-                break;
-            default:
-                return true;
-        }
-    } else
-        return true;
-}
-
-function AxRuleIsApplicable(thisfldName,axrdInd)
-{
-    if(AxRulesDefIsAppli=="true"){
-        let isapplExp=AxRDIsApplicable[axrdInd];
-        if(isapplExp!="" && isapplExp!="T"){
-            if(isapplExp=="true")
-                return true;
-            else if(isapplExp=="false")
-                return false;
-            else{
-                let flval=GetFieldValue(thisfldName);
-                let fResult = Evaluate(thisfldName, flval, isapplExp, "vexpr");
-                if (fResult == 'T' || fResult == 't' || fResult == true) {
-                    AxRDIsApplicable[axrdInd]="true";
-                    return true;
-                }else{
-                    AxRDIsApplicable[axrdInd]="false";
-                    return false;
-                }
-            }
-        }else
-            return true;
-    }else
-        return true;
-}
-
-function AxFilterDropDownResult(thisFld,result)
-{
-    var resultSet=result;
-    try{
-        let axrFilter = AxRulesDefParser(thisFld, "field", "filter");
-        if (axrFilter != "" && axrFilter!=true) {    
-            var axrFilterArray=axrFilter.split('♠');
-            $.each(axrFilterArray, function (ind, thisFilter) { 
-                if(thisFilter.toLowerCase().startsWith("not in(") || thisFilter.toLowerCase().startsWith("not in ("))
-                {
-                    let fliterVals = thisFilter.replace("not in(", "").replace("not in (", "").replace("Not in(", "").replace("Not in (", "");
-                    fliterVals=fliterVals.substr(0,fliterVals.length-1);
-                    let flVals = GetFilterVarValues(fliterVals, thisFld);
-                    resultSet = resultSet.filter(x=>!flVals.includes(x.id));
-                }else if(thisFilter.toLowerCase().startsWith("in(") || thisFilter.toLowerCase().startsWith("in ("))
-                {
-                    let fliterVals = thisFilter.replace("in(", "").replace("in (", "").replace("In(", "").replace("In (", "");
-                    fliterVals=fliterVals.substr(0,fliterVals.length-1);
-                    let flVals = GetFilterVarValues(fliterVals, thisFld);
-                    resultSet = resultSet.filter(x=>flVals.includes(x.id));
-                }                
-            });
-        }
-        return resultSet;
-    }catch(ex){
-        return resultSet;
-    }    
-}
-    
-function GetFilterVarValues(filterVars,selectFld) {
-    var repFilterVal=[];
-    if (filterVars != "") {
-        var paramsList = filterVars.split(',');
-        paramsList.forEach(item => {
-            item=item.trim();
-            if (item.startsWith(":")) {
-                let thisVarName= item.substring(1);
-                var fldInd = GetFieldIndex(thisVarName);
-                if (fldInd > -1) {
-                    var thisDc = GetDcNo(thisVarName);
-                    if (IsDcGrid(thisDc)){
-                        //Get Active row number 
-                        let thisRow = selectFld.substring(selectFld.lastIndexOf("F"), selectFld.lastIndexOf("F") - 3);
-                        let thisFldVal = GetFieldValue(thisVarName + thisRow + "F" + thisDc);
-                        repFilterVal.push(...thisFldVal.split(','));
-                    }
-                    else{
-                        let thisFldVal = GetFieldValue(thisVarName + "000F" + thisDc);
-                        repFilterVal.push(...thisFldVal.split(','));
-                    }
-                } else {
-                    let glbParamVal = Parameters.filter(word => word.startsWith(thisVarName + "~"))[0];
-                    if (typeof glbParamVal != "undefined"){
-                        let pval=glbParamVal.split("~")[1];
-                        if(pval!="")
-                            pval=pval.split(",");
-                        repFilterVal.push(...pval);
-                    }
-                }
-            } else {
-                repFilterVal.push(item);
-            }
-        });
-    }
-    return repFilterVal;
-}
-
-function AxRulesFldsArray(type,fldname,ruleVal,vonsave="") {
-    if (fldname != "") {
-        let fName = "";
-        if (FNames.indexOf(fldname) > -1)
-            fName = fldname;
-        else
-            fName = GetFieldsName(fldname);
-        if (fName == "" && fldname == "validate onsave")
-            fName = "validate_onsave";
-        if (fName != "" && fName != "validate_onsave" && AxRulesFlds.length > 0) {
-            let flValue = AxRulesFlds.filter(x => x.startsWith(type + "♦" + fName + "♦"))[0];
-            if (typeof flValue != "undefined" && flValue != "") {
-                let flInx = AxRulesFlds.indexOf(flValue);
-                AxRulesFlds[flInx] = type + "♦" + fName + "♦" + ruleVal;
-            } else
-                AxRulesFlds.push(type + "♦" + fName + "♦" + ruleVal);
-            /* } else if (fName == "validate_onsave" && AxRulesFlds.length > 0) {*/
-        } else if (fName == "validate_onsave") {
-            type = 'validate_onsave';
-            let flValue = AxRulesFlds.filter(x => x.startsWith(type + "♦" + vonsave + "♦"))[0];
-            if (typeof flValue != "undefined" && flValue != "") {
-                let flInx = AxRulesFlds.indexOf(flValue);
-                AxRulesFlds[flInx] = type + "♦" + vonsave + "♦" + ruleVal;
-            } else
-                AxRulesFlds.push(type + "♦" + vonsave + "♦" + ruleVal);
-        } else if (fName != "") {
-            AxRulesFlds.push(type + "♦" + fName + "♦" + ruleVal);
-        }
-    }
-}
-
-//Function to check either time field have 24 hours pattern or not.
-function TimeFieldPattern(fldId) {
-    var fname = "";
-    var indx = fldId.lastIndexOf("F");
-    if (fldId != "") {
-        fname = fldId.substring(0, parseInt(indx, 10) - 3);
-    }
-    let isTimeFormat = false;
-    for (var j = 0; j < PatternNames.length; j++) {
-        if (fname == PatternNames[j].substring(3)) {
-            if (Patterns[j] == "24H Format")
-                isTimeFormat = true;
-            break;
-        }
-    }
-    if (isTimeFormat)
-        return true;
-    else
-        return false;
-}
-
-function AxAllowEmptyCheck(_thisFldName) {
-    var axraw = -1;
-    if (AxAllowEmptyFlds.length > 0) {
-        let _IndVal = AxAllowEmptyFlds.filter(vals => vals.startsWith(_thisFldName + "~"));
-        if (_IndVal.length > 0) {
-            let axralEmpty = _IndVal[0].split('~')[1];
-            if (axralEmpty != "")
-                AxRulesFldsArray('allowempty', _thisFldName, axralEmpty);
-            if (axralEmpty != "" && axralEmpty.toLowerCase() == "f") {
-                let idx = FNames.indexOf(_thisFldName);
-                let thisDcNo = GetDcNo(_thisFldName);
-                var fldType = FDataType[idx];
-                if (IsGridField(_thisFldName)) {
-
-                    var rCount = 0;
-                    rCount = GetDcRowCount(thisDcNo);
-
-                    if (!axInlineGridEdit && rCount == 1 && $("#gridHd" + thisDcNo + " tbody tr").length == 0) {
-                        var dcCaption = GetDcCaption(thisDcNo);
-                        showAlertDialog("warning", 2054, "client", dcCaption);
-                        axraw = 0;
-                    }
-
-                    if (gridDummyRowVal.length > 0) {
-                        var isExitDummy = false;
-                        gridDummyRowVal.map(function (v) {
-                            if (v.split("~")[0] == thisDcNo && v.split("~")[1] == '001')
-                                isExitDummy = true;
-                        });
-                        if (isExitDummy)
-                            axraw = 1;
-                    }
-
-                    for (var k = 1; k < (axInlineGridEdit ? rCount + 1 : rCount); k++) {
-                        var clRowNo = GetClientRowNo(k, thisDcNo);
-                        var fldValue = GetFieldValue(_thisFldName + clRowNo + "F" + thisDcNo);
-                        if ((fldType == "Numeric" && parseFloat(fldValue) == 0) || fldValue == "") {
-                            showAlertDialog("warning", 2055, "client", FCaption[idx]);
-                            axraw = 0;
-                        }
-                        else
-                            axraw = 1;
-                    }
-                } else {
-                    var fldValue = GetFieldValue(_thisFldName + "000F" + thisDcNo);
-                    if ((fldType == "Numeric" && parseFloat(fldValue) == 0) || fldValue == "") {
-                        showAlertDialog("warning", 2055, "client", FCaption[idx]);
-                        axraw = 0;
-                    } else
-                        axraw = 1;
-                }
-            } else if (axralEmpty != "" && axralEmpty.toLowerCase() != "f") {
-                axraw = 1;
-            }
-        }
-    }
-    return axraw;
-}
-
-function AxRulesScriptsParser(thisEvent, thisEleName = "") {
-    switch (thisEvent) {
-        case 'formcontrol':
-            var flname = "";
-            $.each(AxRDFormControl, function (ind, thisScript) {
-                if (thisScript != "") {
-                    if (thisEleName != "") {
-                        var axfldList = AxRDFormControlParent[ind];
-                        if (axfldList != "") {
-                            axfldList = axfldList.split(',');
-                            if ($.inArray(thisEleName, axfldList) > -1) {
-                                isScriptFormLoad = "false";
-                                EvaluateScriptFormControl(thisScript, thisEleName);
-                            }
-                        }
-                    } else {
-                        isScriptFormLoad = "true";
-                        EvaluateScriptFormControl(thisScript, flname);
-                    }
-                }
-            });
-            break;
-        case 'scriptonload':
-            var flname = "";
-            $.each(AxRDScriptOnLoad, function (ind, thisScript) {
-                if (thisScript) {
-                    var arrsfcExp = thisScript.split("♥");
-                    AxFormControlList = new Array();
-                    EvalExprSet(arrsfcExp);
-                    isScriptFormLoad = "true";
-                    if (AxFormControlList.length > 0)
-                        ProcessScriptFormControlOnList(flname);
-                }
-            });
-            break;
-        default:
-            return true;
-    }
-}
-
-//TO Get DoFormLoad data from client side with the result & tstruct HTML.
-function GetCloneFormLoadData(tstQureystr) {
-    try {
-        GetProcessTime();
-        $.ajax({
-            url: 'tstruct.aspx/GetCloneFormLoadValues',
-            type: 'POST',
-            cache: false,
-            async: true,
-            data: JSON.stringify({
-                key: tstDataId,
-                tstQureystr: tstQureystr
-            }),
-            dataType: 'json',
-            contentType: "application/json",
-            success: function (data) {
-                var result = data.d;
-                if (result != "") {
-                    if (result.split("*♠♦*").length > 1) {
-                        serverprocesstime = result.split("*♠♦*")[1];
-                        requestProcess_logtime = result.split("*♠♦*")[2];
-                        result = result.split("*♠♦*")[0];
-                        WireElapsTime(serverprocesstime, requestProcess_logtime, true);
-                    } else {
-                        UpdateExceptionMessageInET("Error : " + result);
-                    }
-                }
-                Closediv();
-                if (result.toLowerCase().indexOf("access violation") === -1) {
-                    ArrActionLog = "";
-                    if (CheckSessionTimeout(result))
-                        return;
-                    if (result != "") {
-                        actionCallbackFlag = actionCallFlag;
-                        $("#icons,#btnSaveTst,.BottomToolbarBar a,.wizardNextPrevWrapper").css({
-                            "pointer-events": "auto"
-                        });
-                        if (FromSave) {
-                            FromSave = false;
-                        }
-                        EnableSaveBtn(true);
-                        isReadyCK = false
-                        DCFrameNo.forEach(function (dcID) {
-                            ClearFieldsInDC(dcID);
-                        });
-                        ExprPosArray.forEach(function (vals, ind) {
-                            if (vals != "")
-                                ExprPosArray[ind] = "";
-                        });
-                        tstReadOnlyPeg = false;
-                        navValidator = true;
-                        SetFormDirty(false);
-                        blurNextPreventId = "";
-                        AxFormControlList = new Array();
-                        RegVarFldList = new Array();
-                        ChangedFields = new Array();
-                        ChangedFieldDbRowNo = new Array();
-                        ChangedFieldValues = new Array();
-                        DeletedDCRows = new Array();
-                        AllFieldNames = new Array();
-                        AllFieldValues = new Array();
-                        ScriptMaskFields = new Array();
-                        AxExecFormControl = false;
-                        DisabledDcs = new Array();
-                        AxFormContHiddenFlds = new Array();
-                        AxFormContSetCapFlds = new Array();
-                        AxFormContSetCapFldsGrid = new Array();
-                        AxFormContSetFldActGrid = new Array();
-                        AxFormContSetGridCell = new Array();
-                        AxFormContFldSetFocus = new Array();
-                        multiSelectflds = new Array();
-                        multiSelFldParents = new Array();
-                        multiSelFldResult = new Array();
-                        multiSelectLoadVals = new Array();
-                        AxRulesFlds = new Array();
-                        FldListParents = new Array();
-                        FldListData = new Array();
-                        changeFillGridDc = 0;
-                        imgNames = new Array();
-                        imgSrc = new Array();
-
-                        if (isMobile)
-                            OnMobileNewTst();
-
-                        document.title = "Tstruct";
-                        recordid = "0";
-                        $j("#recordid000F0").val("0");
-                        var resval = result.split("*$*");
-                        if (resval[0] == "") {
-                            window.location.reload();
-                            return;
-                        }
-                        $j(".workflow").remove();
-                        $(".wfselectbox").html("<div class=\"menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-bold w-200px py-3\" data-kt-menu=\"true\" data-popper-placement=\"bottom-end\" id=\"selectbox\"></div>");
-                        $j(".wrkflwinline").remove();
-                        $j(".workflowMsg").remove();
-                        $j(".downArr").remove();
-                        $j(".Selectboxlist").remove();
-                        $j("#workflowoverlay").addClass("d-none");
-                        $j("#dvMessage").html("");
-                        $j("#dvMessage").removeClass("AXinfo").addClass("success d-none");
-                        $j("#file").addClass("d-none");
-                        $j("#attachment-overlay").html("");
-                        $j("#attachfname").val("");
-                        attachments = "";
-                        filenamearray = new Array();
-                        fileonloadarray = new Array();
-                        $("#hdnTabHtml").val(resval[3]);
-                        var tstPerfVars = resval[4];
-                        if (tstPerfVars != "") {
-                            wsPerfFormLoadCall = tstPerfVars.split(";")[0] == "true" ? true : false;
-                            wsPerfEvalExpClient = tstPerfVars.split(";")[1].split(",");
-                            headerAttachDir = tstPerfVars.split(";")[2];
-                        }
-                        var ImgVals = resval[5];
-                        if (ImgVals != "") {
-                            ImgVals = ImgVals.split("♠");
-                            for (i = 0; i < ImgVals.length; i++) {
-                                imgNames[i] = ImgVals[i].split("♦")[0];
-                                imgSrc[i] = ImgVals[i].split("♦")[1];
-                                if (imgSrc[i] != "")
-                                    imgSrc[i] = imgSrc[i].replace("%20", " ");
-                            }
-                        }
-                        if (resval[6] != "") {
-                            var dcStatus = resval[6].split(',');
-                            dcStatus.forEach(function (dcStat, indx) {
-                                TabDCStatus[indx] = dcStat;
-                            })
-                        }
-                        tstructCancelled = resval[7];
-                        if (typeof AxGridAttNotExistList != "undefined" && resval[8] != "") {
-                            var agattnotfiles = resval[8].split(',');
-                            AxGridAttNotExistList = agattnotfiles;
-                        } else if (resval[8] != "") {
-                            var agattnotfiles = resval[8].split(',');
-                            AxGridAttNotExistList = agattnotfiles;
-                        } else
-                            AxGridAttNotExistList = "";
-                        tstDataId = resval[9];
-
-                        try {
-                            DCHasDataRows.forEach(function (_val, _ind) {
-                                if (_val == "True")
-                                    DCHasDataRows[_ind] = 'False';
-                            })
-
-                            FFieldHidden = new Array();
-                            FFieldReadOnly = new Array();
-
-                            if (resval[11] != "") {
-                                var _thisFFH = resval[11].split(',');
-                                _thisFFH.forEach(function (_val) {
-                                    if (_val != "")
-                                        FFieldHidden.push(_val);
-                                })
-                            }
-                            if (resval[12] != "") {
-                                var _thisFFH = resval[12].split(',');
-                                _thisFFH.forEach(function (_val) {
-                                    if (_val != "")
-                                        FFieldReadOnly.push(_val);
-                                })
-                            }
-                        } catch (ex) { }
-
-                        $j("#hdnDataObjId").val(tstDataId);
-                        LoadResult = result;
-                        Closediv();
-                        isLoadDataCall = false;
-                        ReloadJqueryReference();
-                        isTstPostBackVal = resval[0] + "*$*" + resval[1] + "*$*" + resval[2];
-                    }
-                } else {
-                    blurNextPreventId = "";
-                    actionCallbackFlag = actionCallFlag;
-                    $("#icons,#btnSaveTst,.BottomToolbarBar a,.wizardNextPrevWrapper").css({
-                        "pointer-events": "auto"
-                    });
-                    if (FromSave) {
-                        FromSave = false;
-                    }
-                    EnableSaveBtn(true);
-                    AxWaitCursor(false);
-                    ShowDimmer(false);
-                    SetFormDirty(false);
-                    $("#reloaddiv").show();
-                    $("#dvlayout").hide();
-                }
-            },
-            error: function (error) {
-                Closediv();
-                blurNextPreventId = "";
-                actionCallbackFlag = actionCallFlag;
-                $("#icons,#btnSaveTst,.BottomToolbarBar a,.wizardNextPrevWrapper").css({
-                    "pointer-events": "auto"
-                });
-                if (FromSave) {
-                    FromSave = false;
-                }
-                EnableSaveBtn(true);
-                AxWaitCursor(false);
-                ShowDimmer(false);
-                SetFormDirty(false);
-                $("#reloaddiv").show();
-                $("#dvlayout").hide();
-            }
-        });
-    } catch (exp) {
-        Closediv();
-        blurNextPreventId = "";
-        actionCallbackFlag = actionCallFlag;
-        $("#icons,#btnSaveTst,.BottomToolbarBar a,.wizardNextPrevWrapper").css({
-            "pointer-events": "auto"
-        });
-        if (FromSave) {
-            FromSave = false;
-        }
-        EnableSaveBtn(true);
-        AxWaitCursor(false);
-        ShowDimmer(false);
-        SetFormDirty(false);
-        $("#reloaddiv").show();
-        $("#dvlayout").hide();
-    }
-}

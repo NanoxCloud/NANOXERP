@@ -30,13 +30,13 @@
 
     <%--custom alerts start--%>
     <%--<link href="../Css/animate.min.css" rel="stylesheet" type="text/css" />--%>
-    <script src="../Js/alerts.min.js?v=30" type="text/javascript"></script>
+    <script src="../Js/alerts.min.js?v=28" type="text/javascript"></script>
     <%--custom alerts end--%>
     <script src="../Js/gen.min.js?v=14" type="text/javascript"></script>
- 	<script src="../Js/common.min.js?v=118" type="text/javascript"></script>   
- 	<script src="../Js/tstruct.min.js?v=490" type="text/javascript"></script>
+ 	<script src="../Js/common.min.js?v=98" type="text/javascript"></script>   
+ 	<script src="../Js/tstruct.min.js?v=432" type="text/javascript"></script>
 
-    <script src="../Js/gridFileUpload.min.js?v=53" type="text/javascript"></script>
+    <script src="../Js/gridFileUpload.min.js?v=52" type="text/javascript"></script>
    
     <link href="../Css/tstructNewUi.min.css?v=82" rel="stylesheet" />
     <link href="../Css/globalStyles.min.css?v=36" rel="stylesheet" type="text/css" />
@@ -90,9 +90,6 @@
             <asp:HiddenField ID="hdnDcNo" Value="" runat="server" />
             <asp:HiddenField ID="hdnImagePath" Value="" runat="server" />
             <asp:HiddenField ID="hdnAxGridAttSavedPath" Value="" runat="server" />
-            <asp:HiddenField ID="hdnExeTrace" Value="" runat="server" />
-            <asp:HiddenField ID="hdnattTransId" Value="" runat="server" />
-            <asp:HiddenField ID="hdnattFldName" Value="" runat="server" />
 
             <asp:Label ID="lblFileUp" runat="server" meta:resourcekey="lblFileUp" Visible="false">File uploaded successfully!</asp:Label>
             <asp:Label ID="lblfilecn" runat="server" meta:resourcekey="lblfilecn" Visible="false"></asp:Label>
